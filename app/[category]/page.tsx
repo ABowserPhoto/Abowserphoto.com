@@ -25,7 +25,7 @@ export function generateStaticParams() {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
-  const selectedCategory = categoryContentMap[category];
+  const selectedCategory = categoryContentMap[category as keyof typeof categoryContentMap];
 
   if (!selectedCategory) {
     notFound();
