@@ -15,6 +15,10 @@ type FAQSectionProps = {
 export default function FAQSection({ faqs, accentColor }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
+  if (!faqs?.length) {
+    return null;
+  }
+
   return (
     <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
       <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">FAQ</h2>

@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-white text-slate-900 antialiased">
+      <body className="overflow-x-hidden bg-black text-[#F4F1ED] antialiased">
         {children}
         <CookieConsent />
       </body>

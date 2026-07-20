@@ -1,7 +1,6 @@
 export type ServiceItem = {
-  name: string;
+  title: string;
   description: string;
-  image: string;
 };
 
 export type FAQItem = {
@@ -33,6 +32,12 @@ export type CategorySlug =
   | "social-media-management"
   | "commercial";
 
+export const sharedAbout = {
+  title: "About Me",
+  description:
+    "I am Aaron Bowser, a visual storyteller working across wedding, commercial, editorial, and brand photography. My work blends cinematic composition with authentic emotion—whether capturing a once-in-a-lifetime celebration, elevating a product line, or shaping a personal brand. Every project is approached with intention, craft, and a commitment to images that feel timeless and true.",
+};
+
 function buildPortfolio(seed: string) {
   return Array.from({ length: 6 }).map(
     (_, index) => `https://picsum.photos/seed/${seed}-${index + 1}/1200/900`
@@ -51,22 +56,16 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     portfolioImages: buildPortfolio("wedding"),
     services: [
       {
-        name: "Full-Day Coverage",
+        title: "Full-Day Coverage",
         description: "Editorial and candid coverage from prep to reception.",
-        image:
-          "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Engagement Session",
+        title: "Engagement Session",
         description: "Pre-wedding portraits tailored to your personal story.",
-        image:
-          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Album Design",
+        title: "Album Design",
         description: "Fine-art printed albums with curated narrative flow.",
-        image:
-          "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80",
       },
     ],
     aboutText:
@@ -89,22 +88,16 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     portfolioImages: buildPortfolio("real-estate"),
     services: [
       {
-        name: "Interior and Exterior",
+        title: "Interior and Exterior",
         description: "Balanced, clean imagery for complete listing coverage.",
-        image:
-          "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Twilight Sessions",
+        title: "Twilight Sessions",
         description: "Golden-hour and evening looks for high-impact listing hero shots.",
-        image:
-          "https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Agent Branding",
+        title: "Agent Branding",
         description: "Portrait and lifestyle content for real estate professionals.",
-        image:
-          "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80",
       },
     ],
     aboutText:
@@ -127,22 +120,16 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     portfolioImages: buildPortfolio("business-portraits"),
     services: [
       {
-        name: "Executive Headshots",
+        title: "Executive Headshots",
         description: "Confident and polished portraits for leadership profiles.",
-        image:
-          "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Team Sessions",
+        title: "Team Sessions",
         description: "Consistent visual style for company-wide profile imagery.",
-        image:
-          "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Personal Branding",
+        title: "Personal Branding",
         description: "Authentic portraits for entrepreneurs and consultants.",
-        image:
-          "https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&w=1200&q=80",
       },
     ],
     aboutText:
@@ -165,22 +152,16 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     portfolioImages: buildPortfolio("food"),
     services: [
       {
-        name: "Menu Photography",
+        title: "Menu Photography",
         description: "Appetizing imagery optimized for print and digital menus.",
-        image:
-          "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Styled Product Sets",
+        title: "Styled Product Sets",
         description: "Color-rich compositions for campaigns and packaging.",
-        image:
-          "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Social Content Packs",
+        title: "Social Content Packs",
         description: "Recurring short-form sets tailored for social growth.",
-        image:
-          "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
       },
     ],
     aboutText:
@@ -203,22 +184,16 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     portfolioImages: buildPortfolio("cinematography"),
     services: [
       {
-        name: "Brand Films",
+        title: "Brand Films",
         description: "Narrative-driven films crafted for brand identity and launch campaigns.",
-        image:
-          "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Event Coverage",
+        title: "Event Coverage",
         description: "Highlight edits and documentary-style event motion coverage.",
-        image:
-          "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Social Reels",
+        title: "Social Reels",
         description: "Short cinematic edits optimized for social platforms.",
-        image:
-          "https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=1200&q=80",
       },
     ],
     aboutText:
@@ -241,22 +216,16 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     portfolioImages: buildPortfolio("social-media-management"),
     services: [
       {
-        name: "Content Calendars",
+        title: "Content Calendars",
         description: "Monthly publishing strategy tailored to your audience and goals.",
-        image:
-          "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Platform Management",
+        title: "Platform Management",
         description: "Hands-on posting, copywriting, and community support.",
-        image:
-          "https://images.unsplash.com/photo-1521790797524-b2497295b8a0?auto=format&fit=crop&w=1200&q=80",
       },
       {
-        name: "Performance Reports",
+        title: "Performance Reports",
         description: "Actionable analytics with content and campaign recommendations.",
-        image:
-          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
       },
     ],
     aboutText:
@@ -272,7 +241,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     slug: "commercial",
     navLabel: "Commercial",
     title: "Commercial & Editorial",
-    subtitle: "Editorial storytelling, high-fashion portraiture, and magazine-grade aesthetics.",
+    subtitle: "Based in Hagen, NRW, with a premier studio in Solingen—serving Düsseldorf, Köln, and the wider North Rhine-Westphalia region—I specialize in high-end commercial and creative photography. Whether you are an aspiring model, a visionary creative, or a brand launching a new campaign, I craft striking imagery designed to command attention and elevate your visual identity.",
     themeColor: "#FFB70F",
     heroImage:
       "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?auto=format&fit=crop&w=1920&q=80",
@@ -280,23 +249,25 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     portfolioImages: buildPortfolio("commercial"),
     services: [
       {
-        name: "Editorial Portraits",
-        description: "Narrative-driven portraiture crafted for magazines, lookbooks, and cultural campaigns.",
-        image:
-          "https://images.unsplash.com/photo-1464863979621-258859e62245?auto=format&fit=crop&w=1200&q=80",
+        title: "Portraits & Model Portfolios",
+        description: "Standard headshots don't capture true artistic identity. I specialize in highly individualized portrait sessions and dynamic editorial-style photoshoots designed to showcase your full range. Whether you are breaking into the modeling industry or building your creative brand, we will craft a standout portfolio that agencies and art directors notice."
       },
       {
-        name: "High-Fashion Sets",
-        description: "Magazine-style lighting and direction that elevates fashion, beauty, and personal brand stories.",
-        image:
-          "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80",
+        title: "Fashion Photography",
+        description: "From striking lookbooks to full-scale brand campaigns, I produce trend-forward fashion photography that brings your garments and vision to life. Emphasizing style, movement, and narrative, these sessions are designed to elevate fashion brands and designers in a competitive market."
       },
       {
-        name: "Editorial Campaigns",
-        description: "Cohesive visual narratives designed for editorial spreads, premium branding, and art direction.",
-        image:
-          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80",
+        title: "Beauty",
+        description: "Beauty photography demands flawless lighting and an eye for intricate detail. I create crisp, high-impact macro and beauty imagery perfect for cosmetics brands, skincare lines, and makeup artists looking to showcase texture, color, and technique at the highest level."
       },
+      {
+        title: "Product Photography",
+        description: "The imagery representing your product is often your first impression with a potential client. I shoot bold, high-quality product photography—from clean e-commerce shots to stylized, creative setups—that serves as the face of your brand and drives engagement across your digital platforms."
+      },
+      {
+        title: "Editorial",
+        description: "More than just a beautiful image, editorial photography tells a compelling story. We collaborate to build conceptual, magazine-quality visual narratives perfect for publications, unique brand storytelling, or artistic campaigns that require a deeper, cinematic approach."
+      }
     ],
     aboutText:
       "My commercial work is rooted in editorial storytelling—blending high-fashion sensibility with intentional narrative to create portraits that feel cinematic, refined, and publication-ready.",
