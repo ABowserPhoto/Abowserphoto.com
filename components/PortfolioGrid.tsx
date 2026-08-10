@@ -9,6 +9,8 @@ type PortfolioGridProps = {
   title: string;
   themeColor: string;
   onImageClick?: (image: string) => void;
+  /** Eyebrow label above the count (e.g. "Selected Work" vs "Full Portfolio"). */
+  label?: string;
 };
 
 // Fixed repeating pattern of portrait-oriented spans applied by index (mod
@@ -25,7 +27,13 @@ const SPAN_CLASSES = [
   "col-span-1 row-span-4", // standard portrait
 ];
 
-export default function PortfolioGrid({ images, title, themeColor, onImageClick }: PortfolioGridProps) {
+export default function PortfolioGrid({
+  images,
+  title,
+  themeColor,
+  onImageClick,
+  label = "Full Portfolio",
+}: PortfolioGridProps) {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
 
   const [shuffledImages, setShuffledImages] = useState(images);
@@ -39,7 +47,7 @@ export default function PortfolioGrid({ images, title, themeColor, onImageClick 
     }
     setShuffledImages(shuffled);
     setIsMounted(true);
-  }, []);
+  }, [images]);
 
   if (images.length === 0) {
     return null;
@@ -52,7 +60,7 @@ export default function PortfolioGrid({ images, title, themeColor, onImageClick 
   return (
     <div className="relative z-0 w-full border-t border-[#1a1a1a] bg-black py-14">
       <div className="mb-6 px-4 text-center">
-        <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-white/50">Full Portfolio</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-white/50">{label}</p>
         <span className="mt-1 block text-sm font-medium text-[#F4F1ED]/85">
           {shuffledImages.length} showcase images
         </span>

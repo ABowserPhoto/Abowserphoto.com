@@ -49,6 +49,9 @@ const sectionLinks: { id: SectionId; label: string }[] = [
   { id: "faq", label: "FAQ" },
 ];
 
+/** Preview count on the commercial category page; full set lives at /commercial/portfolio. */
+const COMMERCIAL_PORTFOLIO_PREVIEW_COUNT = 15;
+
 export default function CategoryTemplate({
   category,
   heroMedia,
@@ -63,6 +66,15 @@ export default function CategoryTemplate({
   const servicesRef = useRef<HTMLElement>(null);
 
   const portfolioImages = category.portfolioImages;
+  const isCommercial = category.slug === "commercial";
+  const showFullPortfolioCta = isCommercial && portfolioImages.length > COMMERCIAL_PORTFOLIO_PREVIEW_COUNT;
+  const gridImages = useMemo(
+    () =>
+      showFullPortfolioCta
+        ? portfolioImages.slice(0, COMMERCIAL_PORTFOLIO_PREVIEW_COUNT)
+        : portfolioImages,
+    [portfolioImages, showFullPortfolioCta]
+  );
 
   const visibleSectionLinks = useMemo(
     () => (faqs.length > 0 ? sectionLinks : sectionLinks.filter((section) => section.id !== "faq")),
@@ -128,11 +140,22 @@ export default function CategoryTemplate({
 
         <section id="portfolio" className="relative bg-black">
           <PortfolioGrid
-            images={portfolioImages}
+            images={gridImages}
             title={category.title}
             themeColor={category.themeColor}
             onImageClick={setSelectedImage}
+            label={showFullPortfolioCta ? "Selected Work" : "Full Portfolio"}
           />
+          {showFullPortfolioCta ? (
+            <div className="flex justify-center bg-black px-4 pb-16 pt-4">
+              <Link
+                href="/commercial/portfolio"
+                className="inline-flex items-center justify-center border border-[#F4F1ED]/45 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#F4F1ED] transition-colors duration-300 hover:border-[#F4F1ED] hover:bg-[#F4F1ED] hover:text-[#322B2B]"
+              >
+                View Full Portfolio
+              </Link>
+            </div>
+          ) : null}
         </section>
 
         <motion.section
