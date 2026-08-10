@@ -37,7 +37,10 @@ type SectionId = "hero" | "portfolio" | "services" | "about" | "faq";
 const fadeUp = {
   initial: { opacity: 0, y: 36 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.22 },
+  // "some" = any pixel visible. A fractional amount (e.g. 0.22) can never
+  // fire on mobile when the section is taller than ~viewport/amount — which
+  // happens on Commercial with 5 tall portrait service cards stacked.
+  viewport: { once: true, amount: "some" as const, margin: "0px 0px -8% 0px" },
   transition: { duration: 0.75, ease: "easeOut" as const },
 };
 
@@ -138,7 +141,7 @@ export default function CategoryTemplate({
           <HeroSlider media={heroMedia} title={category.title} subtitle={category.subtitle} />
         </section>
 
-        <section id="portfolio" className="relative bg-black">
+        <section id="portfolio" className="relative z-0 isolate bg-black">
           <PortfolioGrid
             images={gridImages}
             title={category.title}
@@ -147,7 +150,7 @@ export default function CategoryTemplate({
             label={showFullPortfolioCta ? "Selected Work" : "Full Portfolio"}
           />
           {showFullPortfolioCta ? (
-            <div className="flex justify-center bg-black px-4 pb-16 pt-4">
+            <div className="relative z-10 flex justify-center bg-black px-4 pb-16 pt-4">
               <Link
                 href="/commercial/portfolio"
                 className="inline-flex items-center justify-center border border-[#F4F1ED]/45 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#F4F1ED] transition-colors duration-300 hover:border-[#F4F1ED] hover:bg-[#F4F1ED] hover:text-[#322B2B]"
@@ -180,14 +183,14 @@ export default function CategoryTemplate({
                   className="grid overflow-hidden rounded-2xl border border-[#322B2B]/10 bg-white shadow-sm md:grid-cols-2"
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.22 }}
+                  viewport={{ once: true, amount: "some", margin: "0px 0px -8% 0px" }}
                   transition={{ duration: 0.75, delay: 0.08, ease: "easeOut" }}
                 >
                   <div className={reverse ? "order-1 md:order-2" : "order-1"}>
                     <div
-                      className={`relative w-full max-h-[70vh] bg-[#F4F1ED] ${
+                      className={`relative w-full overflow-hidden bg-[#F4F1ED] ${
                         service.imageWidth && service.imageHeight
-                          ? ""
+                          ? "max-h-[55vh] md:max-h-[70vh]"
                           : "h-64 sm:h-72 md:h-full md:min-h-[22rem]"
                       }`}
                       style={
