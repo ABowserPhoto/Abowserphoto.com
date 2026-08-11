@@ -148,6 +148,7 @@ export default function CategoryTemplate({
             themeColor={category.themeColor}
             onImageClick={setSelectedImage}
             label={showFullPortfolioCta ? "Selected Work" : "Full Portfolio"}
+            orientation={category.slug === "real-estate" ? "landscape" : "portrait"}
           />
           {showFullPortfolioCta ? (
             <div className="relative z-10 flex justify-center bg-black px-4 pb-16 pt-4">
