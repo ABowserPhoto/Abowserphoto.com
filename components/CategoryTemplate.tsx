@@ -8,6 +8,7 @@ import type { CategoryContent, FAQItem } from "../lib/content";
 import HeroSlider, { type HeroMediaItem } from "./HeroSlider";
 import Navbar from "./Navbar";
 import PortfolioGrid from "./PortfolioGrid";
+import ServicesScroll from "./ServicesScroll";
 
 type ServiceWithMedia = {
   title: string;
@@ -67,6 +68,7 @@ export default function CategoryTemplate({
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const servicesRef = useRef<HTMLElement>(null);
+  const aboutRef = useRef<HTMLElement>(null);
 
   const portfolioImages = category.portfolioImages;
   const isCommercial = category.slug === "commercial";
@@ -133,7 +135,7 @@ export default function CategoryTemplate({
         activeSection={activeSection}
         onSectionClick={handleSectionClick}
         themeColor={category.themeColor}
-        lightSectionRef={servicesRef}
+        lightSectionRef={aboutRef}
       />
 
       <main>
@@ -162,85 +164,10 @@ export default function CategoryTemplate({
           ) : null}
         </section>
 
-        <motion.section
-          ref={servicesRef}
-          id="services"
-          className="relative z-30 mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8"
-          {...fadeUp}
-        >
-          <motion.div className="mb-12 text-center md:text-left" {...fadeUp}>
-            <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#322B2B]/55">Services</p>
-            <h2 className="mt-3 text-3xl font-light tracking-tight text-[#322B2B] sm:text-4xl">
-              Crafted for premium storytelling
-            </h2>
-          </motion.div>
-
-          <div className="space-y-12">
-            {services.map((service, index) => {
-              const reverse = index % 2 === 1;
-              return (
-                <motion.article
-                  key={service.title}
-                  className="grid overflow-hidden rounded-2xl border border-[#322B2B]/10 bg-white shadow-sm md:grid-cols-2"
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: "some", margin: "0px 0px -8% 0px" }}
-                  transition={{ duration: 0.75, delay: 0.08, ease: "easeOut" }}
-                >
-                  <div className={reverse ? "order-1 md:order-2" : "order-1"}>
-                    <div
-                      className={`relative w-full overflow-hidden bg-[#F4F1ED] ${
-                        service.imageWidth && service.imageHeight
-                          ? "max-h-[55vh] md:max-h-[70vh]"
-                          : "h-64 sm:h-72 md:h-full md:min-h-[22rem]"
-                      }`}
-                      style={
-                        service.imageWidth && service.imageHeight
-                          ? { aspectRatio: `${service.imageWidth} / ${service.imageHeight}` }
-                          : undefined
-                      }
-                    >
-                      {service.imageUrl ? (
-                        <Image
-                          src={service.imageUrl}
-                          alt={service.title}
-                          fill
-                          sizes="(min-width: 768px) 50vw, 100vw"
-                          className="object-contain"
-                        />
-                      ) : null}
-                    </div>
-                  </div>
-                  <div className={reverse ? "order-2 md:order-1" : "order-2"}>
-                    <div className="flex h-full flex-col justify-center px-6 py-8 sm:px-10 sm:py-12">
-                      <span
-                        className="mb-3 inline-block h-1 w-14 rounded-full"
-                        style={{ backgroundColor: category.themeColor }}
-                        aria-hidden="true"
-                      />
-                      <h3 className="text-2xl font-semibold text-[#322B2B]">{service.title}</h3>
-                      <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#322B2B]/80 sm:text-base">
-                        {service.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.article>
-              );
-            })}
-          </div>
-
-          <div className="mt-12 flex justify-center md:justify-start">
-            <Link
-              href="/booking"
-              className="rounded-full px-6 py-3 text-sm font-semibold text-white transition-opacity duration-300 hover:opacity-90"
-              style={{ backgroundColor: category.themeColor }}
-            >
-              Start an Inquiry
-            </Link>
-          </div>
-        </motion.section>
+        <ServicesScroll ref={servicesRef} services={services} themeColor={category.themeColor} />
 
         <motion.section
+          ref={aboutRef}
           id="about"
           className="relative z-30 bg-white/65 py-24"
           {...fadeUp}
