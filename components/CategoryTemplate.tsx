@@ -191,7 +191,7 @@ export default function CategoryTemplate({
                   aria-hidden="true"
                 />
                 <div
-                  className="relative h-80 w-full overflow-hidden rounded-2xl border shadow-sm sm:h-96"
+                  className="relative aspect-[2/3] w-full overflow-hidden rounded-2xl border shadow-sm"
                   style={{ borderColor: `${category.themeColor}66` }}
                 >
                   <Image
@@ -199,7 +199,7 @@ export default function CategoryTemplate({
                     alt={aboutData.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover object-top"
+                    className="object-cover object-center"
                   />
                 </div>
               </motion.div>

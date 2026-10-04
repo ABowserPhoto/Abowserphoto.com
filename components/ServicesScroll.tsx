@@ -7,6 +7,8 @@ import {
   motion,
   useMotionValueEvent,
   useScroll,
+  useTransform,
+  type MotionValue,
 } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 
@@ -43,6 +45,54 @@ function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   } else {
     (ref as React.MutableRefObject<T | null>).current = value;
   }
+}
+
+function ServiceImageLayer({
+  service,
+  index,
+  totalLength,
+  scrollYProgress,
+  isActive,
+  priority,
+}: {
+  service: ServiceScrollItem;
+  index: number;
+  totalLength: number;
+  scrollYProgress: MotionValue<number>;
+  isActive: boolean;
+  priority?: boolean;
+}) {
+  const start = index / totalLength;
+  const end = (index + 1) / totalLength;
+
+  // Continuous zoom across the full service window (grows until handoff).
+  const scale = useTransform(scrollYProgress, [start, end], [1, 1.15]);
+
+  return (
+    <motion.div
+      className="absolute inset-0 origin-center transition-opacity duration-[1400ms] ease-in-out"
+      style={{
+        scale,
+        opacity: isActive ? 1 : 0,
+        zIndex: isActive ? 2 : 1,
+        pointerEvents: isActive ? "auto" : "none",
+      }}
+      aria-hidden={!isActive}
+    >
+      {service.imageUrl ? (
+        <Image
+          src={service.imageUrl}
+          alt={service.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 80vw"
+          className="object-contain"
+          priority={priority}
+        />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]" />
+      )}
+    </motion.div>
+  );
 }
 
 const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function ServicesScroll(
@@ -84,39 +134,25 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
     >
       <div className="sticky top-0 flex h-[100dvh] w-full flex-col overflow-x-hidden">
         <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-20 sm:gap-5 sm:px-8 sm:pb-8 md:block md:pb-6">
-          {/* Centered media — stacked layers cross-fade via opacity */}
+          {/* Centered media — stacked layers cross-fade + scroll-linked scale */}
           <div className="relative min-h-0 w-full max-w-5xl flex-1 md:absolute md:inset-0 md:m-auto md:h-full md:max-h-[70dvh] md:flex-none">
             <div className="relative mx-auto h-full max-h-[42dvh] w-full sm:max-h-[50dvh] md:max-h-none">
               {services.map((service, index) => (
-                <div
+                <ServiceImageLayer
                   key={`${service.title}-${index}`}
-                  className="absolute inset-0 transition-opacity duration-700 ease-in-out"
-                  style={{
-                    opacity: index === activeIndex ? 1 : 0,
-                    zIndex: index === activeIndex ? 2 : 1,
-                    pointerEvents: index === activeIndex ? "auto" : "none",
-                  }}
-                  aria-hidden={index !== activeIndex}
-                >
-                  {service.imageUrl ? (
-                    <Image
-                      src={service.imageUrl}
-                      alt={service.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 80vw"
-                      className="object-contain"
-                      priority={index === 0}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]" />
-                  )}
-                </div>
+                  service={service}
+                  index={index}
+                  totalLength={count}
+                  scrollYProgress={scrollYProgress}
+                  isActive={index === activeIndex}
+                  priority={index === 0}
+                />
               ))}
             </div>
           </div>
 
           {/* Glassmorphism copy card — grows with content; no fixed height clipping */}
-          <div className="pointer-events-none relative z-20 flex w-full shrink-0 justify-center md:absolute md:inset-x-auto md:bottom-auto md:left-[max(1.25rem,calc(50%-30rem))] md:top-1/2 md:w-[min(24rem,42vw)] md:-translate-y-1/2 md:justify-start">
+          <div className="pointer-events-none relative z-20 flex w-full shrink-0 justify-center md:absolute md:inset-x-auto md:left-[max(1.25rem,calc(50%-30rem))] md:bottom-[10%] md:top-auto md:w-[min(24rem,42vw)] md:justify-start">
             <div
               className="pointer-events-auto h-auto w-full max-w-md max-h-[46dvh] overflow-x-hidden overflow-y-auto rounded-2xl border border-white/25 px-5 pb-7 pt-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:max-w-lg sm:px-6 sm:pb-8 sm:pt-6 md:max-h-none md:max-w-none md:overflow-visible"
               style={{
