@@ -91,6 +91,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       imageUrl,
       imageWidth: imageDimensions?.width ?? null,
       imageHeight: imageDimensions?.height ?? null,
+      mediaType: service.mediaType,
+      embedUrl: service.embedUrl,
+      videoUrl: service.videoUrl,
     };
   });
 

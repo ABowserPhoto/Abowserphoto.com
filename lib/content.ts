@@ -1,6 +1,9 @@
 export type ServiceItem = {
   title: string;
   description: string;
+  mediaType?: "embed" | "video";
+  embedUrl?: string;
+  videoUrl?: string;
 };
 
 export type FAQItem = {
@@ -98,6 +101,30 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
       {
         title: "Agent Branding",
         description: "Portrait and lifestyle content for real estate professionals.",
+      },
+      {
+        title: "Drone Photography",
+        description:
+          "Capture sweeping aerial perspectives to showcase property boundaries, surrounding landscapes, and unique architectural angles from above.",
+      },
+      {
+        title: "360° Virtual Tours",
+        description:
+          "Provide immersive, interactive walkthroughs that allow prospective buyers to explore every room in detail from anywhere in the world.",
+        mediaType: "embed",
+        embedUrl: "https://my.matterport.com/show/?m=SxQL3iGyoDo",
+      },
+      {
+        title: "Cinematic Highlight Videos",
+        description:
+          "Deliver premium, emotionally engaging video tours that highlight the flow, atmosphere, and finest details of the property.",
+        mediaType: "video",
+        videoUrl: "/commercial/hero/hero-video.mp4",
+      },
+      {
+        title: "Digital Room Staging",
+        description:
+          "Transform empty spaces into warm, inviting homes with hyper-realistic digital furniture and decor staging, helping buyers visualize the property's full potential.",
       },
     ],
     aboutText:

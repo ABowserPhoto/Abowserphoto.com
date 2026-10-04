@@ -16,6 +16,9 @@ type ServiceWithMedia = {
   imageUrl: string | null;
   imageWidth: number | null;
   imageHeight: number | null;
+  mediaType?: "embed" | "video";
+  embedUrl?: string;
+  videoUrl?: string;
 };
 
 type AboutData = {

@@ -16,6 +16,26 @@ export type ServiceScrollItem = {
   title: string;
   description: string;
   imageUrl: string | null;
+  mediaType?: "embed" | "video";
+  embedUrl?: string;
+  videoUrl?: string;
+};
+
+type ActiveMedia = {
+  type: "embed" | "video";
+  url: string;
+};
+
+const modalOverlayVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 },
+};
+
+const modalContentVariants = {
+  hidden: { opacity: 0, scale: 0.97 },
+  visible: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.97 },
 };
 
 type ServicesScrollProps = {
@@ -101,6 +121,7 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
 ) {
   const containerRef = useRef<HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeMedia, setActiveMedia] = useState<ActiveMedia | null>(null);
   const count = services.length;
 
   useEffect(() => {
@@ -125,7 +146,45 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
 
   const activeService = services[activeIndex];
 
+  const ctaClassName =
+    "shrink-0 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white transition-opacity duration-300 hover:opacity-90";
+
+  const renderServiceCta = (service: ServiceScrollItem) => {
+    if (service.mediaType === "embed" && service.embedUrl) {
+      return (
+        <button
+          type="button"
+          className={ctaClassName}
+          style={{ backgroundColor: themeColor }}
+          onClick={() => setActiveMedia({ type: "embed", url: service.embedUrl! })}
+        >
+          View 360° Tour
+        </button>
+      );
+    }
+
+    if (service.mediaType === "video" && service.videoUrl) {
+      return (
+        <button
+          type="button"
+          className={ctaClassName}
+          style={{ backgroundColor: themeColor }}
+          onClick={() => setActiveMedia({ type: "video", url: service.videoUrl! })}
+        >
+          Watch Video
+        </button>
+      );
+    }
+
+    return (
+      <Link href="/booking" className={ctaClassName} style={{ backgroundColor: themeColor }}>
+        Inquire
+      </Link>
+    );
+  };
+
   return (
+    <>
     <section
       ref={containerRef}
       id="services"
@@ -217,19 +276,66 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
                     />
                   ))}
                 </div>
-                <Link
-                  href="/booking"
-                  className="shrink-0 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white transition-opacity duration-300 hover:opacity-90"
-                  style={{ backgroundColor: themeColor }}
-                >
-                  Inquire
-                </Link>
+                {renderServiceCta(activeService)}
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <AnimatePresence>
+      {activeMedia ? (
+        <motion.div
+          key="services-media-modal"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm md:p-12"
+          variants={modalOverlayVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          role="dialog"
+          aria-modal="true"
+          aria-label={activeMedia.type === "embed" ? "360° virtual tour" : "Property highlight video"}
+        >
+          <button
+            type="button"
+            onClick={() => setActiveMedia(null)}
+            className="absolute right-4 top-4 z-[110] rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/90 transition-colors hover:bg-white/20 md:right-8 md:top-8"
+          >
+            Close
+          </button>
+
+          <motion.div
+            className="aspect-video w-full max-w-7xl overflow-hidden rounded-xl shadow-2xl"
+            variants={modalContentVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {activeMedia.type === "embed" ? (
+              <iframe
+                src={activeMedia.url}
+                title="360° virtual tour"
+                className="h-full w-full border-0 bg-black"
+                allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
+                allowFullScreen
+              />
+            ) : (
+              <video
+                src={activeMedia.url}
+                controls
+                autoPlay
+                playsInline
+                className="h-full w-full bg-black object-contain"
+              />
+            )}
+          </motion.div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+    </>
   );
 });
 
