@@ -12,6 +12,11 @@ import {
 } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 
+export type VirtualTourItem = {
+  title: string;
+  url: string;
+};
+
 export type ServiceScrollItem = {
   title: string;
   description: string;
@@ -19,11 +24,15 @@ export type ServiceScrollItem = {
   mediaType?: "embed" | "video";
   embedUrl?: string;
   videoUrl?: string;
+  tours?: VirtualTourItem[];
+  videos?: VirtualTourItem[];
 };
 
 type ActiveMedia = {
   type: "embed" | "video";
   url: string;
+  tours?: VirtualTourItem[];
+  videos?: VirtualTourItem[];
 };
 
 const modalOverlayVariants = {
@@ -42,6 +51,18 @@ type ServicesScrollProps = {
   services: ServiceScrollItem[];
   themeColor: string;
 };
+
+function getYouTubeEmbedUrl(url: string) {
+  if (url.includes("youtu.be/")) return url.replace("youtu.be/", "www.youtube.com/embed/");
+  if (url.includes("watch?v=")) return url.replace("watch?v=", "embed/");
+  return url;
+}
+
+function getYouTubeIframeSrc(url: string) {
+  const embedUrl = getYouTubeEmbedUrl(url);
+  const separator = embedUrl.includes("?") ? "&" : "?";
+  return `${embedUrl}${separator}autoplay=1&rel=0`;
+}
 
 const textVariants = {
   enter: {
@@ -122,12 +143,19 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
   const containerRef = useRef<HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMedia, setActiveMedia] = useState<ActiveMedia | null>(null);
+  const [selectedPlaylistIndex, setSelectedPlaylistIndex] = useState(0);
   const count = services.length;
 
   useEffect(() => {
     assignRef(forwardedRef, containerRef.current);
     return () => assignRef(forwardedRef, null);
   }, [forwardedRef]);
+
+  useEffect(() => {
+    if (activeMedia) {
+      setSelectedPlaylistIndex(0);
+    }
+  }, [activeMedia]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -146,30 +174,80 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
 
   const activeService = services[activeIndex];
 
+  const modalPlaylist =
+    activeMedia?.type === "embed"
+      ? activeMedia.tours
+      : activeMedia?.type === "video"
+        ? activeMedia.videos
+        : undefined;
+
+  const embedIframeUrl =
+    activeMedia?.type === "embed" && modalPlaylist?.length
+      ? modalPlaylist[selectedPlaylistIndex]?.url ?? activeMedia.url
+      : activeMedia?.url;
+
+  const currentVideoUrl =
+    activeMedia?.type === "video"
+      ? modalPlaylist?.[selectedPlaylistIndex]?.url ?? activeMedia.url
+      : "";
+
+  const isYouTubeVideo =
+    currentVideoUrl.includes("youtube.com") || currentVideoUrl.includes("youtu.be");
+
   const ctaClassName =
     "shrink-0 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white transition-opacity duration-300 hover:opacity-90";
 
+  const openVideoMedia = (service: ServiceScrollItem) => {
+    const videos = service.videos?.filter((video) => video.url.trim());
+    if (videos?.length) {
+      setActiveMedia({ type: "video", url: videos[0].url, videos });
+      return;
+    }
+    if (service.videoUrl) {
+      setActiveMedia({ type: "video", url: service.videoUrl });
+    }
+  };
+
+  const openEmbedMedia = (service: ServiceScrollItem) => {
+    const tours = service.tours?.filter((tour) => tour.url.trim());
+    if (tours?.length) {
+      setActiveMedia({ type: "embed", url: tours[0].url, tours });
+      return;
+    }
+    if (service.embedUrl) {
+      setActiveMedia({ type: "embed", url: service.embedUrl });
+    }
+  };
+
   const renderServiceCta = (service: ServiceScrollItem) => {
-    if (service.mediaType === "embed" && service.embedUrl) {
+    const hasEmbed =
+      service.mediaType === "embed" &&
+      (Boolean(service.embedUrl) || Boolean(service.tours?.some((tour) => tour.url.trim())));
+
+    if (hasEmbed) {
       return (
         <button
           type="button"
           className={ctaClassName}
           style={{ backgroundColor: themeColor }}
-          onClick={() => setActiveMedia({ type: "embed", url: service.embedUrl! })}
+          onClick={() => openEmbedMedia(service)}
         >
           View 360° Tour
         </button>
       );
     }
 
-    if (service.mediaType === "video" && service.videoUrl) {
+    const hasVideo =
+      service.mediaType === "video" &&
+      (Boolean(service.videoUrl) || Boolean(service.videos?.some((video) => video.url.trim())));
+
+    if (hasVideo) {
       return (
         <button
           type="button"
           className={ctaClassName}
           style={{ backgroundColor: themeColor }}
-          onClick={() => setActiveMedia({ type: "video", url: service.videoUrl! })}
+          onClick={() => openVideoMedia(service)}
         >
           Watch Video
         </button>
@@ -307,30 +385,82 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
           </button>
 
           <motion.div
-            className="aspect-video w-full max-w-7xl overflow-hidden rounded-xl shadow-2xl"
+            className="flex w-full max-w-7xl flex-col gap-4"
             variants={modalContentVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
+            {modalPlaylist && modalPlaylist.length > 1 ? (
+              <div
+                className="flex flex-wrap justify-center gap-2"
+                role="tablist"
+                aria-label={
+                  activeMedia.type === "embed" ? "Select virtual tour" : "Select highlight video"
+                }
+              >
+                {modalPlaylist.map((item, index) => {
+                  const isSelected = index === selectedPlaylistIndex;
+                  return (
+                    <button
+                      key={`${item.title}-${index}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={isSelected}
+                      className="rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors"
+                      style={{
+                        borderColor: isSelected ? themeColor : "rgba(255,255,255,0.25)",
+                        backgroundColor: isSelected ? themeColor : "rgba(255,255,255,0.08)",
+                        color: isSelected ? "#fff" : "rgba(255,255,255,0.85)",
+                      }}
+                      onClick={() => setSelectedPlaylistIndex(index)}
+                    >
+                      {item.title}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            <div className="aspect-video w-full overflow-hidden rounded-xl shadow-2xl">
             {activeMedia.type === "embed" ? (
               <iframe
-                src={activeMedia.url}
-                title="360° virtual tour"
+                key={embedIframeUrl}
+                src={embedIframeUrl}
+                title={
+                  modalPlaylist?.[selectedPlaylistIndex]?.title
+                    ? `${modalPlaylist[selectedPlaylistIndex].title} — 360° virtual tour`
+                    : "360° virtual tour"
+                }
                 className="h-full w-full border-0 bg-black"
                 allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
                 allowFullScreen
               />
+            ) : isYouTubeVideo ? (
+              <iframe
+                key={currentVideoUrl}
+                src={getYouTubeIframeSrc(currentVideoUrl)}
+                title={
+                  modalPlaylist?.[selectedPlaylistIndex]?.title
+                    ? `${modalPlaylist[selectedPlaylistIndex].title} — property highlight video`
+                    : "Property highlight video"
+                }
+                className="aspect-video w-full rounded-xl border-0 shadow-2xl"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
             ) : (
               <video
-                src={activeMedia.url}
+                key={currentVideoUrl}
+                src={currentVideoUrl}
                 controls
                 autoPlay
                 playsInline
                 className="h-full w-full bg-black object-contain"
               />
             )}
+            </div>
           </motion.div>
         </motion.div>
       ) : null}

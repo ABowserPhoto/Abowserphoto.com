@@ -1,9 +1,16 @@
+export type VirtualTourItem = {
+  title: string;
+  url: string;
+};
+
 export type ServiceItem = {
   title: string;
   description: string;
   mediaType?: "embed" | "video";
   embedUrl?: string;
   videoUrl?: string;
+  tours?: VirtualTourItem[];
+  videos?: VirtualTourItem[];
 };
 
 export type FAQItem = {
@@ -112,14 +119,23 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         description:
           "Provide immersive, interactive walkthroughs that allow prospective buyers to explore every room in detail from anywhere in the world.",
         mediaType: "embed",
-        embedUrl: "https://my.matterport.com/show/?m=SxQL3iGyoDo",
+        tours: [
+          { title: "Primary Property", url: "https://abowser-360tour.netlify.app/" },
+          { title: "Secondary Property", url: "https://www.3dvista.com/samples/living_room.html" },
+        ],
       },
       {
         title: "Cinematic Highlight Videos",
         description:
           "Deliver premium, emotionally engaging video tours that highlight the flow, atmosphere, and finest details of the property.",
         mediaType: "video",
-        videoUrl: "/commercial/hero/hero-video.mp4",
+        videos: [
+          {
+            title: "Exterior & Drone",
+            url: "https://youtu.be/8nPB8MCfO30",
+          },
+          { title: "Exterior & Drone", url: "https://youtu.be/pWVGs4TKYRk" },
+        ],
       },
       {
         title: "Digital Room Staging",

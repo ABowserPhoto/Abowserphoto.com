@@ -19,6 +19,8 @@ type ServiceWithMedia = {
   mediaType?: "embed" | "video";
   embedUrl?: string;
   videoUrl?: string;
+  tours?: { title: string; url: string }[];
+  videos?: { title: string; url: string }[];
 };
 
 type AboutData = {
