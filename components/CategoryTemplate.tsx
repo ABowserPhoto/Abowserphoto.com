@@ -21,6 +21,8 @@ type ServiceWithMedia = {
   videoUrl?: string;
   tours?: { title: string; url: string }[];
   videos?: { title: string; url: string }[];
+  beforeImage?: string;
+  afterImage?: string;
 };
 
 type AboutData = {

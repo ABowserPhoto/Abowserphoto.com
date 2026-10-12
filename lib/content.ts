@@ -11,6 +11,8 @@ export type ServiceItem = {
   videoUrl?: string;
   tours?: VirtualTourItem[];
   videos?: VirtualTourItem[];
+  beforeImage?: string;
+  afterImage?: string;
 };
 
 export type FAQItem = {
@@ -141,6 +143,8 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         title: "Digital Room Staging",
         description:
           "Transform empty spaces into warm, inviting homes with hyper-realistic digital furniture and decor staging, helping buyers visualize the property's full potential.",
+        beforeImage: "/real-estate/services/staging-before.jpg",
+        afterImage: "/real-estate/services/staging-after.jpg",
       },
     ],
     aboutText:

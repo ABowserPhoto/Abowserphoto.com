@@ -11,6 +11,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
+import BeforeAfterSlider from "./BeforeAfterSlider";
 
 export type VirtualTourItem = {
   title: string;
@@ -26,6 +27,8 @@ export type ServiceScrollItem = {
   videoUrl?: string;
   tours?: VirtualTourItem[];
   videos?: VirtualTourItem[];
+  beforeImage?: string;
+  afterImage?: string;
 };
 
 type ActiveMedia = {
@@ -120,7 +123,14 @@ function ServiceImageLayer({
       }}
       aria-hidden={!isActive}
     >
-      {service.imageUrl ? (
+      {service.beforeImage && service.afterImage ? (
+        <BeforeAfterSlider
+          beforeImage={service.beforeImage}
+          afterImage={service.afterImage}
+          alt={service.title}
+          priority={priority}
+        />
+      ) : service.imageUrl ? (
         <Image
           src={service.imageUrl}
           alt={service.title}

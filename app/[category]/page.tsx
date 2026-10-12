@@ -96,6 +96,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       videoUrl: service.videoUrl,
       tours: service.tours,
       videos: service.videos,
+      beforeImage: service.beforeImage,
+      afterImage: service.afterImage,
     };
   });
 
