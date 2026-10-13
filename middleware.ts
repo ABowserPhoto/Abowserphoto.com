@@ -1,36 +1,32 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from "next/server";
+import { copySessionOntoResponse, updateSession } from "./lib/supabase/middleware";
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
+  const supabaseResponse = await updateSession(req);
   const url = req.nextUrl;
-  const hostname = req.headers.get('host') || '';
+  const hostname = req.headers.get("host") || "";
 
-  // 1. Define your subdomains
-  const isImmo = hostname.startsWith('immo.');
-  const isFood = hostname.startsWith('food.');
-  const isWedding = hostname.startsWith('wedding.');
-
-  // 2. Rewrite the URL invisibly to the correct folder path
-  // The user still sees "immo.aaronbowser-photography.com" in their browser
-  if (isImmo) {
-    return NextResponse.rewrite(new URL(`/immo${url.pathname}`, req.url));
-  }
-  
-  if (isFood) {
-    return NextResponse.rewrite(new URL(`/food${url.pathname}`, req.url));
+  function rewriteWithSession(pathname: string) {
+    const rewriteUrl = new URL(`${pathname}${url.search}`, req.url);
+    const rewrite = NextResponse.rewrite(rewriteUrl);
+    return copySessionOntoResponse(supabaseResponse, rewrite);
   }
 
-  if (isWedding) {
-    return NextResponse.rewrite(new URL(`/wedding${url.pathname}`, req.url));
+  if (hostname.startsWith("immo.")) {
+    return rewriteWithSession(`/immo${url.pathname}`);
   }
 
-  // 3. Let normal root domain traffic pass through unchanged
-  return NextResponse.next();
+  if (hostname.startsWith("food.")) {
+    return rewriteWithSession(`/food${url.pathname}`);
+  }
+
+  if (hostname.startsWith("wedding.")) {
+    return rewriteWithSession(`/wedding${url.pathname}`);
+  }
+
+  return supabaseResponse;
 }
 
-// Ensure the middleware doesn't run on images, CSS, or API routes
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|images|commercial).*)',
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|images|commercial).*)"],
 };

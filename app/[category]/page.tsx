@@ -82,7 +82,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   const servicesWithMedia = selectedCategory.services.map((service) => {
     const matchKey = service.title.trim().toLowerCase();
-    const imageUrl = serviceImageMap[matchKey] ?? null;
+    const imageUrl = service.image ?? serviceImageMap[matchKey] ?? null;
     const imageDimensions = imageUrl ? getImageDimensions(imageUrl) : null;
 
     return {

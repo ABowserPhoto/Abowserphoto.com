@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BookingModalBoundary from "../components/BookingModalBoundary";
 import CookieConsent from "../components/CookieConsent";
 import "./globals.css";
 
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="overflow-x-hidden bg-black text-[#F4F1ED] antialiased">
         {children}
+        <BookingModalBoundary />
         <CookieConsent />
       </body>
     </html>

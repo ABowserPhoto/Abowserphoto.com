@@ -10,7 +10,9 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { forwardRef, useEffect, useRef, useState } from "react";
+import { bookingHref, requestOpenBooking } from "../lib/booking";
 import BeforeAfterSlider from "./BeforeAfterSlider";
 
 export type VirtualTourItem = {
@@ -151,6 +153,7 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
   forwardedRef
 ) {
   const containerRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMedia, setActiveMedia] = useState<ActiveMedia | null>(null);
   const [selectedPlaylistIndex, setSelectedPlaylistIndex] = useState(0);
@@ -265,15 +268,70 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
     }
 
     return (
-      <Link href="/booking" className={ctaClassName} style={{ backgroundColor: themeColor }}>
+      <Link
+        href={bookingHref(pathname)}
+        scroll={false}
+        onClick={() => requestOpenBooking()}
+        className={ctaClassName}
+        style={{ backgroundColor: themeColor }}
+      >
         Inquire
       </Link>
     );
   };
 
+  const renderModalMedia = () => {
+    if (!activeMedia) return null;
+
+    if (activeMedia.type === "embed") {
+      return (
+        <iframe
+          key={embedIframeUrl}
+          src={embedIframeUrl}
+          title={
+            modalPlaylist?.[selectedPlaylistIndex]?.title
+              ? `${modalPlaylist[selectedPlaylistIndex].title} — 360° virtual tour`
+              : "360° virtual tour"
+          }
+          className="h-full w-full border-0 bg-black"
+          allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
+          allowFullScreen
+        />
+      );
+    }
+
+    if (isYouTubeVideo) {
+      return (
+        <iframe
+          key={currentVideoUrl}
+          src={getYouTubeIframeSrc(currentVideoUrl)}
+          title={
+            modalPlaylist?.[selectedPlaylistIndex]?.title
+              ? `${modalPlaylist[selectedPlaylistIndex].title} — property highlight video`
+              : "Property highlight video"
+          }
+          className="h-full w-full border-0 bg-black"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      );
+    }
+
+    return (
+      <video
+        key={currentVideoUrl}
+        src={currentVideoUrl}
+        controls
+        autoPlay
+        playsInline
+        className="h-full w-full bg-black object-contain"
+      />
+    );
+  };
+
   return (
     <>
-    <section
+      <section
       ref={containerRef}
       id="services"
       className="relative z-30 w-full bg-black"
@@ -370,111 +428,76 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
           </div>
         </div>
       </div>
-    </section>
+      </section>
 
-    <AnimatePresence>
-      {activeMedia ? (
-        <motion.div
-          key="services-media-modal"
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm md:p-12"
-          variants={modalOverlayVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          role="dialog"
-          aria-modal="true"
-          aria-label={activeMedia.type === "embed" ? "360° virtual tour" : "Property highlight video"}
-        >
-          <button
-            type="button"
-            onClick={() => setActiveMedia(null)}
-            className="absolute right-4 top-4 z-[110] rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/90 transition-colors hover:bg-white/20 md:right-8 md:top-8"
-          >
-            Close
-          </button>
-
+      <AnimatePresence>
+        {activeMedia ? (
           <motion.div
-            className="flex w-full max-w-7xl flex-col gap-4"
-            variants={modalContentVariants}
+            key="services-media-modal"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm md:p-12"
+            variants={modalOverlayVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={activeMedia.type === "embed" ? "360° virtual tour" : "Property highlight video"}
           >
-            {modalPlaylist && modalPlaylist.length > 1 ? (
-              <div
-                className="flex flex-wrap justify-center gap-2"
-                role="tablist"
-                aria-label={
-                  activeMedia.type === "embed" ? "Select virtual tour" : "Select highlight video"
-                }
-              >
-                {modalPlaylist.map((item, index) => {
-                  const isSelected = index === selectedPlaylistIndex;
-                  return (
-                    <button
-                      key={`${item.title}-${index}`}
-                      type="button"
-                      role="tab"
-                      aria-selected={isSelected}
-                      className="rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors"
-                      style={{
-                        borderColor: isSelected ? themeColor : "rgba(255,255,255,0.25)",
-                        backgroundColor: isSelected ? themeColor : "rgba(255,255,255,0.08)",
-                        color: isSelected ? "#fff" : "rgba(255,255,255,0.85)",
-                      }}
-                      onClick={() => setSelectedPlaylistIndex(index)}
-                    >
-                      {item.title}
-                    </button>
-                  );
-                })}
-              </div>
-            ) : null}
+            <button
+              type="button"
+              onClick={() => setActiveMedia(null)}
+              className="absolute right-4 top-4 z-[110] rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/90 transition-colors hover:bg-white/20 md:right-8 md:top-8"
+            >
+              Close
+            </button>
 
-            <div className="aspect-video w-full overflow-hidden rounded-xl shadow-2xl">
-            {activeMedia.type === "embed" ? (
-              <iframe
-                key={embedIframeUrl}
-                src={embedIframeUrl}
-                title={
-                  modalPlaylist?.[selectedPlaylistIndex]?.title
-                    ? `${modalPlaylist[selectedPlaylistIndex].title} — 360° virtual tour`
-                    : "360° virtual tour"
-                }
-                className="h-full w-full border-0 bg-black"
-                allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
-                allowFullScreen
-              />
-            ) : isYouTubeVideo ? (
-              <iframe
-                key={currentVideoUrl}
-                src={getYouTubeIframeSrc(currentVideoUrl)}
-                title={
-                  modalPlaylist?.[selectedPlaylistIndex]?.title
-                    ? `${modalPlaylist[selectedPlaylistIndex].title} — property highlight video`
-                    : "Property highlight video"
-                }
-                className="aspect-video w-full rounded-xl border-0 shadow-2xl"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            ) : (
-              <video
-                key={currentVideoUrl}
-                src={currentVideoUrl}
-                controls
-                autoPlay
-                playsInline
-                className="h-full w-full bg-black object-contain"
-              />
-            )}
-            </div>
+            <motion.div
+              className="flex w-full max-w-7xl flex-col gap-4"
+              variants={modalContentVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {modalPlaylist && modalPlaylist.length > 1 ? (
+                <div
+                  className="flex flex-wrap justify-center gap-2"
+                  role="tablist"
+                  aria-label={
+                    activeMedia.type === "embed" ? "Select virtual tour" : "Select highlight video"
+                  }
+                >
+                  {modalPlaylist.map((item, index) => {
+                    const isSelected = index === selectedPlaylistIndex;
+                    return (
+                      <button
+                        key={`${item.title}-${index}`}
+                        type="button"
+                        role="tab"
+                        aria-selected={isSelected}
+                        className="rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors"
+                        style={{
+                          borderColor: isSelected ? themeColor : "rgba(255,255,255,0.25)",
+                          backgroundColor: isSelected ? themeColor : "rgba(255,255,255,0.08)",
+                          color: isSelected ? "#fff" : "rgba(255,255,255,0.85)",
+                        }}
+                        onClick={() => setSelectedPlaylistIndex(index)}
+                      >
+                        {item.title}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
+
+              <div className="aspect-video w-full overflow-hidden rounded-xl shadow-2xl">
+                {renderModalMedia()}
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 });

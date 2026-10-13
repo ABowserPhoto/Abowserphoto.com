@@ -3,7 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BOOKING_HREF, bookingHref, requestOpenBooking } from "../lib/booking";
+import AccountNav from "./AccountNav";
 
 export type NavbarSection = {
   id: string;
@@ -75,10 +78,12 @@ export default function Navbar({
   onSectionClick,
   themeColor,
   lightSectionRef,
-  bookHref = "/booking",
+  bookHref = BOOKING_HREF,
 }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const resolvedBookHref = bookHref === BOOKING_HREF ? bookingHref(pathname) : bookHref;
 
   const { scrollYProgress: lightProgress } = useScroll({
     target: lightSectionRef,
@@ -179,7 +184,7 @@ export default function Navbar({
             )
           )}
           <motion.div className="rounded-full border px-4 py-2" style={{ borderColor: bookBorder }}>
-            <Link href={bookHref}>
+            <Link href={resolvedBookHref} scroll={false} onClick={() => requestOpenBooking()}>
               <motion.span
                 className="text-[11px] font-semibold uppercase tracking-[0.18em]"
                 style={{ color: bookText }}
@@ -187,6 +192,9 @@ export default function Navbar({
                 Book
               </motion.span>
             </Link>
+          </motion.div>
+          <motion.div style={{ color: bookText }}>
+            <AccountNav />
           </motion.div>
         </nav>
 
@@ -231,13 +239,18 @@ export default function Navbar({
               </a>
             ))}
             <Link
-              href={bookHref}
-              onClick={() => setMenuOpen(false)}
+              href={resolvedBookHref}
+              scroll={false}
+              onClick={() => {
+                requestOpenBooking();
+                setMenuOpen(false);
+              }}
               className="mt-2 block rounded-md px-3 py-2.5 text-center text-sm font-semibold text-[#F4F1ED]"
               style={{ backgroundColor: themeColor }}
             >
               Book
             </Link>
+            <AccountNav variant="mobile" onNavigated={() => setMenuOpen(false)} />
           </div>
         </nav>
       ) : null}

@@ -6,6 +6,7 @@ export type VirtualTourItem = {
 export type ServiceItem = {
   title: string;
   description: string;
+  image?: string;
   mediaType?: "embed" | "video";
   embedUrl?: string;
   videoUrl?: string;
@@ -46,8 +47,11 @@ export type CategorySlug =
 
 export const sharedAbout = {
   title: "About Me",
-  description:
-    "I am Aaron Bowser, a visual storyteller working across wedding, commercial, editorial, and brand photography. My work blends cinematic composition with authentic emotion—whether capturing a once-in-a-lifetime celebration, elevating a product line, or shaping a personal brand. Every project is approached with intention, craft, and a commitment to images that feel timeless and true.",
+  description: `I am Aaron Bowser, a visual storyteller and professional real estate photographer based in Hagen, North Rhine-Westphalia. My work spans wedding, commercial, editorial, and property photography, consistently blending cinematic composition with authentic emotion.
+
+Whether I am capturing a once-in-a-lifetime celebration, shaping a personal brand, or elevating a real estate listing, every project is approached with intention, craft, and a commitment to images that feel timeless and true.
+
+When shooting interiors and real estate, I help agents, developers, and homeowners turn browsers into buyers. From cozy residential homes to modern commercial spaces, my goal is to highlight the unique character, natural light, and true potential of every room. By combining advanced lighting techniques, meticulous post-production, and a seamless client experience, I deliver stunning, market-ready photos with the speed and reliability your business demands.`,
 };
 
 function buildPortfolio(seed: string) {
@@ -100,8 +104,16 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     portfolioImages: buildPortfolio("real-estate"),
     services: [
       {
-        title: "Interior and Exterior",
-        description: "Balanced, clean imagery for complete listing coverage.",
+        title: "Interior Photography",
+        description:
+          "Showcase the flow, natural light, and architectural details of every room. We create bright, inviting spaces that allow buyers to truly visualize themselves living in the home.",
+        image: "/real-estate/services/Interior.jpg",
+      },
+      {
+        title: "Exterior Photography",
+        description:
+          "Maximize curb appeal by highlighting the property’s architecture, landscaping, and surrounding environment with perfect angles and optimal natural lighting.",
+        image: "/real-estate/services/Exterior.jpg",
       },
       {
         title: "Twilight Sessions",

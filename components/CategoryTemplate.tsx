@@ -224,9 +224,15 @@ export default function CategoryTemplate({
               <h2 className="mt-3 text-3xl font-light tracking-tight text-[#322B2B] sm:text-4xl">
                 Behind the lens
               </h2>
-              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#322B2B]/80 sm:text-base">
-                {aboutData.description}
-              </p>
+              <div className="mt-5 max-w-2xl space-y-4 text-sm leading-relaxed text-[#322B2B]/80 sm:text-base">
+                {aboutData.description
+                  .split(/\n\n+/)
+                  .map((paragraph) => paragraph.trim())
+                  .filter(Boolean)
+                  .map((paragraph) => (
+                    <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                  ))}
+              </div>
               <a
                 href="mailto:hello@abowserphoto.com"
                 className="mt-8 inline-flex rounded-full px-6 py-3 text-sm font-semibold text-white transition-opacity duration-300 hover:opacity-90"
