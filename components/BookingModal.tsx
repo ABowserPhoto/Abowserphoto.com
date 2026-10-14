@@ -5,12 +5,16 @@ import { useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { isSupabaseConfigured } from "../lib/supabase/env";
 import { createClient } from "../lib/supabase/client";
+import type { InquiryCategory } from "../lib/booking";
 import ClientAuth from "./Auth/ClientAuth";
 import BookingForm from "./BookingForm";
+import GeneralInquiryForm from "./GeneralInquiryForm";
 
 type BookingModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  isRealEstate: boolean;
+  inquiryCategory: InquiryCategory;
 };
 
 const SIGNUP_SUCCESS_MESSAGE =
@@ -76,7 +80,7 @@ function PendingApprovalMessage({
   );
 }
 
-export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
+export default function BookingModal({ isOpen, onClose, isRealEstate, inquiryCategory }: BookingModalProps) {
   const [hasMounted, setHasMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isApproved, setIsApproved] = useState(false);
@@ -268,14 +272,26 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 }}
               />
             ) : user && isApproved ? (
-              <BookingForm
-                userEmail={user.email}
-                onClose={onClose}
-                onSignedOut={() => {
-                  setUser(null);
-                  setIsApproved(false);
-                }}
-              />
+              isRealEstate ? (
+                <BookingForm
+                  userEmail={user.email}
+                  onClose={onClose}
+                  onSignedOut={() => {
+                    setUser(null);
+                    setIsApproved(false);
+                  }}
+                />
+              ) : (
+                <GeneralInquiryForm
+                  category={inquiryCategory}
+                  userEmail={user.email}
+                  onClose={onClose}
+                  onSignedOut={() => {
+                    setUser(null);
+                    setIsApproved(false);
+                  }}
+                />
+              )
             ) : (
               <PendingApprovalMessage
                 userEmail={user.email}

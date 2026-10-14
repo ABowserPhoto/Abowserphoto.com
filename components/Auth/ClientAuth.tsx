@@ -126,8 +126,8 @@ export default function ClientAuth({
         {mode === "sign-in" ? "Sign in to book" : "Create your account"}
       </h2>
       <p className="mt-3 text-sm leading-relaxed text-[#F4F1ED]/75">
-        You need an approved account to request a real estate photoshoot. Sign in or create an
-        account to continue.
+        You need an approved account to request a photoshoot. Sign in or create an account to
+        continue.
       </p>
 
       <div className="mt-6 grid grid-cols-2 gap-2">

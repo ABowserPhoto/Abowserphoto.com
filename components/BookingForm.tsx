@@ -3,15 +3,23 @@
 import { useState, useTransition } from "react";
 import { submitBooking, type BookingFormData } from "../actions/submitBooking";
 import {
-  BOOKING_TIME_SLOTS,
+  BOOKING_SERVICES,
+  PHOTO_PACKAGES,
   PROPERTY_STATUSES,
+  isPhotoPackage,
   isPropertyStatus,
+  parseBookingServices,
   todayInputValue,
 } from "../lib/booking";
 import { createClient } from "../lib/supabase/client";
+import { useAvailableTimes } from "../lib/useAvailableTimes";
+import DarkSelect from "./DarkSelect";
 
 const inputClassName =
-  "w-full rounded-none border border-gray-800 bg-transparent px-4 py-3 text-sm text-[#F4F1ED] outline-none transition-colors duration-300 placeholder:text-[#F4F1ED]/40 focus:border-[#F4F1ED]/60";
+  "w-full rounded-none border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED] outline-none transition-colors duration-300 placeholder:text-[#F4F1ED]/40 focus:border-[#F4F1ED]/60";
+
+const choiceClassName =
+  "flex cursor-pointer items-center gap-3 rounded-none border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED] transition-colors duration-300 has-[:checked]:border-[#F4F1ED]/60";
 
 type BookingFormProps = {
   userEmail?: string | null;
@@ -24,6 +32,8 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate);
 
   async function handleSignOut() {
     setIsSigningOut(true);
@@ -38,20 +48,50 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
     setErrorMessage(null);
 
     const formData = new FormData(event.currentTarget);
+    if (isCheckingTimes) {
+      setErrorMessage("Please wait while we check availability.");
+      return;
+    }
+
+    const requestedTime = String(formData.get("requestedTime") ?? "");
+    if (!requestedTime || !availableTimes.includes(requestedTime)) {
+      setErrorMessage(
+        availableTimes.length === 0
+          ? "No available times for this date"
+          : "Please select an available time."
+      );
+      return;
+    }
+
     const propertyStatus = String(formData.get("propertyStatus") ?? "");
     if (!isPropertyStatus(propertyStatus)) {
       setErrorMessage("Please select a property status.");
       return;
     }
 
+    const services = parseBookingServices(formData.getAll("services").map(String));
+    if (services.length === 0) {
+      setErrorMessage("Please select at least one service.");
+      return;
+    }
+
+    const photoPackage = String(formData.get("photoPackage") ?? "");
+    if (!isPhotoPackage(photoPackage)) {
+      setErrorMessage("Please select a photo package.");
+      return;
+    }
+
     const payload: BookingFormData = {
       locationAddress: String(formData.get("locationAddress") ?? ""),
       requestedDate: String(formData.get("requestedDate") ?? ""),
-      requestedTime: String(formData.get("requestedTime") ?? ""),
+      requestedTime,
       propertyStatus,
       contactName: String(formData.get("contactName") ?? ""),
       contactNumber: String(formData.get("contactNumber") ?? ""),
       contactEmail: String(formData.get("contactEmail") ?? ""),
+      services,
+      photoPackage,
+      additionalDetails: String(formData.get("additionalDetails") ?? ""),
     };
 
     startTransition(async () => {
@@ -114,7 +154,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
         </div>
       ) : null}
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+      <form onSubmit={handleSubmit} className="booking-form mt-8 space-y-5">
         <div>
           <label
             htmlFor="locationAddress"
@@ -147,6 +187,8 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
               type="date"
               required
               min={todayInputValue()}
+              value={selectedDate}
+              onChange={(event) => setSelectedDate(event.target.value)}
               className={`${inputClassName} [color-scheme:dark]`}
             />
           </div>
@@ -157,22 +199,22 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
             >
               Requested Time *
             </label>
-            <select
+            <DarkSelect
               id="requestedTime"
               name="requestedTime"
-              required
-              defaultValue=""
-              className={`${inputClassName} [color-scheme:dark]`}
-            >
-              <option value="" disabled>
-                Select a time
-              </option>
-              {BOOKING_TIME_SLOTS.map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
-            </select>
+              placeholder={selectedDate ? "Select a time" : "Select a date first"}
+              options={availableTimes.map((time) => ({ value: time, label: time }))}
+              disabled={!selectedDate || isCheckingTimes || availableTimes.length === 0}
+              loading={isCheckingTimes}
+              loadingLabel="Checking availability..."
+              emptyLabel="No available times for this date"
+              resetKey={selectedDate}
+            />
+            {availabilityMessage && !isCheckingTimes ? (
+              <p className="mt-2 text-sm text-[#F4F1ED]/70" role="status">
+                {availabilityMessage}
+              </p>
+            ) : null}
           </div>
         </div>
 
@@ -184,7 +226,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
             {PROPERTY_STATUSES.map((status) => (
               <label
                 key={status}
-                className="flex cursor-pointer items-center gap-3 rounded-none border border-gray-800 px-4 py-3 text-sm text-[#F4F1ED] transition-colors duration-300 has-[:checked]:border-[#F4F1ED]/60"
+                className={choiceClassName}
               >
                 <input
                   type="radio"
@@ -251,6 +293,63 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           </div>
         </div>
 
+        <fieldset>
+          <legend className="mb-3 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
+            Services *
+          </legend>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {BOOKING_SERVICES.map((service) => (
+              <label
+                key={service}
+                className={choiceClassName}
+              >
+                <input
+                  type="checkbox"
+                  name="services"
+                  value={service}
+                  className="accent-[#F4F1ED]"
+                />
+                {service}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <div>
+          <label
+            htmlFor="photoPackage"
+            className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+          >
+            Photo Package *
+          </label>
+          <DarkSelect
+            id="photoPackage"
+            name="photoPackage"
+            placeholder="Select a photo package"
+            options={PHOTO_PACKAGES.map((photoPackage) => ({
+              value: photoPackage.id,
+              label: photoPackage.label,
+            }))}
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="additionalDetails"
+            className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+          >
+            Additional Details
+          </label>
+          <textarea
+            id="additionalDetails"
+            name="additionalDetails"
+            rows={4}
+            maxLength={2000}
+            placeholder="Access notes, timing preferences, or anything else we should know"
+            className={`${inputClassName} min-h-[7rem] resize-y`}
+          />
+        </div>
+
         {errorMessage ? (
           <p className="text-sm text-red-300" role="alert">
             {errorMessage}
@@ -259,10 +358,15 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
 
         <button
           type="submit"
-          disabled={isPending}
+          disabled={
+            isPending ||
+            isCheckingTimes ||
+            !selectedDate ||
+            availableTimes.length === 0
+          }
           className="w-full rounded-none border border-[#F4F1ED] bg-[#F4F1ED] px-5 py-3 text-sm font-semibold text-black transition-opacity duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isPending ? "Submitting..." : "Submit Request"}
+          {isPending ? "Submitting..." : isCheckingTimes ? "Checking availability..." : "Submit Request"}
         </button>
       </form>
     </div>

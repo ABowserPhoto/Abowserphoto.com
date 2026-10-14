@@ -1,7 +1,19 @@
 "use server";
 
-import { google } from "googleapis";
-import { extractCity, isPropertyStatus, type PropertyStatus } from "../lib/booking";
+import {
+  addOneHour,
+  extractCity,
+  getPhotoPackageLabel,
+  isBookingTimeSlot,
+  isPhotoPackage,
+  isPropertyStatus,
+  normalizeTime,
+  parseBookingServices,
+  type BookingService,
+  type PhotoPackage,
+  type PropertyStatus,
+} from "../lib/booking";
+import { getCalendarClient, queryAvailableTimesForDate } from "../lib/googleCalendar";
 import { createClient } from "../lib/supabase/server";
 
 export type BookingFormData = {
@@ -12,6 +24,9 @@ export type BookingFormData = {
   contactName: string;
   contactNumber: string;
   contactEmail: string;
+  services: BookingService[];
+  photoPackage: PhotoPackage;
+  additionalDetails?: string;
 };
 
 export type SubmitBookingResult = {
@@ -23,23 +38,6 @@ type ClientRecord = {
   company_name: string;
   is_approved: boolean;
 };
-
-function normalizeTime(value: string) {
-  const [hours = "00", minutes = "00"] = value.split(":");
-  return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}:00`;
-}
-
-function addOneHour(value: string) {
-  const [hours = "0", minutes = "00"] = value.split(":");
-  const nextHour = (Number(hours) + 1) % 24;
-  return `${String(nextHour).padStart(2, "0")}:${minutes.padStart(2, "0")}:00`;
-}
-
-function getPrivateKey() {
-  const key = process.env.GOOGLE_PRIVATE_KEY;
-  if (!key || key.includes("...")) return undefined;
-  return key.replace(/\\n/g, "\n");
-}
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -63,30 +61,7 @@ async function getApprovedClient(
 }
 
 async function createCalendarEvent(data: BookingFormData, companyName: string) {
-  const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-  const privateKey = getPrivateKey();
-  const calendarId = process.env.GOOGLE_CALENDAR_ID;
-  const timeZone = process.env.BOOKING_TIMEZONE ?? "Europe/Berlin";
-
-  if (
-    !clientEmail ||
-    !privateKey ||
-    !calendarId ||
-    clientEmail.includes("your-service-account") ||
-    calendarId.includes("your-calendar-id")
-  ) {
-    throw new Error(
-      "Google Calendar is not configured. Set GOOGLE_CLIENT_EMAIL, GOOGLE_PRIVATE_KEY, and GOOGLE_CALENDAR_ID."
-    );
-  }
-
-  const auth = new google.auth.JWT({
-    email: clientEmail,
-    key: privateKey,
-    scopes: ["https://www.googleapis.com/auth/calendar"],
-  });
-
-  const calendar = google.calendar({ version: "v3", auth });
+  const { calendar, calendarId, timeZone } = getCalendarClient();
   const startTime = normalizeTime(data.requestedTime);
   const endTime = addOneHour(data.requestedTime);
   const city = extractCity(data.locationAddress);
@@ -102,6 +77,9 @@ async function createCalendarEvent(data: BookingFormData, companyName: string) {
           `Contact Name: ${data.contactName}`,
           `Contact Number: ${data.contactNumber}`,
           `Contact Email Address: ${data.contactEmail}`,
+          `Services: ${data.services.join(", ")}`,
+          `Photo Package: ${getPhotoPackageLabel(data.photoPackage)}`,
+          `Additional Details: ${data.additionalDetails?.trim() || "None"}`,
         ].join("\n"),
         start: {
           dateTime: `${data.requestedDate}T${startTime}`,
@@ -127,6 +105,9 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
   const contactName = data.contactName.trim();
   const contactNumber = data.contactNumber.trim();
   const contactEmail = data.contactEmail.trim();
+  const services = parseBookingServices(data.services ?? []);
+  const photoPackage = data.photoPackage;
+  const additionalDetails = (data.additionalDetails ?? "").replace(/\r\n/g, "\n").trim().slice(0, 2000);
 
   if (
     !locationAddress ||
@@ -135,7 +116,10 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
     !isPropertyStatus(propertyStatus) ||
     !contactName ||
     !contactNumber ||
-    !contactEmail
+    !contactEmail ||
+    services.length === 0 ||
+    !isPhotoPackage(photoPackage) ||
+    !isBookingTimeSlot(requestedTime)
   ) {
     return { success: false, message: "Please complete all required fields." };
   }
@@ -159,6 +143,14 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
   }
 
   try {
+    const availableTimes = await queryAvailableTimesForDate(requestedDate);
+    if (!availableTimes.includes(requestedTime)) {
+      return {
+        success: false,
+        message: "That time is no longer available. Please choose another slot.",
+      };
+    }
+
     await createCalendarEvent(
       {
         locationAddress,
@@ -168,6 +160,9 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
         contactName,
         contactNumber,
         contactEmail,
+        services,
+        photoPackage,
+        additionalDetails,
       },
       client.company_name
     );

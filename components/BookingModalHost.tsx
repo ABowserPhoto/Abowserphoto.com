@@ -6,7 +6,9 @@ import {
   BOOKING_OPEN_EVENT,
   BOOKING_QUERY_KEY,
   BOOKING_QUERY_VALUE,
+  getInquiryCategory,
   isBookingRoute,
+  isRealEstateBookingPath,
 } from "../lib/booking";
 import BookingModal from "./BookingModal";
 
@@ -61,5 +63,12 @@ export default function BookingModalHost() {
     router.replace(nextPath, { scroll: false });
   }, [isRouteOpen, router]);
 
-  return <BookingModal isOpen={isOpen} onClose={closeModal} />;
+  return (
+    <BookingModal
+      isOpen={isOpen}
+      onClose={closeModal}
+      isRealEstate={isRealEstateBookingPath(pathname)}
+      inquiryCategory={getInquiryCategory(pathname)}
+    />
+  );
 }

@@ -7,3 +7,13 @@
 body {
   margin: 0;
 }
+
+.booking-form {
+  color-scheme: dark;
+}
+
+.booking-form select,
+.booking-form select option {
+  background-color: #1a1a1a;
+  color: #f4f1ed;
+}
