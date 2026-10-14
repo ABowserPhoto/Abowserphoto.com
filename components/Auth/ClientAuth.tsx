@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { notifyAdminOfRegistration } from "../../actions/notifyAdminOfRegistration";
 import { BOOKING_QUERY_KEY, BOOKING_QUERY_VALUE } from "../../lib/booking";
 import { createClient } from "../../lib/supabase/client";
 
@@ -89,6 +90,20 @@ export default function ClientAuth({
         onSignupFailed?.();
         setErrorMessage(error.message);
         return;
+      }
+
+      const isNewUser = Boolean(data.user) && (data.user?.identities?.length ?? 1) > 0;
+      if (isNewUser) {
+        try {
+          await notifyAdminOfRegistration({
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            companyName: companyName.trim(),
+            email: email.trim(),
+          });
+        } catch (notifyError) {
+          console.error("Admin registration email failed:", notifyError);
+        }
       }
 
       setInfoMessage(SIGNUP_SUCCESS_MESSAGE);
