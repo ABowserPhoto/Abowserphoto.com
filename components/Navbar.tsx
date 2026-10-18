@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BOOKING_HREF, bookingHref, requestOpenBooking } from "../lib/booking";
 import AccountNav from "./AccountNav";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export type NavbarSection = {
   id: string;
@@ -21,21 +22,28 @@ type NavbarProps = {
   themeColor: string;
   lightSectionRef?: React.RefObject<HTMLElement | null>;
   bookHref?: string;
+  homeHref?: string;
+  labels?: {
+    book?: string;
+    home?: string;
+  };
 };
 
 function NavbarLogo({
   logoUrl,
+  homeHref,
   lightOpacity,
   darkOpacity,
 }: {
   logoUrl: string | null;
+  homeHref: string;
   lightOpacity: MotionValue<number>;
   darkOpacity: MotionValue<number>;
 }) {
   const isSvg = logoUrl?.toLowerCase().endsWith(".svg");
 
   return (
-    <Link href="/" className="relative block h-9 w-9 shrink-0" aria-label="Aaron Bowser Photography home">
+    <Link href={homeHref} className="relative block h-9 w-9 shrink-0" aria-label="Aaron Bowser Photography home">
       {logoUrl ? (
         <>
           <motion.span className="absolute inset-0" style={{ opacity: lightOpacity }}>
@@ -79,11 +87,15 @@ export default function Navbar({
   themeColor,
   lightSectionRef,
   bookHref = BOOKING_HREF,
+  homeHref = "/",
+  labels,
 }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const resolvedBookHref = bookHref === BOOKING_HREF ? bookingHref(pathname) : bookHref;
+  const bookLabel = labels?.book ?? "Book";
+  const homeLabel = labels?.home ?? "Home";
 
   const { scrollYProgress: lightProgress } = useScroll({
     target: lightSectionRef,
@@ -150,16 +162,22 @@ export default function Navbar({
       }}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
-        <NavbarLogo logoUrl={logoUrl} lightOpacity={logoLightOpacity} darkOpacity={logoDarkOpacity} />
+        <NavbarLogo
+          logoUrl={logoUrl}
+          homeHref={homeHref}
+          lightOpacity={logoLightOpacity}
+          darkOpacity={logoDarkOpacity}
+        />
 
         <nav className="hidden items-center gap-8 md:flex">
-          <motion.a
-            href="/"
-            className="text-[11px] font-medium uppercase tracking-[0.22em]"
-            style={{ color: linkColor }}
-          >
-            Home
-          </motion.a>
+          <Link href={homeHref}>
+            <motion.span
+              className="text-[11px] font-medium uppercase tracking-[0.22em]"
+              style={{ color: linkColor }}
+            >
+              {homeLabel}
+            </motion.span>
+          </Link>
           {pageSections.map((section) =>
             activeSection === section.id ? (
               <a
@@ -189,12 +207,15 @@ export default function Navbar({
                 className="text-[11px] font-semibold uppercase tracking-[0.18em]"
                 style={{ color: bookText }}
               >
-                Book
+                {bookLabel}
               </motion.span>
             </Link>
           </motion.div>
           <motion.div style={{ color: bookText }}>
             <AccountNav />
+          </motion.div>
+          <motion.div style={{ color: linkColor }}>
+            <LanguageSwitcher />
           </motion.div>
         </nav>
 
@@ -217,11 +238,11 @@ export default function Navbar({
         >
           <div className="space-y-1">
             <Link
-              href="/"
+              href={homeHref}
               onClick={() => setMenuOpen(false)}
               className="block rounded-md px-3 py-2.5 text-sm font-medium text-[#322B2B]/90"
             >
-              Home
+              {homeLabel}
             </Link>
             {pageSections.map((section) => (
               <a
@@ -248,9 +269,12 @@ export default function Navbar({
               className="mt-2 block rounded-md px-3 py-2.5 text-center text-sm font-semibold text-[#F4F1ED]"
               style={{ backgroundColor: themeColor }}
             >
-              Book
+              {bookLabel}
             </Link>
             <AccountNav variant="mobile" onNavigated={() => setMenuOpen(false)} />
+            <div className="border-t border-[#322B2B]/10 pt-3">
+              <LanguageSwitcher onNavigated={() => setMenuOpen(false)} className="flex items-center gap-1.5 px-3 text-sm font-semibold uppercase tracking-[0.14em] text-[#322B2B]/90" />
+            </div>
           </div>
         </nav>
       ) : null}

@@ -5,6 +5,7 @@ export type NewClientRegistrationDetails = {
   lastName: string;
   companyName: string;
   email: string;
+  locale?: string;
 };
 
 function sanitize(value: string) {
@@ -42,6 +43,8 @@ export async function sendAdminRegistrationEmail(details: NewClientRegistrationD
       ? `Please log into the Workflow CRM to review and approve this client: ${crmUrl}`
       : "Please log into the Workflow CRM to review and approve this client.";
 
+    const preferredLocale = sanitize(details.locale ?? "en").toUpperCase();
+
     const text = [
       "A new client has registered on the website and is pending approval.",
       "",
@@ -49,6 +52,7 @@ export async function sendAdminRegistrationEmail(details: NewClientRegistrationD
       `Last Name: ${lastName}`,
       `Company Name: ${companyName}`,
       `Email Address: ${email}`,
+      `Preferred Language: ${preferredLocale}`,
       "",
       reminder,
     ].join("\n");
@@ -59,7 +63,8 @@ export async function sendAdminRegistrationEmail(details: NewClientRegistrationD
         <strong>First Name:</strong> ${escapeHtml(firstName)}<br />
         <strong>Last Name:</strong> ${escapeHtml(lastName)}<br />
         <strong>Company Name:</strong> ${escapeHtml(companyName)}<br />
-        <strong>Email Address:</strong> ${escapeHtml(email)}
+        <strong>Email Address:</strong> ${escapeHtml(email)}<br />
+        <strong>Preferred Language:</strong> ${escapeHtml(preferredLocale)}
       </p>
       <p>${
         crmUrl

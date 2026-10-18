@@ -8,6 +8,7 @@ import {
   resolveInquiryCategoryLabel,
 } from "../lib/booking";
 import { getCalendarClient, queryAvailableTimesForDate } from "../lib/googleCalendar";
+import { getAuthCopy, getBookingCopy, resolveLocale } from "../lib/i18n/messages";
 import { createClient } from "../lib/supabase/server";
 
 export type GeneralInquiryFormData = {
@@ -18,6 +19,7 @@ export type GeneralInquiryFormData = {
   contactEmail: string;
   contactPhone: string;
   details: string;
+  locale?: string;
 };
 
 export type SubmitGeneralInquiryResult = {
@@ -91,6 +93,9 @@ async function createInquiryEvent(
 export async function submitGeneralInquiry(
   data: GeneralInquiryFormData
 ): Promise<SubmitGeneralInquiryResult> {
+  const locale = resolveLocale(data.locale);
+  const auth = getAuthCopy(locale);
+  const booking = getBookingCopy(locale);
   const categoryLabel = resolveInquiryCategoryLabel(data.categorySlug);
   const requestedDate = data.requestedDate.trim();
   const requestedTime = data.requestedTime.trim();
@@ -108,24 +113,24 @@ export async function submitGeneralInquiry(
     !contactPhone ||
     !details
   ) {
-    return { success: false, message: "Please complete all required fields." };
+    return { success: false, message: booking.completeFields };
   }
 
   if (!isValidEmail(contactEmail)) {
-    return { success: false, message: "Please enter a valid contact email address." };
+    return { success: false, message: booking.validEmail };
   }
 
   const supabase = await createClient();
   const { data: userData, error: userError } = await supabase.auth.getUser();
   if (userError || !userData.user) {
-    return { success: false, message: "Please sign in to submit an inquiry." };
+    return { success: false, message: booking.signInToInquire };
   }
 
   const client = await getApprovedClient(supabase, userData.user.id);
   if (!client || !client.is_approved) {
     return {
       success: false,
-      message: "Your account is currently being reviewed. You will be able to book photoshoots once approved.",
+      message: auth.pendingReviewBooking,
     };
   }
 
@@ -134,7 +139,7 @@ export async function submitGeneralInquiry(
     if (!availableTimes.includes(requestedTime)) {
       return {
         success: false,
-        message: "That time is no longer available. Please choose another slot.",
+        message: booking.timeUnavailable,
       };
     }
 
@@ -152,13 +157,13 @@ export async function submitGeneralInquiry(
       sanitizeLine(client.company_name)
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : "We could not create the calendar event.";
+    const message = error instanceof Error ? error.message : booking.calendarEventFailed;
     console.error("Google Calendar inquiry sync failed:", error);
     return { success: false, message };
   }
 
   return {
     success: true,
-    message: "Your inquiry has been received. We will review your details and be in touch shortly.",
+    message: booking.inquirySuccess,
   };
 }

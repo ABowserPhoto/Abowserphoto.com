@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { submitGeneralInquiry } from "../actions/submitGeneralInquiry";
 import { todayInputValue, type InquiryCategory } from "../lib/booking";
+import { useDictionary, useLocale } from "../lib/i18n/LocaleProvider";
 import { createClient } from "../lib/supabase/client";
 import { useAvailableTimes } from "../lib/useAvailableTimes";
 import DarkSelect from "./DarkSelect";
@@ -23,12 +24,14 @@ export default function GeneralInquiryForm({
   onClose,
   onSignedOut,
 }: GeneralInquiryFormProps) {
+  const { locale } = useLocale();
+  const { auth, booking } = useDictionary();
   const [isPending, startTransition] = useTransition();
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate);
+  const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate, locale);
 
   async function handleSignOut() {
     setIsSigningOut(true);
@@ -44,23 +47,19 @@ export default function GeneralInquiryForm({
 
     const formData = new FormData(event.currentTarget);
     if (isCheckingTimes) {
-      setErrorMessage("Please wait while we check availability.");
+      setErrorMessage(booking.waitAvailability);
       return;
     }
 
     const requestedTime = String(formData.get("requestedTime") ?? "");
     if (!requestedTime || !availableTimes.includes(requestedTime)) {
-      setErrorMessage(
-        availableTimes.length === 0
-          ? "No available times for this date"
-          : "Please select an available time."
-      );
+      setErrorMessage(availableTimes.length === 0 ? booking.noTimes : booking.selectAvailableTime);
       return;
     }
 
     const details = String(formData.get("details") ?? "").trim();
     if (!details) {
-      setErrorMessage("Please add details of the photoshoot.");
+      setErrorMessage(booking.addDetails);
       return;
     }
 
@@ -74,6 +73,7 @@ export default function GeneralInquiryForm({
           contactEmail: String(formData.get("contactEmail") ?? ""),
           contactPhone: String(formData.get("contactPhone") ?? ""),
           details,
+          locale,
         });
         if (result.success) {
           setIsSuccess(true);
@@ -81,7 +81,7 @@ export default function GeneralInquiryForm({
         }
         setErrorMessage(result.message);
       } catch (error) {
-        const message = error instanceof Error ? error.message : "Inquiry submission failed.";
+        const message = error instanceof Error ? error.message : booking.inquiryError;
         console.error("Inquiry submission failed:", error);
         setErrorMessage(message);
       }
@@ -91,10 +91,12 @@ export default function GeneralInquiryForm({
   if (isSuccess) {
     return (
       <div className="text-center">
-        <p className="text-xs uppercase tracking-[0.2em] text-[#F4F1ED]/60">{category.label} Inquiry</p>
-        <h2 className="mt-4 text-2xl font-semibold text-[#F4F1ED] sm:text-3xl">Thank you</h2>
+        <p className="text-xs uppercase tracking-[0.2em] text-[#F4F1ED]/60">
+          {category.label} {booking.inquirySuffix}
+        </p>
+        <h2 className="mt-4 text-2xl font-semibold text-[#F4F1ED] sm:text-3xl">{booking.successTitle}</h2>
         <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-[#F4F1ED]/80 sm:text-base">
-          Your inquiry has been received. We will review your details and be in touch shortly.
+          {booking.inquirySuccess}
         </p>
         {onClose ? (
           <button
@@ -102,7 +104,7 @@ export default function GeneralInquiryForm({
             onClick={onClose}
             className="mt-8 inline-flex rounded-none border border-gray-800 px-5 py-2.5 text-sm font-semibold text-[#F4F1ED] transition-colors duration-300 hover:border-[#F4F1ED]/60"
           >
-            Close
+            {booking.close}
           </button>
         ) : null}
       </div>
@@ -111,15 +113,15 @@ export default function GeneralInquiryForm({
 
   return (
     <div>
-      <p className="text-xs uppercase tracking-[0.2em] text-[#F4F1ED]/60">{category.label} Inquiry</p>
-      <h2 className="mt-3 text-2xl font-semibold text-[#F4F1ED] sm:text-3xl">Request a Shoot</h2>
-      <p className="mt-3 text-sm leading-relaxed text-[#F4F1ED]/75">
-        Share a few details and your preferred time. We will confirm availability shortly.
+      <p className="text-xs uppercase tracking-[0.2em] text-[#F4F1ED]/60">
+        {category.label} {booking.inquirySuffix}
       </p>
+      <h2 className="mt-3 text-2xl font-semibold text-[#F4F1ED] sm:text-3xl">{booking.requestAShoot}</h2>
+      <p className="mt-3 text-sm leading-relaxed text-[#F4F1ED]/75">{booking.inquiryIntro}</p>
       {userEmail ? (
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-gray-800 px-4 py-3">
           <p className="text-xs text-[#F4F1ED]/70">
-            Signed in as <span className="text-[#F4F1ED]">{userEmail}</span>
+            {auth.signedInAs} <span className="text-[#F4F1ED]">{userEmail}</span>
           </p>
           <button
             type="button"
@@ -127,7 +129,7 @@ export default function GeneralInquiryForm({
             disabled={isSigningOut}
             className="text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/70 underline-offset-4 hover:text-[#F4F1ED] hover:underline disabled:opacity-60"
           >
-            {isSigningOut ? "Signing out..." : "Sign out"}
+            {isSigningOut ? auth.signingOut : auth.signOut}
           </button>
         </div>
       ) : null}
@@ -139,7 +141,7 @@ export default function GeneralInquiryForm({
               htmlFor="requestedDate"
               className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
             >
-              Date *
+              {booking.selectDate} *
             </label>
             <input
               id="requestedDate"
@@ -157,17 +159,17 @@ export default function GeneralInquiryForm({
               htmlFor="requestedTime"
               className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
             >
-              Time *
+              {booking.time} *
             </label>
             <DarkSelect
               id="requestedTime"
               name="requestedTime"
-              placeholder={selectedDate ? "Select a time" : "Select a date first"}
+              placeholder={selectedDate ? booking.selectTime : booking.selectDateFirst}
               options={availableTimes.map((time) => ({ value: time, label: time }))}
               disabled={!selectedDate || isCheckingTimes || availableTimes.length === 0}
               loading={isCheckingTimes}
-              loadingLabel="Checking availability..."
-              emptyLabel="No available times for this date"
+              loadingLabel={booking.checkingAvailability}
+              emptyLabel={booking.noTimes}
               resetKey={selectedDate}
             />
             {availabilityMessage && !isCheckingTimes ? (
@@ -183,7 +185,7 @@ export default function GeneralInquiryForm({
             htmlFor="contactName"
             className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
           >
-            Contact Name *
+            {booking.contactName} *
           </label>
           <input
             id="contactName"
@@ -201,7 +203,7 @@ export default function GeneralInquiryForm({
               htmlFor="contactEmail"
               className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
             >
-              Contact Email Address *
+              {booking.contactEmail} *
             </label>
             <input
               id="contactEmail"
@@ -217,7 +219,7 @@ export default function GeneralInquiryForm({
               htmlFor="contactPhone"
               className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
             >
-              Contact Phone Number *
+              {booking.contactPhone} *
             </label>
             <input
               id="contactPhone"
@@ -231,11 +233,8 @@ export default function GeneralInquiryForm({
         </div>
 
         <div>
-          <label
-            htmlFor="details"
-            className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
-          >
-            Details of the Photoshoot *
+          <label htmlFor="details" className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
+            {booking.details} *
           </label>
           <textarea
             id="details"
@@ -243,7 +242,7 @@ export default function GeneralInquiryForm({
             rows={5}
             required
             maxLength={4000}
-            placeholder="Tell us about the shoot, location, and anything we should prepare"
+            placeholder={booking.detailsPlaceholder}
             className={`${inputClassName} min-h-[8rem] resize-y`}
           />
         </div>
@@ -256,12 +255,14 @@ export default function GeneralInquiryForm({
 
         <button
           type="submit"
-          disabled={
-            isPending || isCheckingTimes || !selectedDate || availableTimes.length === 0
-          }
+          disabled={isPending || isCheckingTimes || !selectedDate || availableTimes.length === 0}
           className="w-full rounded-none border border-[#F4F1ED] bg-[#F4F1ED] px-5 py-3 text-sm font-semibold text-black transition-opacity duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isPending ? "Submitting..." : isCheckingTimes ? "Checking availability..." : "Submit Inquiry"}
+          {isPending
+            ? booking.submitting
+            : isCheckingTimes
+              ? booking.checkingAvailability
+              : booking.confirmBooking}
         </button>
       </form>
     </div>

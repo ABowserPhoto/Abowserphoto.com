@@ -10,7 +10,15 @@ import {
   isBookingRoute,
   isRealEstateBookingPath,
 } from "../lib/booking";
+import { getLocaleFromPathname, withLocale } from "../lib/i18n/config";
 import BookingModal from "./BookingModal";
+
+function stripBookingParam(href = window.location.href) {
+  const nextUrl = new URL(href);
+  nextUrl.searchParams.delete(BOOKING_QUERY_KEY);
+  const search = nextUrl.searchParams.toString();
+  return `${nextUrl.pathname}${search ? `?${search}` : ""}${nextUrl.hash}`;
+}
 
 export default function BookingModalHost() {
   const pathname = usePathname();
@@ -36,32 +44,24 @@ export default function BookingModalHost() {
   const closeModal = useCallback(() => {
     setIsOpen(false);
 
+    // Dedicated /book and /booking routes have no underlying page. Prefer history back
+    // so users return to wherever they came from, instead of forcing home.
     if (isRouteOpen) {
-      if (document.referrer) {
-        try {
-          const referrer = new URL(document.referrer);
-          if (
-            referrer.origin === window.location.origin &&
-            !isBookingRoute(referrer.pathname) &&
-            referrer.searchParams.get(BOOKING_QUERY_KEY) !== BOOKING_QUERY_VALUE
-          ) {
-            router.back();
-            return;
-          }
-        } catch {
-          // Fall through to a safe home redirect.
-        }
+      if (typeof window !== "undefined" && window.history.length > 1) {
+        router.back();
+        return;
       }
-      router.push("/");
+      const locale = getLocaleFromPathname(pathname) ?? "en";
+      const nextPath = stripBookingParam(`${window.location.origin}${withLocale("/", locale)}`);
+      window.history.replaceState(window.history.state, "", nextPath);
+      router.replace(nextPath, { scroll: false });
       return;
     }
 
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.delete(BOOKING_QUERY_KEY);
-    const nextPath = `${nextUrl.pathname}${nextUrl.search}`;
+    const nextPath = stripBookingParam();
     window.history.replaceState(window.history.state, "", nextPath);
     router.replace(nextPath, { scroll: false });
-  }, [isRouteOpen, router]);
+  }, [isRouteOpen, pathname, router]);
 
   return (
     <BookingModal

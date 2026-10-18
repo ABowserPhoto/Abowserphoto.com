@@ -1,3 +1,5 @@
+import { getLocaleFromPathname, stripLocaleFromPathname } from "./i18n/config";
+
 export const BOOKING_QUERY_KEY = "book";
 export const BOOKING_QUERY_VALUE = "1";
 export const BOOKING_HREF = `?${BOOKING_QUERY_KEY}=${BOOKING_QUERY_VALUE}`;
@@ -33,7 +35,8 @@ export type InquiryCategory = {
 };
 
 export function getPathSlug(pathname: string) {
-  return pathname.split("/").filter(Boolean)[0] ?? "";
+  const clean = stripLocaleFromPathname(pathname);
+  return clean.split("/").filter(Boolean)[0] ?? "";
 }
 
 export function isRealEstateBookingPath(pathname: string) {
@@ -265,7 +268,12 @@ export function extractCity(locationAddress: string) {
 }
 
 export function isBookingRoute(pathname: string) {
-  return pathname === "/book" || pathname === "/booking";
+  const clean = stripLocaleFromPathname(pathname);
+  return clean === "/book" || clean === "/booking";
+}
+
+export function getLocaleFromBookingPath(pathname: string) {
+  return getLocaleFromPathname(pathname);
 }
 
 export function todayInputValue() {

@@ -5,6 +5,7 @@ import Link from "next/link";
 
 type SiteLogoProps = {
   logoUrl: string | null;
+  href?: string;
   label?: string;
   className?: string;
   imageClassName?: string;
@@ -13,6 +14,7 @@ type SiteLogoProps = {
 
 export default function SiteLogo({
   logoUrl,
+  href = "/",
   label,
   className = "flex items-center gap-2.5 text-[#322B2B]",
   imageClassName = "h-10 w-10 object-contain",
@@ -21,7 +23,7 @@ export default function SiteLogo({
   const isSvg = logoUrl?.toLowerCase().endsWith(".svg");
 
   return (
-    <Link href="/" className={className}>
+    <Link href={href} className={className}>
       {logoUrl ? (
         isSvg ? (
           // eslint-disable-next-line @next/next/no-img-element

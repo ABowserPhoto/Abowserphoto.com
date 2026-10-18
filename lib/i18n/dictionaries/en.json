@@ -1,0 +1,212 @@
+{
+  "brand": "Aaron Bowser Photography",
+  "nav": {
+    "home": "Home",
+    "hero": "Hero",
+    "portfolio": "Portfolio",
+    "services": "Services",
+    "about": "About",
+    "faq": "FAQ",
+    "book": "Book",
+    "account": "Account",
+    "signOut": "Sign Out",
+    "contact": "Contact",
+    "inquire": "Inquire",
+    "viewFullPortfolio": "View Full Portfolio",
+    "selectedWork": "Selected Work",
+    "fullPortfolio": "Full Portfolio",
+    "back": "Back",
+    "language": "Language"
+  },
+  "home": {
+    "headline": "Choose Your Visual Story",
+    "subhead": "Explore editorial, commercial, and niche-focused workspaces crafted for premium visual storytelling.",
+    "logoLabel": "A. Bowser Photography",
+    "niches": {
+      "wedding": "Wedding",
+      "food": "Food",
+      "real-estate": "Real Estate",
+      "business-portraits": "Business Portraits",
+      "cinematography": "Cinematography",
+      "social-media-management": "Social Media Management",
+      "commercial": "Commercial"
+    },
+    "commercialTags": ["Portrait", "Fashion", "Product", "Beauty", "Editorial"]
+  },
+  "category": {
+    "behindTheLens": "Behind the lens",
+    "commonQuestions": "Common questions",
+    "watchVideo": "Watch Video",
+    "viewTour": "View 360° Tour"
+  },
+  "seo": {
+    "home": {
+      "title": "Professional Photography in NRW",
+      "description": "Aaron Bowser Photography delivers premium real estate, commercial, wedding, food, and portrait photography across Hagen, Düsseldorf, Köln, and North Rhine-Westphalia."
+    },
+    "real-estate": {
+      "title": "Premium Real Estate Photography & 360° Tours",
+      "description": "High-converting property photography, drone, twilight, digital staging, and 360° virtual tours for agents and developers in NRW. Fast turnaround, MLS-ready delivery."
+    },
+    "commercial": {
+      "title": "Commercial & Editorial Photography",
+      "description": "Fashion, beauty, product, and editorial photography for brands and creatives. Studio in Solingen, serving Düsseldorf, Köln, and the wider NRW region."
+    },
+    "wedding": {
+      "title": "Wedding Photography",
+      "description": "Cinematic and documentary wedding photography for intimate ceremonies and grand celebrations across Germany and destination weddings."
+    },
+    "food": {
+      "title": "Food Photography",
+      "description": "Appetite-driven food and beverage photography for restaurants, menus, product launches, and social content."
+    },
+    "business-portraits": {
+      "title": "Business Portrait Photography",
+      "description": "Executive headshots, team portraits, and personal branding photography for modern professionals and companies."
+    },
+    "cinematography": {
+      "title": "Cinematography & Brand Films",
+      "description": "Motion storytelling for brands, events, and campaigns — from brand films to social reels."
+    },
+    "social-media-management": {
+      "title": "Social Media Management",
+      "description": "Strategy-led content planning, publishing, and performance reporting for brands that want consistent visual presence."
+    },
+    "commercial-portfolio": {
+      "title": "Commercial Portfolio Archive",
+      "description": "Browse the complete commercial and editorial photography archive from Aaron Bowser Photography."
+    },
+    "account": {
+      "title": "Client Account",
+      "description": "Manage your profile, bookings, photo delivery folders, and invoices."
+    }
+  },
+  "auth": {
+    "clientAccess": "Client Access",
+    "signInToBook": "Sign in to book",
+    "createYourAccount": "Create your account",
+    "intro": "You need an approved account to request a photoshoot. Sign in or create an account to continue.",
+    "signIn": "Log In",
+    "signUp": "Sign Up",
+    "createAccount": "Create Account",
+    "backToSignIn": "Back to Sign In",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "companyName": "Company Name",
+    "companyAddress": "Company Address",
+    "telephone": "Telephone",
+    "email": "Email",
+    "password": "Password",
+    "pleaseWait": "Please wait...",
+    "signupSuccess": "Please check your email to verify your account. Once verified, your account will be manually reviewed.",
+    "checkEmailTitle": "Check your email",
+    "pendingReview": "Your account is currently under review. We will notify you once approved.",
+    "pendingReviewBooking": "Your account is currently being reviewed. You will be able to book photoshoots once approved.",
+    "accountReview": "Account Review",
+    "bookingUnavailable": "Booking unavailable",
+    "signedInAs": "Signed in as",
+    "signOut": "Sign Out",
+    "signingOut": "Signing out...",
+    "requiredFields": "Please complete all required registration fields.",
+    "genericError": "We could not complete that request. Please try again.",
+    "approvedToBook": "Approved to book",
+    "pendingAdminApproval": "Pending admin approval",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "profileUpdated": "Profile updated successfully.",
+    "completeProfileFields": "Please complete all required profile fields.",
+    "signInToUpdate": "Please sign in to update your profile.",
+    "signInToViewAccount": "Please sign in to view your account.",
+    "loadingAccount": "Loading your account...",
+    "unableToLoadAccount": "Unable to load your account.",
+    "accountNotConfigured": "Account access is not configured yet.",
+    "clientAccount": "Client Account",
+    "yourAccount": "Your account",
+    "accountIntro": "Manage your profile, view past and upcoming shoots, and download invoices.",
+    "tabProfile": "Profile",
+    "tabBookings": "Bookings",
+    "tabInvoices": "Invoices",
+    "loadingTab": "Loading {tab}...",
+    "noBookings": "No bookings yet. Once a shoot is scheduled in the workflow, it will appear here.",
+    "noInvoices": "No invoices are available yet.",
+    "couldNotLoadBookings": "Could not load bookings.",
+    "closeModal": "Close account modal",
+    "profile": "Profile",
+    "account": "Account"
+  },
+  "booking": {
+    "title": "Booking",
+    "selectDate": "Select Date",
+    "selectService": "Select Service",
+    "confirmBooking": "Confirm Booking",
+    "cancel": "Cancel",
+    "close": "Close",
+    "success": "Your request has been received. We will review your details and be in touch shortly.",
+    "successTitle": "Thank you",
+    "error": "Booking submission failed.",
+    "inquirySuccess": "Your inquiry has been received. We will review your details and be in touch shortly.",
+    "inquiryError": "Inquiry submission failed.",
+    "requestAShoot": "Request a Shoot",
+    "realEstateTitle": "Real Estate Booking",
+    "realEstateIntro": "Share the property details and your preferred time. We will confirm availability shortly.",
+    "inquiryIntro": "Share a few details and your preferred time. We will confirm availability shortly.",
+    "inquirySuffix": "Inquiry",
+    "locationAddress": "Photoshoot Location Address",
+    "locationPlaceholder": "Street, house number, ZIP, city",
+    "requestedDate": "Requested Date",
+    "requestedTime": "Requested Time",
+    "date": "Date",
+    "time": "Time",
+    "selectTime": "Select a time",
+    "selectDateFirst": "Select a date first",
+    "checkingAvailability": "Checking availability...",
+    "noTimes": "No available times for this date",
+    "waitAvailability": "Please wait while we check availability.",
+    "selectAvailableTime": "Please select an available time.",
+    "propertyStatus": "Property Status",
+    "contactName": "Contact Name",
+    "contactNumber": "Contact Number",
+    "contactEmail": "Contact Email Address",
+    "contactPhone": "Contact Phone Number",
+    "services": "Services",
+    "photoPackage": "Photo Package",
+    "selectPhotoPackage": "Select a photo package",
+    "additionalDetails": "Additional Details",
+    "additionalPlaceholder": "Access notes, timing preferences, or anything else we should know",
+    "details": "Details of the Photoshoot",
+    "detailsPlaceholder": "Tell us about the shoot, location, and anything we should prepare",
+    "submitRequest": "Submit Request",
+    "submitInquiry": "Submit Inquiry",
+    "submitting": "Submitting...",
+    "selectPropertyStatus": "Please select a property status.",
+    "selectAtLeastOneService": "Please select at least one service.",
+    "selectPhotoPackageError": "Please select a photo package.",
+    "addDetails": "Please add details of the photoshoot.",
+    "completeFields": "Please complete all required fields.",
+    "validEmail": "Please enter a valid contact email address.",
+    "signInToSubmit": "Please sign in to submit a booking request.",
+    "signInToInquire": "Please sign in to submit an inquiry.",
+    "signInToCheck": "Please sign in to check availability.",
+    "timeUnavailable": "That time is no longer available. Please choose another slot.",
+    "calendarUnavailable": "We could not check calendar availability.",
+    "calendarEventFailed": "We could not create the calendar event.",
+    "invalidDate": "Please select a valid date.",
+    "notConfigured": "Booking is not configured yet. Add the Supabase project URL and publishable key to enable sign-in and requests.",
+    "checkingAccount": "Checking your account...",
+    "closeModal": "Close booking modal",
+    "propertyStatuses": {
+      "Empty": "Empty",
+      "Occupied": "Occupied",
+      "Clean": "Clean",
+      "Messy": "Messy"
+    },
+    "serviceLabels": {
+      "Interior": "Interior",
+      "Exterior": "Exterior",
+      "Drohne": "Drone",
+      "360 Degree Tour": "360° Tour",
+      "Digital Homestaging": "Digital Homestaging",
+      "Highlight Video": "Highlight Video"
+    }
+  }
+}

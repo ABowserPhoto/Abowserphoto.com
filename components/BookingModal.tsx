@@ -3,9 +3,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
+import type { InquiryCategory } from "../lib/booking";
+import { useDictionary } from "../lib/i18n/LocaleProvider";
 import { isSupabaseConfigured } from "../lib/supabase/env";
 import { createClient } from "../lib/supabase/client";
-import type { InquiryCategory } from "../lib/booking";
 import ClientAuth from "./Auth/ClientAuth";
 import BookingForm from "./BookingForm";
 import GeneralInquiryForm from "./GeneralInquiryForm";
@@ -17,21 +18,20 @@ type BookingModalProps = {
   inquiryCategory: InquiryCategory;
 };
 
-const SIGNUP_SUCCESS_MESSAGE =
-  "Please check your email to verify your account. Once verified, your account will be manually reviewed.";
-
 function SignupSuccessMessage({ onBackToSignIn }: { onBackToSignIn: () => void }) {
+  const { auth } = useDictionary();
+
   return (
     <div>
-      <p className="text-xs uppercase tracking-[0.2em] text-[#F4F1ED]/60">Client Access</p>
-      <h2 className="mt-3 text-2xl font-semibold text-[#F4F1ED] sm:text-3xl">Check your email</h2>
-      <p className="mt-6 text-sm leading-relaxed text-[#F4F1ED]/80">{SIGNUP_SUCCESS_MESSAGE}</p>
+      <p className="text-xs uppercase tracking-[0.2em] text-[#F4F1ED]/60">{auth.clientAccess}</p>
+      <h2 className="mt-3 text-2xl font-semibold text-[#F4F1ED] sm:text-3xl">{auth.checkEmailTitle}</h2>
+      <p className="mt-6 text-sm leading-relaxed text-[#F4F1ED]/80">{auth.signupSuccess}</p>
       <button
         type="button"
         onClick={onBackToSignIn}
         className="mt-6 w-full rounded-none border border-[#F4F1ED] bg-[#F4F1ED] px-5 py-3 text-sm font-semibold text-black transition-opacity duration-300 hover:opacity-90"
       >
-        Back to Sign In
+        {auth.backToSignIn}
       </button>
     </div>
   );
@@ -44,6 +44,7 @@ function PendingApprovalMessage({
   userEmail?: string | null;
   onSignedOut: () => void;
 }) {
+  const { auth } = useDictionary();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   async function handleSignOut() {
@@ -56,12 +57,12 @@ function PendingApprovalMessage({
 
   return (
     <div>
-      <p className="text-xs uppercase tracking-[0.2em] text-[#F4F1ED]/60">Account Review</p>
-      <h2 className="mt-3 text-2xl font-semibold text-[#F4F1ED] sm:text-3xl">Booking unavailable</h2>
+      <p className="text-xs uppercase tracking-[0.2em] text-[#F4F1ED]/60">{auth.accountReview}</p>
+      <h2 className="mt-3 text-2xl font-semibold text-[#F4F1ED] sm:text-3xl">{auth.bookingUnavailable}</h2>
       {userEmail ? (
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-gray-800 px-4 py-3">
           <p className="text-xs text-[#F4F1ED]/70">
-            Signed in as <span className="text-[#F4F1ED]">{userEmail}</span>
+            {auth.signedInAs} <span className="text-[#F4F1ED]">{userEmail}</span>
           </p>
           <button
             type="button"
@@ -69,18 +70,17 @@ function PendingApprovalMessage({
             disabled={isSigningOut}
             className="text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/70 underline-offset-4 hover:text-[#F4F1ED] hover:underline disabled:opacity-60"
           >
-            {isSigningOut ? "Signing out..." : "Sign out"}
+            {isSigningOut ? auth.signingOut : auth.signOut}
           </button>
         </div>
       ) : null}
-      <p className="mt-6 text-sm leading-relaxed text-[#F4F1ED]/80">
-        Your account is currently being reviewed. You will be able to book photoshoots once approved.
-      </p>
+      <p className="mt-6 text-sm leading-relaxed text-[#F4F1ED]/80">{auth.pendingReview}</p>
     </div>
   );
 }
 
 export default function BookingModal({ isOpen, onClose, isRealEstate, inquiryCategory }: BookingModalProps) {
+  const { booking } = useDictionary();
   const [hasMounted, setHasMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isApproved, setIsApproved] = useState(false);
@@ -208,23 +208,20 @@ export default function BookingModal({ isOpen, onClose, isRealEstate, inquiryCat
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close booking modal"
+              aria-label={booking.closeModal}
               className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center border border-gray-800 text-lg leading-none text-[#F4F1ED] transition-colors duration-300 hover:border-[#F4F1ED]/60"
             >
               X
             </button>
 
             <h2 id="booking-modal-title" className="sr-only">
-              Booking
+              {booking.title}
             </h2>
 
             {!isSupabaseConfigured() ? (
-              <p className="pr-10 text-sm leading-relaxed text-[#F4F1ED]/80">
-                Booking is not configured yet. Add the Supabase project URL and publishable key to
-                enable sign-in and requests.
-              </p>
+              <p className="pr-10 text-sm leading-relaxed text-[#F4F1ED]/80">{booking.notConfigured}</p>
             ) : isCheckingSession && !showSignupSuccess ? (
-              <p className="pr-10 text-sm text-[#F4F1ED]/70">Checking your account...</p>
+              <p className="pr-10 text-sm text-[#F4F1ED]/70">{booking.checkingAccount}</p>
             ) : showSignupSuccess ? (
               <SignupSuccessMessage
                 onBackToSignIn={() => {

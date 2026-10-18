@@ -2,9 +2,10 @@
 
 import { useState, useTransition } from "react";
 import { updateProfile } from "../actions/updateProfile";
+import { useDictionary, useLocale } from "../lib/i18n/LocaleProvider";
 
 const inputClassName =
-  "w-full rounded-none border border-gray-800 bg-transparent px-4 py-3 text-sm text-[#F4F1ED] outline-none transition-colors duration-300 placeholder:text-[#F4F1ED]/40 focus:border-[#F4F1ED]/60";
+  "w-full rounded-none border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED] outline-none transition-colors duration-300 placeholder:text-[#F4F1ED]/40 focus:border-[#F4F1ED]/60";
 
 export type AccountProfileValues = {
   firstName: string;
@@ -21,6 +22,8 @@ type AccountProfileFormProps = {
 };
 
 export default function AccountProfileForm({ email, isApproved, initialValues }: AccountProfileFormProps) {
+  const { locale } = useLocale();
+  const { auth } = useDictionary();
   const [isPending, startTransition] = useTransition();
   const [firstName, setFirstName] = useState(initialValues.firstName);
   const [lastName, setLastName] = useState(initialValues.lastName);
@@ -43,6 +46,7 @@ export default function AccountProfileForm({ email, isApproved, initialValues }:
           companyName,
           companyAddress,
           phoneNumber,
+          locale,
         });
         if (result.success) {
           setSuccessMessage(result.message);
@@ -50,7 +54,7 @@ export default function AccountProfileForm({ email, isApproved, initialValues }:
         }
         setErrorMessage(result.message);
       } catch (error) {
-        const message = error instanceof Error ? error.message : "Profile update failed.";
+        const message = error instanceof Error ? error.message : auth.genericError;
         console.error("Profile update failed:", error);
         setErrorMessage(message);
       }
@@ -61,17 +65,20 @@ export default function AccountProfileForm({ email, isApproved, initialValues }:
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="border border-gray-800 px-4 py-3">
         <p className="text-xs text-[#F4F1ED]/70">
-          Signed in as <span className="text-[#F4F1ED]">{email}</span>
+          {auth.signedInAs} <span className="text-[#F4F1ED]">{email}</span>
         </p>
         <p className="mt-2 text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/60">
-          {isApproved ? "Approved to book" : "Pending admin approval"}
+          {isApproved ? auth.approvedToBook : auth.pendingAdminApproval}
         </p>
+        {!isApproved ? (
+          <p className="mt-3 text-sm leading-relaxed text-[#F4F1ED]/75">{auth.pendingReview}</p>
+        ) : null}
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="account-first-name" className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
-            First Name *
+            {auth.firstName} *
           </label>
           <input
             id="account-first-name"
@@ -86,7 +93,7 @@ export default function AccountProfileForm({ email, isApproved, initialValues }:
         </div>
         <div>
           <label htmlFor="account-last-name" className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
-            Last Name *
+            {auth.lastName} *
           </label>
           <input
             id="account-last-name"
@@ -106,7 +113,7 @@ export default function AccountProfileForm({ email, isApproved, initialValues }:
           htmlFor="account-company-name"
           className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
         >
-          Company Name *
+          {auth.companyName} *
         </label>
         <input
           id="account-company-name"
@@ -125,7 +132,7 @@ export default function AccountProfileForm({ email, isApproved, initialValues }:
           htmlFor="account-company-address"
           className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
         >
-          Company Address *
+          {auth.companyAddress} *
         </label>
         <textarea
           id="account-company-address"
@@ -144,7 +151,7 @@ export default function AccountProfileForm({ email, isApproved, initialValues }:
           htmlFor="account-phone-number"
           className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
         >
-          Telephone Number *
+          {auth.telephone} *
         </label>
         <input
           id="account-phone-number"
@@ -174,7 +181,7 @@ export default function AccountProfileForm({ email, isApproved, initialValues }:
         disabled={isPending}
         className="w-full rounded-none border border-[#F4F1ED] bg-[#F4F1ED] px-5 py-3 text-sm font-semibold text-black transition-opacity duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isPending ? "Saving..." : "Save Changes"}
+        {isPending ? auth.saving : auth.saveChanges}
       </button>
     </form>
   );

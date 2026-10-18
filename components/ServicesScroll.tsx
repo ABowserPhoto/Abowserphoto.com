@@ -55,6 +55,9 @@ const modalContentVariants = {
 type ServicesScrollProps = {
   services: ServiceScrollItem[];
   themeColor: string;
+  inquireLabel?: string;
+  watchVideoLabel?: string;
+  viewTourLabel?: string;
 };
 
 function getYouTubeEmbedUrl(url: string) {
@@ -149,7 +152,13 @@ function ServiceImageLayer({
 }
 
 const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function ServicesScroll(
-  { services, themeColor },
+  {
+    services,
+    themeColor,
+    inquireLabel = "Inquire",
+    watchVideoLabel = "Watch Video",
+    viewTourLabel = "View 360° Tour",
+  },
   forwardedRef
 ) {
   const containerRef = useRef<HTMLElement>(null);
@@ -245,7 +254,7 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
           style={{ backgroundColor: themeColor }}
           onClick={() => openEmbedMedia(service)}
         >
-          View 360° Tour
+          {viewTourLabel}
         </button>
       );
     }
@@ -262,7 +271,7 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
           style={{ backgroundColor: themeColor }}
           onClick={() => openVideoMedia(service)}
         >
-          Watch Video
+          {watchVideoLabel}
         </button>
       );
     }
@@ -275,7 +284,7 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
         className={ctaClassName}
         style={{ backgroundColor: themeColor }}
       >
-        Inquire
+        {inquireLabel}
       </Link>
     );
   };

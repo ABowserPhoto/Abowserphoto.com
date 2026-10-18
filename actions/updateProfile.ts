@@ -1,5 +1,6 @@
 "use server";
 
+import { getAuthCopy, resolveLocale } from "../lib/i18n/messages";
 import { createClient } from "../lib/supabase/server";
 
 export type ProfileFormData = {
@@ -8,6 +9,7 @@ export type ProfileFormData = {
   companyName: string;
   companyAddress: string;
   phoneNumber: string;
+  locale?: string;
 };
 
 export type UpdateProfileResult = {
@@ -16,6 +18,7 @@ export type UpdateProfileResult = {
 };
 
 export async function updateProfile(data: ProfileFormData): Promise<UpdateProfileResult> {
+  const auth = getAuthCopy(resolveLocale(data.locale));
   const firstName = data.firstName.trim();
   const lastName = data.lastName.trim();
   const companyName = data.companyName.trim();
@@ -24,13 +27,13 @@ export async function updateProfile(data: ProfileFormData): Promise<UpdateProfil
   const fullName = `${firstName} ${lastName}`.trim();
 
   if (!firstName || !lastName || !companyName || !companyAddress || !phoneNumber) {
-    return { success: false, message: "Please complete all required profile fields." };
+    return { success: false, message: auth.completeProfileFields };
   }
 
   const supabase = await createClient();
   const { data: userData, error: userError } = await supabase.auth.getUser();
   if (userError || !userData.user) {
-    return { success: false, message: "Please sign in to update your profile." };
+    return { success: false, message: auth.signInToUpdate };
   }
 
   const userId = userData.user.id;
@@ -59,7 +62,6 @@ export async function updateProfile(data: ProfileFormData): Promise<UpdateProfil
     contact_first_name: firstName,
     contact_last_name: lastName,
     billing_address: companyAddress,
-    phone: phoneNumber,
   };
 
   if (existing) {
@@ -82,5 +84,5 @@ export async function updateProfile(data: ProfileFormData): Promise<UpdateProfil
     throw new Error(profileError.message);
   }
 
-  return { success: true, message: "Profile updated successfully." };
+  return { success: true, message: auth.profileUpdated };
 }

@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { getAvailableTimes } from "../actions/getAvailableTimes";
+import type { Locale } from "./i18n/config";
+import { getBookingCopy } from "./i18n/messages";
 
-export function useAvailableTimes(selectedDate: string) {
+export function useAvailableTimes(selectedDate: string, locale?: Locale) {
   const [availableTimes, setAvailableTimes] = useState<string[]>([]);
   const [isCheckingTimes, setIsCheckingTimes] = useState(false);
   const [availabilityMessage, setAvailabilityMessage] = useState<string | null>(null);
@@ -20,24 +22,22 @@ export function useAvailableTimes(selectedDate: string) {
     setAvailableTimes([]);
     setIsCheckingTimes(true);
     setAvailabilityMessage(null);
+    const copy = getBookingCopy(locale);
 
-    getAvailableTimes(selectedDate)
+    getAvailableTimes(selectedDate, locale)
       .then((result) => {
         if (cancelled) return;
         if (!result.success) {
           setAvailableTimes([]);
-          setAvailabilityMessage(result.message ?? "We could not check calendar availability.");
+          setAvailabilityMessage(result.message ?? copy.calendarUnavailable);
           return;
         }
         setAvailableTimes(result.times);
-        setAvailabilityMessage(
-          result.times.length === 0 ? "No available times for this date" : null
-        );
+        setAvailabilityMessage(result.times.length === 0 ? copy.noTimes : null);
       })
       .catch((error) => {
         if (cancelled) return;
-        const message =
-          error instanceof Error ? error.message : "We could not check calendar availability.";
+        const message = error instanceof Error ? error.message : copy.calendarUnavailable;
         setAvailableTimes([]);
         setAvailabilityMessage(message);
       })
@@ -48,7 +48,7 @@ export function useAvailableTimes(selectedDate: string) {
     return () => {
       cancelled = true;
     };
-  }, [selectedDate]);
+  }, [selectedDate, locale]);
 
   return { availableTimes, isCheckingTimes, availabilityMessage };
 }

@@ -14,6 +14,7 @@ import {
   type PropertyStatus,
 } from "../lib/booking";
 import { getCalendarClient, queryAvailableTimesForDate } from "../lib/googleCalendar";
+import { getAuthCopy, getBookingCopy, resolveLocale } from "../lib/i18n/messages";
 import { createClient } from "../lib/supabase/server";
 
 export type BookingFormData = {
@@ -27,6 +28,7 @@ export type BookingFormData = {
   services: BookingService[];
   photoPackage: PhotoPackage;
   additionalDetails?: string;
+  locale?: string;
 };
 
 export type SubmitBookingResult = {
@@ -98,6 +100,9 @@ async function createCalendarEvent(data: BookingFormData, companyName: string) {
 }
 
 export async function submitBooking(data: BookingFormData): Promise<SubmitBookingResult> {
+  const locale = resolveLocale(data.locale);
+  const auth = getAuthCopy(locale);
+  const booking = getBookingCopy(locale);
   const locationAddress = data.locationAddress.trim();
   const requestedDate = data.requestedDate.trim();
   const requestedTime = data.requestedTime.trim();
@@ -121,24 +126,24 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
     !isPhotoPackage(photoPackage) ||
     !isBookingTimeSlot(requestedTime)
   ) {
-    return { success: false, message: "Please complete all required fields." };
+    return { success: false, message: booking.completeFields };
   }
 
   if (!isValidEmail(contactEmail)) {
-    return { success: false, message: "Please enter a valid contact email address." };
+    return { success: false, message: booking.validEmail };
   }
 
   const supabase = await createClient();
   const { data: userData, error: userError } = await supabase.auth.getUser();
   if (userError || !userData.user) {
-    return { success: false, message: "Please sign in to submit a booking request." };
+    return { success: false, message: booking.signInToSubmit };
   }
 
   const client = await getApprovedClient(supabase, userData.user.id);
   if (!client || !client.is_approved) {
     return {
       success: false,
-      message: "Your account is currently being reviewed. You will be able to book photoshoots once approved.",
+      message: auth.pendingReviewBooking,
     };
   }
 
@@ -147,7 +152,7 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
     if (!availableTimes.includes(requestedTime)) {
       return {
         success: false,
-        message: "That time is no longer available. Please choose another slot.",
+        message: booking.timeUnavailable,
       };
     }
 
@@ -167,13 +172,13 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
       client.company_name
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : "We could not create the calendar event.";
+    const message = error instanceof Error ? error.message : booking.calendarEventFailed;
     console.error("Google Calendar sync failed:", error);
     return { success: false, message };
   }
 
   return {
     success: true,
-    message: "Your request has been received. We will review your details and be in touch shortly.",
+    message: booking.success,
   };
 }

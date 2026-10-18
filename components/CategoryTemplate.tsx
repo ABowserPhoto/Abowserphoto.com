@@ -5,6 +5,9 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CategoryContent, FAQItem } from "../lib/content";
+import type { Locale } from "../lib/i18n/config";
+import { withLocale } from "../lib/i18n/config";
+import type { Dictionary } from "../lib/i18n/getDictionary";
 import HeroSlider, { type HeroMediaItem } from "./HeroSlider";
 import Navbar from "./Navbar";
 import PortfolioGrid from "./PortfolioGrid";
@@ -38,6 +41,8 @@ type CategoryTemplateProps = {
   logoUrl: string | null;
   aboutData: AboutData;
   faqs: FAQItem[];
+  dictionary: Dictionary;
+  locale: Locale;
 };
 
 type SectionId = "hero" | "portfolio" | "services" | "about" | "faq";
@@ -52,14 +57,6 @@ const fadeUp = {
   transition: { duration: 0.75, ease: "easeOut" as const },
 };
 
-const sectionLinks: { id: SectionId; label: string }[] = [
-  { id: "hero", label: "Hero" },
-  { id: "portfolio", label: "Portfolio" },
-  { id: "services", label: "Services" },
-  { id: "about", label: "About" },
-  { id: "faq", label: "FAQ" },
-];
-
 /** Preview count on the commercial category page; full set lives at /commercial/portfolio. */
 const COMMERCIAL_PORTFOLIO_PREVIEW_COUNT = 15;
 
@@ -70,6 +67,8 @@ export default function CategoryTemplate({
   logoUrl,
   aboutData,
   faqs,
+  dictionary,
+  locale,
 }: CategoryTemplateProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
@@ -88,9 +87,21 @@ export default function CategoryTemplate({
     [portfolioImages, showFullPortfolioCta]
   );
 
+  const sectionLinks = useMemo(
+    () =>
+      [
+        { id: "hero" as const, label: dictionary.nav.hero },
+        { id: "portfolio" as const, label: dictionary.nav.portfolio },
+        { id: "services" as const, label: dictionary.nav.services },
+        { id: "about" as const, label: dictionary.nav.about },
+        { id: "faq" as const, label: dictionary.nav.faq },
+      ] satisfies Array<{ id: SectionId; label: string }>,
+    [dictionary]
+  );
+
   const visibleSectionLinks = useMemo(
     () => (faqs.length > 0 ? sectionLinks : sectionLinks.filter((section) => section.id !== "faq")),
-    [faqs.length]
+    [faqs.length, sectionLinks]
   );
 
   useEffect(() => {
@@ -143,6 +154,11 @@ export default function CategoryTemplate({
         onSectionClick={handleSectionClick}
         themeColor={category.themeColor}
         lightSectionRef={aboutRef}
+        homeHref={withLocale("/", locale)}
+        labels={{
+          book: dictionary.nav.book,
+          home: dictionary.nav.home,
+        }}
       />
 
       <main>
@@ -156,22 +172,31 @@ export default function CategoryTemplate({
             title={category.title}
             themeColor={category.themeColor}
             onImageClick={setSelectedImage}
-            label={showFullPortfolioCta ? "Selected Work" : "Full Portfolio"}
+            label={
+              showFullPortfolioCta ? dictionary.nav.selectedWork : dictionary.nav.fullPortfolio
+            }
             orientation={category.slug === "real-estate" ? "landscape" : "portrait"}
           />
           {showFullPortfolioCta ? (
             <div className="relative z-10 flex justify-center bg-black px-4 pb-16 pt-4">
               <Link
-                href="/commercial/portfolio"
+                href={withLocale("/commercial/portfolio", locale)}
                 className="inline-flex items-center justify-center border border-[#F4F1ED]/45 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#F4F1ED] transition-colors duration-300 hover:border-[#F4F1ED] hover:bg-[#F4F1ED] hover:text-[#322B2B]"
               >
-                View Full Portfolio
+                {dictionary.nav.viewFullPortfolio}
               </Link>
             </div>
           ) : null}
         </section>
 
-        <ServicesScroll ref={servicesRef} services={services} themeColor={category.themeColor} />
+        <ServicesScroll
+          ref={servicesRef}
+          services={services}
+          themeColor={category.themeColor}
+          inquireLabel={dictionary.nav.inquire}
+          watchVideoLabel={dictionary.category.watchVideo}
+          viewTourLabel={dictionary.category.viewTour}
+        />
 
         <motion.section
           ref={aboutRef}
@@ -222,7 +247,7 @@ export default function CategoryTemplate({
                 {aboutData.title}
               </p>
               <h2 className="mt-3 text-3xl font-light tracking-tight text-[#322B2B] sm:text-4xl">
-                Behind the lens
+                {dictionary.category.behindTheLens}
               </h2>
               <div className="mt-5 max-w-2xl space-y-4 text-sm leading-relaxed text-[#322B2B]/80 sm:text-base">
                 {aboutData.description
@@ -238,7 +263,7 @@ export default function CategoryTemplate({
                 className="mt-8 inline-flex rounded-full px-6 py-3 text-sm font-semibold text-white transition-opacity duration-300 hover:opacity-90"
                 style={{ backgroundColor: category.themeColor }}
               >
-                Contact
+                {dictionary.nav.contact}
               </a>
             </motion.div>
           </div>
@@ -246,8 +271,12 @@ export default function CategoryTemplate({
 
         {faqs.length > 0 ? (
           <motion.section id="faq" className="relative z-30 mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8" {...fadeUp}>
-            <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#322B2B]/55">FAQ</p>
-            <h2 className="mt-3 text-3xl font-light tracking-tight text-[#322B2B]">Common questions</h2>
+            <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#322B2B]/55">
+              {dictionary.nav.faq}
+            </p>
+            <h2 className="mt-3 text-3xl font-light tracking-tight text-[#322B2B]">
+              {dictionary.category.commonQuestions}
+            </h2>
             <div className="mt-8 space-y-3">
               {faqs.map((item, index) => {
                 const isOpen = index === openFaq;

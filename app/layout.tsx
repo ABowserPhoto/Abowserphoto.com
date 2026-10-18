@@ -1,24 +1,35 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import AccountModalBoundary from "../components/AccountModalBoundary";
 import BookingModalBoundary from "../components/BookingModalBoundary";
 import CookieConsent from "../components/CookieConsent";
+import { defaultLocale, isLocale } from "../lib/i18n/config";
+import { getDictionary } from "../lib/i18n/getDictionary";
+import { LocaleProvider } from "../lib/i18n/LocaleProvider";
+import { buildRootMetadata } from "../lib/i18n/seo";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Abowser Photo Portfolio",
-  description: "Multi-niche photography portfolio built with Next.js.",
-};
+export const metadata: Metadata = buildRootMetadata();
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerStore = await headers();
+  const headerLocale = headerStore.get("x-locale");
+  const lang = headerLocale && isLocale(headerLocale) ? headerLocale : defaultLocale;
+  const dictionary = await getDictionary(lang);
+
   return (
-    <html lang="en">
+    <html lang={lang}>
       <body className="overflow-x-hidden bg-black text-[#F4F1ED] antialiased">
-        {children}
-        <BookingModalBoundary />
-        <CookieConsent />
+        <LocaleProvider locale={lang} dictionary={dictionary}>
+          {children}
+          <BookingModalBoundary />
+          <AccountModalBoundary />
+          <CookieConsent />
+        </LocaleProvider>
       </body>
     </html>
   );
