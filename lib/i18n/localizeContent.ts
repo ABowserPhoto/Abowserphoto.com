@@ -10,7 +10,7 @@ import { getDictionarySync } from "./getDictionary";
 
 const germanSharedAbout = {
   title: "Über mich",
-  description: `Ich bin Aaron Bowser, visueller Storyteller und professioneller Immobilienfotograf mit Sitz in Hagen, Nordrhein-Westfalen. Meine Arbeit umfasst Hochzeit, Commercial, Editorial und Immobilienfotografie – stets mit filmischer Bildsprache und authentischer Emotion.
+  description: `Ich bin Aaron Bowser, Fotograf für Business-Porträts, Hochzeiten, Commercial und Immobilien, mit Studios in Hagen und Solingen in Nordrhein-Westfalen. Die Arbeit umfasst Hochzeit, Commercial, Editorial und Immobilienfotografie, mit filmischer Bildsprache und authentischer Emotion.
 
 Ob ich einen einmaligen Moment festhalte, eine persönliche Marke forme oder ein Immobilienexposé aufwerte: Jedes Projekt wird mit Intention, Handwerk und dem Anspruch angegangen, Bilder zu schaffen, die zeitlos und wahrhaftig wirken.
 
@@ -31,9 +31,9 @@ const germanCategoryCopy: Partial<
 > = {
   "real-estate": {
     navLabel: "Immobilien",
-    title: "Immobilienfotografie",
+    title: "Immobilienfotografie NRW",
     subtitle:
-      "Immobilienbilder, die Exposés aufwerten und Kaufinteresse beschleunigen.",
+      "Immobilienbilder für Exposés in Nordrhein-Westfalen, mit Studios in Hagen und Solingen.",
     aboutText:
       "Meine Immobilienarbeit fokussiert Raum, Licht und Perspektive – damit jede Immobilie einladend, präzise und premium wirkt.",
     services: [
@@ -76,46 +76,158 @@ const germanCategoryCopy: Partial<
   },
   commercial: {
     navLabel: "Commercial",
-    title: "Commercial & Editorial",
+    title: "Commercial-Fotografie in Hagen & Solingen",
     subtitle:
-      "Mit Studio in Solingen und Basis in Hagen, NRW – Düsseldorf, Köln und Umgebung. High-End Commercial- und Creative-Fotografie für Models, Marken und Kampagnen.",
+      "Fashion, Beauty, Produkt und Editorial für Marken. Studios in Hagen und Solingen, Einsätze in Nordrhein-Westfalen.",
     aboutText:
-      "Meine Commercial-Arbeit verbindet Editorial-Storytelling mit Modeästhetik – cinematic, präzise und publikationsreif.",
+      "Meine Commercial-Arbeit verbindet Editorial-Storytelling mit einer klaren Modeästhetik: cinematic, präzise und publikationsreif. Die Studios liegen in Hagen und Solingen.",
+    services: [
+      {
+        title: "Porträts und Model-Portfolios",
+        description:
+          "Ein gewöhnliches Kopfbild trägt eine künstlerische Identität selten. Ich fotografiere individuelle Porträts und editorial angelegte Serien, die Ihre Bandbreite zeigen. Ob der Einstieg in die Modelbranche oder der Aufbau einer eigenen Bildmarke: Wir entwickeln ein Portfolio, das Agenturen und Artdirectors ernst nehmen.",
+      },
+      {
+        title: "Fashion-Fotografie",
+        description:
+          "Von Lookbooks bis zur Kampagne fotografiere ich Mode so, dass Schnitt, Bewegung und Haltung sichtbar werden. Die Bilder sind für Marken und Designer gemacht, die in einem vollen Markt erkennbar bleiben wollen.",
+      },
+      {
+        title: "Beauty",
+        description:
+          "Beauty lebt von Licht und von Details. Ich fotografiere klare Beauty- und Makroaufnahmen für Kosmetik, Pflege und Make-up, in denen Textur, Farbe und Technik lesbar bleiben.",
+      },
+      {
+        title: "Produktfotografie",
+        description:
+          "Das Produktbild ist oft der erste Kontakt. Ich fotografiere präzise Produktbilder, von klaren Aufnahmen für den Shop bis zu inszenierten Sets, die die Marke auf der Website und in der Kampagne tragen.",
+      },
+      {
+        title: "Editorial",
+        description:
+          "Editorial-Fotografie erzählt mehr als ein einzelnes schönes Bild. Wir entwickeln konzeptionelle, magazinreife Serien für Publikationen, Markengeschichten und Kampagnen mit einer filmischen Haltung.",
+      },
+    ],
   },
   wedding: {
     navLabel: "Hochzeit",
-    title: "Hochzeitsfotografie",
-    subtitle: "Zeitloses Storytelling für intime Momente und große Feiern.",
+    title: "Hochzeitsfotograf Hagen & Solingen",
+    subtitle:
+      "Reportage für die freie Trauung, den ganzen Tag und das Standesamt in Solingen und Hagen.",
     aboutText:
-      "Ich fotografiere Hochzeiten cinematic und ehrlich – natürliche Emotionen und durchdachte Details von Anfang bis Ende.",
+      "Ich fotografiere Hochzeiten in Hagen, Solingen und in Nordrhein-Westfalen, cinematic und ehrlich. Natürliche Emotion und die Details, die zu den Menschen im Raum gehören, vom Standesamt bis zum Ende des Tages.",
+    services: [
+      {
+        title: "Ganztägige Reportage",
+        description: "Begleitung von der Vorbereitung bis zur Feier, dokumentarisch und mit filmischer Bildsprache.",
+      },
+      {
+        title: "Standesamt",
+        description:
+          "Ruhige Reportage der standesamtlichen Trauung in Solingen, Hagen und der Umgebung. Kurze Wege, keine gestellte Zeremonie, Bilder vom Ablauf und von den Menschen.",
+      },
+      {
+        title: "Paarshooting vor der Hochzeit",
+        description: "Porträts vor dem Tag, angelegt an Ihre Geschichte und an die Orte, die Ihnen gehören.",
+      },
+      {
+        title: "Album",
+        description: "Ein gedrucktes Album mit einer klaren Abfolge, nicht mit einer losen Bildersammlung.",
+      },
+    ],
   },
   food: {
     navLabel: "Food",
-    title: "Food-Fotografie",
-    subtitle: "Geschmacksstarke Bilder für Restaurants, Marken und Produkte.",
+    title: "Food-Fotografie in NRW",
+    subtitle: "Bilder für Restaurants, Speisekarten und Produkte, aus den Studios in Hagen und Solingen oder vor Ort.",
     aboutText:
-      "Food-Fotografie mit Fokus auf Textur, Licht und Appetite Appeal für Print und Digital.",
+      "Food-Fotografie mit Blick auf Textur, Licht und Appetit, für Karte, Packung und Bildschirm.",
+    services: [
+      {
+        title: "Speisekarten",
+        description: "Bilder, die auf der gedruckten Karte und auf der Website gleich lesbar bleiben.",
+      },
+      {
+        title: "Inszenierte Produktsets",
+        description: "Aufbauten für Kampagnen und Verpackungen, mit klarer Farbe und ruhiger Fläche.",
+      },
+      {
+        title: "Serien für Social Media",
+        description: "Wiederkehrende, kurze Sets für Kanäle, die regelmäßig neues Bildmaterial brauchen.",
+      },
+    ],
   },
   "business-portraits": {
     navLabel: "Business-Porträts",
-    title: "Business-Porträts",
-    subtitle: "Professionelle Headshots und Branding-Porträts für moderne Teams.",
+    title: "Business-Porträts in Hagen & Solingen",
+    subtitle:
+      "Executive-Headshots, Mitarbeiterfotos und LinkedIn-Profilbilder für Unternehmen in Hagen, Solingen und Nordrhein-Westfalen.",
     aboutText:
-      "Klar, selbstbewusst und markenkonform – Porträts, die Leadership und Persönlichkeit zeigen.",
+      "Ich bin Aaron Bowser und fotografiere Business-Porträts, Hochzeiten und Commercial. Die Studios liegen in Hagen, Eckeseyer Str. 133, und in Solingen, Merscheider Str. 112. Für Unternehmen geht es um Bilder, die auf der Website, bei LinkedIn und in der Presse dieselbe ruhige Haltung haben: klares Licht, ein Gesicht, das man ernst nimmt, und eine Bildsprache, die zum Haus passt.\n\nVor der Aufnahme klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Im Shooting leite ich Haltung und Ausdruck an. Das Ergebnis sind Businessfotos für Geschäftsführung, Teams und Menschen, die ihre eigene Marke führen.",
+    services: [
+      {
+        title: "Executive-Headshots",
+        description:
+          "Porträts für Geschäftsführung und Partner. Licht, Haltung und Ausdruck werden so geführt, dass dieselbe Person auf der Website, in der Präsentation und bei LinkedIn klar lesbar ist. Die Sitzung findet im Studio Hagen, im Studio Solingen oder in Ihrem Büro statt.",
+      },
+      {
+        title: "Mitarbeiterfotos und Teamfotos",
+        description:
+          "Eine gemeinsame Bildlinie für das ganze Unternehmen: gleiches Licht, gleicher Ausschnitt, gleicher Ton. Mitarbeiterfotos und Firmenfotos für die Website, für Angebote und für die Presse, an einem Bürotag, wenn das Team beisammen ist.",
+      },
+      {
+        title: "LinkedIn-Profilbild und Personal Branding",
+        description:
+          "Ein Corporate Headshot, der nach der Person aussieht. Für Berater, Sprecher und Spezialisten, die ein LinkedIn-Profilbild brauchen und dazu eine ruhigere Aufnahme für Website und Druck.",
+      },
+      {
+        title: "Business-Fotoshooting vor Ort",
+        description:
+          "Der Studioaufbau kommt ins Büro, in Hagen, Solingen und in Nordrhein-Westfalen. Kompaktes Licht, kurze Sitzungen und eine Serie, die danach wie aus einem Guss aussieht.",
+      },
+    ],
   },
   cinematography: {
     navLabel: "Film & Video",
     title: "Filmproduktion",
-    subtitle: "Bewegtbild für Marken, Events und visuelle Kampagnen.",
+    subtitle: "Bewegtbild für Marken, Events und Kampagnen, aus Hagen und Solingen.",
     aboutText:
-      "Von Brand Films bis Social Reels: Motion mit klarer Erzählung und starker Bildsprache.",
+      "Von Brand Films bis zu kurzen Social-Filmen: Bewegung mit klarer Erzählung und einer ruhigen Bildsprache.",
+    services: [
+      {
+        title: "Brand Films",
+        description: "Filme für Markenauftritt und Launch, mit einer Erzählung, die zum Unternehmen passt.",
+      },
+      {
+        title: "Eventfilme",
+        description: "Kurze Highlights und eine dokumentarische Begleitung von Veranstaltungen.",
+      },
+      {
+        title: "Social Reels",
+        description: "Kurze, filmische Schnitte für die Formate, in denen die Marke täglich sichtbar ist.",
+      },
+    ],
   },
   "social-media-management": {
     navLabel: "Social Media",
     title: "Social-Media-Management",
-    subtitle: "Strategie, Publishing und Optimierung für konsistenten Content.",
+    subtitle: "Planung, Veröffentlichung und Pflege für Marken mit einem festen visuellen Auftritt.",
     aboutText:
-      "Kreation und Strategie für Marken, die regelmäßig und messbar wachsen wollen.",
+      "Kreation und Planung für Marken, die regelmäßig veröffentlichen und den Auftritt messen wollen.",
+    services: [
+      {
+        title: "Redaktionspläne",
+        description: "Ein monatlicher Plan, der zu Zielgruppe und Auftrag passt.",
+      },
+      {
+        title: "Kanäle führen",
+        description: "Veröffentlichen, Texte schreiben und die Kommentare im Blick behalten.",
+      },
+      {
+        title: "Auswertung",
+        description: "Ein Bericht, der zeigt, was getragen hat und was als Nächstes angepasst wird.",
+      },
+    ],
   },
 };
 

@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import AccountModalBoundary from "../components/AccountModalBoundary";
 import BookingModalBoundary from "../components/BookingModalBoundary";
 import CookieConsent from "../components/CookieConsent";
+import JsonLd from "../components/JsonLd";
 import { defaultLocale, isLocale } from "../lib/i18n/config";
 import { getDictionary } from "../lib/i18n/getDictionary";
 import { LocaleProvider } from "../lib/i18n/LocaleProvider";
@@ -25,6 +26,7 @@ export default async function RootLayout({
     <html lang={lang}>
       <body className="overflow-x-hidden bg-black text-[#F4F1ED] antialiased">
         <LocaleProvider locale={lang} dictionary={dictionary}>
+          <JsonLd />
           {children}
           <BookingModalBoundary />
           <AccountModalBoundary />

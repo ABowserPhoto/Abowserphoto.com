@@ -1,4 +1,5 @@
 import { getLocaleFromPathname, stripLocaleFromPathname } from "./i18n/config";
+import { resolveCategorySegment } from "./routes";
 
 export const BOOKING_QUERY_KEY = "book";
 export const BOOKING_QUERY_VALUE = "1";
@@ -15,7 +16,7 @@ export function requestOpenBooking() {
   }
 }
 
-export const REAL_ESTATE_PATH_SLUGS = new Set(["real-estate", "immobilien"]);
+export const REAL_ESTATE_PATH_SLUGS = new Set(["real-estate", "immobilien", "immobilienfotografie"]);
 
 export const INQUIRY_CATEGORY_LABELS = {
   wedding: "Wedding",
@@ -48,7 +49,8 @@ function isInquiryCategorySlug(value: string): value is InquiryCategorySlug {
 }
 
 export function getInquiryCategory(pathname: string): InquiryCategory {
-  const slug = getPathSlug(pathname);
+  const resolved = resolveCategorySegment(getPathSlug(pathname));
+  const slug = resolved ?? getPathSlug(pathname);
   if (isInquiryCategorySlug(slug) && slug !== "general") {
     return { slug, label: INQUIRY_CATEGORY_LABELS[slug] };
   }

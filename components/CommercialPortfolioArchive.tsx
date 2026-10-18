@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
-import PortfolioGrid from "./PortfolioGrid";
+import PortfolioGrid, { type PortfolioImage } from "./PortfolioGrid";
 
 type CommercialPortfolioArchiveProps = {
-  images: string[];
+  images: PortfolioImage[];
   themeColor: string;
   locale: Locale;
   dictionary: Dictionary;
@@ -21,7 +21,7 @@ export default function CommercialPortfolioArchive({
   locale,
   dictionary,
 }: CommercialPortfolioArchiveProps) {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<PortfolioImage | null>(null);
 
   useEffect(() => {
     function onEscape(event: KeyboardEvent) {
@@ -76,8 +76,8 @@ export default function CommercialPortfolioArchive({
             onClick={() => setSelectedImage(null)}
           >
             <motion.img
-              src={selectedImage}
-              alt=""
+              src={selectedImage.src}
+              alt={selectedImage.alt}
               className="max-h-[90vh] max-w-[90vw] object-contain"
               initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}

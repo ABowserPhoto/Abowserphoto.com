@@ -385,6 +385,14 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
                 </span>
               </p>
 
+              <ul className="sr-only">
+                {services.map((service) => (
+                  <li key={`index-${service.title}`}>
+                    <h2>{service.title}</h2>
+                    <p>{service.description}</p>
+                  </li>
+                ))}
+              </ul>
               <div className="relative mt-3 h-auto overflow-x-hidden overflow-y-visible">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div

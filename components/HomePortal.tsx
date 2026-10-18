@@ -8,6 +8,7 @@ import type { CmsMediaItem } from "../lib/cms";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
+import { STUDIOS } from "../lib/site";
 import LanguageSwitcher from "./LanguageSwitcher";
 import SiteLogo from "./SiteLogo";
 
@@ -224,6 +225,15 @@ export default function HomePortal({
           <p className="mt-3 text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base">
             {dictionary.home.subhead}
           </p>
+          <address className="mt-4 space-y-1 not-italic text-[11px] leading-relaxed tracking-wide text-[#F4F1ED]/75">
+            {STUDIOS.map((studio) => (
+              <span key={studio.id} className="block">
+                {locale === "de" ? studio.nameDe : studio.nameEn}
+                {" · "}
+                {studio.street}, {studio.postalCode} {studio.city}
+              </span>
+            ))}
+          </address>
 
           <nav className="mt-7 flex flex-col gap-2 sm:gap-1.5">
             <PortalLink item={commercialItem} activeKey={activeKey} onActivate={setActiveKey} />

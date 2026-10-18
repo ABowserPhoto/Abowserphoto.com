@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export type HeroMediaItem = {
   url: string;
   type: "image" | "video";
+  alt?: string;
 };
 
 type HeroSliderProps = {
@@ -48,7 +49,7 @@ export default function HeroSlider({ media, title, subtitle, intervalMs = 10000 
             {activeMedia.type === "image" ? (
               <Image
                 src={activeMedia.url}
-                alt={`${title} hero`}
+                alt={activeMedia.alt || title}
                 fill
                 priority
                 sizes="100vw"

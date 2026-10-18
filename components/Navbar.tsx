@@ -49,11 +49,11 @@ function NavbarLogo({
           <motion.span className="absolute inset-0" style={{ opacity: lightOpacity }}>
             {isSvg ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={logoUrl} alt="" className="h-9 w-9 object-contain brightness-0 invert" />
+              <img src={logoUrl} alt="Aaron Bowser Photography Logo" className="h-9 w-9 object-contain brightness-0 invert" />
             ) : (
               <Image
                 src={logoUrl}
-                alt=""
+                alt="Aaron Bowser Photography Logo"
                 width={36}
                 height={36}
                 className="h-9 w-9 object-contain brightness-0 invert"
@@ -61,7 +61,7 @@ function NavbarLogo({
               />
             )}
           </motion.span>
-          <motion.span className="absolute inset-0" style={{ opacity: darkOpacity }}>
+          <motion.span className="absolute inset-0" style={{ opacity: darkOpacity }} aria-hidden="true">
             {isSvg ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} alt="" className="h-9 w-9 object-contain" />

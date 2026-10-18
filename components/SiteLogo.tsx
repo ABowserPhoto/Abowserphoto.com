@@ -27,11 +27,11 @@ export default function SiteLogo({
       {logoUrl ? (
         isSvg ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={logoUrl} alt="Aaron Bowser Photography" className={imageClassName} />
+          <img src={logoUrl} alt="Aaron Bowser Photography Logo" className={imageClassName} />
         ) : (
           <Image
             src={logoUrl}
-            alt="Aaron Bowser Photography"
+            alt="Aaron Bowser Photography Logo"
             width={40}
             height={40}
             className={imageClassName}

@@ -1,3 +1,5 @@
+import { localizePublicPath } from "../routes";
+
 export const locales = ["en", "de"] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "en";
@@ -22,9 +24,9 @@ export function stripLocaleFromPathname(pathname: string) {
 }
 
 export function withLocale(pathname: string, locale: Locale) {
-  const clean = stripLocaleFromPathname(pathname);
-  if (clean === "/") return `/${locale}`;
-  return `/${locale}${clean}`;
+  const localized = localizePublicPath(stripLocaleFromPathname(pathname), locale);
+  if (localized === "/") return `/${locale}`;
+  return `/${locale}${localized}`;
 }
 
 export function detectLocaleFromHeader(header: string | null): Locale {

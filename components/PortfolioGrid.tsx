@@ -2,13 +2,18 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+export type PortfolioImage = {
+  src: string;
+  alt: string;
+};
 
 type PortfolioGridProps = {
-  images: string[];
+  images: PortfolioImage[];
   title: string;
   themeColor: string;
-  onImageClick?: (image: string) => void;
+  onImageClick?: (image: PortfolioImage) => void;
   /** Eyebrow label above the count (e.g. "Selected Work" vs "Full Portfolio"). */
   label?: string;
   /** Grid tile aspect bias. Defaults to portrait for people/editorial work. */
@@ -52,33 +57,17 @@ export default function PortfolioGrid({
   orientation = "portrait",
 }: PortfolioGridProps) {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
-  const [displayImages, setDisplayImages] = useState(images);
-  const [isMounted, setIsMounted] = useState(false);
+  const displayImages = images;
 
   const isLandscape = orientation === "landscape";
   const activeClasses = isLandscape ? landscapeSpanClasses : portraitSpanClasses;
-
-  // Shuffle images only (never the span classes) after mount to avoid hydration mismatch.
-  useEffect(() => {
-    const shuffled = [...images];
-    for (let i = shuffled.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    setDisplayImages(shuffled);
-    setIsMounted(true);
-  }, [images]);
 
   if (images.length === 0) {
     return null;
   }
 
-  if (!isMounted) {
-    return null;
-  }
-
   return (
-    <div className="relative z-0 w-full border-t border-[#1a1a1a] bg-black py-14">
+    <div className="relative z-0 w-full border-t border-[#1a1a1a] bg-black py-14" aria-label={title}>
       <div className="mb-6 px-4 text-center">
         <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-white/50">{label}</p>
         <span className="mt-1 block text-sm font-medium text-[#F4F1ED]/85">
@@ -94,10 +83,10 @@ export default function PortfolioGrid({
       >
         {displayImages.map((image, index) => (
           <motion.div
-            key={image}
+            key={image.src}
             className={`${activeClasses[index % activeClasses.length]} group relative min-h-[100px] overflow-hidden rounded-none border border-[#1f1f1f] bg-[#202020] shadow-sm transition-[opacity,border-color,box-shadow,filter] duration-300 ${
               isLandscape ? "aspect-[3/2]" : ""
-            } ${hoveredImage && hoveredImage !== image ? "opacity-50" : "opacity-100"}`}
+            } ${hoveredImage && hoveredImage !== image.src ? "opacity-50" : "opacity-100"}`}
             style={{ borderColor: index === 0 ? `${themeColor}55` : undefined }}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -109,13 +98,13 @@ export default function PortfolioGrid({
               borderColor: "#f4f1ed66",
               boxShadow: "0 0 0 1px rgba(244,241,237,0.3)",
             }}
-            onHoverStart={() => setHoveredImage(image)}
+            onHoverStart={() => setHoveredImage(image.src)}
             onHoverEnd={() => setHoveredImage(null)}
             onClick={() => onImageClick?.(image)}
           >
             <Image
-              src={image}
-              alt={`${title} portfolio ${index + 1}`}
+              src={image.src}
+              alt={image.alt}
               fill
               sizes={
                 isLandscape

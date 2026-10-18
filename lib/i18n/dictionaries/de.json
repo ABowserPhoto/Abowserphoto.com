@@ -19,8 +19,8 @@
     "language": "Sprache"
   },
   "home": {
-    "headline": "Wählen Sie Ihre visuelle Geschichte",
-    "subhead": "Entdecken Sie redaktionelle, kommerzielle und spezialisierte Fotografie für hochwertiges Storytelling.",
+    "headline": "Fotograf für Business, Hochzeit & Commercial in Hagen und Solingen",
+    "subhead": "Studios in Hagen und Solingen. Editorial, Commercial und Reportage für Unternehmen, Paare und Marken.",
     "logoLabel": "A. Bowser Photography",
     "niches": {
       "wedding": "Hochzeit",
@@ -41,28 +41,28 @@
   },
   "seo": {
     "home": {
-      "title": "Professionelle Fotografie in NRW",
-      "description": "Aaron Bowser Photography bietet Premium-Fotografie für Immobilien, Commercial, Hochzeit, Food und Porträts in Hagen, Düsseldorf, Köln und ganz NRW."
+      "title": "Fotograf für Business, Hochzeit & Commercial in Hagen und Solingen",
+      "description": "Aaron Bowser Photography fotografiert Business-Porträts, Hochzeiten und Commercial. Studios in Hagen, Eckeseyer Str. 133, und Solingen, Merscheider Str. 112."
     },
     "real-estate": {
-      "title": "Premium Immobilienfotografie & 360°-Touren",
-      "description": "Verkaufsstarke Immobilienfotos, Drohnenaufnahmen, Twilight, digitales Homestaging und 360°-Touren für Makler und Projektentwickler in NRW. Schnelle Lieferung, MLS-ready."
+      "title": "Immobilienfotografie NRW",
+      "description": "Immobilienfotografie in Nordrhein-Westfalen: Innen- und Außenaufnahmen, Drohne, Twilight, digitales Homestaging und 360°-Touren. Studios in Hagen und Solingen."
     },
     "commercial": {
-      "title": "Commercial- & Editorial-Fotografie",
-      "description": "Fashion-, Beauty-, Produkt- und Editorial-Fotografie für Marken und Creatives. Studio in Solingen – Düsseldorf, Köln und NRW."
+      "title": "Commercial-Fotografie in Hagen & Solingen",
+      "description": "Fashion-, Beauty-, Produkt- und Editorial-Fotografie für Marken. Studios in Hagen und Solingen, Einsätze in Nordrhein-Westfalen."
     },
     "wedding": {
-      "title": "Hochzeitsfotografie",
-      "description": "Filmische und dokumentarische Hochzeitsfotografie für intime Zeremonien und große Feiern in Deutschland und weltweit."
+      "title": "Hochzeitsfotograf Hagen & Solingen",
+      "description": "Hochzeitsfotograf für die freie Trauung, den ganzen Tag und das Standesamt in Solingen und Hagen. Reportage mit ruhiger, filmischer Bildsprache."
     },
     "food": {
-      "title": "Food-Fotografie",
-      "description": "Appetitliche Food- und Getränkefotografie für Restaurants, Speisekarten, Produkte und Social Content."
+      "title": "Food-Fotografie in NRW",
+      "description": "Food- und Getränkefotografie für Restaurants, Speisekarten und Produkte. Studios in Hagen und Solingen."
     },
     "business-portraits": {
-      "title": "Business-Porträtfotografie",
-      "description": "Executive-Headshots, Team-Porträts und Personal-Branding-Fotografie für Unternehmen und Professionals."
+      "title": "Business-Porträts in Hagen & Solingen",
+      "description": "Business-Porträts, Mitarbeiterfotos und LinkedIn-Profilbilder für Unternehmen. Studios in Hagen und Solingen, Shootings auch vor Ort im Büro."
     },
     "cinematography": {
       "title": "Filmproduktion & Brand Films",
@@ -79,7 +79,32 @@
     "account": {
       "title": "Kundenkonto",
       "description": "Profil, Buchungen, Foto-Ordner und Rechnungen verwalten."
+    },
+    "book": {
+      "title": "Anfrage",
+      "description": "Fotoshooting bei Aaron Bowser Photography anfragen."
+    },
+    "impressum": {
+      "title": "Impressum",
+      "description": "Anbieterkennzeichnung der Aaron Bowser Photography UG, Studios in Hagen und Solingen."
+    },
+    "datenschutz": {
+      "title": "Datenschutzerklärung",
+      "description": "Hinweise zur Verarbeitung personenbezogener Daten auf aaronbowser-photography.com."
+    },
+    "cookie-richtlinie": {
+      "title": "Cookie-Richtlinie",
+      "description": "Welche Cookies und lokalen Speicher diese Website setzt."
     }
+  },
+  "footer": {
+    "contact": "Kontakt",
+    "studios": "Studios",
+    "legal": "Rechtliches",
+    "privacy": "Datenschutz",
+    "impressum": "Impressum",
+    "cookies": "Cookie-Richtlinie",
+    "privacyPolicy": "Datenschutzerklärung"
   },
   "auth": {
     "clientAccess": "Kundenzugang",

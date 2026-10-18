@@ -1,0 +1,502 @@
+{
+  "/logo/aaron-bowser-photography-logo.webp": {
+    "de": "Aaron Bowser Photography Logo",
+    "en": "Aaron Bowser Photography Logo"
+  },
+  "/about/portraet-aaron-bowser.webp": {
+    "de": "Porträt von Aaron Bowser, Fotograf mit Studios in Hagen und Solingen.",
+    "en": "Portrait of Aaron Bowser, photographer with studios in Hagen and Solingen."
+  },
+  "/real-estate/services/aussenaufnahmen-immobilie.webp": {
+    "de": "Außenaufnahme einer Immobilie.",
+    "en": "Exterior photograph of a property."
+  },
+  "/real-estate/services/twilight-immobilie.webp": {
+    "de": "Twilight-Aufnahme einer Immobilie in der Dämmerung.",
+    "en": "Twilight photograph of a property at dusk."
+  },
+  "/real-estate/services/highlight-video-immobilie.webp": {
+    "de": "Standbild aus einem Highlight-Video einer Immobilie.",
+    "en": "Still from a property highlight video."
+  },
+  "/real-estate/services/homestaging-nachher.webp": {
+    "de": "Derselbe Raum nach dem digitalen Homestaging.",
+    "en": "The same room after digital staging."
+  },
+  "/real-estate/services/makler-branding.webp": {
+    "de": "Porträt für das Branding eines Maklers.",
+    "en": "Portrait for an estate agent's branding."
+  },
+  "/real-estate/services/drohnenfotografie-immobilie.webp": {
+    "de": "Luftaufnahme einer Immobilie aus der Drohnenfotografie.",
+    "en": "Example of a drone photograph of a property."
+  },
+  "/real-estate/services/innenaufnahmen-immobilie.webp": {
+    "de": "Innenaufnahme einer Immobilie mit Tageslicht.",
+    "en": "Interior photograph of a property in daylight."
+  },
+  "/real-estate/services/360-grad-rundgang.webp": {
+    "de": "Vorschaubild eines 360-Grad-Rundgangs durch eine Immobilie.",
+    "en": "Preview of a 360-degree tour through a property."
+  },
+  "/real-estate/services/homestaging-vorher.webp": {
+    "de": "Raum vor dem digitalen Homestaging.",
+    "en": "Room before digital staging."
+  },
+  "/real-estate/services/digitales-homestaging.webp": {
+    "de": "Beispiel für digitales Homestaging eines Raums.",
+    "en": "Example of digital staging in a room."
+  },
+  "/real-estate/hero/immobilienfoto-airport-city.webp": {
+    "de": "Titelbild einer Gewerbefläche im Airport City.",
+    "en": "Opening photograph of a commercial property at Airport City."
+  },
+  "/real-estate/hero/immobilienfotografie-nrw-hero.webp": {
+    "de": "Schriftzug zur Immobilienfotografie von Aaron Bowser Photography in Nordrhein-Westfalen.",
+    "en": "Title card for Aaron Bowser Photography real-estate work in North Rhine-Westphalia."
+  },
+  "/real-estate/hero/immobilien-signet-ab-photography.webp": {
+    "de": "Signet AB Photography für die Immobilienfotografie.",
+    "en": "AB Photography mark for the real-estate work."
+  },
+  "/real-estate/hero/immobilienfoto-luedenscheid-westfalenstrasse.webp": {
+    "de": "Immobilienfoto eines Objekts in der Westfalenstraße in Lüdenscheid.",
+    "en": "Photograph of a property on Westfalenstraße in Lüdenscheid."
+  },
+  "/business-portraits/portfolio/businessportrait-thomas-metzner.webp": {
+    "de": "Business-Porträt von Thomas Metzner in dunkler Kleidung vor einem ruhigen Hintergrund.",
+    "en": "Business portrait of Thomas Metzner in dark clothing against a quiet background."
+  },
+  "/commercial/services/fashion-fotografie.webp": {
+    "de": "Fashion-Fotografie mit Blick auf Schnitt und Haltung.",
+    "en": "Fashion photograph focused on cut and posture."
+  },
+  "/commercial/services/editorial-fotografie.webp": {
+    "de": "Editorial-Aufnahme aus einer Commercial-Produktion.",
+    "en": "Editorial frame from a commercial production."
+  },
+  "/commercial/services/produktfotografie.webp": {
+    "de": "Produktfotografie vor einem ruhigen Hintergrund.",
+    "en": "Product photograph against a quiet background."
+  },
+  "/commercial/services/portraet-und-modelportfolio.webp": {
+    "de": "Porträt aus einem Model-Portfolio.",
+    "en": "Portrait from a model portfolio."
+  },
+  "/commercial/services/beauty-fotografie.webp": {
+    "de": "Beauty-Fotografie mit kontrolliertem Licht.",
+    "en": "Beauty photograph made with controlled light."
+  },
+  "/commercial/hero/commercial-fotografie-hero.webp": {
+    "de": "Commercial-Fotografie von Aaron Bowser Photography.",
+    "en": "Commercial photograph by Aaron Bowser Photography."
+  },
+  "/real-estate/portfolio/immobilienfoto-dieringhauser-strasse.webp": {
+    "de": "Immobilienfoto eines Objekts in der Dieringhauser Straße.",
+    "en": "Photograph of a property on Dieringhauser Straße."
+  },
+  "/real-estate/portfolio/immobilienfoto-arnsberg-schlossstrasse-1.webp": {
+    "de": "Erstes Immobilienfoto eines Objekts in der Schlossstraße in Arnsberg.",
+    "en": "First photograph of a property on Schlossstraße in Arnsberg."
+  },
+  "/real-estate/portfolio/immobilienfoto-arnsberg-schlossstrasse-2.webp": {
+    "de": "Zweites Immobilienfoto eines Objekts in der Schlossstraße in Arnsberg.",
+    "en": "Second photograph of a property on Schlossstraße in Arnsberg."
+  },
+  "/real-estate/portfolio/immobilienfoto-arnsberg-schlossstrasse-3.webp": {
+    "de": "Drittes Immobilienfoto eines Objekts in der Schlossstraße in Arnsberg.",
+    "en": "Third photograph of a property on Schlossstraße in Arnsberg."
+  },
+  "/real-estate/portfolio/immobilienfoto-dortmund-reitweg.webp": {
+    "de": "Immobilienfoto eines Objekts am Reitweg in Dortmund.",
+    "en": "Photograph of a property on Reitweg in Dortmund."
+  },
+  "/real-estate/portfolio/innenaufnahme-badezimmer.webp": {
+    "de": "Innenaufnahme eines Badezimmers.",
+    "en": "Interior photograph of a bathroom."
+  },
+  "/real-estate/portfolio/immobilienfoto-boenen-bockeldamm-1.webp": {
+    "de": "Erstes Immobilienfoto eines Objekts am Bockeldamm in Bönen.",
+    "en": "First photograph of a property on Bockeldamm in Bönen."
+  },
+  "/real-estate/portfolio/immobilienfoto-boenen-bockeldamm-2.webp": {
+    "de": "Zweites Immobilienfoto eines Objekts am Bockeldamm in Bönen.",
+    "en": "Second photograph of a property on Bockeldamm in Bönen."
+  },
+  "/real-estate/portfolio/immobilienfoto-boenen-bockeldamm-3.webp": {
+    "de": "Drittes Immobilienfoto eines Objekts am Bockeldamm in Bönen.",
+    "en": "Third photograph of a property on Bockeldamm in Bönen."
+  },
+  "/real-estate/portfolio/immobilienfoto-airport-city.webp": {
+    "de": "Immobilienfoto einer Gewerbefläche im Airport City.",
+    "en": "Photograph of a commercial property at Airport City."
+  },
+  "/real-estate/portfolio/immobilienfoto-luedenscheid-westfalenstrasse-1.webp": {
+    "de": "Erstes Immobilienfoto eines Objekts in der Westfalenstraße in Lüdenscheid.",
+    "en": "First photograph of a property on Westfalenstraße in Lüdenscheid."
+  },
+  "/real-estate/portfolio/immobilienfoto-luedenscheid-westfalenstrasse-2.webp": {
+    "de": "Zweites Immobilienfoto eines Objekts in der Westfalenstraße in Lüdenscheid.",
+    "en": "Second photograph of a property on Westfalenstraße in Lüdenscheid."
+  },
+  "/real-estate/portfolio/immobilienfoto-luedenscheid-oenekinger-weg.webp": {
+    "de": "Immobilienfoto eines Objekts am Önekinger Weg in Lüdenscheid.",
+    "en": "Photograph of a property on Önekinger Weg in Lüdenscheid."
+  },
+  "/real-estate/portfolio/immobilienfoto-hagen-rummenohler-strasse.webp": {
+    "de": "Immobilienfoto eines Objekts in der Rummenohler Straße in Hagen.",
+    "en": "Photograph of a property on Rummenohler Straße in Hagen."
+  },
+  "/real-estate/portfolio/immobilienfoto-krefeld-vereinsstrasse-1.webp": {
+    "de": "Erstes Immobilienfoto eines Objekts in der Vereinsstraße in Krefeld.",
+    "en": "First photograph of a property on Vereinsstraße in Krefeld."
+  },
+  "/real-estate/portfolio/immobilienfoto-krefeld-vereinsstrasse-2.webp": {
+    "de": "Zweites Immobilienfoto eines Objekts in der Vereinsstraße in Krefeld.",
+    "en": "Second photograph of a property on Vereinsstraße in Krefeld."
+  },
+  "/real-estate/portfolio/luftaufnahme-immobilie.webp": {
+    "de": "Luftaufnahme einer Immobilie.",
+    "en": "Aerial photograph of a property."
+  },
+  "/real-estate/portfolio/immobilienfoto-8500d573-023.webp": {
+    "de": "Immobilienfoto aus dem Portfolio.",
+    "en": "Property photograph from the portfolio."
+  },
+  "/real-estate/portfolio/immobilienfoto-hamm-schloss.webp": {
+    "de": "Immobilienfoto eines Objekts am Schloss in Hamm.",
+    "en": "Photograph of a property by the Schloss in Hamm."
+  },
+  "/real-estate/portfolio/immobilienfoto-dortmund-kronenstrasse.webp": {
+    "de": "Immobilienfoto eines Objekts in der Kronenstraße in Dortmund.",
+    "en": "Photograph of a property on Kronenstraße in Dortmund."
+  },
+  "/real-estate/portfolio/immobilienfoto-wilhelm-busch-strasse.webp": {
+    "de": "Immobilienfoto eines Objekts in der Wilhelm-Busch-Straße.",
+    "en": "Photograph of a property on Wilhelm-Busch-Straße."
+  },
+  "/commercial/portfolio/produktfoto-imanelle-1.webp": {
+    "de": "Erstes Produktfoto mit Imanelle.",
+    "en": "First product photograph with Imanelle."
+  },
+  "/commercial/portfolio/produktfoto-imanelle-2.webp": {
+    "de": "Zweites Produktfoto mit Imanelle.",
+    "en": "Second product photograph with Imanelle."
+  },
+  "/commercial/portfolio/fashion-portraet-alexandria-allerding-1.webp": {
+    "de": "Erstes Fashion-Porträt von Alexandria Allerding.",
+    "en": "First fashion portrait of Alexandria Allerding."
+  },
+  "/commercial/portfolio/fashion-portraet-alexandria-allerding-2.webp": {
+    "de": "Zweites Fashion-Porträt von Alexandria Allerding.",
+    "en": "Second fashion portrait of Alexandria Allerding."
+  },
+  "/commercial/portfolio/portraet-dya-mafoudia.webp": {
+    "de": "Porträt von Dya Mafoudia.",
+    "en": "Portrait of Dya Mafoudia."
+  },
+  "/commercial/portfolio/beauty-iman-1.webp": {
+    "de": "Erste Beauty-Aufnahme von Iman.",
+    "en": "First beauty photograph of Iman."
+  },
+  "/commercial/portfolio/beauty-iman-2.webp": {
+    "de": "Zweite Beauty-Aufnahme von Iman.",
+    "en": "Second beauty photograph of Iman."
+  },
+  "/commercial/portfolio/portraet-lara.webp": {
+    "de": "Porträt von Lara.",
+    "en": "Portrait of Lara."
+  },
+  "/commercial/portfolio/fashion-portraet-marsela-1.webp": {
+    "de": "Erstes Fashion-Porträt von Marsela.",
+    "en": "First fashion portrait of Marsela."
+  },
+  "/commercial/portfolio/fashion-portraet-marsela-2.webp": {
+    "de": "Zweites Fashion-Porträt von Marsela.",
+    "en": "Second fashion portrait of Marsela."
+  },
+  "/commercial/portfolio/portraet-nina-1.webp": {
+    "de": "Erstes Porträt von Nina.",
+    "en": "First portrait of Nina."
+  },
+  "/commercial/portfolio/portraet-nina-2.webp": {
+    "de": "Zweites Porträt von Nina.",
+    "en": "Second portrait of Nina."
+  },
+  "/commercial/portfolio/portraet-nina-3.webp": {
+    "de": "Drittes Porträt von Nina.",
+    "en": "Third portrait of Nina."
+  },
+  "/commercial/portfolio/portraet-studiosession.webp": {
+    "de": "Porträt aus einer kurzen Studiosession.",
+    "en": "Portrait from a short studio session."
+  },
+  "/commercial/portfolio/fashion-portraet-naya-1.webp": {
+    "de": "Erstes Fashion-Porträt von Naya.",
+    "en": "First fashion portrait of Naya."
+  },
+  "/commercial/portfolio/fashion-portraet-naya-2.webp": {
+    "de": "Zweites Fashion-Porträt von Naya.",
+    "en": "Second fashion portrait of Naya."
+  },
+  "/commercial/portfolio/fashion-portraet-naya-3.webp": {
+    "de": "Drittes Fashion-Porträt von Naya.",
+    "en": "Third fashion portrait of Naya."
+  },
+  "/commercial/portfolio/fashion-editorial-racheal-gausi-hoepfner-1.webp": {
+    "de": "Erstes Fashion-Editorial mit Racheal Gausi-Höpfner.",
+    "en": "First fashion editorial with Racheal Gausi-Hoepfner."
+  },
+  "/commercial/portfolio/fashion-editorial-racheal-gausi-hoepfner-2.webp": {
+    "de": "Zweites Fashion-Editorial mit Racheal Gausi-Höpfner.",
+    "en": "Second fashion editorial with Racheal Gausi-Hoepfner."
+  },
+  "/commercial/portfolio/portraet-gertrudes.webp": {
+    "de": "Porträt von Gertrudes.",
+    "en": "Portrait of Gertrudes."
+  },
+  "/commercial/portfolio/produktfoto-elegance-1.webp": {
+    "de": "Erstes Produktfoto der Flasche Elegance.",
+    "en": "First product photograph of the Elegance bottle."
+  },
+  "/commercial/portfolio/produktfoto-elegance-2.webp": {
+    "de": "Zweites Produktfoto der Flasche Elegance.",
+    "en": "Second product photograph of the Elegance bottle."
+  },
+  "/commercial/portfolio/fashion-editorial-emiliia-1.webp": {
+    "de": "Erstes Fashion-Editorial mit Emiliia.",
+    "en": "First fashion editorial with Emiliia."
+  },
+  "/commercial/portfolio/fashion-editorial-emiliia-2.webp": {
+    "de": "Zweites Fashion-Editorial mit Emiliia.",
+    "en": "Second fashion editorial with Emiliia."
+  },
+  "/commercial/portfolio/fashion-editorial-emiliia-3.webp": {
+    "de": "Drittes Fashion-Editorial mit Emiliia.",
+    "en": "Third fashion editorial with Emiliia."
+  },
+  "/commercial/portfolio/portraet-alecia.webp": {
+    "de": "Porträt von Alecia.",
+    "en": "Portrait of Alecia."
+  },
+  "/commercial/portfolio/fashion-editorial-carina-amber-1.webp": {
+    "de": "Erstes Fashion-Editorial mit Carina Amber.",
+    "en": "First fashion editorial with Carina Amber."
+  },
+  "/commercial/portfolio/fashion-editorial-carina-amber-2.webp": {
+    "de": "Zweites Fashion-Editorial mit Carina Amber.",
+    "en": "Second fashion editorial with Carina Amber."
+  },
+  "/commercial/portfolio/fashion-editorial-carina-amber-3.webp": {
+    "de": "Drittes Fashion-Editorial mit Carina Amber.",
+    "en": "Third fashion editorial with Carina Amber."
+  },
+  "/commercial/portfolio/businessportrait-jana-neupert-1.webp": {
+    "de": "Erstes Business-Porträt von Jana Neupert.",
+    "en": "First business portrait of Jana Neupert."
+  },
+  "/commercial/portfolio/businessportrait-jana-neupert-2.webp": {
+    "de": "Zweites Business-Porträt von Jana Neupert.",
+    "en": "Second business portrait of Jana Neupert."
+  },
+  "/commercial/portfolio/portraet-archiv-0038.webp": {
+    "de": "Porträtaufnahme aus dem Archiv, Nummer 0038.",
+    "en": "Portrait from the archive, number 0038."
+  },
+  "/commercial/portfolio/fashion-editorial-delaurent-1.webp": {
+    "de": "Erstes Fashion-Editorial für DeLaurent.",
+    "en": "First fashion editorial for DeLaurent."
+  },
+  "/commercial/portfolio/fashion-editorial-delaurent-2.webp": {
+    "de": "Zweites Fashion-Editorial für DeLaurent.",
+    "en": "Second fashion editorial for DeLaurent."
+  },
+  "/commercial/portfolio/fashion-editorial-delaurent-3.webp": {
+    "de": "Drittes Fashion-Editorial für DeLaurent.",
+    "en": "Third fashion editorial for DeLaurent."
+  },
+  "/commercial/portfolio/portraet-diane-1.webp": {
+    "de": "Erstes Porträt von Diane.",
+    "en": "First portrait of Diane."
+  },
+  "/commercial/portfolio/portraet-diane-2.webp": {
+    "de": "Zweites Porträt von Diane.",
+    "en": "Second portrait of Diane."
+  },
+  "/commercial/portfolio/fashion-imanelle-1.webp": {
+    "de": "Erste Fashion-Aufnahme von Imanelle.",
+    "en": "First fashion photograph of Imanelle."
+  },
+  "/commercial/portfolio/fashion-imanelle-2.webp": {
+    "de": "Zweite Fashion-Aufnahme von Imanelle.",
+    "en": "Second fashion photograph of Imanelle."
+  },
+  "/commercial/portfolio/produktfoto-cellavent-1.webp": {
+    "de": "Erstes Produktfoto für Cellavent.",
+    "en": "First product photograph for Cellavent."
+  },
+  "/commercial/portfolio/produktfoto-cellavent-2.webp": {
+    "de": "Zweites Produktfoto für Cellavent.",
+    "en": "Second product photograph for Cellavent."
+  },
+  "/commercial/portfolio/produktfoto-cellavent-3.webp": {
+    "de": "Drittes Produktfoto für Cellavent.",
+    "en": "Third product photograph for Cellavent."
+  },
+  "/commercial/portfolio/produktfoto-cellavent-4.webp": {
+    "de": "Viertes Produktfoto für Cellavent.",
+    "en": "Fourth product photograph for Cellavent."
+  },
+  "/commercial/portfolio/portraet-caroline-zoe.webp": {
+    "de": "Porträt von Caroline Zoe.",
+    "en": "Portrait of Caroline Zoe."
+  },
+  "/commercial/portfolio/fashion-peak-1.webp": {
+    "de": "Erste Fashion-Aufnahme für Peak.",
+    "en": "First fashion photograph for Peak."
+  },
+  "/commercial/portfolio/fashion-peak-2.webp": {
+    "de": "Zweite Fashion-Aufnahme für Peak.",
+    "en": "Second fashion photograph for Peak."
+  },
+  "/commercial/portfolio/beauty-margarita-terpugova-1.webp": {
+    "de": "Erste Beauty-Aufnahme von Margarita Terpugova.",
+    "en": "First beauty photograph of Margarita Terpugova."
+  },
+  "/commercial/portfolio/beauty-margarita-terpugova-2.webp": {
+    "de": "Zweite Beauty-Aufnahme von Margarita Terpugova.",
+    "en": "Second beauty photograph of Margarita Terpugova."
+  },
+  "/commercial/portfolio/fashion-editorial-why-k-1.webp": {
+    "de": "Erstes Fashion-Editorial für Why K.",
+    "en": "First fashion editorial for Why K."
+  },
+  "/commercial/portfolio/fashion-editorial-why-k-2.webp": {
+    "de": "Zweites Fashion-Editorial für Why K.",
+    "en": "Second fashion editorial for Why K."
+  },
+  "/commercial/portfolio/fashion-editorial-why-k-3.webp": {
+    "de": "Drittes Fashion-Editorial für Why K.",
+    "en": "Third fashion editorial for Why K."
+  },
+  "/commercial/portfolio/fashion-editorial-why-k-4.webp": {
+    "de": "Viertes Fashion-Editorial für Why K.",
+    "en": "Fourth fashion editorial for Why K."
+  },
+  "/commercial/portfolio/fashion-severin.webp": {
+    "de": "Fashion-Aufnahme von Severin.",
+    "en": "Fashion photograph of Severin."
+  },
+  "/commercial/portfolio/fashion-imanelle-strand-1.webp": {
+    "de": "Erste Fashion-Aufnahme von Imanelle am Strand.",
+    "en": "First fashion photograph of Imanelle on the beach."
+  },
+  "/commercial/portfolio/fashion-imanelle-strand-2.webp": {
+    "de": "Zweite Fashion-Aufnahme von Imanelle am Strand.",
+    "en": "Second fashion photograph of Imanelle on the beach."
+  },
+  "/commercial/portfolio/fashion-imanelle-strand-3.webp": {
+    "de": "Dritte Fashion-Aufnahme von Imanelle am Strand.",
+    "en": "Third fashion photograph of Imanelle on the beach."
+  },
+  "/commercial/portfolio/editorial-imirage-1.webp": {
+    "de": "Erste Editorial-Seite im Magazin IMIRAGE.",
+    "en": "First editorial page in IMIRAGE magazine."
+  },
+  "/commercial/portfolio/editorial-imirage-2.webp": {
+    "de": "Zweite Editorial-Seite im Magazin IMIRAGE.",
+    "en": "Second editorial page in IMIRAGE magazine."
+  },
+  "/commercial/portfolio/portraet-archiv-5147.webp": {
+    "de": "Porträtaufnahme aus dem Archiv, Nummer 5147.",
+    "en": "Portrait from the archive, number 5147."
+  },
+  "/commercial/portfolio/portraet-archiv-5128.webp": {
+    "de": "Porträtaufnahme aus dem Archiv, Nummer 5128.",
+    "en": "Portrait from the archive, number 5128."
+  },
+  "/commercial/portfolio/portraet-monja.webp": {
+    "de": "Porträt von Monja.",
+    "en": "Portrait of Monja."
+  },
+  "/commercial/portfolio/fashion-beauty-linda-klein.webp": {
+    "de": "Fashion-Beauty-Aufnahme von Linda Klein.",
+    "en": "Fashion beauty photograph of Linda Klein."
+  },
+  "/commercial/portfolio/fashion-editorial-high-life.webp": {
+    "de": "Fashion-Editorial High Life.",
+    "en": "High Life fashion editorial."
+  },
+  "/commercial/portfolio/portraet-christoph-ostenfelder-1.webp": {
+    "de": "Erstes Porträt von Christoph Ostenfelder.",
+    "en": "First portrait of Christoph Ostenfelder."
+  },
+  "/commercial/portfolio/portraet-christoph-ostenfelder-2.webp": {
+    "de": "Zweites Porträt von Christoph Ostenfelder.",
+    "en": "Second portrait of Christoph Ostenfelder."
+  },
+  "/commercial/portfolio/portraet-archiv-5577.webp": {
+    "de": "Porträtaufnahme aus dem Archiv, Nummer 5577.",
+    "en": "Portrait from the archive, number 5577."
+  },
+  "/commercial/portfolio/portraet-darya-litviakova-1.webp": {
+    "de": "Erstes Porträt von Darya Litviakova.",
+    "en": "First portrait of Darya Litviakova."
+  },
+  "/commercial/portfolio/portraet-darya-litviakova-2.webp": {
+    "de": "Zweites Porträt von Darya Litviakova.",
+    "en": "Second portrait of Darya Litviakova."
+  },
+  "/commercial/portfolio/portraet-julia.webp": {
+    "de": "Porträt von Julia.",
+    "en": "Portrait of Julia."
+  },
+  "/commercial/portfolio/fashion-editorial-valentina.webp": {
+    "de": "Fashion-Editorial der Kollektion Valentina.",
+    "en": "Fashion editorial of the Valentina collection."
+  },
+  "/commercial/portfolio/konzertfoto-dj-flvr.webp": {
+    "de": "Konzertfoto von DJ Flvr und dem One Violin Orchestra.",
+    "en": "Concert photograph of DJ Flvr and the One Violin Orchestra."
+  },
+  "/commercial/portfolio/fashion-editorial-strand.webp": {
+    "de": "Fashion-Editorial am Strand.",
+    "en": "Fashion editorial on the beach."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-1.webp": {
+    "de": "Erstes Hochzeitsfoto von Mariam.",
+    "en": "First wedding photograph of Mariam."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-2.webp": {
+    "de": "Zweites Hochzeitsfoto von Mariam.",
+    "en": "Second wedding photograph of Mariam."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-3.webp": {
+    "de": "Drittes Hochzeitsfoto von Mariam.",
+    "en": "Third wedding photograph of Mariam."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-4.webp": {
+    "de": "Viertes Hochzeitsfoto von Mariam.",
+    "en": "Fourth wedding photograph of Mariam."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-5.webp": {
+    "de": "Fünftes Hochzeitsfoto von Mariam.",
+    "en": "Fifth wedding photograph of Mariam."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-6.webp": {
+    "de": "Sechstes Hochzeitsfoto von Mariam.",
+    "en": "Sixth wedding photograph of Mariam."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-7.webp": {
+    "de": "Siebtes Hochzeitsfoto von Mariam.",
+    "en": "Seventh wedding photograph of Mariam."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-8.webp": {
+    "de": "Achtes Hochzeitsfoto von Mariam.",
+    "en": "Eighth wedding photograph of Mariam."
+  },
+  "/wedding/portfolio/hochzeitsfoto-mariam-9.webp": {
+    "de": "Neuntes Hochzeitsfoto von Mariam.",
+    "en": "Ninth wedding photograph of Mariam."
+  }
+}
