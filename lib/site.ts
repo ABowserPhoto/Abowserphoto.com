@@ -35,6 +35,15 @@ export const OG_IMAGE_WIDTH = 1200;
 export const OG_IMAGE_HEIGHT = 630;
 export const OG_IMAGE_ALT = "Aaron Bowser Photography, Studios in Hagen und Solingen";
 
+/** Preview image for the business-portraits pages only. */
+export const BUSINESS_PORTRAITS_OG_IMAGE_PATH = "/og/og-business-portraits.jpg";
+export const BUSINESS_PORTRAITS_OG_IMAGE_WIDTH = 1200;
+export const BUSINESS_PORTRAITS_OG_IMAGE_HEIGHT = 630;
+export const BUSINESS_PORTRAITS_OG_ALT = {
+  de: "Businessportrait einer Unternehmerin im roten Blazer als Vorschaubild für Business-Portraits.",
+  en: "Business portrait of a businesswoman in a red blazer, used as the preview image for business portraits.",
+} as const;
+
 export type Studio = {
   id: "hagen" | "solingen";
   nameDe: string;
@@ -43,6 +52,9 @@ export type Studio = {
   postalCode: string;
   city: string;
   countryCode: "DE";
+  latitude: number;
+  longitude: number;
+  mapsUrl: string;
 };
 
 export const STUDIOS: readonly Studio[] = [
@@ -54,6 +66,10 @@ export const STUDIOS: readonly Studio[] = [
     postalCode: "58089",
     city: "Hagen",
     countryCode: "DE",
+    latitude: 51.3771835,
+    longitude: 7.454225,
+    mapsUrl:
+      "https://www.google.com/maps/place/Aaron+Bowser+Photography/@51.3771835,7.454225,17z/data=!4m6!3m5!1s0x47b93cbdc8d7c7b3:0x6fde83c86b76ba38!8m2!3d51.3771835!4d7.454225!16s%2Fg%2F11btwpyctw",
   },
   {
     id: "solingen",
@@ -63,6 +79,10 @@ export const STUDIOS: readonly Studio[] = [
     postalCode: "42699",
     city: "Solingen",
     countryCode: "DE",
+    latitude: 51.1641699,
+    longitude: 7.020909,
+    mapsUrl:
+      "https://www.google.com/maps/place/Aaron+Bowser+Photography/@51.1641699,7.020909,17z/data=!4m6!3m5!1s0x47b8d36375b52c6f:0x36d573286e598635!8m2!3d51.1641699!4d7.020909!16s%2Fg%2F11vzycbxq5",
   },
 ];
 
@@ -99,6 +119,7 @@ export const BUSINESS_PORTRAIT_PRICE_FROM: string | null = null;
 
 /**
  * TODO(owner): Echte Profil-URLs eintragen (Instagram, LinkedIn, weitere).
- * Platzhalter-Domains werden nicht veröffentlicht und nicht in sameAs geschrieben.
+ * Platzhalter-Domains werden nicht veröffentlicht. Google-Maps-Einträge
+ * stehen an den Studios und werden separat in sameAs aufgenommen.
  */
 export const SOCIAL_PROFILE_URLS: readonly string[] = [];

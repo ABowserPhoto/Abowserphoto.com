@@ -8,6 +8,8 @@ import imageAlts from "./image-alts.json";
 export type GalleryImage = {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
 };
 
 const altMap = imageAlts as Record<string, { de: string; en: string }>;
@@ -41,7 +43,7 @@ export function readPortfolio(slug: CategorySlug, locale: Locale): GalleryImage[
       const src = `/business-portraits/portfolio/${item.file}`;
       const absolute = path.join(process.cwd(), "public", "business-portraits", "portfolio", item.file);
       if (!fs.existsSync(absolute)) return [];
-      return [{ src, alt: item.alt[locale] }];
+      return [{ src, alt: item.alt[locale], width: item.width, height: item.height }];
     });
   }
 

@@ -15,9 +15,17 @@ type HeroSliderProps = {
   title: string;
   subtitle: string;
   intervalMs?: number;
+  /** Left when the subject sits on the right of the frame. */
+  align?: "left" | "center";
 };
 
-export default function HeroSlider({ media, title, subtitle, intervalMs = 10000 }: HeroSliderProps) {
+export default function HeroSlider({
+  media,
+  title,
+  subtitle,
+  intervalMs = 10000,
+  align = "center",
+}: HeroSliderProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -53,7 +61,7 @@ export default function HeroSlider({ media, title, subtitle, intervalMs = 10000 
                 fill
                 priority
                 sizes="100vw"
-                className="object-cover"
+                className={align === "left" ? "object-cover object-right" : "object-cover"}
               />
             ) : (
               <video
@@ -70,18 +78,39 @@ export default function HeroSlider({ media, title, subtitle, intervalMs = 10000 
         </AnimatePresence>
       )}
 
-      <div className="pointer-events-none absolute inset-0 bg-black/35" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/40" />
+      {align === "left" ? (
+        <>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/20" />
+        </>
+      ) : (
+        <>
+          <div className="pointer-events-none absolute inset-0 bg-black/35" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/40" />
+        </>
+      )}
 
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-6 pt-16 text-center sm:px-10">
-        <div className="max-w-4xl">
+      <div
+        className={
+          align === "left"
+            ? "pointer-events-none absolute inset-0 flex items-center justify-start px-6 pt-16 text-left sm:px-12 lg:px-20"
+            : "pointer-events-none absolute inset-0 flex items-center justify-center px-6 pt-16 text-center sm:px-10"
+        }
+      >
+        <div className={align === "left" ? "max-w-xl lg:max-w-2xl" : "max-w-4xl"}>
           <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#F4F1ED]/70">
             Aaron Bowser Photography
           </p>
           <h1 className="mt-5 text-4xl font-light leading-tight tracking-tight text-[#F4F1ED] sm:text-6xl lg:text-7xl">
             {title}
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base lg:text-lg">
+          <p
+            className={
+              align === "left"
+                ? "mt-6 max-w-xl text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base lg:text-lg"
+                : "mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base lg:text-lg"
+            }
+          >
             {subtitle}
           </p>
         </div>

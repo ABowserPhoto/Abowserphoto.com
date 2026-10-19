@@ -53,6 +53,14 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
                 <span className="block">
                   {studio.postalCode} {studio.city}, {country}
                 </span>
+                <a
+                  href={studio.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-block underline underline-offset-2 transition-opacity hover:opacity-80"
+                >
+                  {dictionary.footer.directions}
+                </a>
               </p>
             ))}
           </div>

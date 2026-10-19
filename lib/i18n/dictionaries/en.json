@@ -104,7 +104,8 @@
     "privacy": "Privacy",
     "impressum": "Legal notice",
     "cookies": "Cookie policy",
-    "privacyPolicy": "Privacy policy"
+    "privacyPolicy": "Privacy policy",
+    "directions": "Directions / Google Maps"
   },
   "auth": {
     "clientAccess": "Client Access",

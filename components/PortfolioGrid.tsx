@@ -7,7 +7,15 @@ import { useState } from "react";
 export type PortfolioImage = {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
 };
+
+/** 1000×1250 headshots are 4:5; the other portraits are 2:3. */
+function isFourFive(image: PortfolioImage) {
+  if (!image.width || !image.height) return false;
+  return Math.abs(image.width / image.height - 0.8) < 0.02;
+}
 
 type PortfolioGridProps = {
   images: PortfolioImage[];
@@ -81,10 +89,14 @@ export default function PortfolioGrid({
             : "grid grid-cols-4 grid-flow-dense auto-rows-[minmax(100px,auto)] gap-[5px] sm:grid-cols-5 lg:grid-cols-6"
         }
       >
-        {displayImages.map((image, index) => (
+        {displayImages.map((image, index) => {
+          const fourFive = !isLandscape && isFourFive(image);
+          return (
           <motion.div
             key={image.src}
-            className={`${activeClasses[index % activeClasses.length]} group relative min-h-[100px] overflow-hidden rounded-none border border-[#1f1f1f] bg-[#202020] shadow-sm transition-[opacity,border-color,box-shadow,filter] duration-300 ${
+            className={`${
+              fourFive ? "col-span-1 self-start" : activeClasses[index % activeClasses.length]
+            } group relative min-h-[100px] overflow-hidden rounded-none border border-[#1f1f1f] bg-[#202020] shadow-sm transition-[opacity,border-color,box-shadow,filter] duration-300 ${
               isLandscape ? "aspect-[3/2]" : ""
             } ${hoveredImage && hoveredImage !== image.src ? "opacity-50" : "opacity-100"}`}
             style={{ borderColor: index === 0 ? `${themeColor}55` : undefined }}
@@ -102,21 +114,33 @@ export default function PortfolioGrid({
             onHoverEnd={() => setHoveredImage(null)}
             onClick={() => onImageClick?.(image)}
           >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes={
-                isLandscape
-                  ? "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
-                  : "(max-width: 639px) 50vw, (max-width: 1023px) 40vw, 33vw"
-              }
-              className={`rounded-none object-cover transition duration-300 group-hover:brightness-110 ${
-                isLandscape ? "object-center" : "object-top"
-              }`}
-            />
+            {fourFive && image.width && image.height ? (
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                sizes="(max-width: 639px) 25vw, (max-width: 1023px) 20vw, 16vw"
+                className="h-auto w-full object-cover object-center transition duration-300 group-hover:brightness-110"
+              />
+            ) : (
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                sizes={
+                  isLandscape
+                    ? "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                    : "(max-width: 639px) 50vw, (max-width: 1023px) 40vw, 33vw"
+                }
+                className={`rounded-none object-cover transition duration-300 group-hover:brightness-110 ${
+                  isLandscape ? "object-center" : "object-top"
+                }`}
+              />
+            )}
           </motion.div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

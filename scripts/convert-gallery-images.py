@@ -59,13 +59,6 @@ EXPLICIT: dict[str, tuple[str, dict[str, str]]] = {
             "en": "Portrait of Aaron Bowser, photographer with studios in Hagen and Solingen.",
         },
     ),
-    "business-portraits/portfolio/Thomas_Metzner_Business_64.jpg": (
-        "business-portraits/portfolio/businessportrait-thomas-metzner.webp",
-        {
-            "de": "Business-Porträt von Thomas Metzner in dunkler Kleidung vor einem ruhigen Hintergrund.",
-            "en": "Business portrait of Thomas Metzner in dark clothing against a quiet background.",
-        },
-    ),
     "real-estate/hero/1920×1080.png": (
         "real-estate/hero/immobilien-signet-ab-photography.webp",
         {

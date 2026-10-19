@@ -10,6 +10,7 @@ import {
   SITE_URL,
   SOCIAL_PROFILE_URLS,
   SOLINGEN_STUDIO,
+  STUDIOS,
   type Studio,
 } from "./site";
 
@@ -33,13 +34,19 @@ function studioNode(studio: Studio) {
     telephone: CONTACT_PHONE_E164,
     image: absoluteUrl(OG_IMAGE_PATH),
     address: postalAddress(studio),
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: studio.latitude,
+      longitude: studio.longitude,
+    },
+    hasMap: studio.mapsUrl,
     parentOrganization: { "@id": `${SITE_URL}/#organization` },
   };
 }
 
 /**
  * One photography practice with two studio locations.
- * Unknown fields (sameAs, priceRange, opening hours) are omitted.
+ * Unknown fields (priceRange, opening hours, social profiles) are omitted.
  */
 export function buildBusinessJsonLd() {
   const organization: Record<string, unknown> = {
@@ -64,8 +71,9 @@ export function buildBusinessJsonLd() {
     ],
   };
 
-  if (SOCIAL_PROFILE_URLS.length > 0) {
-    organization.sameAs = [...SOCIAL_PROFILE_URLS];
+  const sameAs = [...STUDIOS.map((studio) => studio.mapsUrl), ...SOCIAL_PROFILE_URLS];
+  if (sameAs.length > 0) {
+    organization.sameAs = sameAs;
   }
 
   return {

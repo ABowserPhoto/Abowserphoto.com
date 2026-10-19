@@ -225,12 +225,21 @@ export default function HomePortal({
           <p className="mt-3 text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base">
             {dictionary.home.subhead}
           </p>
-          <address className="mt-4 space-y-1 not-italic text-[11px] leading-relaxed tracking-wide text-[#F4F1ED]/75">
+          <address className="mt-4 space-y-2 not-italic text-[11px] leading-relaxed tracking-wide text-[#F4F1ED]/75">
             {STUDIOS.map((studio) => (
               <span key={studio.id} className="block">
                 {locale === "de" ? studio.nameDe : studio.nameEn}
                 {" · "}
                 {studio.street}, {studio.postalCode} {studio.city}
+                {" · "}
+                <a
+                  href={studio.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-white/40 underline-offset-2 transition-opacity hover:text-[#F4F1ED] hover:opacity-100"
+                >
+                  {dictionary.footer.directions}
+                </a>
               </span>
             ))}
           </address>

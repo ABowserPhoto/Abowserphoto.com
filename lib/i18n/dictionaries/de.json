@@ -104,7 +104,8 @@
     "privacy": "Datenschutz",
     "impressum": "Impressum",
     "cookies": "Cookie-Richtlinie",
-    "privacyPolicy": "Datenschutzerklärung"
+    "privacyPolicy": "Datenschutzerklärung",
+    "directions": "Route / Google Maps"
   },
   "auth": {
     "clientAccess": "Kundenzugang",

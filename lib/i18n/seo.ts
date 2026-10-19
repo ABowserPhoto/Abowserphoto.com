@@ -3,6 +3,10 @@ import type { CategorySlug } from "../content";
 import { categoryPath } from "../routes";
 import {
   BRAND_NAME,
+  BUSINESS_PORTRAITS_OG_ALT,
+  BUSINESS_PORTRAITS_OG_IMAGE_HEIGHT,
+  BUSINESS_PORTRAITS_OG_IMAGE_PATH,
+  BUSINESS_PORTRAITS_OG_IMAGE_WIDTH,
   OG_IMAGE_ALT,
   OG_IMAGE_HEIGHT,
   OG_IMAGE_PATH,
@@ -37,7 +41,13 @@ function languageAlternates(pathnameFor: (locale: Locale) => string) {
   };
 }
 
-function openGraphFor(locale: Locale, path: string, title: string, description: string): Metadata["openGraph"] {
+function openGraphFor(
+  locale: Locale,
+  path: string,
+  title: string,
+  description: string,
+  images: NonNullable<Metadata["openGraph"]>["images"] = [ogImage]
+): Metadata["openGraph"] {
   return {
     type: "website",
     siteName: BRAND_NAME,
@@ -46,7 +56,7 @@ function openGraphFor(locale: Locale, path: string, title: string, description: 
     description,
     locale: locale === "de" ? "de_DE" : "en_US",
     alternateLocale: locale === "de" ? ["en_US"] : ["de_DE"],
-    images: [ogImage],
+    images,
   };
 }
 
@@ -88,6 +98,17 @@ export function buildCategoryMetadata(locale: Locale, slug: CategorySlug): Metad
   const dict = getDictionarySync(locale);
   const seo = dict.seo[slug];
   const path = withLocale(categoryPath(slug, locale), locale);
+  const images =
+    slug === "business-portraits"
+      ? [
+          {
+            url: BUSINESS_PORTRAITS_OG_IMAGE_PATH,
+            width: BUSINESS_PORTRAITS_OG_IMAGE_WIDTH,
+            height: BUSINESS_PORTRAITS_OG_IMAGE_HEIGHT,
+            alt: BUSINESS_PORTRAITS_OG_ALT[locale],
+          },
+        ]
+      : [ogImage];
   return {
     title: seo.title,
     description: seo.description,
@@ -95,7 +116,7 @@ export function buildCategoryMetadata(locale: Locale, slug: CategorySlug): Metad
       canonical: absoluteUrl(path),
       languages: languageAlternates((entry) => withLocale(categoryPath(slug, entry), entry)),
     },
-    openGraph: openGraphFor(locale, path, `${seo.title} | ${dict.brand}`, seo.description),
+    openGraph: openGraphFor(locale, path, `${seo.title} | ${dict.brand}`, seo.description, images),
   };
 }
 
