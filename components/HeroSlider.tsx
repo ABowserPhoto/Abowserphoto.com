@@ -58,8 +58,8 @@ export default function HeroSlider({
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-black via-[#111111] to-[#1a1a1a]" />
             )}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 via-40% to-transparent to-[68%]" />
-            <div className="pointer-events-none absolute inset-0 hidden items-center px-10 text-left md:flex lg:px-16">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 via-[22%] to-transparent to-[46%]" />
+            <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[46%] items-center px-8 text-left md:flex lg:px-12">
               <HeroCopy title={title} subtitle={subtitle} align="left" />
             </div>
           </div>
@@ -131,7 +131,7 @@ function HeroCopy({
   compact?: boolean;
 }) {
   return (
-    <div className={align === "left" ? "max-w-lg lg:max-w-xl" : "max-w-4xl"}>
+    <div className={align === "left" ? "max-w-full" : "max-w-4xl"}>
       <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#F4F1ED]/70">
         Aaron Bowser Photography
       </p>
@@ -147,7 +147,7 @@ function HeroCopy({
       <p
         className={
           align === "left"
-            ? "mt-4 max-w-md text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base"
+            ? "mt-4 max-w-full text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base"
             : "mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base lg:text-lg"
         }
       >

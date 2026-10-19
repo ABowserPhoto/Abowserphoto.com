@@ -40,8 +40,8 @@ export const BUSINESS_PORTRAITS_OG_IMAGE_PATH = "/og/og-business-portraits.jpg";
 export const BUSINESS_PORTRAITS_OG_IMAGE_WIDTH = 1200;
 export const BUSINESS_PORTRAITS_OG_IMAGE_HEIGHT = 630;
 export const BUSINESS_PORTRAITS_OG_ALT = {
-  de: "Businessportrait einer Unternehmerin im roten Blazer als Vorschaubild für Business-Portraits.",
-  en: "Business portrait of a businesswoman in a red blazer, used as the preview image for business portraits.",
+  de: "Businessportrait einer lächelnden Frau im fliederfarbenen Blazer als Vorschaubild für Business-Portraits.",
+  en: "Business portrait of a smiling woman in a lilac blazer, used as the preview image for business portraits.",
 } as const;
 
 export type Studio = {
