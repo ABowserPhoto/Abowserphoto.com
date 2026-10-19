@@ -1,16 +1,30 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+export type PortfolioImage = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
+/** 1000×1250 headshots are 4:5; the other portraits are 2:3. */
+function isFourFive(image: PortfolioImage) {
+  if (!image.width || !image.height) return false;
+  return Math.abs(image.width / image.height - 0.8) < 0.02;
+}
 
 type PortfolioGridProps = {
-  images: string[];
+  images: PortfolioImage[];
   title: string;
   themeColor: string;
-  onImageClick?: (image: string) => void;
+  onImageClick?: (image: PortfolioImage) => void;
   /** Eyebrow label above the count (e.g. "Selected Work" vs "Full Portfolio"). */
   label?: string;
+  /** Localized count line, already including the number. */
+  countLabel: string;
   /** Grid tile aspect bias. Defaults to portrait for people/editorial work. */
   orientation?: "portrait" | "landscape";
 };
@@ -49,41 +63,24 @@ export default function PortfolioGrid({
   themeColor,
   onImageClick,
   label = "Full Portfolio",
+  countLabel,
   orientation = "portrait",
 }: PortfolioGridProps) {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
-  const [displayImages, setDisplayImages] = useState(images);
-  const [isMounted, setIsMounted] = useState(false);
+  const displayImages = images;
 
   const isLandscape = orientation === "landscape";
   const activeClasses = isLandscape ? landscapeSpanClasses : portraitSpanClasses;
-
-  // Shuffle images only (never the span classes) after mount to avoid hydration mismatch.
-  useEffect(() => {
-    const shuffled = [...images];
-    for (let i = shuffled.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    setDisplayImages(shuffled);
-    setIsMounted(true);
-  }, [images]);
 
   if (images.length === 0) {
     return null;
   }
 
-  if (!isMounted) {
-    return null;
-  }
-
   return (
-    <div className="relative z-0 w-full border-t border-[#1a1a1a] bg-black py-14">
+    <div className="relative z-0 w-full border-t border-[#1a1a1a] bg-black py-14" aria-label={title}>
       <div className="mb-6 px-4 text-center">
         <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-white/50">{label}</p>
-        <span className="mt-1 block text-sm font-medium text-[#F4F1ED]/85">
-          {displayImages.length} showcase images
-        </span>
+        <span className="mt-1 block text-sm font-medium text-[#F4F1ED]/85">{countLabel}</span>
       </div>
       <div
         className={
@@ -92,42 +89,48 @@ export default function PortfolioGrid({
             : "grid grid-cols-4 grid-flow-dense auto-rows-[minmax(100px,auto)] gap-[5px] sm:grid-cols-5 lg:grid-cols-6"
         }
       >
-        {displayImages.map((image, index) => (
-          <motion.div
-            key={image}
-            className={`${activeClasses[index % activeClasses.length]} group relative min-h-[100px] overflow-hidden rounded-none border border-[#1f1f1f] bg-[#202020] shadow-sm transition-[opacity,border-color,box-shadow,filter] duration-300 ${
+        {displayImages.map((image, index) => {
+          const fourFive = !isLandscape && isFourFive(image);
+          return (
+          <div
+            key={image.src}
+            className={`${
+              fourFive ? "col-span-1 self-start" : activeClasses[index % activeClasses.length]
+            } group relative min-h-[100px] overflow-hidden rounded-none border border-[#1f1f1f] bg-[#202020] shadow-sm transition-[opacity,border-color] duration-300 ${
               isLandscape ? "aspect-[3/2]" : ""
-            } ${hoveredImage && hoveredImage !== image ? "opacity-50" : "opacity-100"}`}
+            } ${hoveredImage && hoveredImage !== image.src ? "opacity-50" : ""}`}
             style={{ borderColor: index === 0 ? `${themeColor}55` : undefined }}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.18 }}
-            transition={{ duration: 0.55, delay: index * 0.06, ease: "easeOut" }}
-            whileHover={{
-              scale: 1.05,
-              zIndex: 20,
-              borderColor: "#f4f1ed66",
-              boxShadow: "0 0 0 1px rgba(244,241,237,0.3)",
-            }}
-            onHoverStart={() => setHoveredImage(image)}
-            onHoverEnd={() => setHoveredImage(null)}
+            onMouseEnter={() => setHoveredImage(image.src)}
+            onMouseLeave={() => setHoveredImage(null)}
             onClick={() => onImageClick?.(image)}
           >
-            <Image
-              src={image}
-              alt={`${title} portfolio ${index + 1}`}
-              fill
-              sizes={
-                isLandscape
-                  ? "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
-                  : "(max-width: 639px) 50vw, (max-width: 1023px) 40vw, 33vw"
-              }
-              className={`rounded-none object-cover transition duration-300 group-hover:brightness-110 ${
-                isLandscape ? "object-center" : "object-top"
-              }`}
-            />
-          </motion.div>
-        ))}
+            {fourFive && image.width && image.height ? (
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                sizes="(max-width: 639px) 25vw, (max-width: 1023px) 20vw, 16vw"
+                className="h-auto w-full object-cover object-center transition duration-300 group-hover:brightness-110"
+              />
+            ) : (
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                sizes={
+                  isLandscape
+                    ? "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                    : "(max-width: 639px) 50vw, (max-width: 1023px) 40vw, 33vw"
+                }
+                className={`rounded-none object-cover transition duration-300 group-hover:brightness-110 ${
+                  isLandscape ? "object-center" : "object-top"
+                }`}
+              />
+            )}
+          </div>
+          );
+        })}
       </div>
     </div>
   );

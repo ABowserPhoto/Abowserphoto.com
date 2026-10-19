@@ -5,13 +5,18 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CategoryContent, FAQItem } from "../lib/content";
+import type { GalleryImage } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
+import type { PageSection } from "../lib/i18n/pageSections";
+import { CONTACT_EMAIL } from "../lib/site";
 import HeroSlider, { type HeroMediaItem } from "./HeroSlider";
 import Navbar from "./Navbar";
+import PageSections from "./PageSections";
 import PortfolioGrid from "./PortfolioGrid";
 import ServicesScroll from "./ServicesScroll";
+import SiteFooter from "./SiteFooter";
 
 type ServiceWithMedia = {
   title: string;
@@ -32,15 +37,18 @@ type AboutData = {
   title: string;
   description: string;
   imageUrl: string | null;
+  imageAlt: string;
 };
 
 type CategoryTemplateProps = {
   category: CategoryContent;
+  portfolio: GalleryImage[];
   heroMedia: HeroMediaItem[];
   services: ServiceWithMedia[];
   logoUrl: string | null;
   aboutData: AboutData;
   faqs: FAQItem[];
+  pageSections?: PageSection[];
   dictionary: Dictionary;
   locale: Locale;
 };
@@ -62,29 +70,28 @@ const COMMERCIAL_PORTFOLIO_PREVIEW_COUNT = 15;
 
 export default function CategoryTemplate({
   category,
+  portfolio,
   heroMedia,
   services,
   logoUrl,
   aboutData,
   faqs,
+  pageSections = [],
   dictionary,
   locale,
 }: CategoryTemplateProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const servicesRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
 
-  const portfolioImages = category.portfolioImages;
   const isCommercial = category.slug === "commercial";
-  const showFullPortfolioCta = isCommercial && portfolioImages.length > COMMERCIAL_PORTFOLIO_PREVIEW_COUNT;
+  const showFullPortfolioCta = isCommercial && portfolio.length > COMMERCIAL_PORTFOLIO_PREVIEW_COUNT;
   const gridImages = useMemo(
     () =>
-      showFullPortfolioCta
-        ? portfolioImages.slice(0, COMMERCIAL_PORTFOLIO_PREVIEW_COUNT)
-        : portfolioImages,
-    [portfolioImages, showFullPortfolioCta]
+      showFullPortfolioCta ? portfolio.slice(0, COMMERCIAL_PORTFOLIO_PREVIEW_COUNT) : portfolio,
+    [portfolio, showFullPortfolioCta]
   );
 
   const sectionLinks = useMemo(
@@ -158,12 +165,23 @@ export default function CategoryTemplate({
         labels={{
           book: dictionary.nav.book,
           home: dictionary.nav.home,
+          menu: dictionary.nav.menu,
         }}
       />
 
       <main>
-        <section id="hero" className="relative min-h-screen w-full">
-          <HeroSlider media={heroMedia} title={category.title} subtitle={category.subtitle} />
+        <section
+          id="hero"
+          className={
+            category.slug === "business-portraits" ? "relative w-full bg-black" : "relative min-h-screen w-full"
+          }
+        >
+          <HeroSlider
+            media={heroMedia}
+            title={category.title}
+            subtitle={category.subtitle}
+            align={category.slug === "business-portraits" ? "left" : "center"}
+          />
         </section>
 
         <section id="portfolio" className="relative z-0 isolate bg-black">
@@ -175,6 +193,7 @@ export default function CategoryTemplate({
             label={
               showFullPortfolioCta ? dictionary.nav.selectedWork : dictionary.nav.fullPortfolio
             }
+            countLabel={dictionary.nav.showcaseCount.replace("{count}", String(gridImages.length))}
             orientation={category.slug === "real-estate" ? "landscape" : "portrait"}
           />
           {showFullPortfolioCta ? (
@@ -197,6 +216,8 @@ export default function CategoryTemplate({
           watchVideoLabel={dictionary.category.watchVideo}
           viewTourLabel={dictionary.category.viewTour}
         />
+
+        <PageSections sections={pageSections} />
 
         <motion.section
           ref={aboutRef}
@@ -228,7 +249,7 @@ export default function CategoryTemplate({
                 >
                   <Image
                     src={aboutData.imageUrl}
-                    alt={aboutData.title}
+                    alt={aboutData.imageAlt}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover object-center"
@@ -259,7 +280,7 @@ export default function CategoryTemplate({
                   ))}
               </div>
               <a
-                href="mailto:hello@abowserphoto.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="mt-8 inline-flex rounded-full px-6 py-3 text-sm font-semibold text-white transition-opacity duration-300 hover:opacity-90"
                 style={{ backgroundColor: category.themeColor }}
               >
@@ -308,72 +329,7 @@ export default function CategoryTemplate({
           </motion.section>
         ) : null}
 
-        <footer className="relative z-30 border-t border-[#322B2B]/15 bg-[#F4F1ED]">
-          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 gap-8 text-sm sm:grid-cols-2 md:grid-cols-4">
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#322B2B]/70">Contact</p>
-                <a
-                  href="tel:+4915783529270"
-                  className="block text-[#322B2B] transition-opacity duration-300 hover:opacity-80"
-                >
-                  +49 157 83529270
-                </a>
-                <a
-                  href="mailto:info@aaronbowser-photography.com"
-                  className="block break-words text-[#322B2B] transition-opacity duration-300 hover:opacity-80"
-                >
-                  info@aaronbowser-photography.com
-                </a>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#322B2B]/70">Address</p>
-                <p className="text-[#322B2B]">Aaron Bowser Photography UG (haftungsbeschränkt)</p>
-                <p className="text-[#322B2B]">Eckeseyerstr. 133</p>
-                <p className="text-[#322B2B]">58089 Hagen, Germany</p>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#322B2B]/70">Legal</p>
-                <p className="text-[#322B2B]">Gericht: Hagen</p>
-                <p className="text-[#322B2B]">VAT: DE344108567</p>
-                <p className="text-[#322B2B]">HRB: 11957</p>
-                <Link href="/impressum" className="inline-block font-medium underline underline-offset-2">
-                  Impressum
-                </Link>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#322B2B]/70">Privacy</p>
-                <a
-                  href="/cookie-richtlinie"
-                  className="inline-flex items-center gap-2 rounded-md border border-[#322B2B]/15 bg-white/70 px-3 py-1.5 text-xs font-medium text-[#322B2B] transition-colors duration-300 hover:bg-white"
-                >
-                  <span aria-hidden="true">
-                    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="5" y="11" width="14" height="10" rx="2" />
-                      <path d="M8 11V8a4 4 0 1 1 8 0v3" />
-                    </svg>
-                  </span>
-                  Cookie-Richtlinie
-                </a>
-                <a
-                  href="/datenschutzerklaerung"
-                  className="inline-flex items-center gap-2 rounded-md border border-[#322B2B]/15 bg-white/70 px-3 py-1.5 text-xs font-medium text-[#322B2B] transition-colors duration-300 hover:bg-white"
-                >
-                  <span aria-hidden="true">
-                    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="5" y="11" width="14" height="10" rx="2" />
-                      <path d="M8 11V8a4 4 0 1 1 8 0v3" />
-                    </svg>
-                  </span>
-                  Datenschutzerklärung
-                </a>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter locale={locale} dictionary={dictionary} />
       </main>
 
       <AnimatePresence>
@@ -390,11 +346,11 @@ export default function CategoryTemplate({
               onClick={() => setSelectedImage(null)}
               className="absolute right-4 top-4 rounded-md border border-white/30 bg-black/35 px-3 py-1.5 text-sm font-semibold text-white"
             >
-              X
+              {dictionary.nav.close}
             </button>
             <motion.img
-              src={selectedImage}
-              alt="Selected portfolio image"
+              src={selectedImage.src}
+              alt={selectedImage.alt}
               className="max-h-[90vh] w-auto max-w-full rounded-xl object-contain"
               initial={{ scale: 0.86, opacity: 0.7 }}
               animate={{ scale: 1, opacity: 1 }}

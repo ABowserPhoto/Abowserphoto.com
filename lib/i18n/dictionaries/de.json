@@ -2,7 +2,10 @@
   "brand": "Aaron Bowser Photography",
   "nav": {
     "home": "Start",
-    "hero": "Hero",
+    "hero": "Titelbild",
+    "menu": "Menü",
+    "close": "Schließen",
+    "showcaseCount": "{count} ausgewählte Aufnahmen",
     "portfolio": "Portfolio",
     "services": "Leistungen",
     "about": "Über mich",
@@ -19,8 +22,8 @@
     "language": "Sprache"
   },
   "home": {
-    "headline": "Wählen Sie Ihre visuelle Geschichte",
-    "subhead": "Entdecken Sie redaktionelle, kommerzielle und spezialisierte Fotografie für hochwertiges Storytelling.",
+    "headline": "Fotograf für Business, Hochzeit & Commercial in Hagen und Solingen",
+    "subhead": "Studio Hagen ist das Hauptstudio für Porträts und Business. Studio Solingen nimmt größere Produktionen auf, nur nach Termin.",
     "logoLabel": "A. Bowser Photography",
     "niches": {
       "wedding": "Hochzeit",
@@ -41,28 +44,28 @@
   },
   "seo": {
     "home": {
-      "title": "Professionelle Fotografie in NRW",
-      "description": "Aaron Bowser Photography bietet Premium-Fotografie für Immobilien, Commercial, Hochzeit, Food und Porträts in Hagen, Düsseldorf, Köln und ganz NRW."
+      "title": "Fotograf für Business, Hochzeit & Commercial in Hagen und Solingen",
+      "description": "Business-Porträts, Hochzeiten und Commercial. Hauptstudio Hagen, Eckeseyer Str. 133. Studio Solingen, Merscheider Str. 112, nur nach Termin für größere Produktionen."
     },
     "real-estate": {
-      "title": "Premium Immobilienfotografie & 360°-Touren",
-      "description": "Verkaufsstarke Immobilienfotos, Drohnenaufnahmen, Twilight, digitales Homestaging und 360°-Touren für Makler und Projektentwickler in NRW. Schnelle Lieferung, MLS-ready."
+      "title": "Immobilienfotografie NRW",
+      "description": "Immobilienfotografie in Nordrhein-Westfalen: Innen- und Außenaufnahmen, Drohne, Twilight, digitales Homestaging und 360°-Touren. Studios in Hagen und Solingen."
     },
     "commercial": {
-      "title": "Commercial- & Editorial-Fotografie",
-      "description": "Fashion-, Beauty-, Produkt- und Editorial-Fotografie für Marken und Creatives. Studio in Solingen – Düsseldorf, Köln und NRW."
+      "title": "Commercial-Fotografie in Hagen & Solingen",
+      "description": "Fashion-, Beauty-, Produkt- und Editorial-Fotografie für Marken. Studios in Hagen und Solingen, Einsätze in Nordrhein-Westfalen."
     },
     "wedding": {
-      "title": "Hochzeitsfotografie",
-      "description": "Filmische und dokumentarische Hochzeitsfotografie für intime Zeremonien und große Feiern in Deutschland und weltweit."
+      "title": "Hochzeitsfotograf Hagen & Solingen",
+      "description": "Hochzeitsfotograf für die freie Trauung, den ganzen Tag und das Standesamt in Solingen und Hagen. Reportage mit ruhiger, filmischer Bildsprache."
     },
     "food": {
-      "title": "Food-Fotografie",
-      "description": "Appetitliche Food- und Getränkefotografie für Restaurants, Speisekarten, Produkte und Social Content."
+      "title": "Food-Fotografie in NRW",
+      "description": "Food- und Getränkefotografie für Restaurants, Speisekarten und Produkte. Studios in Hagen und Solingen."
     },
     "business-portraits": {
-      "title": "Business-Porträtfotografie",
-      "description": "Executive-Headshots, Team-Porträts und Personal-Branding-Fotografie für Unternehmen und Professionals."
+      "title": "Business-Porträts in Hagen & Solingen",
+      "description": "Business-Porträts im Studio Hagen, dem Alltagstudio. Größere Teams im Studio Solingen, nur nach Termin. Shootings auch im Büro."
     },
     "cinematography": {
       "title": "Filmproduktion & Brand Films",
@@ -79,7 +82,34 @@
     "account": {
       "title": "Kundenkonto",
       "description": "Profil, Buchungen, Foto-Ordner und Rechnungen verwalten."
+    },
+    "book": {
+      "title": "Anfrage",
+      "description": "Fotoshooting bei Aaron Bowser Photography anfragen."
+    },
+    "impressum": {
+      "title": "Impressum",
+      "description": "Anbieterkennzeichnung der Aaron Bowser Photography UG, Studios in Hagen und Solingen."
+    },
+    "datenschutz": {
+      "title": "Datenschutzerklärung",
+      "description": "Hinweise zur Verarbeitung personenbezogener Daten auf aaronbowser-photography.com."
+    },
+    "cookie-richtlinie": {
+      "title": "Cookie-Richtlinie",
+      "description": "Welche Cookies und lokalen Speicher diese Website setzt."
     }
+  },
+  "footer": {
+    "contact": "Kontakt",
+    "studios": "Studios",
+    "legal": "Rechtliches",
+    "privacy": "Datenschutz",
+    "impressum": "Impressum",
+    "cookies": "Cookie-Richtlinie",
+    "privacyPolicy": "Datenschutzerklärung",
+    "vatId": "USt-IdNr.",
+    "directions": "Route / Google Maps"
   },
   "auth": {
     "clientAccess": "Kundenzugang",

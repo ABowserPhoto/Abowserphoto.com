@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useLocale } from "../lib/i18n/LocaleProvider";
 
 type ConsentPreference = "all" | "essential";
 
 const STORAGE_KEY = "cookie-consent";
 
 export default function CookieConsent() {
+  const { localizePath } = useLocale();
   const [isReady, setIsReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -50,7 +52,7 @@ export default function CookieConsent() {
             <p className="mt-2 text-sm leading-relaxed text-[#322B2B]">
               Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und den Website-Traffic zu analysieren.
               Details finden Sie in unserer{" "}
-              <Link href="/datenschutzerklaerung" className="underline underline-offset-2">
+              <Link href={localizePath("/datenschutz")} className="underline underline-offset-2">
                 Datenschutzerklärung
               </Link>
               .

@@ -26,6 +26,7 @@ type NavbarProps = {
   labels?: {
     book?: string;
     home?: string;
+    menu?: string;
   };
 };
 
@@ -49,11 +50,11 @@ function NavbarLogo({
           <motion.span className="absolute inset-0" style={{ opacity: lightOpacity }}>
             {isSvg ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={logoUrl} alt="" className="h-9 w-9 object-contain brightness-0 invert" />
+              <img src={logoUrl} alt="Aaron Bowser Photography Logo" className="h-9 w-9 object-contain brightness-0 invert" />
             ) : (
               <Image
                 src={logoUrl}
-                alt=""
+                alt="Aaron Bowser Photography Logo"
                 width={36}
                 height={36}
                 className="h-9 w-9 object-contain brightness-0 invert"
@@ -61,7 +62,7 @@ function NavbarLogo({
               />
             )}
           </motion.span>
-          <motion.span className="absolute inset-0" style={{ opacity: darkOpacity }}>
+          <motion.span className="absolute inset-0" style={{ opacity: darkOpacity }} aria-hidden="true">
             {isSvg ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} alt="" className="h-9 w-9 object-contain" />
@@ -96,6 +97,7 @@ export default function Navbar({
   const resolvedBookHref = bookHref === BOOKING_HREF ? bookingHref(pathname) : bookHref;
   const bookLabel = labels?.book ?? "Book";
   const homeLabel = labels?.home ?? "Home";
+  const menuLabel = labels?.menu ?? "Menu";
 
   const { scrollYProgress: lightProgress } = useScroll({
     target: lightSectionRef,
@@ -227,7 +229,7 @@ export default function Navbar({
           aria-expanded={menuOpen}
           aria-controls="mobile-navbar-menu"
         >
-          Menu
+          {menuLabel}
         </motion.button>
       </div>
 
