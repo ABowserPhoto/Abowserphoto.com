@@ -47,7 +47,7 @@ export type CategorySlug =
 
 export const sharedAbout = {
   title: "About Me",
-  description: `I am Aaron Bowser, a photographer for business portraits, weddings, commercial work, and real estate, with studios in Hagen and Solingen, North Rhine-Westphalia. The work spans wedding, commercial, editorial, and property photography, blending cinematic composition with authentic emotion.
+  description: `I am Aaron Bowser, a photographer for business portraits, weddings, commercial work, and real estate in North Rhine-Westphalia. The main studio is in Hagen, about 40 m², where I work every day. The Solingen studio, about 100 m², is for larger productions and by appointment only. The work spans wedding, commercial, editorial, and property photography, blending cinematic composition with authentic emotion.
 
 Whether I am capturing a once-in-a-lifetime celebration, shaping a personal brand, or elevating a real estate listing, every project is approached with intention, craft, and a commitment to images that feel timeless and true.
 
@@ -192,7 +192,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
       {
         title: "Executive Headshots",
         description:
-          "Portraits for founders and leadership. Light, posture, and expression are directed so the same person reads clearly on a company website, in a deck, and on LinkedIn. Sessions run in the Hagen studio, the Solingen studio, or at your office.",
+          "Portraits for founders and leadership. Light, posture, and expression are directed so the same person reads clearly on a company website, in a deck, and on LinkedIn. Sessions usually run at the Hagen studio. The Solingen studio is for larger productions and by appointment only. I also photograph at your office.",
       },
       {
         title: "Team and Staff Portraits",
@@ -211,7 +211,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
       },
     ],
     aboutText:
-      "I am Aaron Bowser, a photographer for business portraits, weddings, and commercial work, with studios in Hagen and Solingen. For companies I photograph leadership, teams, and personal brands so the pictures share one calm line on the website, on LinkedIn, and in the press.\n\nBefore the session we agree where the portraits will be used and who should be in them. During the sitting I direct posture and expression. The result is a tight edit of business photographs, not a folder of unused frames.",
+      "I am Aaron Bowser, a photographer for business portraits, weddings, and commercial work. The main studio is in Hagen, Eckeseyer Str. 133, about 40 m². I work there every day, and portrait and business sessions are booked there by default. The Solingen studio, Merscheider Str. 112, is about 100 m² and is for larger productions, such as teams and bigger set-ups, by appointment only. It can also be rented. Studio Solingen — more to come; a page of its own will follow.\n\nFor companies the pictures should share one calm line on the website, on LinkedIn, and in the press. Before the session we agree where the portraits will be used and who should be in them. During the sitting I direct posture and expression.",
     aboutImage:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -319,7 +319,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     slug: "commercial",
     navLabel: "Commercial",
     title: "Commercial & Editorial",
-    subtitle: "Based in Hagen, NRW, with a premier studio in Solingen—serving Düsseldorf, Köln, and the wider North Rhine-Westphalia region—I specialize in high-end commercial and creative photography. Whether you are an aspiring model, a visionary creative, or a brand launching a new campaign, I craft striking imagery designed to command attention and elevate your visual identity.",
+    subtitle: "Commercial and editorial photography for brands in North Rhine-Westphalia. The main studio is in Hagen. Larger productions use the Solingen studio, by appointment only.",
     themeColor: "#FFB70F",
     heroImage:
       "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?auto=format&fit=crop&w=1920&q=80",
@@ -353,7 +353,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
       }
     ],
     aboutText:
-      "My commercial work is rooted in editorial storytelling—blending high-fashion sensibility with intentional narrative to create portraits that feel cinematic, refined, and publication-ready.",
+      "My commercial work is rooted in editorial storytelling—blending high-fashion sensibility with intentional narrative to create portraits that feel cinematic, refined, and publication-ready. The Hagen studio is about 40 m² and is where I work every day. Larger productions and set-ups use the Solingen studio, about 100 m², by appointment only. That studio can also be rented.",
     aboutImage:
       "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
     faq: [

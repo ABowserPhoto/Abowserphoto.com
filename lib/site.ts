@@ -55,6 +55,20 @@ export type Studio = {
   latitude: number;
   longitude: number;
   mapsUrl: string;
+  /** Floor area in square metres. */
+  areaSqm: number;
+  summaryDe: string;
+  summaryEn: string;
+  /**
+   * Public page for this studio. Null until the page exists, so the
+   * interface must not render a link.
+   */
+  pagePath: string | null;
+  /** Plain-text hook. Not a link while pagePath is null. */
+  detailLabelDe?: string;
+  detailLabelEn?: string;
+  /** Reserved path for a future page. Do not link it yet. */
+  plannedPagePath?: string;
 };
 
 export const STUDIOS: readonly Studio[] = [
@@ -70,6 +84,12 @@ export const STUDIOS: readonly Studio[] = [
     longitude: 7.454225,
     mapsUrl:
       "https://www.google.com/maps/place/Aaron+Bowser+Photography/@51.3771835,7.454225,17z/data=!4m6!3m5!1s0x47b93cbdc8d7c7b3:0x6fde83c86b76ba38!8m2!3d51.3771835!4d7.454225!16s%2Fg%2F11btwpyctw",
+    areaSqm: 40,
+    summaryDe:
+      "Hauptstudio, etwa 40 m². Aaron arbeitet hier täglich. Porträt- und Business-Sitzungen finden in der Regel hier statt.",
+    summaryEn:
+      "The main studio, about 40 m². Aaron works here every day. Portrait and business sessions are booked here by default.",
+    pagePath: null,
   },
   {
     id: "solingen",
@@ -83,6 +103,15 @@ export const STUDIOS: readonly Studio[] = [
     longitude: 7.020909,
     mapsUrl:
       "https://www.google.com/maps/place/Aaron+Bowser+Photography/@51.1641699,7.020909,17z/data=!4m6!3m5!1s0x47b8d36375b52c6f:0x36d573286e598635!8m2!3d51.1641699!4d7.020909!16s%2Fg%2F11vzycbxq5",
+    areaSqm: 100,
+    summaryDe:
+      "Etwa 100 m² für größere Produktionen, zum Beispiel Teams, Commercial und aufwendigere Sets. Nur nach Termin. Studiovermietung möglich.",
+    summaryEn:
+      "About 100 m² for larger productions, such as team shoots, commercial work, and bigger set-ups. By appointment only. The studio can be rented.",
+    pagePath: null,
+    detailLabelDe: "Studio Solingen – mehr erfahren",
+    detailLabelEn: "Studio Solingen — more to come",
+    plannedPagePath: "/studio-solingen",
   },
 ];
 

@@ -240,6 +240,14 @@ export default function HomePortal({
                 >
                   {dictionary.footer.directions}
                 </a>
+                <span className="mt-0.5 block normal-case tracking-normal text-[#F4F1ED]/65">
+                  {locale === "de" ? studio.summaryDe : studio.summaryEn}
+                </span>
+                {studio.detailLabelDe && studio.detailLabelEn ? (
+                  <span className="mt-0.5 block normal-case tracking-normal text-[#F4F1ED]/80">
+                    {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
+                  </span>
+                ) : null}
               </span>
             ))}
           </address>

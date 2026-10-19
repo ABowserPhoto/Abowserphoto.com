@@ -1,6 +1,12 @@
 import type { CategorySlug } from "./content";
 import type { Locale } from "./i18n/config";
 
+/**
+ * Studio Solingen will have its own page later, at /studio-solingen
+ * (SOLINGEN_STUDIO.plannedPagePath). Do not add a link or a route until that
+ * page exists.
+ */
+
 export const CATEGORY_SEGMENTS: Record<CategorySlug, Record<Locale, string>> = {
   wedding: { en: "wedding", de: "hochzeitsfotograf" },
   "real-estate": { en: "real-estate", de: "immobilienfotografie" },

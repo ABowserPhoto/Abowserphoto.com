@@ -32,7 +32,7 @@ const businessSections: Record<Locale, PageSection[]> = {
       title: "Executive-Headshots",
       paragraphs: [
         "Executive-Headshots sind für Geschäftsführung, Partner und Menschen, die ein Unternehmen nach außen vertreten. Das Bild soll auf der Website, in einer Präsentation und bei LinkedIn dieselbe Person zeigen: ruhig, klar und ohne austauschbare Studio-Geste.",
-        `Die Sitzungen finden im Studio Hagen (${hagen}) oder im Studio Solingen (${solingen}) statt. Wer das eigene Büro als Hintergrund will, bucht das Shooting vor Ort. Vor der Aufnahme klären wir Ausschnitt, Kleidung und wo das Porträt erscheinen soll.`,
+        `Porträts entstehen in der Regel im Studio Hagen (${hagen}, etwa 40 m²), wo Aaron täglich arbeitet. Das Studio Solingen (${solingen}, etwa 100 m²) ist für größere Produktionen und nur nach Termin. Wer das Büro im Bild will, bucht das Shooting vor Ort. Vor der Aufnahme klären wir Ausschnitt, Kleidung und wo das Porträt erscheinen soll.`,
       ],
     },
     {
@@ -41,7 +41,7 @@ const businessSections: Record<Locale, PageSection[]> = {
       title: "Mitarbeiterfotos und Teamfotos",
       paragraphs: [
         "Mitarbeiterfotos und Teamfotos halten ein Unternehmen in einer gemeinsamen Bildlinie. Gleiches Licht, gleicher Ausschnitt, gleicher Ton, damit die Teamseite nicht wie eine Sammlung einzelner Schnappschüsse wirkt. Firmenfotos dieser Art eignen sich für die Website, Angebote und Presse.",
-        "An einem Bürotag fotografiere ich nacheinander, mit kurzer Anleitung zu Haltung und Blick. Die Termine bleiben kurz, damit der Arbeitstag weiterläuft. Die Anzahl der Personen stimmen wir nach Teamgröße und Zeitfenster ab.",
+        "Kleine Runden fotografiere ich im Studio Hagen. Ein größeres Team oder ein aufwendigerer Aufbau kommt ins Studio Solingen, nur nach Termin. An einem Bürotag geht es auch vor Ort, Person für Person, mit kurzer Anleitung zu Haltung und Blick. Wie viele Porträts an einem Tag passen, legen wir nach Teamgröße und Zeitfenster fest.",
       ],
     },
     {
@@ -79,7 +79,7 @@ const businessSections: Record<Locale, PageSection[]> = {
       title: "Executive headshots",
       paragraphs: [
         "Executive headshots are for founders, partners, and the people who represent a company. The portrait should read as the same person on the website, in a deck, and on LinkedIn: calm, clear, and free of a generic studio pose.",
-        `Sessions take place at the Hagen studio (${hagen}) or the Solingen studio (${solingen}). If the office itself should be in the frame, the sitting happens on site. Before we start, we agree the crop, the clothing, and where the portrait will be used.`,
+        `Portraits are usually made at the Hagen studio (${hagen}, about 40 m²), where Aaron works every day. The Solingen studio (${solingen}, about 100 m²) is for larger productions and by appointment only. If the office itself should be in the frame, the sitting happens on site. Before we start, we agree the crop, the clothing, and where the portrait will be used.`,
       ],
     },
     {
@@ -88,7 +88,7 @@ const businessSections: Record<Locale, PageSection[]> = {
       title: "Staff portraits and team photographs",
       paragraphs: [
         "Staff and team photographs give a company one visual line. The same light, the same crop, the same tone, so a team page does not look like a folder of unrelated snapshots. These company photographs work on the website, in proposals, and in press kits.",
-        "On an office day I photograph people one after another, with brief direction for posture and gaze. Each sitting stays short so the working day can continue. We set the number of portraits around the size of the team and the time available.",
+        "Small groups are photographed at the Hagen studio. A larger team or a bigger set-up uses the Solingen studio, by appointment only. An office day on location is the other option: one person after another, with brief direction for posture and gaze. How many portraits fit in a day depends on the team and the time available.",
       ],
     },
     {
@@ -129,7 +129,7 @@ const weddingSections: Record<Locale, PageSection[]> = {
       title: "Standesamt-Fotograf in Solingen und Hagen",
       paragraphs: [
         "Viele Paare heiraten zuerst standesamtlich, oft in Solingen oder Hagen, und feiern später. Für diese Stunde fotografiere ich als Standesamt-Fotograf ruhig und nah am Ablauf: Ankunft, der Raum, die Trauung, die Menschen danach. Nichts wird für die Kamera nachgestellt.",
-        `Wenn das Standesamt in Solingen oder das Standesamt in Hagen der ganze Termin ist, bleibt der Umfang überschaubar. Wenn danach ein Essen oder ein Spaziergang folgt, erweitern wir die Reportage. Die Studios liegen in der ${hagen} und in der ${solingen}; die Trauung selbst fotografiere ich dort, wo Sie heiraten.`,
+        `Wenn das Standesamt in Solingen oder das Standesamt in Hagen der ganze Termin ist, bleibt der Umfang überschaubar. Wenn danach ein Essen oder ein Spaziergang folgt, erweitern wir die Reportage. Die Trauung fotografiere ich dort, wo Sie heiraten, nicht im Studio. Porträts danach können im Studio Hagen entstehen (${hagen}, etwa 40 m²). Das größere Studio Solingen (${solingen}) ist nur nach Termin da.`,
         "Die standesamtliche Trauung ist ein eigener Teil der Hochzeitsfotografie, mit derselben ruhigen Bildsprache wie die freie Trauung und der ganze Tag.",
       ],
     },
@@ -141,7 +141,7 @@ const weddingSections: Record<Locale, PageSection[]> = {
       title: "Civil ceremony photographer in Solingen and Hagen",
       paragraphs: [
         "Many couples marry first at the registry office, often in Solingen or Hagen, and celebrate later. For that hour I work quietly and close to the order of the day: the arrival, the room, the ceremony, the people afterwards. Nothing is restaged for the camera.",
-        `When the ceremony in Solingen or Hagen is the whole booking, the coverage stays compact. When a meal or a walk follows, we extend the reportage. The studios are at ${hagen} and ${solingen}; the ceremony itself is photographed where you marry.`,
+        `When the ceremony in Solingen or Hagen is the whole booking, the coverage stays compact. When a meal or a walk follows, we extend the reportage. The ceremony is photographed where you marry, not in the studio. Portraits afterwards can be made at the Hagen studio (${hagen}, about 40 m²). The larger Solingen studio (${solingen}) is by appointment only.`,
         "A civil ceremony is its own part of the wedding coverage, not a footnote. A symbolic ceremony and a full day stay in the same visual language.",
       ],
     },
@@ -152,7 +152,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wo entstehen die Business-Porträts?",
-      answer: `Im Studio Hagen, ${hagen}, im Studio Solingen, ${solingen}, oder bei Ihnen im Büro in Nordrhein-Westfalen.`,
+      answer: `In der Regel im Studio Hagen, ${hagen}, etwa 40 m², wo Aaron täglich arbeitet. Das Studio Solingen, ${solingen}, etwa 100 m², ist für größere Produktionen und nur nach Termin; es kann auch gemietet werden. Eine eigene Seite dazu folgt. Sitzungen im Büro in Nordrhein-Westfalen bleiben möglich.`,
     },
     {
       question: "Für wen sind die Porträts gedacht?",
@@ -171,13 +171,13 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "Können wir ein ganzes Team an einem Tag fotografieren?",
       answer:
-        "Ja. Die Termine liegen nacheinander, jedes Porträt bleibt kurz. Wie viele Personen an einem Tag passen, hängt vom Zeitfenster ab und wird vorher festgelegt.",
+        "Ja. Einzelporträts und kleine Runden bleiben im Studio Hagen. Ein größeres Team fotografiere ich im Studio Solingen, nur nach Termin, oder bei Ihnen im Büro. Die Termine liegen nacheinander, jedes Porträt bleibt kurz. Wie viele Personen an einem Tag passen, hängt vom Zeitfenster ab und wird vorher festgelegt.",
     },
   ],
   en: [
     {
       question: "Where do you photograph business portraits?",
-      answer: `At the Hagen studio, ${hagen}, at the Solingen studio, ${solingen}, or at your office in North Rhine-Westphalia.`,
+      answer: `Usually at the Hagen studio, ${hagen}, about 40 m², where Aaron works every day. The Solingen studio, ${solingen}, about 100 m², is for larger productions and by appointment only; it can also be rented. A page of its own will follow. Sessions at your office in North Rhine-Westphalia are still possible.`,
     },
     {
       question: "Who are the portraits for?",
@@ -196,7 +196,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "Can a whole team be photographed in one day?",
       answer:
-        "Yes. Sittings run one after another, and each portrait stays short. How many people fit depends on the window of time and is agreed beforehand.",
+        "Yes. Individual portraits and small groups stay at the Hagen studio. A larger team is photographed at the Solingen studio, by appointment only, or at your office. Sittings run one after another, and each portrait stays short. How many people fit depends on the window of time and is agreed beforehand.",
     },
   ],
 };

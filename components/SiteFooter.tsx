@@ -61,6 +61,14 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
                 >
                   {dictionary.footer.directions}
                 </a>
+                <span className="mt-1 block text-[#322B2B]/80">
+                  {locale === "de" ? studio.summaryDe : studio.summaryEn}
+                </span>
+                {studio.detailLabelDe && studio.detailLabelEn ? (
+                  <span className="mt-1 block text-[#322B2B]">
+                    {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
+                  </span>
+                ) : null}
               </p>
             ))}
           </div>

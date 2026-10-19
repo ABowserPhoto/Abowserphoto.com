@@ -26,7 +26,6 @@ export type LegalDocument = {
 };
 
 const hagen = `${LEGAL_NAME}, ${formatStudioLine(HAGEN_STUDIO)}`;
-const solingen = `${BRAND_NAME}, ${formatStudioLine(SOLINGEN_STUDIO)}`;
 
 function impressum(locale: Locale): LegalDocument {
   const de = locale === "de";
@@ -40,9 +39,13 @@ function impressum(locale: Locale): LegalDocument {
         heading: de ? "Anbieter" : "Provider",
         paragraphs: [
           LEGAL_NAME,
-          formatStudioLine(HAGEN_STUDIO),
+          de
+            ? `Hauptstudio: ${formatStudioLine(HAGEN_STUDIO)}`
+            : `Main studio: ${formatStudioLine(HAGEN_STUDIO)}`,
           de ? "Deutschland" : "Germany",
-          de ? `Weiteres Studio: ${solingen}` : `Further studio: ${solingen}`,
+          de
+            ? `Studio Solingen, nur nach Termin, für größere Produktionen: ${formatStudioLine(SOLINGEN_STUDIO)}`
+            : `Solingen studio, by appointment only, for larger productions: ${formatStudioLine(SOLINGEN_STUDIO)}`,
         ],
       },
       {

@@ -40,6 +40,13 @@ function studioNode(studio: Studio) {
       longitude: studio.longitude,
     },
     hasMap: studio.mapsUrl,
+    description: studio.summaryDe,
+    floorSize: {
+      "@type": "QuantitativeValue",
+      value: studio.areaSqm,
+      unitCode: "MTK",
+      unitText: "m²",
+    },
     parentOrganization: { "@id": `${SITE_URL}/#organization` },
   };
 }
@@ -58,6 +65,8 @@ export function buildBusinessJsonLd() {
     email: CONTACT_EMAIL,
     telephone: CONTACT_PHONE_E164,
     image: absoluteUrl(OG_IMAGE_PATH),
+    description:
+      "Fotograf mit Hauptstudio in Hagen, etwa 40 m², für Porträt und Business im Alltag. Das Studio Solingen, etwa 100 m², ist für größere Produktionen, nur nach Termin, und kann gemietet werden.",
     address: postalAddress(HAGEN_STUDIO),
     areaServed: [
       { "@type": "City", name: "Hagen" },

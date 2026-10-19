@@ -10,7 +10,7 @@ import { getDictionarySync } from "./getDictionary";
 
 const germanSharedAbout = {
   title: "Über mich",
-  description: `Ich bin Aaron Bowser, Fotograf für Business-Porträts, Hochzeiten, Commercial und Immobilien, mit Studios in Hagen und Solingen in Nordrhein-Westfalen. Die Arbeit umfasst Hochzeit, Commercial, Editorial und Immobilienfotografie, mit filmischer Bildsprache und authentischer Emotion.
+  description: `Ich bin Aaron Bowser, Fotograf für Business-Porträts, Hochzeiten, Commercial und Immobilien in Nordrhein-Westfalen. Das Hauptstudio in Hagen hat etwa 40 m²; dort arbeite ich täglich. Das Studio Solingen, etwa 100 m², ist für größere Produktionen und nur nach Termin. Die Arbeit umfasst Hochzeit, Commercial, Editorial und Immobilienfotografie, mit filmischer Bildsprache und authentischer Emotion.
 
 Ob ich einen einmaligen Moment festhalte, eine persönliche Marke forme oder ein Immobilienexposé aufwerte: Jedes Projekt wird mit Intention, Handwerk und dem Anspruch angegangen, Bilder zu schaffen, die zeitlos und wahrhaftig wirken.
 
@@ -78,9 +78,9 @@ const germanCategoryCopy: Partial<
     navLabel: "Commercial",
     title: "Commercial-Fotografie in Hagen & Solingen",
     subtitle:
-      "Fashion, Beauty, Produkt und Editorial für Marken. Studios in Hagen und Solingen, Einsätze in Nordrhein-Westfalen.",
+      "Fashion, Beauty, Produkt und Editorial für Marken. Größere Produktionen im Studio Solingen, nur nach Termin, sonst im Studio Hagen oder vor Ort in Nordrhein-Westfalen.",
     aboutText:
-      "Meine Commercial-Arbeit verbindet Editorial-Storytelling mit einer klaren Modeästhetik: cinematic, präzise und publikationsreif. Die Studios liegen in Hagen und Solingen.",
+      "Meine Commercial-Arbeit verbindet Editorial-Storytelling mit einer klaren Modeästhetik: cinematic, präzise und publikationsreif. Das Hauptstudio in Hagen hat etwa 40 m²; Aaron arbeitet dort täglich. Größere Produktionen und Sets kommen ins Studio Solingen, etwa 100 m², nur nach Termin. Das Studio kann auch gemietet werden.",
     services: [
       {
         title: "Porträts und Model-Portfolios",
@@ -163,12 +163,12 @@ const germanCategoryCopy: Partial<
     subtitle:
       "Executive-Headshots, Mitarbeiterfotos und LinkedIn-Profilbilder für Unternehmen in Hagen, Solingen und Nordrhein-Westfalen.",
     aboutText:
-      "Ich bin Aaron Bowser und fotografiere Business-Porträts, Hochzeiten und Commercial. Die Studios liegen in Hagen, Eckeseyer Str. 133, und in Solingen, Merscheider Str. 112. Für Unternehmen geht es um Bilder, die auf der Website, bei LinkedIn und in der Presse dieselbe ruhige Haltung haben: klares Licht, ein Gesicht, das man ernst nimmt, und eine Bildsprache, die zum Haus passt.\n\nVor der Aufnahme klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Im Shooting leite ich Haltung und Ausdruck an. Das Ergebnis sind Businessfotos für Geschäftsführung, Teams und Menschen, die ihre eigene Marke führen.",
+      "Ich bin Aaron Bowser und fotografiere Business-Porträts, Hochzeiten und Commercial. Das Hauptstudio liegt in Hagen, Eckeseyer Str. 133, auf etwa 40 m². Dort arbeite ich täglich, und Porträt- sowie Business-Sitzungen finden in der Regel hier statt. Das Studio Solingen, Merscheider Str. 112, hat etwa 100 m² und ist für größere Produktionen gedacht, zum Beispiel Teams und aufwendigere Sets, nur nach Termin. Es kann auch gemietet werden. Studio Solingen – mehr erfahren; die eigene Seite folgt.\n\nFür Unternehmen geht es um Bilder, die auf der Website, bei LinkedIn und in der Presse dieselbe ruhige Haltung haben: klares Licht, ein Gesicht, das man ernst nimmt, und eine Bildsprache, die zum Haus passt. Vor der Aufnahme klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Im Shooting leite ich Haltung und Ausdruck an.",
     services: [
       {
         title: "Executive-Headshots",
         description:
-          "Porträts für Geschäftsführung und Partner. Licht, Haltung und Ausdruck werden so geführt, dass dieselbe Person auf der Website, in der Präsentation und bei LinkedIn klar lesbar ist. Die Sitzung findet im Studio Hagen, im Studio Solingen oder in Ihrem Büro statt.",
+          "Porträts für Geschäftsführung und Partner. Licht, Haltung und Ausdruck werden so geführt, dass dieselbe Person auf der Website, in der Präsentation und bei LinkedIn klar lesbar ist. Die Sitzung findet in der Regel im Studio Hagen statt. Das Studio Solingen ist für größere Produktionen und nur nach Termin. Im Büro fotografiere ich ebenfalls.",
       },
       {
         title: "Mitarbeiterfotos und Teamfotos",
