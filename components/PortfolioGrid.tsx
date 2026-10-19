@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { useState } from "react";
 
 export type PortfolioImage = {
@@ -24,6 +23,8 @@ type PortfolioGridProps = {
   onImageClick?: (image: PortfolioImage) => void;
   /** Eyebrow label above the count (e.g. "Selected Work" vs "Full Portfolio"). */
   label?: string;
+  /** Localized count line, already including the number. */
+  countLabel: string;
   /** Grid tile aspect bias. Defaults to portrait for people/editorial work. */
   orientation?: "portrait" | "landscape";
 };
@@ -62,6 +63,7 @@ export default function PortfolioGrid({
   themeColor,
   onImageClick,
   label = "Full Portfolio",
+  countLabel,
   orientation = "portrait",
 }: PortfolioGridProps) {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
@@ -78,9 +80,7 @@ export default function PortfolioGrid({
     <div className="relative z-0 w-full border-t border-[#1a1a1a] bg-black py-14" aria-label={title}>
       <div className="mb-6 px-4 text-center">
         <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-white/50">{label}</p>
-        <span className="mt-1 block text-sm font-medium text-[#F4F1ED]/85">
-          {displayImages.length} showcase images
-        </span>
+        <span className="mt-1 block text-sm font-medium text-[#F4F1ED]/85">{countLabel}</span>
       </div>
       <div
         className={
@@ -92,26 +92,16 @@ export default function PortfolioGrid({
         {displayImages.map((image, index) => {
           const fourFive = !isLandscape && isFourFive(image);
           return (
-          <motion.div
+          <div
             key={image.src}
             className={`${
               fourFive ? "col-span-1 self-start" : activeClasses[index % activeClasses.length]
-            } group relative min-h-[100px] overflow-hidden rounded-none border border-[#1f1f1f] bg-[#202020] shadow-sm transition-[opacity,border-color,box-shadow,filter] duration-300 ${
+            } group relative min-h-[100px] overflow-hidden rounded-none border border-[#1f1f1f] bg-[#202020] shadow-sm transition-[opacity,border-color] duration-300 ${
               isLandscape ? "aspect-[3/2]" : ""
-            } ${hoveredImage && hoveredImage !== image.src ? "opacity-50" : "opacity-100"}`}
+            } ${hoveredImage && hoveredImage !== image.src ? "opacity-50" : ""}`}
             style={{ borderColor: index === 0 ? `${themeColor}55` : undefined }}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.18 }}
-            transition={{ duration: 0.55, delay: index * 0.06, ease: "easeOut" }}
-            whileHover={{
-              scale: 1.05,
-              zIndex: 20,
-              borderColor: "#f4f1ed66",
-              boxShadow: "0 0 0 1px rgba(244,241,237,0.3)",
-            }}
-            onHoverStart={() => setHoveredImage(image.src)}
-            onHoverEnd={() => setHoveredImage(null)}
+            onMouseEnter={() => setHoveredImage(image.src)}
+            onMouseLeave={() => setHoveredImage(null)}
             onClick={() => onImageClick?.(image)}
           >
             {fourFive && image.width && image.height ? (
@@ -138,7 +128,7 @@ export default function PortfolioGrid({
                 }`}
               />
             )}
-          </motion.div>
+          </div>
           );
         })}
       </div>

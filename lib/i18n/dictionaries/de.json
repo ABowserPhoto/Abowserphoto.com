@@ -2,7 +2,10 @@
   "brand": "Aaron Bowser Photography",
   "nav": {
     "home": "Start",
-    "hero": "Hero",
+    "hero": "Titelbild",
+    "menu": "Menü",
+    "close": "Schließen",
+    "showcaseCount": "{count} ausgewählte Aufnahmen",
     "portfolio": "Portfolio",
     "services": "Leistungen",
     "about": "Über mich",
@@ -105,6 +108,7 @@
     "impressum": "Impressum",
     "cookies": "Cookie-Richtlinie",
     "privacyPolicy": "Datenschutzerklärung",
+    "vatId": "USt-IdNr.",
     "directions": "Route / Google Maps"
   },
   "auth": {

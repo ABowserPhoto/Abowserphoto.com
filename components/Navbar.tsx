@@ -26,6 +26,7 @@ type NavbarProps = {
   labels?: {
     book?: string;
     home?: string;
+    menu?: string;
   };
 };
 
@@ -96,6 +97,7 @@ export default function Navbar({
   const resolvedBookHref = bookHref === BOOKING_HREF ? bookingHref(pathname) : bookHref;
   const bookLabel = labels?.book ?? "Book";
   const homeLabel = labels?.home ?? "Home";
+  const menuLabel = labels?.menu ?? "Menu";
 
   const { scrollYProgress: lightProgress } = useScroll({
     target: lightSectionRef,
@@ -227,7 +229,7 @@ export default function Navbar({
           aria-expanded={menuOpen}
           aria-controls="mobile-navbar-menu"
         >
-          Menu
+          {menuLabel}
         </motion.button>
       </div>
 

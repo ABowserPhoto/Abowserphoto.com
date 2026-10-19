@@ -40,6 +40,37 @@ export default function HeroSlider({
 
   const activeMedia = media[activeIndex];
 
+  if (align === "left") {
+    const image = activeMedia?.type === "image" ? activeMedia : media.find((item) => item.type === "image");
+    return (
+      <section className="relative w-full bg-black pt-20">
+        <div className="relative mx-auto w-full max-w-[min(100%,calc((100svh-5rem)*16/9))]">
+          <div className="relative aspect-video w-full">
+            {image ? (
+              <Image
+                src={image.url}
+                alt={image.alt || title}
+                fill
+                priority
+                sizes="100vw"
+                className="object-contain object-center"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-black via-[#111111] to-[#1a1a1a]" />
+            )}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 via-40% to-transparent to-[68%]" />
+            <div className="pointer-events-none absolute inset-0 hidden items-center px-10 text-left md:flex lg:px-16">
+              <HeroCopy title={title} subtitle={subtitle} align="left" />
+            </div>
+          </div>
+        </div>
+        <div className="px-6 pb-10 pt-6 text-left md:hidden">
+          <HeroCopy title={title} subtitle={subtitle} align="left" compact />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
       {media.length === 0 ? (
@@ -61,7 +92,7 @@ export default function HeroSlider({
                 fill
                 priority
                 sizes="100vw"
-                className={align === "left" ? "object-cover object-right" : "object-cover"}
+                className="object-cover"
               />
             ) : (
               <video
@@ -78,43 +109,50 @@ export default function HeroSlider({
         </AnimatePresence>
       )}
 
-      {align === "left" ? (
-        <>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/20" />
-        </>
-      ) : (
-        <>
-          <div className="pointer-events-none absolute inset-0 bg-black/35" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/40" />
-        </>
-      )}
+      <div className="pointer-events-none absolute inset-0 bg-black/35" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/40" />
 
-      <div
-        className={
-          align === "left"
-            ? "pointer-events-none absolute inset-0 flex items-center justify-start px-6 pt-16 text-left sm:px-12 lg:px-20"
-            : "pointer-events-none absolute inset-0 flex items-center justify-center px-6 pt-16 text-center sm:px-10"
-        }
-      >
-        <div className={align === "left" ? "max-w-xl lg:max-w-2xl" : "max-w-4xl"}>
-          <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#F4F1ED]/70">
-            Aaron Bowser Photography
-          </p>
-          <h1 className="mt-5 text-4xl font-light leading-tight tracking-tight text-[#F4F1ED] sm:text-6xl lg:text-7xl">
-            {title}
-          </h1>
-          <p
-            className={
-              align === "left"
-                ? "mt-6 max-w-xl text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base lg:text-lg"
-                : "mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base lg:text-lg"
-            }
-          >
-            {subtitle}
-          </p>
-        </div>
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-6 pt-16 text-center sm:px-10">
+        <HeroCopy title={title} subtitle={subtitle} align="center" />
       </div>
     </section>
+  );
+}
+
+function HeroCopy({
+  title,
+  subtitle,
+  align,
+  compact = false,
+}: {
+  title: string;
+  subtitle: string;
+  align: "left" | "center";
+  compact?: boolean;
+}) {
+  return (
+    <div className={align === "left" ? "max-w-lg lg:max-w-xl" : "max-w-4xl"}>
+      <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#F4F1ED]/70">
+        Aaron Bowser Photography
+      </p>
+      <h1
+        className={
+          compact
+            ? "mt-3 text-3xl font-light leading-tight tracking-tight text-[#F4F1ED]"
+            : "mt-5 text-4xl font-light leading-tight tracking-tight text-[#F4F1ED] sm:text-5xl lg:text-6xl"
+        }
+      >
+        {title}
+      </h1>
+      <p
+        className={
+          align === "left"
+            ? "mt-4 max-w-md text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base"
+            : "mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base lg:text-lg"
+        }
+      >
+        {subtitle}
+      </p>
+    </div>
   );
 }

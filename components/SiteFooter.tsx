@@ -73,7 +73,9 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
             <p className="text-[#322B2B]">
               {locale === "de" ? "Gericht" : "Court"}: {COMPANY_REGISTER.court}
             </p>
-            <p className="text-[#322B2B]">VAT: {COMPANY_REGISTER.vatId}</p>
+            <p className="text-[#322B2B]">
+              {dictionary.footer.vatId}: {COMPANY_REGISTER.vatId}
+            </p>
             <p className="text-[#322B2B]">HRB: {COMPANY_REGISTER.hrb}</p>
             <Link
               href={withLocale("/impressum", locale)}

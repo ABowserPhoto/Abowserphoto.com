@@ -3,6 +3,9 @@
   "nav": {
     "home": "Home",
     "hero": "Hero",
+    "menu": "Menu",
+    "close": "Close",
+    "showcaseCount": "{count} showcase images",
     "portfolio": "Portfolio",
     "services": "Services",
     "about": "About",
@@ -105,6 +108,7 @@
     "impressum": "Legal notice",
     "cookies": "Cookie policy",
     "privacyPolicy": "Privacy policy",
+    "vatId": "VAT",
     "directions": "Directions / Google Maps"
   },
   "auth": {

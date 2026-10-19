@@ -64,6 +64,7 @@ export default function CommercialPortfolioArchive({
         themeColor={themeColor}
         onImageClick={setSelectedImage}
         label={dictionary.nav.fullPortfolio}
+        countLabel={dictionary.nav.showcaseCount.replace("{count}", String(images.length))}
       />
 
       <AnimatePresence>

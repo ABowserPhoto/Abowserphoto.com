@@ -165,11 +165,17 @@ export default function CategoryTemplate({
         labels={{
           book: dictionary.nav.book,
           home: dictionary.nav.home,
+          menu: dictionary.nav.menu,
         }}
       />
 
       <main>
-        <section id="hero" className="relative min-h-screen w-full">
+        <section
+          id="hero"
+          className={
+            category.slug === "business-portraits" ? "relative w-full bg-black" : "relative min-h-screen w-full"
+          }
+        >
           <HeroSlider
             media={heroMedia}
             title={category.title}
@@ -187,6 +193,7 @@ export default function CategoryTemplate({
             label={
               showFullPortfolioCta ? dictionary.nav.selectedWork : dictionary.nav.fullPortfolio
             }
+            countLabel={dictionary.nav.showcaseCount.replace("{count}", String(gridImages.length))}
             orientation={category.slug === "real-estate" ? "landscape" : "portrait"}
           />
           {showFullPortfolioCta ? (
@@ -339,7 +346,7 @@ export default function CategoryTemplate({
               onClick={() => setSelectedImage(null)}
               className="absolute right-4 top-4 rounded-md border border-white/30 bg-black/35 px-3 py-1.5 text-sm font-semibold text-white"
             >
-              X
+              {dictionary.nav.close}
             </button>
             <motion.img
               src={selectedImage.src}
