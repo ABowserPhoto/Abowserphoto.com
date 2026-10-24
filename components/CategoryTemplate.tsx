@@ -170,18 +170,8 @@ export default function CategoryTemplate({
       />
 
       <main>
-        <section
-          id="hero"
-          className={
-            category.slug === "business-portraits" ? "relative w-full bg-black" : "relative min-h-screen w-full"
-          }
-        >
-          <HeroSlider
-            media={heroMedia}
-            title={category.title}
-            subtitle={category.subtitle}
-            align={category.slug === "business-portraits" ? "left" : "center"}
-          />
+        <section id="hero" className="relative min-h-screen w-full">
+          <HeroSlider media={heroMedia} title={category.title} subtitle={category.subtitle} />
         </section>
 
         <section id="portfolio" className="relative z-0 isolate bg-black">

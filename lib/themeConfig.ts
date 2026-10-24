@@ -19,7 +19,13 @@ export const themeConfig: Record<string, CategoryTheme> = {
     palette: ["#446E8B", "#322B2B", "#8B9DA4", "#F4F1ED"],
     heroImage: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1600&q=80",
     heroTagline: "Professional imagery that elevates your brand presence.",
-    services: ["Executive Headshots", "LinkedIn Portraits", "Team Branding Sessions"],
+    services: [
+      "Executive Headshots",
+      "Staff Portraits",
+      "Team Photographs",
+      "LinkedIn Profile Pictures",
+      "Business Portraits at Your Office",
+    ],
     about:
       "I create polished business portraits with direction and lighting that reflect confidence, personality, and professionalism.",
     faqs: [

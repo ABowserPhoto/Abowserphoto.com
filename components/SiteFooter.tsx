@@ -8,6 +8,7 @@ import {
   CONTACT_EMAIL,
   CONTACT_PHONE_DISPLAY,
   LEGAL_NAME,
+  SOCIAL_LINKS,
   STUDIOS,
 } from "../lib/site";
 
@@ -22,7 +23,7 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
   return (
     <footer className="relative z-30 border-t border-[#322B2B]/15 bg-[#F4F1ED]">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 text-sm sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 text-sm sm:grid-cols-2 lg:grid-cols-5">
           <div className="space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#322B2B]/70">
               {dictionary.footer.contact}
@@ -109,6 +110,31 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
             >
               {dictionary.footer.privacyPolicy}
             </Link>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#322B2B]/70">
+              {dictionary.footer.social}
+            </p>
+            {SOCIAL_LINKS.map((link) => {
+              const label =
+                link.id === "instagram-main"
+                  ? dictionary.footer.instagramMain
+                  : link.id === "instagram-real-estate"
+                    ? dictionary.footer.instagramRealEstate
+                    : dictionary.footer.instagramFood;
+              return (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-[#322B2B] underline-offset-2 transition-opacity hover:opacity-80 hover:underline"
+                >
+                  {label}
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>

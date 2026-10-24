@@ -129,16 +129,9 @@ export const COMPANY_REGISTER = {
   vatId: "DE344108567",
 } as const;
 
-/**
- * TODO(owner): Geschäftsführer der UG eintragen.
- * The footer names the company, court, HRB, and VAT ID, not the managing director.
- */
-export const MANAGING_DIRECTOR: string | null = null;
+export const MANAGING_DIRECTOR = "Aaron Bowser";
 
-/**
- * TODO(owner): Hosting-Anbieter für die Datenschutzerklärung eintragen.
- */
-export const HOSTING_PROVIDER: string | null = null;
+export const HOSTING_PROVIDER = "Vercel";
 
 /**
  * TODO(owner): Startpreis für Business-Porträts eintragen, zum Beispiel "ab 249 €".
@@ -146,9 +139,23 @@ export const HOSTING_PROVIDER: string | null = null;
  */
 export const BUSINESS_PORTRAIT_PRICE_FROM: string | null = null;
 
-/**
- * TODO(owner): Echte Profil-URLs eintragen (Instagram, LinkedIn, weitere).
- * Platzhalter-Domains werden nicht veröffentlicht. Google-Maps-Einträge
- * stehen an den Studios und werden separat in sameAs aufgenommen.
- */
-export const SOCIAL_PROFILE_URLS: readonly string[] = [];
+export const SOCIAL_LINKS = [
+  {
+    id: "instagram-main",
+    label: "Aaron Bowser Photography",
+    href: "https://instagram.com/aaronbowser_photography",
+  },
+  {
+    id: "instagram-real-estate",
+    label: "Immobilien Photography",
+    href: "https://instagram.com/abowser_immobilien_photography",
+  },
+  {
+    id: "instagram-food",
+    label: "Food Photography",
+    href: "https://instagram.com/abowser_food_photography",
+  },
+] as const;
+
+/** Profile URLs for JSON-LD sameAs and public footer links. */
+export const SOCIAL_PROFILE_URLS: readonly string[] = SOCIAL_LINKS.map((link) => link.href);

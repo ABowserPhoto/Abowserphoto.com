@@ -168,22 +168,27 @@ const germanCategoryCopy: Partial<
       {
         title: "Executive-Headshots",
         description:
-          "Porträts für Geschäftsführung und Partner. Licht, Haltung und Ausdruck werden so geführt, dass dieselbe Person auf der Website, in der Präsentation und bei LinkedIn klar lesbar ist. Die Sitzung findet in der Regel im Studio Hagen statt. Das Studio Solingen ist für größere Produktionen und nur nach Termin. Im Büro fotografiere ich ebenfalls.",
+          "Porträts für Geschäftsführung und Partner. Licht, Haltung und Ausdruck werden so geführt, dass dieselbe Person auf der Website, in der Präsentation und bei LinkedIn klar lesbar ist.",
       },
       {
-        title: "Mitarbeiterfotos und Teamfotos",
+        title: "Mitarbeiterfotos",
         description:
-          "Eine gemeinsame Bildlinie für das ganze Unternehmen: gleiches Licht, gleicher Ausschnitt, gleicher Ton. Mitarbeiterfotos und Firmenfotos für die Website, für Angebote und für die Presse, an einem Bürotag, wenn das Team beisammen ist.",
+          "Einzelporträts der Mitarbeitenden mit gleichem Licht, gleichem Ausschnitt und gleichem Ton – damit die Teamseite wie aus einer Sitzung wirkt.",
       },
       {
-        title: "LinkedIn-Profilbild und Personal Branding",
+        title: "Teamfotos",
         description:
-          "Ein Corporate Headshot, der nach der Person aussieht. Für Berater, Sprecher und Spezialisten, die ein LinkedIn-Profilbild brauchen und dazu eine ruhigere Aufnahme für Website und Druck.",
+          "Gruppen- und Teamaufnahmen für Website, Angebote und Presse – fotografiert, wenn das Team beisammen ist, im Studio oder im Büro.",
       },
       {
-        title: "Business-Fotoshooting vor Ort",
+        title: "LinkedIn-Profilbilder",
         description:
-          "Der Studioaufbau kommt ins Büro, in Hagen, Solingen und in Nordrhein-Westfalen. Kompaktes Licht, kurze Sitzungen und eine Serie, die danach wie aus einem Guss aussieht.",
+          "Corporate Headshots, die als LinkedIn-Profilbild funktionieren und auf der eigenen Website trotzdem nach derselben Person aussehen – für Berater, Sprecher und Spezialisten.",
+      },
+      {
+        title: "Business-Porträts im Büro",
+        description:
+          "Wenn das Team nicht ins Studio kommt, wird das Licht im Büro aufgebaut – in Hagen, Solingen und Nordrhein-Westfalen. Eine Serie, die danach wie aus einem Guss aussieht.",
       },
     ],
   },

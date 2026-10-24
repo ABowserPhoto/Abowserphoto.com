@@ -8,7 +8,7 @@ import type { CmsMediaItem } from "../lib/cms";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
-import { STUDIOS } from "../lib/site";
+import { HAGEN_STUDIO, SOLINGEN_STUDIO } from "../lib/site";
 import LanguageSwitcher from "./LanguageSwitcher";
 import SiteLogo from "./SiteLogo";
 
@@ -225,32 +225,28 @@ export default function HomePortal({
           <p className="mt-3 text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base">
             {dictionary.home.subhead}
           </p>
-          <address className="mt-4 space-y-2 not-italic text-[11px] leading-relaxed tracking-wide text-[#F4F1ED]/75">
-            {STUDIOS.map((studio) => (
-              <span key={studio.id} className="block">
-                {locale === "de" ? studio.nameDe : studio.nameEn}
-                {" · "}
-                {studio.street}, {studio.postalCode} {studio.city}
-                {" · "}
-                <a
-                  href={studio.mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline decoration-white/40 underline-offset-2 transition-opacity hover:text-[#F4F1ED] hover:opacity-100"
-                >
-                  {dictionary.footer.directions}
-                </a>
-                <span className="mt-0.5 block normal-case tracking-normal text-[#F4F1ED]/65">
-                  {locale === "de" ? studio.summaryDe : studio.summaryEn}
-                </span>
-                {studio.detailLabelDe && studio.detailLabelEn ? (
-                  <span className="mt-0.5 block normal-case tracking-normal text-[#F4F1ED]/80">
-                    {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
-                  </span>
-                ) : null}
-              </span>
-            ))}
-          </address>
+          <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.28em] text-[#F4F1ED]/55">
+            {dictionary.home.studiosLabel}:{" "}
+            <a
+              href={HAGEN_STUDIO.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#F4F1ED]/70 transition-colors hover:text-[#F4F1ED]"
+            >
+              {dictionary.home.studioHagen}
+            </a>
+            <span className="mx-2 text-[#F4F1ED]/35" aria-hidden>
+              |
+            </span>
+            <a
+              href={SOLINGEN_STUDIO.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#F4F1ED]/70 transition-colors hover:text-[#F4F1ED]"
+            >
+              {dictionary.home.studioSolingen}
+            </a>
+          </p>
 
           <nav className="mt-7 flex flex-col gap-2 sm:gap-1.5">
             <PortalLink item={commercialItem} activeKey={activeKey} onActivate={setActiveKey} />

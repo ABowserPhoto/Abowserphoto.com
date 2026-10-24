@@ -72,7 +72,7 @@ export default function HeroSlider({
   }
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black">
+    <section className="relative h-screen min-h-screen w-full overflow-hidden bg-black">
       {media.length === 0 ? (
         <div className="absolute inset-0 bg-gradient-to-br from-black via-[#111111] to-[#1a1a1a]" />
       ) : (

@@ -24,103 +24,6 @@ function priceSentence(locale: Locale) {
     : "The fee depends on the number of people, the location, and the scope. A public starting price is not set yet, so the fee is on request.";
 }
 
-const businessSections: Record<Locale, PageSection[]> = {
-  de: [
-    {
-      id: "executive-headshots",
-      eyebrow: "Führung",
-      title: "Executive-Headshots",
-      paragraphs: [
-        "Executive-Headshots sind für Geschäftsführung, Partner und Menschen, die ein Unternehmen nach außen vertreten. Das Bild soll auf der Website, in einer Präsentation und bei LinkedIn dieselbe Person zeigen: ruhig, klar und ohne austauschbare Studio-Geste.",
-        `Porträts entstehen in der Regel im Studio Hagen (${hagen}, etwa 40 m²), wo Aaron täglich arbeitet. Das Studio Solingen (${solingen}, etwa 100 m²) ist für größere Produktionen und nur nach Termin. Wer das Büro im Bild will, bucht das Shooting vor Ort. Vor der Aufnahme klären wir Ausschnitt, Kleidung und wo das Porträt erscheinen soll.`,
-      ],
-    },
-    {
-      id: "teamfotos",
-      eyebrow: "Unternehmen",
-      title: "Mitarbeiterfotos und Teamfotos",
-      paragraphs: [
-        "Mitarbeiterfotos und Teamfotos halten ein Unternehmen in einer gemeinsamen Bildlinie. Gleiches Licht, gleicher Ausschnitt, gleicher Ton, damit die Teamseite nicht wie eine Sammlung einzelner Schnappschüsse wirkt. Firmenfotos dieser Art eignen sich für die Website, Angebote und Presse.",
-        "Kleine Runden fotografiere ich im Studio Hagen. Ein größeres Team oder ein aufwendigerer Aufbau kommt ins Studio Solingen, nur nach Termin. An einem Bürotag geht es auch vor Ort, Person für Person, mit kurzer Anleitung zu Haltung und Blick. Wie viele Porträts an einem Tag passen, legen wir nach Teamgröße und Zeitfenster fest.",
-      ],
-    },
-    {
-      id: "linkedin",
-      eyebrow: "Profil",
-      title: "LinkedIn-Profilbild und Personal Branding",
-      paragraphs: [
-        "Ein LinkedIn-Profilbild muss im kleinen Ausschnitt funktionieren und auf der eigenen Website trotzdem nach derselben Person aussehen. Dafür fotografiere ich Corporate Headshots, die eine persönliche Marke tragen, ohne laut zu werden.",
-        "Das ist die richtige Form für Berater, Sprecher und Spezialisten. Wir wählen einen Ausschnitt, der als Profilbild trägt, und eine zweite, ruhigere Variante für Vorträge, Presse und die Über-mich-Seite.",
-      ],
-    },
-    {
-      id: "vor-ort",
-      eyebrow: "Beim Kunden",
-      title: "Business-Fotoshooting vor Ort",
-      paragraphs: [
-        "Wenn das Team nicht ins Studio kommt, baue ich das Licht im Büro auf. Hagen, Solingen und weitere Orte in Nordrhein-Westfalen sind dafür eingeplant. Ein kompakter Aufbau, neutrale oder eigene Räume, und eine Serie, die danach wie aus einem Guss aussieht.",
-        "Vor Ort brauche ich ein kurzes Zeitfenster und einen Raum mit etwas Tiefe. Den Ablauf und die Lieferzeit sprechen wir vor dem Termin ab, damit die Bilder zum Launch oder zum neuen Auftritt passen.",
-      ],
-    },
-    {
-      id: "honorar",
-      eyebrow: "Ablauf",
-      title: "Honorar und Ablauf",
-      paragraphs: [
-        priceSentence("de"),
-        "Nach einem kurzen Briefing setzen wir Licht und Hintergrund. Ich leite Haltung und Ausdruck an. Sie erhalten eine eng ausgewählte Serie, keine ungefilterte Menge. Nutzung für Website, LinkedIn und die übliche Unternehmenskommunikation ist der Ausgangspunkt; eine weitergehende Lizenz klären wir, wenn die Bilder in Kampagnen oder Anzeigen gehen.",
-      ],
-    },
-  ],
-  en: [
-    {
-      id: "executive-headshots",
-      eyebrow: "Leadership",
-      title: "Executive headshots",
-      paragraphs: [
-        "Executive headshots are for founders, partners, and the people who represent a company. The portrait should read as the same person on the website, in a deck, and on LinkedIn: calm, clear, and free of a generic studio pose.",
-        `Portraits are usually made at the Hagen studio (${hagen}, about 40 m²), where Aaron works every day. The Solingen studio (${solingen}, about 100 m²) is for larger productions and by appointment only. If the office itself should be in the frame, the sitting happens on site. Before we start, we agree the crop, the clothing, and where the portrait will be used.`,
-      ],
-    },
-    {
-      id: "teamfotos",
-      eyebrow: "Company",
-      title: "Staff portraits and team photographs",
-      paragraphs: [
-        "Staff and team photographs give a company one visual line. The same light, the same crop, the same tone, so a team page does not look like a folder of unrelated snapshots. These company photographs work on the website, in proposals, and in press kits.",
-        "Small groups are photographed at the Hagen studio. A larger team or a bigger set-up uses the Solingen studio, by appointment only. An office day on location is the other option: one person after another, with brief direction for posture and gaze. How many portraits fit in a day depends on the team and the time available.",
-      ],
-    },
-    {
-      id: "linkedin",
-      eyebrow: "Profile",
-      title: "LinkedIn profile pictures and personal branding",
-      paragraphs: [
-        "A LinkedIn profile picture has to work at a small size and still match the portrait on your own website. I photograph corporate headshots that carry a personal brand without turning the volume up.",
-        "This is the right form for consultants, speakers, and specialists. We choose one crop that holds as a profile picture and a second, quieter frame for talks, press, and an about page.",
-      ],
-    },
-    {
-      id: "vor-ort",
-      eyebrow: "On location",
-      title: "Business portraits at your office",
-      paragraphs: [
-        "When the team cannot come to the studio, I set the light up in the office. Hagen, Solingen, and other locations in North Rhine-Westphalia are part of that work. A compact setup, a neutral or your own room, and a series that looks like one session afterwards.",
-        "On site I need a short window and a room with a little depth. We agree the running order and the delivery date before the session, so the photographs are ready for a launch or a new company presence.",
-      ],
-    },
-    {
-      id: "honorar",
-      eyebrow: "The sitting",
-      title: "Fee and how a session runs",
-      paragraphs: [
-        priceSentence("en"),
-        "After a short briefing we set light and background. I direct posture and expression. You receive a tight edit, not an unfiltered dump. Use on the website, on LinkedIn, and in ordinary company communication is the starting point. A wider licence is agreed when the photographs go into campaigns or advertising.",
-      ],
-    },
-  ],
-};
-
 const weddingSections: Record<Locale, PageSection[]> = {
   de: [
     {
@@ -238,7 +141,6 @@ const weddingFaqs: Record<Locale, FAQItem[]> = {
 };
 
 export function getPageSections(slug: CategorySlug, locale: Locale): PageSection[] {
-  if (slug === "business-portraits") return businessSections[locale];
   if (slug === "wedding") return weddingSections[locale];
   return [];
 }

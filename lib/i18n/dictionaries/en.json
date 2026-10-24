@@ -22,9 +22,12 @@
     "language": "Language"
   },
   "home": {
-    "headline": "Photographer for Business, Weddings and Commercial Work in Hagen and Solingen",
-    "subhead": "The Hagen studio is the main studio for portraits and business sessions. The Solingen studio is for larger productions, by appointment only.",
+    "headline": "Choose Your Visual Story",
+    "subhead": "Explore editorial, commercial, and niche-focused workspaces crafted for premium visual storytelling.",
     "logoLabel": "A. Bowser Photography",
+    "studiosLabel": "Studios",
+    "studioHagen": "Hagen",
+    "studioSolingen": "Solingen",
     "niches": {
       "wedding": "Wedding",
       "food": "Food",
@@ -105,11 +108,15 @@
     "studios": "Studios",
     "legal": "Legal",
     "privacy": "Privacy",
+    "social": "Instagram",
     "impressum": "Legal notice",
     "cookies": "Cookie policy",
     "privacyPolicy": "Privacy policy",
     "vatId": "VAT",
-    "directions": "Directions / Google Maps"
+    "directions": "Directions / Google Maps",
+    "instagramMain": "Aaron Bowser Photography",
+    "instagramRealEstate": "Real Estate Photography",
+    "instagramFood": "Food Photography"
   },
   "auth": {
     "clientAccess": "Client Access",

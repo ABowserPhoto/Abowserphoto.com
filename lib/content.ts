@@ -192,22 +192,32 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
       {
         title: "Executive Headshots",
         description:
-          "Portraits for founders and leadership. Light, posture, and expression are directed so the same person reads clearly on a company website, in a deck, and on LinkedIn. Sessions usually run at the Hagen studio. The Solingen studio is for larger productions and by appointment only. I also photograph at your office.",
+          "Portraits for founders and leadership. Light, posture, and expression are directed so the same person reads clearly on a company website, in a deck, and on LinkedIn.",
+        image: "/business-portraits/portfolio/executive-portrait-frau-roter-anzug.webp",
       },
       {
-        title: "Team and Staff Portraits",
+        title: "Staff Portraits",
         description:
-          "One visual line for the whole company: the same light, the same crop, the same tone. Staff photographs and team photographs for the website, proposals, and press, photographed in a single office day when the team is together.",
+          "Individual staff portraits with one shared light, crop, and tone—so every person on the company page looks like they belong to the same session.",
+        image: "/business-portraits/portfolio/mitarbeiterfoto-frau-sitzend-grau.webp",
       },
       {
-        title: "LinkedIn and Personal Branding",
+        title: "Team Photographs",
         description:
-          "A corporate headshot that still feels like the person. For consultants, speakers, and specialists who need a LinkedIn picture and a quieter frame for the website and for print.",
+          "Group and team photographs for the website, proposals, and press—photographed when the team is together, in the studio or at the office.",
+        image: "/business-portraits/portfolio/firmenportrait-frau-roter-hosenanzug-stehend.webp",
       },
       {
-        title: "On-site Office Sessions",
+        title: "LinkedIn Profile Pictures",
         description:
-          "The studio setup comes to your office in Hagen, Solingen, and across North Rhine-Westphalia. A compact light, short sittings, and one consistent series for the team.",
+          "Corporate headshots that work as a LinkedIn profile picture and still match the portrait on your own website—for consultants, speakers, and specialists.",
+        image: "/business-portraits/portfolio/linkedin-foto-frau-grauer-hintergrund.webp",
+      },
+      {
+        title: "Business Portraits at Your Office",
+        description:
+          "When the team cannot come to the studio, the light is set up in your office in Hagen, Solingen, and across North Rhine-Westphalia—one consistent series on location.",
+        image: "/business-portraits/portfolio/business-fotografie-frau-hellblauer-anzug.webp",
       },
     ],
     aboutText:

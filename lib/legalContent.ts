@@ -114,8 +114,8 @@ function datenschutz(locale: Locale): LegalDocument {
         paragraphs: [
           HOSTING_PROVIDER
             ? de
-              ? `Die Website wird betrieben bei ${HOSTING_PROVIDER}.`
-              : `The website is hosted by ${HOSTING_PROVIDER}.`
+              ? `Diese Website wird bei ${HOSTING_PROVIDER} gehostet. Der Anbieter kann technisch bedingt Zugriffsdaten verarbeiten, zum Beispiel IP-Adresse, Zeitpunkt und aufgerufene Adresse.`
+              : `This website is hosted by ${HOSTING_PROVIDER}. The provider may process access data such as IP address, time, and the address requested.`
             : de
               ? "Angabe fehlt. Bitte den Hosting-Anbieter eintragen. Der Anbieter kann technisch bedingt Zugriffsdaten verarbeiten, zum Beispiel IP-Adresse, Zeitpunkt und aufgerufene Adresse."
               : "Missing. Please name the hosting provider. That provider may process access data such as IP address, time, and the address requested.",
