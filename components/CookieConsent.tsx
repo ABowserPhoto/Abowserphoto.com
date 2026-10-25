@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import {
+  COOKIE_CONSENT_STORAGE_KEY,
+  writeCookieConsent,
+  type CookieConsentChoice,
+} from "../lib/cookieConsent";
 import { useLocale } from "../lib/i18n/LocaleProvider";
-
-type ConsentPreference = "all" | "essential";
-
-const STORAGE_KEY = "cookie-consent";
 
 export default function CookieConsent() {
   const { localizePath } = useLocale();
@@ -15,13 +16,13 @@ export default function CookieConsent() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
+    const saved = window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
     setIsOpen(!saved);
     setIsReady(true);
   }, []);
 
-  function handleConsent(choice: ConsentPreference) {
-    window.localStorage.setItem(STORAGE_KEY, choice);
+  function handleConsent(choice: CookieConsentChoice) {
+    writeCookieConsent(choice);
     setIsOpen(false);
   }
 

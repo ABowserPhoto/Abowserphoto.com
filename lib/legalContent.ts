@@ -1,11 +1,13 @@
 import type { Locale } from "./i18n/config";
 import type { LegalPath } from "./routes";
+import { COOKIE_CONSENT_STORAGE_KEY } from "./cookieConsent";
 import {
   BRAND_NAME,
   COMPANY_REGISTER,
   CONTACT_EMAIL,
   CONTACT_PHONE_DISPLAY,
   formatStudioLine,
+  GA_MEASUREMENT_ID,
   HAGEN_STUDIO,
   HOSTING_PROVIDER,
   LEGAL_NAME,
@@ -136,8 +138,19 @@ function datenschutz(locale: Locale): LegalDocument {
         heading: de ? "Cookies und lokaler Speicher" : "Cookies and local storage",
         paragraphs: [
           de
-            ? "Die Website setzt ein Cookie namens NEXT_LOCALE, um die gewählte Sprache zu speichern. Wenn Sie sich anmelden, setzt der Login-Dienst Sitzungs-Cookies. Die Cookie-Auswahl selbst liegt im lokalen Speicher des Browsers unter dem Schlüssel cookie-consent. Ein Analyse- oder Werbe-Tool ist im aktuellen Code nicht eingebunden."
-            : "The site sets a cookie named NEXT_LOCALE to remember the chosen language. When you sign in, the login service sets session cookies. The cookie choice itself is stored in the browser under the key cookie-consent. The current code does not embed an analytics or advertising tool.",
+            ? `Die Website setzt ein Cookie namens NEXT_LOCALE, um die gewählte Sprache zu speichern. Wenn Sie sich anmelden, setzt der Login-Dienst Sitzungs-Cookies. Die Cookie-Auswahl selbst liegt im lokalen Speicher des Browsers unter dem Schlüssel ${COOKIE_CONSENT_STORAGE_KEY}.`
+            : `The site sets a cookie named NEXT_LOCALE to remember the chosen language. When you sign in, the login service sets session cookies. The cookie choice itself is stored in the browser under the key ${COOKIE_CONSENT_STORAGE_KEY}.`,
+        ],
+      },
+      {
+        heading: "Google Analytics 4",
+        paragraphs: [
+          de
+            ? `Wenn Sie im Cookie-Hinweis „Alle akzeptieren“ wählen, lädt die Website Google Analytics 4 (Google tag, gtag.js) mit der Mess-ID ${GA_MEASUREMENT_ID}. Das Skript kommt von https://www.googletagmanager.com/gtag/js und sendet Nutzungsdaten an Google, darunter die aufgerufene Seite, den Seitentitel und technische Angaben des Browsers. „Nur essenzielle“ lädt das Skript nicht. Ein Werbe-Tool ist nicht eingebunden.`
+            : `If you choose “Alle akzeptieren” in the cookie notice, the site loads Google Analytics 4 (Google tag, gtag.js) with measurement ID ${GA_MEASUREMENT_ID}. The script is loaded from https://www.googletagmanager.com/gtag/js and sends usage data to Google, including the page requested, the page title, and technical browser details. “Nur essenzielle” does not load the script. No advertising tool is embedded.`,
+          de
+            ? `Wechseln Sie später auf „Nur essenzielle“, stoppt die weitere Messung und die Website löscht die Google-Analytics-Cookies, die sie im Browser erreichen kann (Namen beginnend mit _ga). Beim nächsten Aufruf bleibt das Skript aus, bis Sie erneut zustimmen. Eine Speicherdauer bei Google ist in diesem Projekt nicht hinterlegt.`
+            : `If you later choose “Nur essenzielle”, further measurement stops and the site deletes the Google Analytics cookies it can reach in the browser (names starting with _ga). On the next visit the script stays unloaded until you accept again. A retention period at Google is not recorded in this project.`,
         ],
       },
       {
@@ -177,11 +190,19 @@ function cookies(locale: Locale): LegalDocument {
         ],
       },
       {
-        heading: "cookie-consent",
+        heading: COOKIE_CONSENT_STORAGE_KEY,
         paragraphs: [
           de
-            ? "Liegt im lokalen Speicher, nicht als Cookie. Merkt sich, ob Sie alle oder nur essenzielle Speicherungen gewählt haben. Es wird dabei kein Analyseprofil aufgebaut."
-            : "Stored in local storage, not as a cookie. It remembers whether you chose all stores or essential ones only. No analytics profile is built from that choice.",
+            ? "Liegt im lokalen Speicher, nicht als Cookie. Merkt sich, ob Sie alle oder nur essenzielle Speicherungen gewählt haben. Die gespeicherte Auswahl selbst erzeugt kein Profil."
+            : "Stored in local storage, not as a cookie. It remembers whether you chose all stores or essential ones only. The stored choice itself does not create a profile.",
+        ],
+      },
+      {
+        heading: "Google Analytics 4",
+        paragraphs: [
+          de
+            ? `Optional. Nur nach „Alle akzeptieren“. Google tag (gtag.js), Mess-ID ${GA_MEASUREMENT_ID}, geladen von googletagmanager.com. Google setzt dabei eigene Cookies, deren Namen mit _ga beginnen. Ohne diese Zustimmung bleibt das Skript aus.`
+            : `Optional. Only after “Alle akzeptieren”. Google tag (gtag.js), measurement ID ${GA_MEASUREMENT_ID}, loaded from googletagmanager.com. Google then sets its own cookies whose names start with _ga. Without that consent the script stays unloaded.`,
         ],
       },
     ],
