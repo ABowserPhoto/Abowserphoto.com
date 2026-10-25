@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import AccountModalBoundary from "../components/AccountModalBoundary";
 import BookingModalBoundary from "../components/BookingModalBoundary";
 import CookieConsent from "../components/CookieConsent";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 import JsonLd from "../components/JsonLd";
 import { defaultLocale, isLocale } from "../lib/i18n/config";
 import { getDictionary } from "../lib/i18n/getDictionary";
@@ -31,6 +32,7 @@ export default async function RootLayout({
           <BookingModalBoundary />
           <AccountModalBoundary />
           <CookieConsent />
+          <GoogleAnalytics />
         </LocaleProvider>
       </body>
     </html>

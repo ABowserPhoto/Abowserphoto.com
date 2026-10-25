@@ -20,6 +20,12 @@ function normalizeSiteUrl(value: string) {
 
 export const SITE_URL = normalizeSiteUrl(configuredSiteUrl);
 
+/**
+ * Google Analytics 4 measurement ID (gtag.js / Google tag).
+ * studio.aaronbowser-photography.com should reuse this same ID.
+ */
+export const GA_MEASUREMENT_ID = "G-L8XCWNTH3N";
+
 export const BRAND_NAME = "Aaron Bowser Photography";
 export const LEGAL_NAME = "Aaron Bowser Photography UG (haftungsbeschränkt)";
 
