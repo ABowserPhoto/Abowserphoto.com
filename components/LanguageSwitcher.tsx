@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LOCALE_COOKIE,
-  getLocaleFromPathname,
   locales,
   stripLocaleFromPathname,
   withLocale,
   type Locale,
 } from "../lib/i18n/config";
+import { useLocale } from "../lib/i18n/LocaleProvider";
+import { nicheHostForHostname } from "../lib/subdomains";
 
 type LanguageSwitcherProps = {
   className?: string;
@@ -18,11 +19,19 @@ type LanguageSwitcherProps = {
 
 export default function LanguageSwitcher({ className, onNavigated }: LanguageSwitcherProps) {
   const pathname = usePathname();
-  const active = getLocaleFromPathname(pathname) ?? "en";
-  const cleanPath = stripLocaleFromPathname(pathname);
+  const { locale: pageLocale, publicHost } = useLocale();
+  const niche = nicheHostForHostname(publicHost);
+  // Niche hosts rewrite `/` to a localized page, so the visible path may not
+  // contain the locale. The rendered page locale is the one that is active.
+  const active = pageLocale;
 
   function hrefFor(locale: Locale) {
-    return withLocale(cleanPath, locale);
+    if (niche) {
+      // `/de` and `/en` stay on the subdomain. The proxy rewrites them to the
+      // localized landing page, so the category folder never enters the bar.
+      return `/${locale}`;
+    }
+    return withLocale(stripLocaleFromPathname(pathname), locale);
   }
 
   function persistLocale(locale: Locale) {
