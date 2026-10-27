@@ -8,6 +8,8 @@ import { withLocale } from "./config";
 type LocaleContextValue = {
   locale: Locale;
   dictionary: Dictionary;
+  /** Request host, including a niche subdomain such as `immo.example.com`. */
+  publicHost: string;
   localizePath: (pathname: string) => string;
 };
 
@@ -16,19 +18,24 @@ const LocaleContext = createContext<LocaleContextValue | null>(null);
 export function LocaleProvider({
   locale,
   dictionary,
+  publicHost = "",
   children,
 }: {
   locale: Locale;
   dictionary: Dictionary;
+  publicHost?: string;
   children: React.ReactNode;
 }) {
+  const parent = useContext(LocaleContext);
+  const resolvedHost = publicHost || parent?.publicHost || "";
   const value = useMemo(
     () => ({
       locale,
       dictionary,
+      publicHost: resolvedHost,
       localizePath: (pathname: string) => withLocale(pathname, locale),
     }),
-    [locale, dictionary]
+    [locale, dictionary, resolvedHost]
   );
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;

@@ -9,6 +9,7 @@ import {
   type Locale,
 } from "./lib/i18n/config";
 import { localizePublicPath } from "./lib/routes";
+import { nicheHostForHostname } from "./lib/subdomains";
 import { copySessionOntoResponse, updateSession } from "./lib/supabase/middleware";
 
 const PUBLIC_FILE = /\.[^/]+$/;
@@ -52,6 +53,34 @@ function redirectToPath(
   return applyLocaleHeaders(copySessionOntoResponse(supabaseResponse, redirect), locale);
 }
 
+function localeRequestHeaders(req: NextRequest, locale: Locale) {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-locale", locale);
+  return requestHeaders;
+}
+
+/** Serve `pathname` without changing the browser URL. */
+function rewriteToPath(
+  req: NextRequest,
+  supabaseResponse: NextResponse,
+  pathname: string,
+  locale: Locale
+) {
+  const rewriteUrl = req.nextUrl.clone();
+  rewriteUrl.pathname = pathname;
+  const rewrite = NextResponse.rewrite(rewriteUrl, {
+    request: { headers: localeRequestHeaders(req, locale) },
+  });
+  return applyLocaleHeaders(copySessionOntoResponse(supabaseResponse, rewrite), locale);
+}
+
+function continueWithLocale(req: NextRequest, supabaseResponse: NextResponse, locale: Locale) {
+  const response = NextResponse.next({
+    request: { headers: localeRequestHeaders(req, locale) },
+  });
+  return applyLocaleHeaders(copySessionOntoResponse(supabaseResponse, response), locale);
+}
+
 function normalizePathname(pathname: string) {
   if (pathname.length > 1 && pathname.endsWith("/")) return pathname.slice(0, -1);
   return pathname;
@@ -86,15 +115,18 @@ export async function proxy(req: NextRequest) {
   }
 
   const locale = resolveLocale(req);
-
-  if (hostname.startsWith("immo.")) {
-    return redirectToPath(req, supabaseResponse, withLocale("/real-estate", locale), locale);
-  }
-  if (hostname.startsWith("food.")) {
-    return redirectToPath(req, supabaseResponse, withLocale("/food", locale), locale);
-  }
-  if (hostname.startsWith("wedding.")) {
-    return redirectToPath(req, supabaseResponse, withLocale("/wedding", locale), locale);
+  const niche = nicheHostForHostname(hostname);
+  if (niche) {
+    // A /de or /en prefix (the language switcher) wins over the cookie so the
+    // visible locale and the rewritten page stay in sync. The browser URL is
+    // left as-is; only the internal path changes.
+    const pathLocale = getLocaleFromPathname(pathname);
+    const nicheLocale = pathLocale ?? locale;
+    const destination = withLocale(niche.basePath, nicheLocale);
+    if (pathname === destination) {
+      return continueWithLocale(req, supabaseResponse, nicheLocale);
+    }
+    return rewriteToPath(req, supabaseResponse, destination, nicheLocale);
   }
 
   if (pathname === "/immobilien" || pathname.startsWith("/immobilien/")) {

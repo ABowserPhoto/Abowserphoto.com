@@ -22,11 +22,12 @@ export default async function RootLayout({
   const headerLocale = headerStore.get("x-locale");
   const lang = headerLocale && isLocale(headerLocale) ? headerLocale : defaultLocale;
   const dictionary = await getDictionary(lang);
+  const publicHost = headerStore.get("host") ?? "";
 
   return (
     <html lang={lang}>
       <body className="overflow-x-hidden bg-black text-[#F4F1ED] antialiased">
-        <LocaleProvider locale={lang} dictionary={dictionary}>
+        <LocaleProvider locale={lang} dictionary={dictionary} publicHost={publicHost}>
           <JsonLd />
           {children}
           <BookingModalBoundary />
