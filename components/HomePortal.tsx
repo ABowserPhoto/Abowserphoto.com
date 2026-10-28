@@ -18,12 +18,12 @@ const majorMono = Major_Mono_Display({
   display: "swap",
 });
 
-/** First letters (lowercase a / b) are this many times the other letters. */
+/** First letters (uppercase A / B) are this many times the lowercase letters that follow. */
 const HERO_CAP_SCALE = 1.65;
 /**
  * Major Mono Display advance width (740 / 1000 upem). Lowercase and uppercase
- * glyphs share this 0.74em advance, so the 60% column width does not change
- * when the hero uses the lowercase forms.
+ * glyphs share this 0.74em advance, so mixing an uppercase initial with
+ * lowercase letters does not change the 60% column width.
  */
 const MAJOR_MONO_ADVANCE_EM = 0.74;
 const HERO_TRACKING_EM = 0.04;
@@ -271,7 +271,7 @@ export default function HomePortal({
             aria-hidden
             style={{ x: aaronX, opacity: nameOpacity, fontSize: heroNameFontSize(5) }}
           >
-            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>a</span>{"aron"}
+            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>A</span>{"aron"}
           </motion.p>
         </motion.div>
       </div>
@@ -282,7 +282,7 @@ export default function HomePortal({
             aria-hidden
             style={{ x: bowserX, opacity: nameOpacity, fontSize: heroNameFontSize(6) }}
           >
-            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>b</span>{"owser"}
+            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>B</span>{"owser"}
           </motion.p>
         </motion.div>
       </div>
