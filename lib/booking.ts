@@ -21,6 +21,7 @@ export const REAL_ESTATE_PATH_SLUGS = new Set(["real-estate", "immobilien", "imm
 export const INQUIRY_CATEGORY_LABELS = {
   wedding: "Wedding",
   "business-portraits": "Business Portraits",
+  studio: "Application & Passport Photos",
   food: "Food",
   cinematography: "Cinematography",
   "social-media-management": "Social Media Management",

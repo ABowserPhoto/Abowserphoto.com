@@ -11,11 +11,15 @@ export const CATEGORY_SEGMENTS: Record<CategorySlug, Record<Locale, string>> = {
   wedding: { en: "wedding", de: "hochzeitsfotograf" },
   "real-estate": { en: "real-estate", de: "immobilienfotografie" },
   "business-portraits": { en: "business-portraits", de: "business-portraits" },
+  studio: { en: "application-photos", de: "bewerbungsfotos" },
   food: { en: "food", de: "food-fotografie" },
   cinematography: { en: "cinematography", de: "filmproduktion" },
   "social-media-management": { en: "social-media-management", de: "social-media" },
   commercial: { en: "commercial", de: "commercial-fotografie" },
 };
+
+/** Extra public names that should land on the studio page. */
+const STUDIO_ALIASES = new Set(["passbilder", "passfotos", "passport-photos"]);
 
 const segmentToCategory = new Map<string, CategorySlug>();
 
@@ -27,7 +31,7 @@ for (const [slug, segments] of Object.entries(CATEGORY_SEGMENTS) as Array<
 }
 
 export function resolveCategorySegment(segment: string): CategorySlug | null {
-  return segmentToCategory.get(segment) ?? null;
+  return segmentToCategory.get(segment) ?? (STUDIO_ALIASES.has(segment) ? "studio" : null);
 }
 
 export function categorySegment(slug: CategorySlug, locale: Locale) {

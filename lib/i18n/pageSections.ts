@@ -145,8 +145,54 @@ export function getPageSections(slug: CategorySlug, locale: Locale): PageSection
   return [];
 }
 
+const studioFaqs: Record<Locale, FAQItem[]> = {
+  de: [
+    {
+      question: "Wo entstehen Bewerbungsfotos und Passbilder?",
+      answer: `Im Studio Hagen, ${hagen}, etwa 40 m². Dort arbeitet Aaron täglich, und diese Termine werden hier gebucht.`,
+    },
+    {
+      question: "Was unterscheidet ein Bewerbungsfoto von einem Passbild?",
+      answer:
+        "Das Bewerbungsfoto darf lächeln und zur Stelle passen. Das Passbild folgt den aktuellen biometrischen Vorgaben: frontal, neutraler Ausdruck, einfarbiger Hintergrund. Beides kann in einem Termin entstehen.",
+    },
+    {
+      question: "Was kostet der Termin?",
+      answer:
+        "Das Honorar ist auf Anfrage. Vor dem Termin legen wir fest, welche Bilder Sie brauchen: Bewerbungsfoto, Passbild oder beides.",
+    },
+    {
+      question: "Wie läuft das Shooting ab?",
+      answer:
+        "Wir klären die Verwendung, dann Licht und Hintergrund. Für das Bewerbungsfoto leite ich Haltung und Ausdruck an. Das Passbild wird nach den amtlichen Vorgaben aufgenommen.",
+    },
+  ],
+  en: [
+    {
+      question: "Where are application and passport photos taken?",
+      answer: `At the Hagen studio, ${hagen}, about 40 m². Aaron works there every day, and these sittings are booked there.`,
+    },
+    {
+      question: "How is an application photo different from a passport photo?",
+      answer:
+        "An application photo may smile and suit the role. A passport photo follows the current biometric rules: frontal, a neutral expression, and a plain background. Both can be made in the same visit.",
+    },
+    {
+      question: "What does a sitting cost?",
+      answer:
+        "The fee is on request. Before the appointment we confirm which pictures you need: an application photo, a passport photo, or both.",
+    },
+    {
+      question: "How does the sitting work?",
+      answer:
+        "We agree where the pictures will be used, then set the light and the background. For the application photo I direct posture and expression. The passport photo is made to the official rules.",
+    },
+  ],
+};
+
 export function getPageFaqs(slug: CategorySlug, locale: Locale): FAQItem[] {
   if (slug === "business-portraits") return businessFaqs[locale];
   if (slug === "wedding") return weddingFaqs[locale];
+  if (slug === "studio") return studioFaqs[locale];
   return [];
 }

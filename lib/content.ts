@@ -40,6 +40,7 @@ export type CategorySlug =
   | "wedding"
   | "real-estate"
   | "business-portraits"
+  | "studio"
   | "food"
   | "cinematography"
   | "social-media-management"
@@ -227,6 +228,50 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     faq: [
       { question: "Do you coach posing?", answer: "Yes, complete posing direction is included in every session." },
       { question: "Can sessions happen at our office?", answer: "Yes, on-site sessions are available for teams and individuals." },
+    ],
+  },
+  studio: {
+    slug: "studio",
+    navLabel: "Application Photos",
+    title: "Application Photos and Passport Photos in Hagen",
+    subtitle:
+      "Application photos and biometric passport photos at the Hagen studio, Eckeseyer Str. 133.",
+    themeColor: "#446E8B",
+    heroImage: "/business-portraits/hero/businessportrait-hero-frau-flieder-blazer.webp",
+    portfolioImages: buildPortfolio("studio"),
+    services: [
+      {
+        title: "Application Photos",
+        description:
+          "Portraits for a job application, a CV, and a company profile. Light, background, and expression are set for the place the picture will be used.",
+        image: "/business-portraits/portfolio/businessfoto-frau-weisse-bluse-studio.webp",
+      },
+      {
+        title: "Passport Photos",
+        description:
+          "Biometric photographs for a German passport, an identity card, and a visa. The portrait is frontal, with a neutral expression, on a plain background, following the current official rules.",
+        image: "/business-portraits/portfolio/linkedin-foto-frau-grauer-hintergrund.webp",
+      },
+      {
+        title: "LinkedIn and Xing Portraits",
+        description:
+          "A portrait from the same sitting that still works as a profile picture, so the person on the application and the person on the profile are recognisably the same.",
+        image: "/business-portraits/portfolio/mitarbeiterfoto-frau-sitzend-grau.webp",
+      },
+    ],
+    aboutText:
+      "I am Aaron Bowser. Application photos and passport photos are made at the Hagen studio, Eckeseyer Str. 133, about 40 m². I work there every day, and these sittings are booked there.\n\nAn application photo and a passport photo are different pictures. For the application we agree where it will be seen, then I direct posture and expression. The passport photo follows the current biometric rules: a frontal portrait, a neutral expression, and a plain background. Both can be made in the same visit.",
+    aboutImage:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
+    faq: [
+      {
+        question: "Where are application and passport photos taken?",
+        answer: "At the Hagen studio, Eckeseyer Str. 133, 58089 Hagen.",
+      },
+      {
+        question: "What does a sitting cost?",
+        answer: "The fee is on request. We confirm the pictures you need before the appointment.",
+      },
     ],
   },
   food: {

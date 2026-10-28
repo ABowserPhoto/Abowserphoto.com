@@ -3,14 +3,14 @@
  * localized path on this app instead of redirecting the browser onto a
  * `/de/...` or `/en/...` folder of the main site.
  *
- * `studio.` has no category route of its own, so it serves the localized
- * homepage. The others serve one category landing page.
+ * `studio.` serves the Bewerbungsfotos / application-photos category.
+ * The others serve one category landing page each.
  */
 export const NICHE_HOSTS = [
   { prefix: "immo.", basePath: "/real-estate" },
   { prefix: "food.", basePath: "/food" },
   { prefix: "wedding.", basePath: "/wedding" },
-  { prefix: "studio.", basePath: "/" },
+  { prefix: "studio.", basePath: "/application-photos" },
 ] as const;
 
 export type NicheHost = (typeof NICHE_HOSTS)[number];

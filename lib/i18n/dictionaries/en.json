@@ -33,6 +33,7 @@
       "food": "Food",
       "real-estate": "Real Estate",
       "business-portraits": "Business Portraits",
+      "studio": "Application Photos",
       "cinematography": "Cinematography",
       "social-media-management": "Social Media Management",
       "commercial": "Commercial"
@@ -69,6 +70,10 @@
     "business-portraits": {
       "title": "Business Portraits in Hagen and Solingen",
       "description": "Business portraits at the Hagen studio, where sessions usually take place. Larger teams at the Solingen studio, by appointment only, or at your office."
+    },
+    "studio": {
+      "title": "Application Photos and Passport Photos in Hagen",
+      "description": "Application photos and biometric passport photos at the Hagen studio, Eckeseyer Str. 133. Application portraits, passport photos, and LinkedIn pictures in one visit."
     },
     "cinematography": {
       "title": "Cinematography & Brand Films",

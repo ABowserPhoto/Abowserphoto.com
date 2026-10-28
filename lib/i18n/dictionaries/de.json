@@ -33,6 +33,7 @@
       "food": "Food",
       "real-estate": "Immobilien",
       "business-portraits": "Business-Porträts",
+      "studio": "Bewerbungsfotos",
       "cinematography": "Film & Video",
       "social-media-management": "Social Media",
       "commercial": "Commercial"
@@ -69,6 +70,10 @@
     "business-portraits": {
       "title": "Business-Porträts in Hagen & Solingen",
       "description": "Business-Porträts im Studio Hagen, dem Alltagstudio. Größere Teams im Studio Solingen, nur nach Termin. Shootings auch im Büro."
+    },
+    "studio": {
+      "title": "Bewerbungsfotos und Passbilder in Hagen",
+      "description": "Bewerbungsfotos und biometrische Passbilder im Studio Hagen, Eckeseyer Str. 133. Bewerbung, Passbild und LinkedIn-Porträt in einem Termin."
     },
     "cinematography": {
       "title": "Filmproduktion & Brand Films",

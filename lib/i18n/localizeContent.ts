@@ -192,6 +192,30 @@ const germanCategoryCopy: Partial<
       },
     ],
   },
+  studio: {
+    navLabel: "Bewerbungsfotos",
+    title: "Bewerbungsfotos und Passbilder in Hagen",
+    subtitle: "Bewerbungsfotos und biometrische Passbilder im Studio Hagen, Eckeseyer Str. 133.",
+    aboutText:
+      "Ich bin Aaron Bowser. Bewerbungsfotos und Passbilder entstehen im Studio Hagen, Eckeseyer Str. 133, auf etwa 40 m². Dort arbeite ich täglich, und diese Termine werden hier gebucht.\n\nEin Bewerbungsfoto und ein Passbild sind zwei verschiedene Bilder. Für die Bewerbung klären wir, wo das Foto erscheinen soll, danach leite ich Haltung und Ausdruck an. Das Passbild folgt den aktuellen biometrischen Vorgaben: frontal, mit neutralem Ausdruck, vor einem einfarbigen Hintergrund. Beides kann in einem Termin entstehen.",
+    services: [
+      {
+        title: "Bewerbungsfotos",
+        description:
+          "Porträts für Bewerbung, Lebenslauf und Firmenprofil. Licht, Hintergrund und Ausdruck richten sich danach, wo das Bild verwendet wird.",
+      },
+      {
+        title: "Passbilder",
+        description:
+          "Biometrische Aufnahmen für Reisepass, Personalausweis und Visum. Das Porträt ist frontal, der Ausdruck neutral, der Hintergrund einfarbig, nach den aktuellen amtlichen Vorgaben.",
+      },
+      {
+        title: "LinkedIn- und Xing-Porträts",
+        description:
+          "Ein Porträt aus demselben Termin, das als Profilbild funktioniert, damit die Person in der Bewerbung und im Profil dieselbe bleibt.",
+      },
+    ],
+  },
   cinematography: {
     navLabel: "Film & Video",
     title: "Filmproduktion",

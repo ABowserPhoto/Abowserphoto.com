@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomePortal from "../../components/HomePortal";
-import { getCategoryHeroes, getLogoUrl } from "../../lib/cms";
-import { categoryNavigation } from "../../lib/content";
+import { getLogoUrl } from "../../lib/cms";
+import { readHomeBaseImages, readHomeIntroVideo, readPortalHeroSets } from "../../lib/gallery";
 import { isLocale, type Locale } from "../../lib/i18n/config";
 import { getDictionary } from "../../lib/i18n/getDictionary";
 import { buildHomeMetadata } from "../../lib/i18n/seo";
@@ -22,14 +22,17 @@ export default async function HomePage({ params }: HomePageProps) {
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const dictionary = await getDictionary(locale);
-  const categorySlugs = categoryNavigation.map((item) => item.slug);
-  const categoryHeroes = getCategoryHeroes(categorySlugs);
   const logoUrl = getLogoUrl();
+  const introVideoUrl = readHomeIntroVideo(locale);
+  const baseImages = readHomeBaseImages(locale);
+  const portalHeroes = readPortalHeroSets(locale);
 
   return (
     <HomePortal
-      categoryHeroes={categoryHeroes}
       logoUrl={logoUrl}
+      introVideoUrl={introVideoUrl}
+      baseImages={baseImages}
+      portalHeroes={portalHeroes}
       locale={locale}
       dictionary={dictionary}
     />
