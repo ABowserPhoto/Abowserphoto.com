@@ -79,10 +79,25 @@ export function buildRootMetadata(): Metadata {
   };
 }
 
+/**
+ * Root layout metadata uses `title.template` (`%s | Brand`). A plain string
+ * title is interpolated into that template. Pass `exact` when the dictionary
+ * title is already the full document title so the brand is not appended twice.
+ */
+function resolveDocumentTitle(title: string, brand: string, exact: boolean): {
+  title: Metadata["title"];
+  openGraphTitle: string;
+} {
+  if (exact) {
+    return { title: { absolute: title }, openGraphTitle: title };
+  }
+  return { title, openGraphTitle: `${title} | ${brand}` };
+}
+
 export function buildHomeMetadata(locale: Locale): Metadata {
   const dict = getDictionarySync(locale);
   const path = withLocale("/", locale);
-  const title = dict.seo.home.title;
+  const { title, openGraphTitle } = resolveDocumentTitle(dict.seo.home.title, dict.brand, true);
   return {
     title,
     description: dict.seo.home.description,
@@ -90,7 +105,7 @@ export function buildHomeMetadata(locale: Locale): Metadata {
       canonical: absoluteUrl(path),
       languages: languageAlternates((entry) => withLocale("/", entry)),
     },
-    openGraph: openGraphFor(locale, path, `${title} | ${dict.brand}`, dict.seo.home.description),
+    openGraph: openGraphFor(locale, path, openGraphTitle, dict.seo.home.description),
   };
 }
 
@@ -109,14 +124,19 @@ export function buildCategoryMetadata(locale: Locale, slug: CategorySlug): Metad
           },
         ]
       : [ogImage];
+  const { title, openGraphTitle } = resolveDocumentTitle(
+    seo.title,
+    dict.brand,
+    slug === "real-estate"
+  );
   return {
-    title: seo.title,
+    title,
     description: seo.description,
     alternates: {
       canonical: absoluteUrl(path),
       languages: languageAlternates((entry) => withLocale(categoryPath(slug, entry), entry)),
     },
-    openGraph: openGraphFor(locale, path, `${seo.title} | ${dict.brand}`, seo.description, images),
+    openGraph: openGraphFor(locale, path, openGraphTitle, seo.description, images),
   };
 }
 
