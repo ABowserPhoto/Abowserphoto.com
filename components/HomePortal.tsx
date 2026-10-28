@@ -18,11 +18,12 @@ const majorMono = Major_Mono_Display({
   display: "swap",
 });
 
-/** Initial A / B are this many times the other letters in the hero name. */
+/** First letters (lowercase a / b) are this many times the other letters. */
 const HERO_CAP_SCALE = 1.65;
 /**
- * Major Mono Display advance width (740 / 1000 upem). Every glyph, including "0",
- * is 0.74em, so a string's width is predictable from the font size.
+ * Major Mono Display advance width (740 / 1000 upem). Lowercase and uppercase
+ * glyphs share this 0.74em advance, so the 60% column width does not change
+ * when the hero uses the lowercase forms.
  */
 const MAJOR_MONO_ADVANCE_EM = 0.74;
 const HERO_TRACKING_EM = 0.04;
@@ -81,7 +82,7 @@ const HOVER_FADE = { duration: 0.8, ease: "easeInOut" as const };
 const CENTER_LOGO_CLASS =
   "h-auto max-h-[35vh] w-[calc(40vw-12.8px)] max-w-none object-contain brightness-0 invert drop-shadow-lg";
 
-const NAME_CLASS = `${majorMono.className} mx-auto w-fit whitespace-nowrap text-center uppercase leading-none tracking-[0.04em] text-[#F4F1ED]`;
+const NAME_CLASS = `${majorMono.className} mx-auto w-fit whitespace-nowrap text-center normal-case leading-none tracking-[0.04em] text-[#F4F1ED]`;
 
 /** Was 2.5s. 1.25× so the name slide-in takes 25% longer. Link timing below stays locked to this. */
 const NAME_ENTRANCE_S = 2.5 * 1.25;
@@ -270,7 +271,7 @@ export default function HomePortal({
             aria-hidden
             style={{ x: aaronX, opacity: nameOpacity, fontSize: heroNameFontSize(5) }}
           >
-            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>A</span>{"ARON"}
+            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>a</span>{"aron"}
           </motion.p>
         </motion.div>
       </div>
@@ -281,7 +282,7 @@ export default function HomePortal({
             aria-hidden
             style={{ x: bowserX, opacity: nameOpacity, fontSize: heroNameFontSize(6) }}
           >
-            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>B</span>{"OWSER"}
+            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>b</span>{"owser"}
           </motion.p>
         </motion.div>
       </div>
