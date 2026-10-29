@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { Major_Mono_Display } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -11,6 +12,29 @@ import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
 import { categoryPath } from "../lib/routes";
 import LanguageSwitcher from "./LanguageSwitcher";
+
+const majorMono = Major_Mono_Display({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+/** First letters (uppercase A / B) are this many times the lowercase letters that follow. */
+const HERO_CAP_SCALE = 1.65;
+/**
+ * Major Mono Display advance width (740 / 1000 upem). Lowercase and uppercase
+ * glyphs share this 0.74em advance, so mixing an uppercase initial with
+ * lowercase letters does not change the 60% column width.
+ */
+const MAJOR_MONO_ADVANCE_EM = 0.74;
+const HERO_TRACKING_EM = 0.04;
+
+/** Font size that makes one hero word about 60% of its column (the column is the container). */
+function heroNameFontSize(letterCount: number) {
+  const widthEm =
+    (HERO_CAP_SCALE + letterCount - 1) * MAJOR_MONO_ADVANCE_EM + HERO_TRACKING_EM * (letterCount - 1);
+  return `calc(60cqw / ${widthEm})`;
+}
 
 const PORTAL_CATEGORIES = [
   "commercial",
@@ -59,8 +83,10 @@ const HOVER_FADE = { duration: 0.8, ease: "easeInOut" as const };
 const CENTER_LOGO_CLASS =
   "h-auto max-h-[35vh] w-[calc(40vw-12.8px)] max-w-none object-contain brightness-0 invert drop-shadow-lg";
 
-const NAME_CLASS =
-  "mx-auto w-[75%] text-center font-black uppercase leading-none tracking-[0.04em] text-[#F4F1ED] text-[5vw] md:text-[6vw]";
+const NAME_CLASS = `${majorMono.className} mx-auto w-fit whitespace-nowrap text-center normal-case leading-none tracking-[0.04em] text-[#F4F1ED]`;
+
+/** Was 2.5s. 1.25× so the name slide-in takes 25% longer. Link timing below stays locked to this. */
+const NAME_ENTRANCE_S = 2.5 * 1.25;
 
 type HomePortalProps = {
   logoUrl: string | null;
@@ -212,7 +238,7 @@ export default function HomePortal({
 
   useEffect(() => {
     if (reduceMotion === null) return;
-    const timeoutId = window.setTimeout(() => setLinksReady(true), reduceMotion ? 0 : 2500);
+    const timeoutId = window.setTimeout(() => setLinksReady(true), reduceMotion ? 0 : NAME_ENTRANCE_S * 1000);
     return () => window.clearTimeout(timeoutId);
   }, [reduceMotion]);
 
@@ -232,7 +258,7 @@ export default function HomePortal({
   const activeKey = activeIndex === null ? null : PORTAL_CATEGORIES[activeIndex];
   const hoveredKey = hoverEnabled ? activeKey : null;
   const hoveredHero = hoveredKey ? portalHeroes[hoveredKey] : null;
-  const nameEntrance = { duration: reduceMotion ? 0 : 2.5, ease: NAME_EASE };
+  const nameEntrance = { duration: reduceMotion ? 0 : NAME_ENTRANCE_S, ease: NAME_EASE };
 
   return (
     <main ref={trackRef} className="relative h-[200vh] bg-black">
@@ -275,17 +301,25 @@ export default function HomePortal({
         />
       </div>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-30 flex w-1/3 items-center justify-center">
+      <div className="@container pointer-events-none absolute inset-y-0 left-0 z-30 flex w-1/3 items-center justify-center">
         <motion.div className="w-full" initial={{ x: "-100vw" }} animate={{ x: 0 }} transition={nameEntrance}>
-          <motion.p className={NAME_CLASS} aria-hidden style={{ x: aaronX, opacity: nameOpacity }}>
-            AARON
+          <motion.p
+            className={NAME_CLASS}
+            aria-hidden
+            style={{ x: aaronX, opacity: nameOpacity, fontSize: heroNameFontSize(5) }}
+          >
+            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>A</span>{"aron"}
           </motion.p>
         </motion.div>
       </div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-30 flex w-1/3 items-center justify-center">
+      <div className="@container pointer-events-none absolute inset-y-0 right-0 z-30 flex w-1/3 items-center justify-center">
         <motion.div className="w-full" initial={{ x: "100vw" }} animate={{ x: 0 }} transition={nameEntrance}>
-          <motion.p className={NAME_CLASS} aria-hidden style={{ x: bowserX, opacity: nameOpacity }}>
-            BOWSER
+          <motion.p
+            className={NAME_CLASS}
+            aria-hidden
+            style={{ x: bowserX, opacity: nameOpacity, fontSize: heroNameFontSize(6) }}
+          >
+            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>B</span>{"owser"}
           </motion.p>
         </motion.div>
       </div>
@@ -334,7 +368,7 @@ export default function HomePortal({
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: reduceMotion ? 0 : 2.5 + (randomDelays[panel.index] ?? 0),
+              delay: reduceMotion ? 0 : NAME_ENTRANCE_S + (randomDelays[panel.index] ?? 0),
               duration: reduceMotion ? 0 : 0.55,
               ease: NAME_EASE,
             }}
