@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound, permanentRedirect } from "next/navigation";
 import CommercialPortfolioArchive from "../../../../components/CommercialPortfolioArchive";
 import { categoryContentMap } from "../../../../lib/content";
@@ -22,7 +23,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: rawLocale, category } = await params;
   if (!isLocale(rawLocale) || resolveCategorySegment(category) !== "commercial") return {};
-  return buildSimplePageMetadata(rawLocale, "commercial-portfolio");
+  const host = (await headers()).get("host");
+  return buildSimplePageMetadata(rawLocale, "commercial-portfolio", host);
 }
 
 export default async function CommercialPortfolioPage({ params }: PageProps) {

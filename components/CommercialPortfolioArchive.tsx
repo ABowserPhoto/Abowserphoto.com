@@ -5,7 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
+import { useLocale } from "../lib/i18n/LocaleProvider";
 import type { Dictionary } from "../lib/i18n/getDictionary";
+import { nicheHostForHostname } from "../lib/subdomains";
 import PortfolioGrid, { type PortfolioImage } from "./PortfolioGrid";
 
 type CommercialPortfolioArchiveProps = {
@@ -21,7 +23,10 @@ export default function CommercialPortfolioArchive({
   locale,
   dictionary,
 }: CommercialPortfolioArchiveProps) {
+  const { publicHost } = useLocale();
   const [selectedImage, setSelectedImage] = useState<PortfolioImage | null>(null);
+  const onCommercialHost = nicheHostForHostname(publicHost)?.slug === "commercial";
+  const backHref = onCommercialHost ? `/${locale}` : withLocale("/commercial", locale);
 
   useEffect(() => {
     function onEscape(event: KeyboardEvent) {
@@ -40,7 +45,7 @@ export default function CommercialPortfolioArchive({
     <div className="min-h-screen bg-black text-[#F4F1ED]">
       <header className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-4 pt-10 sm:px-6 lg:px-8">
         <Link
-          href={withLocale("/commercial", locale)}
+          href={backHref}
           className="inline-flex w-fit items-center text-[11px] font-semibold uppercase tracking-[0.28em] text-white/55 transition-colors duration-300 hover:text-[#F4F1ED]"
         >
           ← {dictionary.nav.back}
