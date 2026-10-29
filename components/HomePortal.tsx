@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, use
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { MotionValue } from "framer-motion";
 import type { PortalHeroSet } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
@@ -82,6 +83,39 @@ type Panel = {
   seoLabel: string;
 };
 
+const GLYPHS = ["X", "#", "8", "%"] as const;
+
+function scrambledText(text: string, progress: number) {
+  const revealCount = Math.round(Math.min(1, Math.max(0, progress)) * text.length);
+  let result = "";
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (character === " ") {
+      result += " ";
+    } else if (index < revealCount) {
+      result += character;
+    } else {
+      result += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+    }
+  }
+  return result;
+}
+
+function ScrambleText({ progress, text }: { progress: MotionValue<number>; text: string }) {
+  const reduceMotion = useReducedMotion();
+  const [value, setValue] = useState(text);
+
+  useMotionValueEvent(progress, "change", (current) => {
+    setValue(reduceMotion ? text : scrambledText(text, current));
+  });
+
+  useEffect(() => {
+    setValue(reduceMotion ? text : scrambledText(text, progress.get()));
+  }, [progress, reduceMotion, text]);
+
+  return <span aria-hidden="true">{value}</span>;
+}
+
 function StageImage({ src, sizes }: { src: string; sizes: string }) {
   const position = "object-cover object-top";
 
@@ -151,13 +185,16 @@ export default function HomePortal({
     target: trackRef,
     offset: ["start start", "end end"],
   });
-  const videoOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const aaronX = useTransform(scrollYProgress, [0, 1], ["0vw", "-100vw"]);
-  const bowserX = useTransform(scrollYProgress, [0, 1], ["0vw", "100vw"]);
-  const nameOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const baseOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const brandingOpacity = useTransform(scrollYProgress, [0.25, 0.9], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0.25, 0.9], [-50, 0]);
+  // Ranges run through 0 and 1 so the scroll-linked animation holds each phase
+  // instead of easing back toward the element's starting style.
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
+  const aaronX = useTransform(scrollYProgress, [0, 0.4, 1], ["0vw", "-100vw", "-100vw"]);
+  const bowserX = useTransform(scrollYProgress, [0, 0.4, 1], ["0vw", "100vw", "100vw"]);
+  const nameOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
+  const baseOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0, 1, 1]);
+  const logoOpacity = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 0, 1, 1]);
+  const textProgress = useTransform(scrollYProgress, [0, 0.7, 1], [0, 0, 1]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.7, 0.78, 1], [0, 0, 1, 1]);
 
   const panels = useMemo<Panel[]>(
     () =>
@@ -180,12 +217,12 @@ export default function HomePortal({
   }, [reduceMotion]);
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
-    const next = value > 0.45;
+    const next = value > 0.4;
     setHoverEnabled((current) => (current === next ? current : next));
 
     const video = videoRef.current;
     if (!video) return;
-    if (value > 0.98) {
+    if (value >= 0.4) {
       if (!video.paused) video.pause();
     } else if (video.paused) {
       void video.play().catch(() => undefined);
@@ -256,7 +293,7 @@ export default function HomePortal({
       {/* Bottom padding on desktop keeps the large signature clear of the bottom menu. */}
       <div className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-start px-4 pt-20 md:justify-center md:pb-32 md:pt-0">
         {logoUrl ? (
-          <motion.div style={{ opacity: brandingOpacity }}>
+          <motion.div style={{ opacity: logoOpacity }}>
             {logoUrl.toLowerCase().endsWith(".svg") ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} alt={dictionary.home.logoLabel} className={CENTER_LOGO_CLASS} />
@@ -274,10 +311,11 @@ export default function HomePortal({
           </motion.div>
         ) : null}
         <motion.h1
-          style={{ opacity: brandingOpacity, y: titleY }}
+          style={{ opacity: titleOpacity }}
           className="mt-4 text-center text-xl font-bold uppercase tracking-widest text-white/80 drop-shadow-lg lg:text-2xl"
         >
-          {dictionary.home.headline}
+          <span className="sr-only">CHOOSE YOUR VISUAL STORY</span>
+          <ScrambleText progress={textProgress} text="CHOOSE YOUR VISUAL STORY" />
         </motion.h1>
       </div>
 
