@@ -234,12 +234,12 @@ export default function HomePortal({
         key,
         index,
         label: dictionary.home.niches[key],
-        href: portalCategoryUrl(key, clientHost || publicHost),
+        href: portalCategoryUrl(key, { host: clientHost || publicHost, locale }),
         hoverColor: HOVER_COLOR[key],
         seoTitle: dictionary.seo[key].title,
         seoLabel: `${dictionary.home.niches[key]} — ${dictionary.nav.services}`,
       })),
-    [clientHost, dictionary, publicHost]
+    [clientHost, dictionary, locale, publicHost]
   );
 
   useEffect(() => {

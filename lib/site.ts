@@ -22,7 +22,7 @@ export const SITE_URL = normalizeSiteUrl(configuredSiteUrl);
 
 /**
  * Google Analytics 4 measurement ID (gtag.js / Google tag).
- * studio.aaronbowser-photography.com should reuse this same ID.
+ * studio.abowserphoto.com should reuse this same ID.
  */
 export const GA_MEASUREMENT_ID = "G-L8XCWNTH3N";
 

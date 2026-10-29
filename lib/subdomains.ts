@@ -1,37 +1,37 @@
-import type { CategorySlug } from "./content";
-import { SITE_URL } from "./site";
-
 /**
- * Niche hosts stay on their own hostname. `proxy.ts` rewrites them to a
- * localized path on this app instead of redirecting the browser onto a
- * `/de/...` or `/en/...` folder of the main site.
+ * Niche hosts stay on their own hostname. `proxy.ts` rewrites `/`, `/de`, and
+ * `/en` to a localized category path on this app instead of redirecting the
+ * browser onto the main site.
  *
- * `studio.` serves the Bewerbungsfotos / application-photos category.
- * The others serve one category landing page each.
+ * Portal links always use `<sub>.abowserphoto.com`, on whichever apex the
+ * visitor arrived. Localhost (and `*.localhost`) keeps the dev port so the
+ * same hosts can be opened locally.
+ *
+ * `studio.` serves Bewerbungsfotos / application photos. Each other prefix
+ * serves one category. English and German paths come from `CATEGORY_SEGMENTS`.
  */
-export const NICHE_HOSTS = [
-  { prefix: "immo.", basePath: "/real-estate" },
-  { prefix: "food.", basePath: "/food" },
-  { prefix: "wedding.", basePath: "/wedding" },
-  { prefix: "studio.", basePath: "/application-photos" },
-] as const;
+import type { CategorySlug } from "./content";
+import { isLocale, stripLocaleFromPathname, withLocale, type Locale } from "./i18n/config";
+import { CATEGORY_SEGMENTS, resolveCategorySegment } from "./routes";
 
-export type NicheHost = (typeof NICHE_HOSTS)[number];
+export const PORTAL_APEX = "abowserphoto.com";
 
-export type PortalCategorySlug = Extract<
-  CategorySlug,
-  | "commercial"
-  | "real-estate"
-  | "wedding"
-  | "food"
-  | "business-portraits"
-  | "cinematography"
-  | "social-media-management"
-  | "studio"
->;
+/** Homepage portal order. Subdomain labels are the public host prefixes. */
+export const PORTAL_CATEGORY_ORDER = [
+  "commercial",
+  "real-estate",
+  "wedding",
+  "food",
+  "business-portraits",
+  "cinematography",
+  "social-media-management",
+  "studio",
+] as const satisfies readonly CategorySlug[];
 
-/** Portal menu labels → first hostname segment (e.g. `immo.example.com`). */
-export const PORTAL_CATEGORY_SUBDOMAIN: Record<PortalCategorySlug, string> = {
+export type PortalCategory = (typeof PORTAL_CATEGORY_ORDER)[number];
+export type PortalCategorySlug = PortalCategory;
+
+export const PORTAL_CATEGORY_SUBDOMAIN: Record<PortalCategory, string> = {
   commercial: "commercial",
   "real-estate": "immo",
   wedding: "wedding",
@@ -42,53 +42,120 @@ export const PORTAL_CATEGORY_SUBDOMAIN: Record<PortalCategorySlug, string> = {
   studio: "studio",
 };
 
-const PORTAL_SUBDOMAIN_PREFIXES = new Set([
-  ...Object.values(PORTAL_CATEGORY_SUBDOMAIN),
-  ...NICHE_HOSTS.map((entry) => entry.prefix.slice(0, -1)),
-]);
+export const NICHE_HOSTS = PORTAL_CATEGORY_ORDER.map((slug) => {
+  const subdomain = PORTAL_CATEGORY_SUBDOMAIN[slug];
+  return {
+    prefix: `${subdomain}.`,
+    subdomain,
+    slug,
+    /** English segment. `withLocale` applies the German public path. */
+    basePath: `/${CATEGORY_SEGMENTS[slug].en}`,
+  };
+});
 
-function rootDomainFromSiteUrl() {
-  try {
-    return new URL(SITE_URL).hostname.replace(/^www\./, "");
-  } catch {
-    return "abowserphoto.com";
-  }
-}
-
-/** Apex domain without `www.` or a known category subdomain prefix. */
-export function rootDomainFromHost(host: string): string {
-  const bare = host.split(":")[0]?.toLowerCase() ?? "";
-  if (!bare || bare === "localhost" || bare === "127.0.0.1") {
-    return rootDomainFromSiteUrl();
-  }
-
-  const withoutWww = bare.replace(/^www\./, "");
-  const labels = withoutWww.split(".");
-  if (labels.length >= 3 && PORTAL_SUBDOMAIN_PREFIXES.has(labels[0] ?? "")) {
-    return labels.slice(1).join(".");
-  }
-
-  return withoutWww;
-}
+export type NicheHost = (typeof NICHE_HOSTS)[number];
 
 /**
- * Absolute URL for a category niche host. Uses the apex of the current site
- * (abowserphoto.com, aaronbowser-photography.com, etc.) so links work across
- * the three production domains and from localhost during development.
+ * Pages that are not the niche landing but must still render on that host:
+ * legal, account, booking, and this category's own routes (including the
+ * commercial portfolio).
  */
-export function getSubdomainUrl(subdomain: string, host?: string): string {
-  const resolvedHost =
-    host ?? (typeof window !== "undefined" ? window.location.host : "");
-  const root = rootDomainFromHost(resolvedHost);
-  const protocol = root === "localhost" || root.startsWith("127.0.0.1") ? "http:" : "https:";
-  return `${protocol}//${subdomain}.${root}/`;
-}
-
-export function portalCategoryUrl(slug: PortalCategorySlug, host?: string): string {
-  return getSubdomainUrl(PORTAL_CATEGORY_SUBDOMAIN[slug], host);
-}
+const NICHE_SHARED_ROOTS = new Set([
+  "impressum",
+  "datenschutz",
+  "cookie-richtlinie",
+  "account",
+  "book",
+  "booking",
+]);
 
 export function nicheHostForHostname(hostname: string): NicheHost | null {
   const host = hostname.toLowerCase().split(":")[0] ?? "";
   return NICHE_HOSTS.find((entry) => host.startsWith(entry.prefix)) ?? null;
+}
+
+function splitHost(host: string) {
+  const trimmed = host.trim();
+  if (trimmed.startsWith("[")) {
+    const end = trimmed.indexOf("]");
+    const hostname = (end >= 0 ? trimmed.slice(1, end) : trimmed).toLowerCase();
+    const port = end >= 0 && trimmed[end + 1] === ":" ? trimmed.slice(end + 2) : "";
+    return { hostname, port };
+  }
+  const [hostname = "", port = ""] = trimmed.split(":");
+  return { hostname: hostname.toLowerCase(), port };
+}
+
+function isDevHostname(hostname: string) {
+  return (
+    hostname === "localhost" ||
+    hostname.endsWith(".localhost") ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1"
+  );
+}
+
+/** Origin for a niche label. Production is always the short apex. */
+export function nicheOrigin(subdomain: string, host?: string | null) {
+  const label = subdomain.trim().toLowerCase();
+  const { hostname, port } = splitHost(host ?? "");
+  if (hostname && isDevHostname(hostname)) {
+    const portSuffix = port ? `:${port}` : "";
+    return `http://${label}.localhost${portSuffix}`;
+  }
+  return `https://${label}.${PORTAL_APEX}`;
+}
+
+export function getSubdomainUrl(
+  subdomain: string,
+  options: { host?: string | null; locale?: Locale; pathname?: string } = {}
+) {
+  const origin = nicheOrigin(subdomain, options.host);
+  const pathname = options.pathname ?? (options.locale ? `/${options.locale}` : "/");
+  if (pathname === "/") return `${origin}/`;
+  return `${origin}${pathname.startsWith("/") ? pathname : `/${pathname}`}`;
+}
+
+/** Public URL for a homepage portal category. Includes the locale when given. */
+export function portalCategoryUrl(
+  slug: PortalCategory,
+  options: { host?: string | null; locale?: Locale } = {}
+) {
+  return getSubdomainUrl(PORTAL_CATEGORY_SUBDOMAIN[slug], options);
+}
+
+function localeLessParts(pathname: string) {
+  return stripLocaleFromPathname(pathname).split("/").filter(Boolean);
+}
+
+/** `/`, `/de`, `/en`, or exactly this niche's category path (no extra segments). */
+export function isNicheCategoryLanding(pathname: string, slug: CategorySlug) {
+  const visible = pathname.split("/").filter(Boolean);
+  if (visible.length === 0) return true;
+  if (visible.length === 1 && isLocale(visible[0] ?? "")) return true;
+  const parts = localeLessParts(pathname);
+  return parts.length === 1 && resolveCategorySegment(parts[0] ?? "") === slug;
+}
+
+/**
+ * True when this path should be served as itself on a niche host.
+ * Bare `/`, `/de`, and `/en` are landings and return false.
+ */
+export function isNicheOnHostPath(pathname: string, slug: CategorySlug) {
+  const parts = localeLessParts(pathname);
+  const first = parts[0];
+  if (!first) return false;
+  if (NICHE_SHARED_ROOTS.has(first)) return true;
+  return resolveCategorySegment(first) === slug;
+}
+
+/**
+ * Language switch on a niche host. The landing stays on `/de` or `/en` so the
+ * category folder never enters the address bar. Subpages keep their path.
+ */
+export function nicheLocaleSwitchPath(pathname: string, locale: Locale, niche: NicheHost) {
+  if (!isNicheCategoryLanding(pathname, niche.slug) && isNicheOnHostPath(pathname, niche.slug)) {
+    return withLocale(stripLocaleFromPathname(pathname), locale);
+  }
+  return `/${locale}`;
 }
