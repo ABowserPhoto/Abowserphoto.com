@@ -3,14 +3,12 @@
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { Major_Mono_Display } from "next/font/google";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { MotionValue } from "framer-motion";
 import type { PortalHeroSet } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
-import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
-import { categoryPath } from "../lib/routes";
+import { type PortalCategorySlug, portalCategoryUrl } from "../lib/subdomains";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const majorMono = Major_Mono_Display({
@@ -45,13 +43,11 @@ const PORTAL_CATEGORIES = [
   "cinematography",
   "social-media-management",
   "studio",
-] as const;
-
-type PortalCategory = (typeof PORTAL_CATEGORIES)[number];
+] as const satisfies readonly PortalCategorySlug[];
 
 type HoverLayout = "triptych" | "landscape-image" | "landscape-video";
 
-const HOVER_LAYOUT: Record<PortalCategory, HoverLayout> = {
+const HOVER_LAYOUT: Record<PortalCategorySlug, HoverLayout> = {
   commercial: "triptych",
   "business-portraits": "triptych",
   "social-media-management": "triptych",
@@ -62,7 +58,7 @@ const HOVER_LAYOUT: Record<PortalCategory, HoverLayout> = {
   cinematography: "landscape-video",
 };
 
-const HOVER_COLOR: Record<PortalCategory, string> = {
+const HOVER_COLOR: Record<PortalCategorySlug, string> = {
   commercial: "hover:bg-amber-500/60",
   "real-estate": "hover:bg-orange-600/60",
   wedding: "hover:bg-red-700/60",
@@ -97,10 +93,12 @@ type HomePortalProps = {
   portalHeroes: Record<string, PortalHeroSet>;
   locale: Locale;
   dictionary: Dictionary;
+  /** Request host for building absolute niche URLs on the server. */
+  publicHost?: string;
 };
 
 type Panel = {
-  key: PortalCategory;
+  key: PortalCategorySlug;
   index: number;
   label: string;
   href: string;
@@ -200,7 +198,15 @@ export default function HomePortal({
   portalHeroes,
   locale,
   dictionary,
+  publicHost = "",
 }: HomePortalProps) {
+  const [clientHost, setClientHost] = useState(publicHost);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setClientHost(window.location.host);
+    }
+  }, []);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoverEnabled, setHoverEnabled] = useState(false);
   const [linksReady, setLinksReady] = useState(false);
@@ -228,12 +234,12 @@ export default function HomePortal({
         key,
         index,
         label: dictionary.home.niches[key],
-        href: withLocale(categoryPath(key, locale), locale),
+        href: portalCategoryUrl(key, clientHost || publicHost),
         hoverColor: HOVER_COLOR[key],
         seoTitle: dictionary.seo[key].title,
         seoLabel: `${dictionary.home.niches[key]} — ${dictionary.nav.services}`,
       })),
-    [dictionary, locale]
+    [clientHost, dictionary, publicHost]
   );
 
   useEffect(() => {
@@ -373,7 +379,7 @@ export default function HomePortal({
               ease: NAME_EASE,
             }}
           >
-            <Link
+            <a
               href={panel.href}
               title={panel.seoTitle}
               aria-label={panel.seoLabel}
@@ -387,7 +393,7 @@ export default function HomePortal({
               }`}
             >
               <span className="drop-shadow-md">{panel.label}</span>
-            </Link>
+            </a>
           </motion.div>
         ))}
       </nav>

@@ -193,7 +193,7 @@ const germanCategoryCopy: Partial<
     ],
   },
   studio: {
-    navLabel: "Bewerbungsfotos",
+    navLabel: "Studio Hagen",
     title: "Bewerbungsfotos und Passbilder in Hagen",
     subtitle: "Bewerbungsfotos und biometrische Passbilder im Studio Hagen, Eckeseyer Str. 133.",
     aboutText:
