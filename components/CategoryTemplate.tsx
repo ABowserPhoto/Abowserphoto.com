@@ -161,7 +161,7 @@ export default function CategoryTemplate({
         onSectionClick={handleSectionClick}
         themeColor={category.themeColor}
         lightSectionRef={aboutRef}
-        homeHref={withLocale("/", locale)}
+        homeHref="/"
         labels={{
           book: dictionary.nav.book,
           home: dictionary.nav.home,

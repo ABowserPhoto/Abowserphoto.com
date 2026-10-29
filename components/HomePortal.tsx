@@ -1,23 +1,53 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { Major_Mono_Display } from "next/font/google";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { MotionValue } from "framer-motion";
 import type { PortalHeroSet } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
-import { useLocale } from "../lib/i18n/LocaleProvider";
 import type { Dictionary } from "../lib/i18n/getDictionary";
-import { PORTAL_CATEGORY_ORDER, portalCategoryUrl } from "../lib/subdomains";
+import { type PortalCategorySlug, portalCategoryUrl } from "../lib/subdomains";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-const PORTAL_CATEGORIES = PORTAL_CATEGORY_ORDER;
+const majorMono = Major_Mono_Display({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
 
-type PortalCategory = (typeof PORTAL_CATEGORIES)[number];
+/** First letters (uppercase A / B) are this many times the lowercase letters that follow. */
+const HERO_CAP_SCALE = 1.65;
+/**
+ * Major Mono Display advance width (740 / 1000 upem). Lowercase and uppercase
+ * glyphs share this 0.74em advance, so mixing an uppercase initial with
+ * lowercase letters does not change the 60% column width.
+ */
+const MAJOR_MONO_ADVANCE_EM = 0.74;
+const HERO_TRACKING_EM = 0.04;
+
+/** Font size that makes one hero word about 60% of its column (the column is the container). */
+function heroNameFontSize(letterCount: number) {
+  const widthEm =
+    (HERO_CAP_SCALE + letterCount - 1) * MAJOR_MONO_ADVANCE_EM + HERO_TRACKING_EM * (letterCount - 1);
+  return `calc(60cqw / ${widthEm})`;
+}
+
+const PORTAL_CATEGORIES = [
+  "commercial",
+  "real-estate",
+  "wedding",
+  "food",
+  "business-portraits",
+  "cinematography",
+  "social-media-management",
+  "studio",
+] as const satisfies readonly PortalCategorySlug[];
 
 type HoverLayout = "triptych" | "landscape-image" | "landscape-video";
 
-const HOVER_LAYOUT: Record<PortalCategory, HoverLayout> = {
+const HOVER_LAYOUT: Record<PortalCategorySlug, HoverLayout> = {
   commercial: "triptych",
   "business-portraits": "triptych",
   "social-media-management": "triptych",
@@ -28,7 +58,7 @@ const HOVER_LAYOUT: Record<PortalCategory, HoverLayout> = {
   cinematography: "landscape-video",
 };
 
-const HOVER_COLOR: Record<PortalCategory, string> = {
+const HOVER_COLOR: Record<PortalCategorySlug, string> = {
   commercial: "hover:bg-amber-500/60",
   "real-estate": "hover:bg-orange-600/60",
   wedding: "hover:bg-red-700/60",
@@ -49,8 +79,10 @@ const HOVER_FADE = { duration: 0.8, ease: "easeInOut" as const };
 const CENTER_LOGO_CLASS =
   "h-auto max-h-[35vh] w-[calc(40vw-12.8px)] max-w-none object-contain brightness-0 invert drop-shadow-lg";
 
-const NAME_CLASS =
-  "mx-auto w-[75%] text-center font-black uppercase leading-none tracking-[0.04em] text-[#F4F1ED] text-[5vw] md:text-[6vw]";
+const NAME_CLASS = `${majorMono.className} mx-auto w-fit whitespace-nowrap text-center normal-case leading-none tracking-[0.04em] text-[#F4F1ED]`;
+
+/** Was 2.5s. 1.25× so the name slide-in takes 25% longer. Link timing below stays locked to this. */
+const NAME_ENTRANCE_S = 2.5 * 1.25;
 
 type HomePortalProps = {
   logoUrl: string | null;
@@ -61,10 +93,12 @@ type HomePortalProps = {
   portalHeroes: Record<string, PortalHeroSet>;
   locale: Locale;
   dictionary: Dictionary;
+  /** Request host for building absolute niche URLs on the server. */
+  publicHost?: string;
 };
 
 type Panel = {
-  key: PortalCategory;
+  key: PortalCategorySlug;
   index: number;
   label: string;
   href: string;
@@ -72,6 +106,39 @@ type Panel = {
   seoTitle: string;
   seoLabel: string;
 };
+
+const GLYPHS = ["X", "#", "8", "%"] as const;
+
+function scrambledText(text: string, progress: number) {
+  const revealCount = Math.round(Math.min(1, Math.max(0, progress)) * text.length);
+  let result = "";
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (character === " ") {
+      result += " ";
+    } else if (index < revealCount) {
+      result += character;
+    } else {
+      result += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+    }
+  }
+  return result;
+}
+
+function ScrambleText({ progress, text }: { progress: MotionValue<number>; text: string }) {
+  const reduceMotion = useReducedMotion();
+  const [value, setValue] = useState(text);
+
+  useMotionValueEvent(progress, "change", (current) => {
+    setValue(reduceMotion ? text : scrambledText(text, current));
+  });
+
+  useEffect(() => {
+    setValue(reduceMotion ? text : scrambledText(text, progress.get()));
+  }, [progress, reduceMotion, text]);
+
+  return <span aria-hidden="true">{value}</span>;
+}
 
 function StageImage({ src, sizes }: { src: string; sizes: string }) {
   const position = "object-cover object-top";
@@ -131,8 +198,15 @@ export default function HomePortal({
   portalHeroes,
   locale,
   dictionary,
+  publicHost = "",
 }: HomePortalProps) {
-  const { publicHost } = useLocale();
+  const [clientHost, setClientHost] = useState(publicHost);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setClientHost(window.location.host);
+    }
+  }, []);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoverEnabled, setHoverEnabled] = useState(false);
   const [linksReady, setLinksReady] = useState(false);
@@ -143,13 +217,16 @@ export default function HomePortal({
     target: trackRef,
     offset: ["start start", "end end"],
   });
-  const videoOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const aaronX = useTransform(scrollYProgress, [0, 1], ["0vw", "-100vw"]);
-  const bowserX = useTransform(scrollYProgress, [0, 1], ["0vw", "100vw"]);
-  const nameOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const baseOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const brandingOpacity = useTransform(scrollYProgress, [0.25, 0.9], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0.25, 0.9], [-50, 0]);
+  // Ranges run through 0 and 1 so the scroll-linked animation holds each phase
+  // instead of easing back toward the element's starting style.
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
+  const aaronX = useTransform(scrollYProgress, [0, 0.4, 1], ["0vw", "-100vw", "-100vw"]);
+  const bowserX = useTransform(scrollYProgress, [0, 0.4, 1], ["0vw", "100vw", "100vw"]);
+  const nameOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
+  const baseOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0, 1, 1]);
+  const logoOpacity = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 0, 1, 1]);
+  const textProgress = useTransform(scrollYProgress, [0, 0.7, 1], [0, 0, 1]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.7, 0.78, 1], [0, 0, 1, 1]);
 
   const panels = useMemo<Panel[]>(
     () =>
@@ -157,27 +234,27 @@ export default function HomePortal({
         key,
         index,
         label: dictionary.home.niches[key],
-        href: portalCategoryUrl(key, { host: publicHost, locale }),
+        href: portalCategoryUrl(key, { host: clientHost || publicHost, locale }),
         hoverColor: HOVER_COLOR[key],
         seoTitle: dictionary.seo[key].title,
         seoLabel: `${dictionary.home.niches[key]} — ${dictionary.nav.services}`,
       })),
-    [dictionary, locale, publicHost]
+    [clientHost, dictionary, locale, publicHost]
   );
 
   useEffect(() => {
     if (reduceMotion === null) return;
-    const timeoutId = window.setTimeout(() => setLinksReady(true), reduceMotion ? 0 : 2500);
+    const timeoutId = window.setTimeout(() => setLinksReady(true), reduceMotion ? 0 : NAME_ENTRANCE_S * 1000);
     return () => window.clearTimeout(timeoutId);
   }, [reduceMotion]);
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
-    const next = value > 0.45;
+    const next = value > 0.4;
     setHoverEnabled((current) => (current === next ? current : next));
 
     const video = videoRef.current;
     if (!video) return;
-    if (value > 0.98) {
+    if (value >= 0.4) {
       if (!video.paused) video.pause();
     } else if (video.paused) {
       void video.play().catch(() => undefined);
@@ -187,7 +264,7 @@ export default function HomePortal({
   const activeKey = activeIndex === null ? null : PORTAL_CATEGORIES[activeIndex];
   const hoveredKey = hoverEnabled ? activeKey : null;
   const hoveredHero = hoveredKey ? portalHeroes[hoveredKey] : null;
-  const nameEntrance = { duration: reduceMotion ? 0 : 2.5, ease: NAME_EASE };
+  const nameEntrance = { duration: reduceMotion ? 0 : NAME_ENTRANCE_S, ease: NAME_EASE };
 
   return (
     <main ref={trackRef} className="relative h-[200vh] bg-black">
@@ -230,17 +307,25 @@ export default function HomePortal({
         />
       </div>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-30 flex w-1/3 items-center justify-center">
+      <div className="@container pointer-events-none absolute inset-y-0 left-0 z-30 flex w-1/3 items-center justify-center">
         <motion.div className="w-full" initial={{ x: "-100vw" }} animate={{ x: 0 }} transition={nameEntrance}>
-          <motion.p className={NAME_CLASS} aria-hidden style={{ x: aaronX, opacity: nameOpacity }}>
-            AARON
+          <motion.p
+            className={NAME_CLASS}
+            aria-hidden
+            style={{ x: aaronX, opacity: nameOpacity, fontSize: heroNameFontSize(5) }}
+          >
+            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>A</span>{"aron"}
           </motion.p>
         </motion.div>
       </div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-30 flex w-1/3 items-center justify-center">
+      <div className="@container pointer-events-none absolute inset-y-0 right-0 z-30 flex w-1/3 items-center justify-center">
         <motion.div className="w-full" initial={{ x: "100vw" }} animate={{ x: 0 }} transition={nameEntrance}>
-          <motion.p className={NAME_CLASS} aria-hidden style={{ x: bowserX, opacity: nameOpacity }}>
-            BOWSER
+          <motion.p
+            className={NAME_CLASS}
+            aria-hidden
+            style={{ x: bowserX, opacity: nameOpacity, fontSize: heroNameFontSize(6) }}
+          >
+            <span style={{ fontSize: `${HERO_CAP_SCALE}em` }}>B</span>{"owser"}
           </motion.p>
         </motion.div>
       </div>
@@ -248,7 +333,7 @@ export default function HomePortal({
       {/* Bottom padding on desktop keeps the large signature clear of the bottom menu. */}
       <div className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-start px-4 pt-20 md:justify-center md:pb-32 md:pt-0">
         {logoUrl ? (
-          <motion.div style={{ opacity: brandingOpacity }}>
+          <motion.div style={{ opacity: logoOpacity }}>
             {logoUrl.toLowerCase().endsWith(".svg") ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} alt={dictionary.home.logoLabel} className={CENTER_LOGO_CLASS} />
@@ -266,10 +351,11 @@ export default function HomePortal({
           </motion.div>
         ) : null}
         <motion.h1
-          style={{ opacity: brandingOpacity, y: titleY }}
+          style={{ opacity: titleOpacity }}
           className="mt-4 text-center text-xl font-bold uppercase tracking-widest text-white/80 drop-shadow-lg lg:text-2xl"
         >
-          {dictionary.home.headline}
+          <span className="sr-only">CHOOSE YOUR VISUAL STORY</span>
+          <ScrambleText progress={textProgress} text="CHOOSE YOUR VISUAL STORY" />
         </motion.h1>
       </div>
 
@@ -288,12 +374,12 @@ export default function HomePortal({
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: reduceMotion ? 0 : 2.5 + (randomDelays[panel.index] ?? 0),
+              delay: reduceMotion ? 0 : NAME_ENTRANCE_S + (randomDelays[panel.index] ?? 0),
               duration: reduceMotion ? 0 : 0.55,
               ease: NAME_EASE,
             }}
           >
-            <Link
+            <a
               href={panel.href}
               title={panel.seoTitle}
               aria-label={panel.seoLabel}
@@ -307,7 +393,7 @@ export default function HomePortal({
               }`}
             >
               <span className="drop-shadow-md">{panel.label}</span>
-            </Link>
+            </a>
           </motion.div>
         ))}
       </nav>

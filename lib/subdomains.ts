@@ -29,6 +29,7 @@ export const PORTAL_CATEGORY_ORDER = [
 ] as const satisfies readonly CategorySlug[];
 
 export type PortalCategory = (typeof PORTAL_CATEGORY_ORDER)[number];
+export type PortalCategorySlug = PortalCategory;
 
 export const PORTAL_CATEGORY_SUBDOMAIN: Record<PortalCategory, string> = {
   commercial: "commercial",
