@@ -6,21 +6,12 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PortalHeroSet } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
-import { withLocale } from "../lib/i18n/config";
+import { useLocale } from "../lib/i18n/LocaleProvider";
 import type { Dictionary } from "../lib/i18n/getDictionary";
-import { categoryPath } from "../lib/routes";
+import { PORTAL_CATEGORY_ORDER, portalCategoryUrl } from "../lib/subdomains";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-const PORTAL_CATEGORIES = [
-  "commercial",
-  "real-estate",
-  "wedding",
-  "food",
-  "business-portraits",
-  "cinematography",
-  "social-media-management",
-  "studio",
-] as const;
+const PORTAL_CATEGORIES = PORTAL_CATEGORY_ORDER;
 
 type PortalCategory = (typeof PORTAL_CATEGORIES)[number];
 
@@ -141,6 +132,7 @@ export default function HomePortal({
   locale,
   dictionary,
 }: HomePortalProps) {
+  const { publicHost } = useLocale();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoverEnabled, setHoverEnabled] = useState(false);
   const [linksReady, setLinksReady] = useState(false);
@@ -165,12 +157,12 @@ export default function HomePortal({
         key,
         index,
         label: dictionary.home.niches[key],
-        href: withLocale(categoryPath(key, locale), locale),
+        href: portalCategoryUrl(key, { host: publicHost, locale }),
         hoverColor: HOVER_COLOR[key],
         seoTitle: dictionary.seo[key].title,
         seoLabel: `${dictionary.home.niches[key]} — ${dictionary.nav.services}`,
       })),
-    [dictionary, locale]
+    [dictionary, locale, publicHost]
   );
 
   useEffect(() => {

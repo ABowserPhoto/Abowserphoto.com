@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound, permanentRedirect } from "next/navigation";
 import CategoryTemplate from "../../../components/CategoryTemplate";
 import { getAboutImageUrl, getImageDimensions, getLogoUrl } from "../../../lib/cms";
@@ -34,7 +35,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const { locale: rawLocale, category } = await params;
   const slug = resolveCategorySegment(category);
   if (!isLocale(rawLocale) || !slug) return {};
-  return buildCategoryMetadata(rawLocale, slug);
+  const host = (await headers()).get("host");
+  return buildCategoryMetadata(rawLocale, slug, host);
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
