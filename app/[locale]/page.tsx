@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import HomePortal from "../../components/HomePortal";
 import { getLogoUrl } from "../../lib/cms";
@@ -26,6 +27,8 @@ export default async function HomePage({ params }: HomePageProps) {
   const introVideoUrl = readHomeIntroVideo(locale);
   const baseImages = readHomeBaseImages(locale);
   const portalHeroes = readPortalHeroSets(locale);
+  const headersList = await headers();
+  const publicHost = headersList.get("host") ?? "";
 
   return (
     <HomePortal
@@ -35,6 +38,7 @@ export default async function HomePage({ params }: HomePageProps) {
       portalHeroes={portalHeroes}
       locale={locale}
       dictionary={dictionary}
+      publicHost={publicHost}
     />
   );
 }
