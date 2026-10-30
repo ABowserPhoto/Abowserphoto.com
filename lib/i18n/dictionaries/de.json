@@ -49,7 +49,7 @@
   "seo": {
     "home": {
       "title": "Fotograf & Fotostudio Hagen | Aaron Bowser Photography",
-      "description": "Fotostudio in Hagen (Eckeseyer Str. 133) für Business, Hochzeit & Commercial. Aaron Bowser Photography — auch Studio Solingen. Termin anfragen."
+      "description": "Fotostudio in Hagen ({hagenStreet}) für Business, Hochzeit & Commercial. Aaron Bowser Photography — auch Studio Solingen. Termin anfragen."
     },
     "real-estate": {
       "title": "Immobilienfotografie Hagen & NRW | ab €189 | Aaron Bowser",
@@ -69,11 +69,11 @@
     },
     "business-portraits": {
       "title": "Business-Porträts in Hagen & Solingen",
-      "description": "Business-Porträts im Studio Hagen, dem Alltagstudio. Größere Teams im Studio Solingen, nur nach Termin. Shootings auch im Büro."
+      "description": "Business-Porträts im Studio Hagen, dem Alltagstudio. Größere Teams im Studio Solingen, {appointmentDeLower}. Shootings auch im Büro."
     },
     "studio": {
       "title": "Bewerbungsfotos und Passbilder in Hagen",
-      "description": "Bewerbungsfotos und biometrische Passbilder im Studio Hagen, Eckeseyer Str. 133. Bewerbung, Passbild und LinkedIn-Porträt in einem Termin."
+      "description": "Bewerbungsfotos und biometrische Passbilder im Studio Hagen, {hagenStreet}. Bewerbung, Passbild und LinkedIn-Porträt in einem Termin."
     },
     "cinematography": {
       "title": "Filmproduktion & Brand Films",

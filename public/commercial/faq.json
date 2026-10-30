@@ -14,7 +14,7 @@
     },
     {
       "question": "Wo findet das Shooting statt?",
-      "answer": "Vor Ort in Nordrhein-Westfalen, unter anderem in Hagen, Düsseldorf und Köln. Das Hauptstudio in Hagen, Eckeseyer Str. 133, hat etwa 40 m²; Aaron arbeitet dort täglich. Größere Produktionen und Sets kommen ins Studio Solingen, Merscheider Str. 112, etwa 100 m², nur nach Termin. Das Studio kann auch gemietet werden."
+      "answer": "Vor Ort in Nordrhein-Westfalen, unter anderem in Hagen, Düsseldorf und Köln. Das Hauptstudio in Hagen, {hagenStreet}, hat etwa 40 m²; Aaron arbeitet dort täglich. Größere Produktionen und Sets kommen ins Studio Solingen, {solingenStreet}, etwa 100 m², {appointmentDeLower}. Das Studio kann auch gemietet werden."
     },
     {
       "question": "Wann sind die bearbeiteten Bilder fertig?",
@@ -36,7 +36,7 @@
     },
     {
       "question": "Where will the photoshoot take place? Do you have a studio?",
-      "answer": "I shoot on location across North Rhine-Westphalia, including Hagen, Düsseldorf, and Köln. The main studio is in Hagen at Eckeseyer Str. 133, about 40 m², and Aaron works there every day. Larger productions and set-ups use the Solingen studio at Merscheider Str. 112, about 100 m², by appointment only. That studio can also be rented."
+      "answer": "I shoot on location across North Rhine-Westphalia, including Hagen, Düsseldorf, and Köln. The main studio is in Hagen at {hagenStreet}, about 40 m², and Aaron works there every day. Larger productions and set-ups use the Solingen studio at {solingenStreet}, about 100 m², {appointmentEnLower}. That studio can also be rented."
     },
     {
       "question": "What is the turnaround time to receive the final edited images?",

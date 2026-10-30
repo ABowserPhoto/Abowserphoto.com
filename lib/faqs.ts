@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { fillContactTokens } from "./contact";
 import type { CategorySlug, FAQItem } from "./content";
 import type { Locale } from "./i18n/config";
 
@@ -16,7 +17,10 @@ function isFaqItem(value: unknown): value is FAQItem {
 
 function asFaqList(value: unknown): FAQItem[] {
   if (!Array.isArray(value)) return [];
-  return value.filter(isFaqItem);
+  return value.filter(isFaqItem).map((item) => ({
+    question: fillContactTokens(item.question),
+    answer: fillContactTokens(item.answer),
+  }));
 }
 
 export function readFaqFile(slug: CategorySlug, locale: Locale): FAQItem[] {
