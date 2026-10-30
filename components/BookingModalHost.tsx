@@ -6,11 +6,11 @@ import {
   BOOKING_OPEN_EVENT,
   BOOKING_QUERY_KEY,
   BOOKING_QUERY_VALUE,
-  getInquiryCategory,
   isBookingRoute,
-  isRealEstateBookingPath,
+  resolveBookingContext,
 } from "../lib/booking";
 import { getLocaleFromPathname, withLocale } from "../lib/i18n/config";
+import { useLocale } from "../lib/i18n/LocaleProvider";
 import BookingModal from "./BookingModal";
 
 function stripBookingParam(href = window.location.href) {
@@ -24,6 +24,8 @@ export default function BookingModalHost() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { publicHost } = useLocale();
+  const bookingContext = resolveBookingContext(pathname, publicHost);
   const isQueryOpen = searchParams.get(BOOKING_QUERY_KEY) === BOOKING_QUERY_VALUE;
   const isRouteOpen = isBookingRoute(pathname);
   const [isOpen, setIsOpen] = useState(false);
@@ -67,8 +69,8 @@ export default function BookingModalHost() {
     <BookingModal
       isOpen={isOpen}
       onClose={closeModal}
-      isRealEstate={isRealEstateBookingPath(pathname)}
-      inquiryCategory={getInquiryCategory(pathname)}
+      isRealEstate={bookingContext.isRealEstate}
+      inquiryCategory={bookingContext.inquiryCategory}
     />
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { submitBooking, type BookingFormData } from "../actions/submitBooking";
+import { immobilienBookingLead, trackGenerateLead } from "../lib/analytics";
 import {
   BOOKING_SERVICES,
   PHOTO_PACKAGES,
@@ -108,6 +109,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
       try {
         const result = await submitBooking(payload);
         if (result.success) {
+          trackGenerateLead(immobilienBookingLead());
           setIsSuccess(true);
           return;
         }
