@@ -1,5 +1,6 @@
 import { getLocaleFromPathname, stripLocaleFromPathname, type Locale } from "./i18n/config";
 import { resolveCategorySegment } from "./routes";
+import { nicheHostForHostname } from "./subdomains";
 
 export const BOOKING_QUERY_KEY = "book";
 export const BOOKING_QUERY_VALUE = "1";
@@ -57,6 +58,36 @@ export function getInquiryCategory(pathname: string): InquiryCategory {
   }
 
   return { slug: "general", label: "General" };
+}
+
+function generalInquiryCategory(): InquiryCategory {
+  return { slug: "general", label: INQUIRY_CATEGORY_LABELS.general };
+}
+
+/**
+ * Which booking form to show.
+ * Niche hosts keep their category when the address bar is still `/`, `/de`,
+ * or `/en`. `proxy.ts` rewrites those to the category page and does not
+ * redirect. The main site follows the path.
+ */
+export function resolveBookingContext(pathname: string, hostname = ""): {
+  isRealEstate: boolean;
+  inquiryCategory: InquiryCategory;
+} {
+  const niche = nicheHostForHostname(hostname);
+  if (niche?.slug === "real-estate") {
+    return { isRealEstate: true, inquiryCategory: generalInquiryCategory() };
+  }
+  if (niche && isInquiryCategorySlug(niche.slug)) {
+    return {
+      isRealEstate: false,
+      inquiryCategory: { slug: niche.slug, label: INQUIRY_CATEGORY_LABELS[niche.slug] },
+    };
+  }
+  if (isRealEstateBookingPath(pathname)) {
+    return { isRealEstate: true, inquiryCategory: generalInquiryCategory() };
+  }
+  return { isRealEstate: false, inquiryCategory: getInquiryCategory(pathname) };
 }
 
 export function resolveInquiryCategoryLabel(slug: string) {

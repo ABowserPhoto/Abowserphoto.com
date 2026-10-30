@@ -75,6 +75,10 @@ function sendPageView(pagePath: string) {
  * Loads the Google tag only after the cookie banner stores "all"
  * ("Alle akzeptieren"). "Nur essenzielle" never loads the tag, and a later
  * switch to essential stops further hits and clears `_ga` cookies.
+ *
+ * The root layout mounts this on every host the app serves, including www
+ * and the niche hosts that `proxy.ts` rewrites in place. The measurement ID
+ * is not limited to one hostname.
  */
 export default function GoogleAnalytics() {
   const pathname = usePathname();
