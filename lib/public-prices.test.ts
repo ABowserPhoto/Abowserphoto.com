@@ -93,9 +93,9 @@ test("studio copy publishes the two allowed prices and nothing else", () => {
     assert.equal(faq?.answer, studioSittingPriceAnswer(locale));
 
     const seo = getDictionarySync(locale).seo.studio;
-    assert.equal(seo.description.includes(applicationPhotoPriceLine(locale)), true);
-    assert.equal(seo.description.includes(passportPhotoPriceLine()), true);
+    assert.equal(seo.description.includes("€"), false);
     assert.equal(seo.title.includes("€"), false);
+    assert.equal(seo.description.includes(locale === "de" ? "Bewerbungsfotos" : "Application photos"), true);
   }
 
   const germanApplication = getLocalizedCategory("studio", "de").services[0];

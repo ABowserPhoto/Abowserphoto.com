@@ -57,9 +57,11 @@ export default function CommercialPortfolioArchive({
           <h1 className="mt-3 text-3xl font-light tracking-tight text-[#F4F1ED] sm:text-4xl lg:text-5xl">
             {dictionary.seo["commercial-portfolio"].title}
           </h1>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">
-            {dictionary.seo["commercial-portfolio"].description}
-          </p>
+          <div className="mt-5 max-w-3xl space-y-4 text-sm leading-relaxed text-white/75 sm:text-base">
+            {dictionary.seo["commercial-portfolio"].intro.map((paragraph) => (
+              <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </header>
 

@@ -1,13 +1,25 @@
 import type { FAQItem, CategorySlug } from "../content";
 import { appointmentOnlyLabel } from "../contact";
+import { solingenStudioPath } from "../routes";
 import { formatStudioLine, HAGEN_STUDIO, SOLINGEN_STUDIO, studioSittingPriceAnswer } from "../site";
-import type { Locale } from "./config";
+import { portalCategoryUrl } from "../subdomains";
+import { withLocale, type Locale } from "./config";
+import { absoluteUrl } from "./seo";
+
+function solingenHref(locale: Locale) {
+  return absoluteUrl(withLocale(solingenStudioPath(locale), locale));
+}
+
+function filmHref(locale: Locale) {
+  return portalCategoryUrl("cinematography", { locale });
+}
 
 export type PageSection = {
   id: string;
   eyebrow: string;
   title: string;
   paragraphs: string[];
+  links?: { href: string; label: string }[];
 };
 
 const hagen = formatStudioLine(HAGEN_STUDIO);
@@ -25,6 +37,21 @@ const weddingSections: Record<Locale, PageSection[]> = {
         "Die standesamtliche Trauung ist ein eigener Teil der Hochzeitsfotografie, mit derselben ruhigen Bildsprache wie die freie Trauung und der ganze Tag.",
       ],
     },
+    {
+      id: "hochzeitsvideo",
+      eyebrow: "Film",
+      title: "Hochzeitsvideo aus derselben Reportage",
+      paragraphs: [
+        "Fotos und Film gehören für viele Paare zusammen. Das Hochzeitsvideo entsteht am selben Tag wie die Reportage: Standesamt in Hagen oder Solingen, freie Trauung, der ganze Tag. Schnitt und Ton folgen der ruhigen Bildsprache der Fotos.",
+        "Konzept, Dreh und Schnitt liegen bei der Filmproduktion. Wer beides buchen möchte, spricht das im selben Gespräch ab. Das Honorar wird dafür einzeln angeboten, ohne Paketpreis auf dieser Seite.",
+      ],
+      links: [
+        {
+          href: filmHref("de"),
+          label: "Zur Filmproduktion",
+        },
+      ],
+    },
   ],
   en: [
     {
@@ -37,6 +64,21 @@ const weddingSections: Record<Locale, PageSection[]> = {
         "A civil ceremony is its own part of the wedding coverage, not a footnote. A symbolic ceremony and a full day stay in the same visual language.",
       ],
     },
+    {
+      id: "wedding-film",
+      eyebrow: "Film",
+      title: "A wedding film from the same reportage",
+      paragraphs: [
+        "Photographs and film belong together for many couples. The wedding film is made on the same day as the reportage: the registry office in Hagen or Solingen, a symbolic ceremony, the full day. The cut follows the calm pace of the photographs.",
+        "Concept, shoot, and edit sit with the film production. Couples who want both discuss it in the same conversation. The film is quoted on its own. This page does not publish a package price.",
+      ],
+      links: [
+        {
+          href: filmHref("en"),
+          label: "Film production",
+        },
+      ],
+    },
   ],
 };
 
@@ -44,7 +86,9 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wo entstehen die Business-Porträts?",
-      answer: `In der Regel im Studio Hagen, ${hagen}, etwa 40 m², wo Aaron täglich arbeitet. Das Studio Solingen, ${solingen}, etwa 100 m², ist für größere Produktionen und ${appointmentOnlyLabel("de", { sentence: false })}; es kann auch gemietet werden. Eine eigene Seite dazu folgt. Sitzungen im Büro in Nordrhein-Westfalen bleiben möglich.`,
+      answer: `In der Regel im Studio Hagen, ${hagen}, etwa 40 m², wo Aaron täglich arbeitet. Das Studio Solingen, ${solingen}, etwa 100 m², ist für größere Produktionen und ${appointmentOnlyLabel("de", { sentence: false })}; es kann auch gemietet werden. Die Seite zum Fotostudio Solingen beschreibt Fläche und Miete. Sitzungen im Büro in Nordrhein-Westfalen bleiben möglich.`,
+      linkHref: solingenHref("de"),
+      linkLabel: "Fotostudio Solingen",
     },
     {
       question: "Für wen sind die Porträts gedacht?",
@@ -70,7 +114,9 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
   en: [
     {
       question: "Where do you photograph business portraits?",
-      answer: `Usually at the Hagen studio, ${hagen}, about 40 m², where Aaron works every day. The Solingen studio, ${solingen}, about 100 m², is for larger productions and ${appointmentOnlyLabel("en", { sentence: false })}; it can also be rented. A page of its own will follow. Sessions at your office in North Rhine-Westphalia are still possible.`,
+      answer: `Usually at the Hagen studio, ${hagen}, about 40 m², where Aaron works every day. The Solingen studio, ${solingen}, about 100 m², is for larger productions and ${appointmentOnlyLabel("en", { sentence: false })}; it can also be rented. The Solingen studio page describes the space and how to rent it. Sessions at your office in North Rhine-Westphalia are still possible.`,
+      linkHref: solingenHref("en"),
+      linkLabel: "Solingen studio",
     },
     {
       question: "Who are the portraits for?",
@@ -112,6 +158,28 @@ const weddingFaqs: Record<Locale, FAQItem[]> = {
       answer:
         "Ja, innerhalb von Nordrhein-Westfalen regelmäßig, weiter entfernt nach Absprache. Reisekosten nennen wir mit dem Angebot.",
     },
+    {
+      question: "Was kostet die Hochzeitsfotografie?",
+      answer:
+        "Das Honorar richtet sich nach Dauer, Ort und Umfang: nur das Standesamt, die freie Trauung, der ganze Tag, und ob ein Hochzeitsvideo dazukommt. Sie erhalten ein Angebot. Auf dieser Seite stehen keine Paketpreise.",
+    },
+    {
+      question: "Wie läuft der Tag ab?",
+      answer:
+        "Vorher sprechen wir über den Ablauf, die Orte und wer dabei ist. Am Tag folge ich Ihrem Plan, von der Vorbereitung über die Trauung bis zur Feier. Nichts wird für die Kamera nachgestellt. Danach bekommen Sie eine enge Auswahl.",
+    },
+    {
+      question: "Fotografieren Sie am Standesamt Hagen und am Standesamt Solingen?",
+      answer:
+        "Ja. Das Standesamt Hagen und das Standesamt Solingen gehören zur regelmäßigen Arbeit, ebenso Trauungen in der Umgebung, an dem Ort, den Sie gewählt haben. Die Zeremonie wird dort fotografiert, nicht ins Studio verlegt.",
+    },
+    {
+      question: "Bieten Sie auch Hochzeitsvideos an?",
+      answer:
+        "Ja. Das Hochzeitsvideo entsteht am selben Tag wie die Fotos und wird in der Filmproduktion geschnitten, mit derselben ruhigen Haltung. Beides kann in einem Gespräch geplant werden.",
+      linkHref: filmHref("de"),
+      linkLabel: "Zur Filmproduktion",
+    },
   ],
   en: [
     {
@@ -127,6 +195,28 @@ const weddingFaqs: Record<Locale, FAQItem[]> = {
       question: "Do you travel beyond Hagen and Solingen?",
       answer:
         "Yes, regularly within North Rhine-Westphalia, and further by arrangement. Travel costs are part of the quote.",
+    },
+    {
+      question: "What does wedding photography cost?",
+      answer:
+        "The fee follows the length, the place, and the scope: the registry office only, a symbolic ceremony, the full day, and whether a wedding film is included. You receive a quote. This page does not publish package prices.",
+    },
+    {
+      question: "How does the day run?",
+      answer:
+        "Beforehand we talk through the order of the day, the places, and who will be there. On the day I follow your plan, from getting ready through the ceremony to the celebration. Nothing is restaged for the camera. Afterwards you receive a tight edit.",
+    },
+    {
+      question: "Do you photograph at the registry office in Hagen and in Solingen?",
+      answer:
+        "Yes. The registry office in Hagen and the registry office in Solingen are regular parts of the work, as are ceremonies nearby, at the place you have chosen. The ceremony is photographed there, not moved into the studio.",
+    },
+    {
+      question: "Do you also make wedding films?",
+      answer:
+        "Yes. The wedding film is made on the same day as the photographs and is edited with the film production, in the same calm register. Both can be planned in one conversation.",
+      linkHref: filmHref("en"),
+      linkLabel: "Film production",
     },
   ],
 };

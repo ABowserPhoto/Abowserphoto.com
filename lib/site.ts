@@ -85,15 +85,12 @@ export type Studio = {
   summaryDe: string;
   summaryEn: string;
   /**
-   * Public page for this studio. Null until the page exists, so the
-   * interface must not render a link.
+   * Locale-less path. `withLocale` maps it to the public German or English slug.
+   * Null when the studio has no page of its own.
    */
   pagePath: string | null;
-  /** Plain-text hook. Not a link while pagePath is null. */
   detailLabelDe?: string;
   detailLabelEn?: string;
-  /** Reserved path for a future page. Do not link it yet. */
-  plannedPagePath?: string;
 };
 
 export const STUDIOS: readonly Studio[] = [
@@ -131,10 +128,9 @@ export const STUDIOS: readonly Studio[] = [
     areaSqm: 100,
     summaryDe: `Etwa 100 m² für größere Produktionen, zum Beispiel Teams, Commercial und aufwendigere Sets. ${appointmentOnlyLabel("de")}. Studiovermietung möglich.`,
     summaryEn: `About 100 m² for larger productions, such as team shoots, commercial work, and bigger set-ups. ${appointmentOnlyLabel("en")}. The studio can be rented.`,
-    pagePath: null,
+    pagePath: "/fotostudio-solingen",
     detailLabelDe: "Studio Solingen – mehr erfahren",
-    detailLabelEn: "Studio Solingen — more to come",
-    plannedPagePath: "/studio-solingen",
+    detailLabelEn: "Learn more about the Solingen studio",
   },
 ];
 

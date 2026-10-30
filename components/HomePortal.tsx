@@ -4,7 +4,6 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, use
 import { Major_Mono_Display } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MotionValue } from "framer-motion";
 import type { PortalHeroSet } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
@@ -42,7 +41,6 @@ const PORTAL_CATEGORIES = [
   "business-portraits",
   "cinematography",
   "social-media-management",
-  "studio",
 ] as const satisfies readonly PortalCategorySlug[];
 
 type HoverLayout = "triptych" | "landscape-image" | "landscape-video";
@@ -106,39 +104,6 @@ type Panel = {
   seoTitle: string;
   seoLabel: string;
 };
-
-const GLYPHS = ["X", "#", "8", "%"] as const;
-
-function scrambledText(text: string, progress: number) {
-  const revealCount = Math.round(Math.min(1, Math.max(0, progress)) * text.length);
-  let result = "";
-  for (let index = 0; index < text.length; index += 1) {
-    const character = text[index];
-    if (character === " ") {
-      result += " ";
-    } else if (index < revealCount) {
-      result += character;
-    } else {
-      result += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-    }
-  }
-  return result;
-}
-
-function ScrambleText({ progress, text }: { progress: MotionValue<number>; text: string }) {
-  const reduceMotion = useReducedMotion();
-  const [value, setValue] = useState(text);
-
-  useMotionValueEvent(progress, "change", (current) => {
-    setValue(reduceMotion ? text : scrambledText(text, current));
-  });
-
-  useEffect(() => {
-    setValue(reduceMotion ? text : scrambledText(text, progress.get()));
-  }, [progress, reduceMotion, text]);
-
-  return <span aria-hidden="true">{value}</span>;
-}
 
 function StageImage({ src, sizes }: { src: string; sizes: string }) {
   const position = "object-cover object-top";
@@ -225,8 +190,6 @@ export default function HomePortal({
   const nameOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
   const baseOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0, 1, 1]);
   const logoOpacity = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 0, 1, 1]);
-  const textProgress = useTransform(scrollYProgress, [0, 0.7, 1], [0, 0, 1]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.7, 0.78, 1], [0, 0, 1, 1]);
 
   const panels = useMemo<Panel[]>(
     () =>
@@ -350,13 +313,6 @@ export default function HomePortal({
             )}
           </motion.div>
         ) : null}
-        <motion.h1
-          style={{ opacity: titleOpacity }}
-          className="mt-4 text-center text-xl font-bold uppercase tracking-widest text-white/80 drop-shadow-lg lg:text-2xl"
-        >
-          <span className="sr-only">CHOOSE YOUR VISUAL STORY</span>
-          <ScrambleText progress={textProgress} text="CHOOSE YOUR VISUAL STORY" />
-        </motion.h1>
       </div>
 
       <nav

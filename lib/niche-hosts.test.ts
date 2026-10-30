@@ -227,7 +227,7 @@ test("niche category canonicals use the short subdomain; www category URLs stay 
     const languages = german.alternates?.languages as Record<string, string>;
     assert.equal(languages.en, `https://${entry.sub}.abowserphoto.com/en`);
     assert.equal(languages.de, `https://${entry.sub}.abowserphoto.com/de`);
-    assert.equal(languages["x-default"], `https://${entry.sub}.abowserphoto.com/en`);
+    assert.equal(languages["x-default"], `https://${entry.sub}.abowserphoto.com/de`);
     assert.equal(german.openGraph?.url, `https://${entry.sub}.abowserphoto.com/de`);
   }
 
@@ -269,4 +269,83 @@ test("niche category canonicals use the short subdomain; www category URLs stay 
     buildLegalMetadata("de", "impressum").alternates?.canonical,
     "https://www.aaronbowser-photography.com/de/impressum"
   );
+  assert.equal(portfolioLanguages["x-default"], "https://commercial.abowserphoto.com/de/commercial-fotografie/portfolio");
+  const wwwPortfolioLanguages = buildSimplePageMetadata(
+    "en",
+    "commercial-portfolio",
+    "www.aaronbowser-photography.com"
+  ).alternates?.languages as Record<string, string>;
+  assert.equal(
+    wwwPortfolioLanguages["x-default"],
+    "https://www.aaronbowser-photography.com/en/commercial/portfolio"
+  );
+});
+
+test("niche hosts default to German without leaving their hostname", async () => {
+  for (const entry of CASES) {
+    const host = `${entry.sub}.abowserphoto.com`;
+    const bare = await proxy(request(host, "/"));
+    assert.equal(bare.status, 200);
+    assert.equal(locationUrl(bare), null);
+    assert.equal(rewriteUrl(bare)?.hostname, host);
+    assert.equal(rewriteUrl(bare)?.pathname, `/de/${entry.de}`);
+
+    const english = await proxy(request(host, "/", { language: "en" }));
+    assert.equal(locationUrl(english), null);
+    assert.equal(rewriteUrl(english)?.hostname, host);
+    assert.equal(rewriteUrl(english)?.pathname, `/en/${entry.en}`);
+
+    const french = await proxy(request(host, "/", { language: "fr" }));
+    assert.equal(locationUrl(french), null);
+    assert.equal(rewriteUrl(french)?.hostname, host);
+    assert.equal(rewriteUrl(french)?.pathname, `/de/${entry.de}`);
+  }
+
+  const www = await proxy(request("www.aaronbowser-photography.com", "/"));
+  assert.equal(www.status, 308);
+  assert.equal(locationUrl(www)?.hostname, "www.aaronbowser-photography.com");
+  assert.equal(locationUrl(www)?.pathname, "/en");
+  assert.equal(rewriteUrl(www), null);
+});
+
+test("solingen and application-photo paths never redirect across hosts", async () => {
+  const german = await proxy(request("www.aaronbowser-photography.com", "/de/fotostudio-solingen"));
+  assert.equal(locationUrl(german), null);
+  assert.equal(rewriteUrl(german), null);
+
+  const englishSlugOnGerman = await proxy(
+    request("www.aaronbowser-photography.com", "/de/photo-studio-solingen")
+  );
+  assert.equal(locationUrl(englishSlugOnGerman)?.hostname, "www.aaronbowser-photography.com");
+  assert.equal(locationUrl(englishSlugOnGerman)?.pathname, "/de/fotostudio-solingen");
+
+  const english = await proxy(request("www.aaronbowser-photography.com", "/en/photo-studio-solingen"));
+  assert.equal(locationUrl(english), null);
+
+  const swapped = await proxy(request("www.aaronbowser-photography.com", "/en/fotostudio-solingen"));
+  assert.equal(locationUrl(swapped)?.hostname, "www.aaronbowser-photography.com");
+  assert.equal(locationUrl(swapped)?.pathname, "/en/photo-studio-solingen");
+
+  const application = await proxy(request("www.aaronbowser-photography.com", "/de/bewerbungsfotos"));
+  assert.equal(locationUrl(application), null);
+  assert.equal(rewriteUrl(application), null);
+  assert.equal(application.headers.get("x-middleware-next"), "1");
+
+  const nicheSolingen = await proxy(request("wedding.abowserphoto.com", "/de/fotostudio-solingen"));
+  assert.equal(locationUrl(nicheSolingen), null);
+  assert.equal(rewriteUrl(nicheSolingen)?.hostname, "wedding.abowserphoto.com");
+  assert.equal(rewriteUrl(nicheSolingen)?.pathname, "/de/hochzeitsfotograf");
+});
+
+test("application photos on the main site canonicalize to the studio host", () => {
+  const german = buildCategoryMetadata("de", "studio", "www.aaronbowser-photography.com");
+  assert.equal(german.alternates?.canonical, "https://studio.abowserphoto.com/de");
+  const robots = german.robots;
+  assert.equal(robots && typeof robots === "object" && "index" in robots ? robots.index : undefined, false);
+  const languages = german.alternates?.languages as Record<string, string>;
+  assert.equal(languages["x-default"], "https://studio.abowserphoto.com/de");
+
+  const onHost = buildCategoryMetadata("en", "studio", "studio.abowserphoto.com");
+  assert.equal(onHost.alternates?.canonical, "https://studio.abowserphoto.com/en");
+  assert.equal(onHost.robots, undefined);
 });

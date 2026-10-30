@@ -117,7 +117,7 @@ const germanCategoryCopy: Partial<
     subtitle:
       "Reportage für die freie Trauung, den ganzen Tag und das Standesamt in Solingen und Hagen.",
     aboutText:
-      "Ich fotografiere Hochzeiten in Hagen, Solingen und in Nordrhein-Westfalen, cinematic und ehrlich. Natürliche Emotion und die Details, die zu den Menschen im Raum gehören, vom Standesamt bis zum Ende des Tages.",
+      "Ich fotografiere Hochzeiten in Hagen, Solingen und in Nordrhein-Westfalen, cinematic und ehrlich. Natürliche Emotion und die Details, die zu den Menschen im Raum gehören, vom Standesamt bis zum Ende des Tages. Ein Hochzeitsvideo kann denselben Tag begleiten; der Film entsteht in der Filmproduktion, nicht als nachträglicher Zusammenschnitt aus den Fotos.",
     services: [
       {
         title: "Ganztägige Reportage",
@@ -135,6 +135,11 @@ const germanCategoryCopy: Partial<
       {
         title: "Album",
         description: "Ein gedrucktes Album mit einer klaren Abfolge, nicht mit einer losen Bildersammlung.",
+      },
+      {
+        title: "Hochzeitsvideo",
+        description:
+          "Ein Film vom selben Tag wie die Fotos: Standesamt, freie Trauung oder der ganze Tag. Der Schnitt bleibt ruhig und entsteht mit der Filmproduktion.",
       },
     ],
   },
@@ -164,7 +169,7 @@ const germanCategoryCopy: Partial<
     title: "Business-Porträts in Hagen & Solingen",
     subtitle:
       "Executive-Headshots, Mitarbeiterfotos und LinkedIn-Profilbilder für Unternehmen in Hagen, Solingen und Nordrhein-Westfalen.",
-    aboutText: `Ich bin Aaron Bowser und fotografiere Business-Porträts, Hochzeiten und Commercial. Das Hauptstudio liegt in Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Dort arbeite ich täglich, und Porträt- sowie Business-Sitzungen finden in der Regel hier statt. Das Studio Solingen, ${SOLINGEN_ADDRESS.street}, hat etwa 100 m² und ist für größere Produktionen gedacht, zum Beispiel Teams und aufwendigere Sets, ${appointmentOnlyLabel("de", { sentence: false })}. Es kann auch gemietet werden. Studio Solingen – mehr erfahren; die eigene Seite folgt.\n\nFür Unternehmen geht es um Bilder, die auf der Website, bei LinkedIn und in der Presse dieselbe ruhige Haltung haben: klares Licht, ein Gesicht, das man ernst nimmt, und eine Bildsprache, die zum Haus passt. Vor der Aufnahme klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Im Shooting leite ich Haltung und Ausdruck an.`,
+    aboutText: `Ich bin Aaron Bowser und fotografiere Business-Porträts, Hochzeiten und Commercial. Das Hauptstudio liegt in Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Dort arbeite ich täglich, und Porträt- sowie Business-Sitzungen finden in der Regel hier statt. Das Studio Solingen, ${SOLINGEN_ADDRESS.street}, hat etwa 100 m² und ist für größere Produktionen gedacht, zum Beispiel Teams und aufwendigere Sets, ${appointmentOnlyLabel("de", { sentence: false })}. Es kann auch gemietet werden. Das Studio Solingen hat eine eigene Seite, mit der Fläche und der Art, wie eine Miete angefragt wird.\n\nFür Unternehmen geht es um Bilder, die auf der Website, bei LinkedIn und in der Presse dieselbe ruhige Haltung haben: klares Licht, ein Gesicht, das man ernst nimmt, und eine Bildsprache, die zum Haus passt. Vor der Aufnahme klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Im Shooting leite ich Haltung und Ausdruck an.`,
     services: [
       {
         title: "Executive-Headshots",

@@ -18,6 +18,7 @@ import {
 } from "./contact";
 import { readFaqFile } from "./faqs";
 import { getDictionarySync } from "./i18n/getDictionary";
+import { getLocalizedCategory } from "./i18n/localizeContent";
 import { getLegalDocument } from "./legalContent";
 import { buildBusinessJsonLd } from "./structuredData";
 
@@ -205,13 +206,21 @@ test("rendered copy reads addresses, phone, and hours from the contact config", 
   assert.equal(german.seo.home.description.includes("{hagenStreet}"), false);
   assert.equal(english.seo.studio.description.includes(HAGEN_ADDRESS.street), true);
   assert.equal(english.seo.home.description.includes("{hagenStreet}"), false);
+  assert.equal(german.seo.studio.description.includes(HAGEN_ADDRESS.street), true);
+  assert.equal(german.seo.solingen.description.includes(SOLINGEN_ADDRESS.street), true);
+  assert.equal(german.seo.solingen.description.includes("{"), false);
+  assert.equal(english.seo.solingen.description.includes(SOLINGEN_ADDRESS.street), true);
+  assert.equal(english.seo.studio.description.includes("{"), false);
   assert.equal(
-    german.seo["business-portraits"].description.includes(appointmentOnlyLabel("de", { sentence: false })),
+    getLocalizedCategory("business-portraits", "de").aboutText.includes(
+      appointmentOnlyLabel("de", { sentence: false })
+    ),
     true
   );
-  assert.equal(german.seo["business-portraits"].description.includes("{appointment"), false);
   assert.equal(
-    english.seo["business-portraits"].description.includes(appointmentOnlyLabel("en", { sentence: false })),
+    getLocalizedCategory("business-portraits", "en").aboutText.includes(
+      appointmentOnlyLabel("en", { sentence: false })
+    ),
     true
   );
 

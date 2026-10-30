@@ -22,6 +22,8 @@ export type ServiceItem = {
 export type FAQItem = {
   question: string;
   answer: string;
+  linkHref?: string;
+  linkLabel?: string;
 };
 
 export type CategoryContent = {
@@ -92,9 +94,14 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         title: "Album Design",
         description: "Fine-art printed albums with curated narrative flow.",
       },
+      {
+        title: "Wedding Film",
+        description:
+          "A film from the same day as the photographs: the registry office, a symbolic ceremony, or the full day. The cut stays calm and is made with the film work.",
+      },
     ],
     aboutText:
-      "I photograph weddings in Hagen, Solingen, and across North Rhine-Westphalia with a cinematic and honest approach. That includes the civil ceremony, a symbolic ceremony, and the full day, with natural emotion and the details that belong to the people in the room.",
+      "I photograph weddings in Hagen, Solingen, and across North Rhine-Westphalia with a cinematic and honest approach. That includes the civil ceremony, a symbolic ceremony, and the full day, with natural emotion and the details that belong to the people in the room. A wedding film can follow the same day; it is produced with the film work, not cut afterwards from the stills.",
     aboutImage:
       "https://images.unsplash.com/photo-1529634806980-85c3dd6d34ac?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -224,7 +231,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         image: "/business-portraits/portfolio/business-fotografie-frau-hellblauer-anzug.webp",
       },
     ],
-    aboutText: `I am Aaron Bowser, a photographer for business portraits, weddings, and commercial work. The main studio is in Hagen, ${HAGEN_ADDRESS.street}, about 40 m². I work there every day, and portrait and business sessions are booked there by default. The Solingen studio, ${SOLINGEN_ADDRESS.street}, is about 100 m² and is for larger productions, such as teams and bigger set-ups, ${appointmentOnlyLabel("en", { sentence: false })}. It can also be rented. Studio Solingen — more to come; a page of its own will follow.\n\nFor companies the pictures should share one calm line on the website, on LinkedIn, and in the press. Before the session we agree where the portraits will be used and who should be in them. During the sitting I direct posture and expression.`,
+    aboutText: `I am Aaron Bowser, a photographer for business portraits, weddings, and commercial work. The main studio is in Hagen, ${HAGEN_ADDRESS.street}, about 40 m². I work there every day, and portrait and business sessions are booked there by default. The Solingen studio, ${SOLINGEN_ADDRESS.street}, is about 100 m² and is for larger productions, such as teams and bigger set-ups, ${appointmentOnlyLabel("en", { sentence: false })}. It can also be rented. The Solingen studio has its own page, with the floor area and how a rental is arranged.\n\nFor companies the pictures should share one calm line on the website, on LinkedIn, and in the press. Before the session we agree where the portraits will be used and who should be in them. During the sitting I direct posture and expression.`,
     aboutImage:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
     faq: [

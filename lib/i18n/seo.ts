@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { CategorySlug } from "../content";
-import { categoryPath } from "../routes";
-import { nicheHostForHostname, nicheOrigin } from "../subdomains";
+import { categoryPath, solingenStudioPath } from "../routes";
+import { nicheHostForHostname, nicheOrigin, PORTAL_CATEGORY_SUBDOMAIN } from "../subdomains";
 import {
   BRAND_NAME,
   BUSINESS_PORTRAITS_OG_ALT,
@@ -38,10 +38,12 @@ function urlOnOrigin(pathname: string, origin: string | null) {
 }
 
 function languageAlternatesOn(pathnameFor: (locale: Locale) => string, origin: string | null) {
+  // Niche hosts (origin set) are German by default. The main site stays English.
+  const xDefault: Locale = origin ? "de" : "en";
   return {
     en: urlOnOrigin(pathnameFor("en"), origin),
     de: urlOnOrigin(pathnameFor("de"), origin),
-    "x-default": urlOnOrigin(pathnameFor("en"), origin),
+    "x-default": urlOnOrigin(pathnameFor(xDefault), origin),
   };
 }
 
@@ -128,6 +130,16 @@ export function buildHomeMetadata(locale: Locale): Metadata {
   };
 }
 
+const COMPLETE_DOCUMENT_TITLES = new Set<CategorySlug>([
+  "real-estate",
+  "wedding",
+  "business-portraits",
+  "studio",
+  "food",
+  "cinematography",
+  "commercial",
+]);
+
 export function buildCategoryMetadata(
   locale: Locale,
   slug: CategorySlug,
@@ -137,8 +149,14 @@ export function buildCategoryMetadata(
   const seo = dict.seo[slug];
   // On the matching niche host the public URL is `/de` or `/en`. The category
   // folder is only the internal rewrite target. Other hosts keep the www path.
+  // Application photos are canonical on studio.* even when the www URL is opened.
   const niche = requestHost ? nicheHostForHostname(requestHost) : null;
-  const origin = niche?.slug === slug ? nicheOrigin(niche.subdomain, requestHost) : null;
+  const onMatchingNiche = niche?.slug === slug;
+  const origin = onMatchingNiche
+    ? nicheOrigin(niche.subdomain, requestHost)
+    : slug === "studio"
+      ? nicheOrigin(PORTAL_CATEGORY_SUBDOMAIN.studio)
+      : null;
   const pathFor = (entry: Locale) =>
     origin ? `/${entry}` : withLocale(categoryPath(slug, entry), entry);
   const path = pathFor(locale);
@@ -157,9 +175,9 @@ export function buildCategoryMetadata(
   const { title, openGraphTitle } = resolveDocumentTitle(
     seo.title,
     dict.brand,
-    slug === "real-estate"
+    COMPLETE_DOCUMENT_TITLES.has(slug)
   );
-  return {
+  const metadata: Metadata = {
     title,
     description: seo.description,
     alternates: {
@@ -170,6 +188,29 @@ export function buildCategoryMetadata(
       ...openGraphFor(locale, path, openGraphTitle, seo.description, images),
       url: canonical,
     },
+  };
+
+  // The www URL is only a pointer. The indexable page is the studio host.
+  if (slug === "studio" && !onMatchingNiche) {
+    metadata.robots = { index: false, follow: true };
+  }
+
+  return metadata;
+}
+
+export function buildSolingenStudioMetadata(locale: Locale): Metadata {
+  const dict = getDictionarySync(locale);
+  const seo = dict.seo.solingen;
+  const path = withLocale(solingenStudioPath(locale), locale);
+  const { title, openGraphTitle } = resolveDocumentTitle(seo.title, dict.brand, true);
+  return {
+    title,
+    description: seo.description,
+    alternates: {
+      canonical: absoluteUrl(path),
+      languages: languageAlternates((entry) => withLocale(solingenStudioPath(entry), entry)),
+    },
+    openGraph: openGraphFor(locale, path, openGraphTitle, seo.description),
   };
 }
 
