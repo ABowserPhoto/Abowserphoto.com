@@ -2,10 +2,13 @@ import type { Locale } from "./i18n/config";
 import type { LegalPath } from "./routes";
 import { COOKIE_CONSENT_STORAGE_KEY } from "./cookieConsent";
 import {
-  BRAND_NAME,
-  COMPANY_REGISTER,
+  appointmentOnlyLabel,
   CONTACT_EMAIL,
   CONTACT_PHONE_DISPLAY,
+  formatHagenOpeningHours,
+} from "./contact";
+import {
+  COMPANY_REGISTER,
   formatStudioLine,
   GA_MEASUREMENT_ID,
   HAGEN_STUDIO,
@@ -46,8 +49,8 @@ function impressum(locale: Locale): LegalDocument {
             : `Main studio: ${formatStudioLine(HAGEN_STUDIO)}`,
           de ? "Deutschland" : "Germany",
           de
-            ? `Studio Solingen, nur nach Termin, für größere Produktionen: ${formatStudioLine(SOLINGEN_STUDIO)}`
-            : `Solingen studio, by appointment only, for larger productions: ${formatStudioLine(SOLINGEN_STUDIO)}`,
+            ? `Studio Solingen, ${appointmentOnlyLabel("de", { sentence: false })}, für größere Produktionen: ${formatStudioLine(SOLINGEN_STUDIO)}`
+            : `Solingen studio, ${appointmentOnlyLabel("en", { sentence: false })}, for larger productions: ${formatStudioLine(SOLINGEN_STUDIO)}`,
         ],
       },
       {
@@ -55,6 +58,12 @@ function impressum(locale: Locale): LegalDocument {
         paragraphs: [
           de ? `Telefon: ${CONTACT_PHONE_DISPLAY}` : `Phone: ${CONTACT_PHONE_DISPLAY}`,
           `E-Mail: ${CONTACT_EMAIL}`,
+          de
+            ? `Öffnungszeiten Studio Hagen: ${formatHagenOpeningHours("de")}`
+            : `Hagen studio opening hours: ${formatHagenOpeningHours("en")}`,
+          de
+            ? `Studio Solingen: ${appointmentOnlyLabel("de")}`
+            : `Solingen studio: ${appointmentOnlyLabel("en")}`,
         ],
       },
       {
@@ -108,6 +117,9 @@ function datenschutz(locale: Locale): LegalDocument {
           de ? "Deutschland" : "Germany",
           `${de ? "Telefon" : "Phone"}: ${CONTACT_PHONE_DISPLAY}`,
           `E-Mail: ${CONTACT_EMAIL}`,
+          de
+            ? `Öffnungszeiten des Hauptstudios in Hagen: ${formatHagenOpeningHours("de")}. Studio Solingen: ${appointmentOnlyLabel("de")}.`
+            : `Opening hours of the main studio in Hagen: ${formatHagenOpeningHours("en")}. Solingen studio: ${appointmentOnlyLabel("en")}.`,
         ],
       },
       {

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
   LOCALE_COOKIE,
+  defaultLocale,
   detectLocaleFromHeader,
   getLocaleFromPathname,
   isLocale,
@@ -9,7 +10,7 @@ import {
   type Locale,
 } from "./lib/i18n/config";
 import { localizePublicPath } from "./lib/routes";
-import { nicheHostForHostname } from "./lib/subdomains";
+import { isNicheOnHostPath, nicheHostForHostname } from "./lib/subdomains";
 import { copySessionOntoResponse, updateSession } from "./lib/supabase/middleware";
 
 const PUBLIC_FILE = /\.[^/]+$/;
@@ -25,10 +26,10 @@ function isSkippedPath(pathname: string) {
   );
 }
 
-function resolveLocale(req: NextRequest): Locale {
+function resolveLocale(req: NextRequest, fallback: Locale): Locale {
   const cookieLocale = req.cookies.get(LOCALE_COOKIE)?.value;
   if (cookieLocale && isLocale(cookieLocale)) return cookieLocale;
-  return detectLocaleFromHeader(req.headers.get("accept-language"));
+  return detectLocaleFromHeader(req.headers.get("accept-language"), fallback);
 }
 
 function applyLocaleHeaders(response: NextResponse, locale: Locale) {
@@ -114,19 +115,27 @@ export async function proxy(req: NextRequest) {
     return redirectToPath(req, supabaseResponse, "/de", "de");
   }
 
-  const locale = resolveLocale(req);
   const niche = nicheHostForHostname(hostname);
+  // Niche hosts are German-market sites. The fallback locale is German.
+  // A cookie or an explicit Accept-Language of en/de still wins. The rewrite
+  // stays on this hostname.
+  const locale = resolveLocale(req, niche ? "de" : defaultLocale);
   if (niche) {
-    // A /de or /en prefix (the language switcher) wins over the cookie so the
-    // visible locale and the rewritten page stay in sync. The browser URL is
-    // left as-is; only the internal path changes.
+    // `/`, `/de`, and `/en` are the public category URL. A locale prefix wins
+    // over the cookie. The rewrite leaves the browser on this host.
+    // This category's own routes, plus legal, account, and booking, are served
+    // here too so those links do not collapse back into the landing page.
+    // Any other path still rewrites to the landing page.
     const pathLocale = getLocaleFromPathname(pathname);
     const nicheLocale = pathLocale ?? locale;
     const destination = withLocale(niche.basePath, nicheLocale);
-    if (pathname === destination) {
-      return continueWithLocale(req, supabaseResponse, nicheLocale);
+    const bareLanding = pathname === "/" || pathname === "/de" || pathname === "/en";
+    if (bareLanding || !isNicheOnHostPath(pathname, niche.slug)) {
+      if (pathname === destination) {
+        return continueWithLocale(req, supabaseResponse, nicheLocale);
+      }
+      return rewriteToPath(req, supabaseResponse, destination, nicheLocale);
     }
-    return rewriteToPath(req, supabaseResponse, destination, nicheLocale);
   }
 
   if (pathname === "/immobilien" || pathname.startsWith("/immobilien/")) {

@@ -1,8 +1,34 @@
 /**
  * Public business facts for Aaron Bowser Photography.
+ * Phone, email, studio addresses, and Hagen hours come from `lib/contact.ts`.
  * Unknown values stay null and are omitted from JSON-LD.
  * Do not invent a price, a social profile, or a legal name that is not listed here.
  */
+
+import {
+  appointmentOnlyLabel,
+  HAGEN_ADDRESS,
+  SOLINGEN_ADDRESS,
+  formatAddressLine,
+} from "./contact";
+
+export {
+  appointmentOnlyLabel,
+  contactEmailHref,
+  contactPhoneHref,
+  CONTACT_EMAIL,
+  CONTACT_PHONE_DISPLAY,
+  CONTACT_PHONE_E164,
+  CONTACT_PHONE_TEL,
+  fillContactTokens,
+  formatAddressLine,
+  formatHagenOpeningHours,
+  HAGEN_ADDRESS,
+  HAGEN_OPENING_HOURS,
+  hagenHoursLine,
+  hagenOpeningHoursSpecification,
+  SOLINGEN_ADDRESS,
+} from "./contact";
 
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aaronbowser-photography.com";
 
@@ -22,19 +48,12 @@ export const SITE_URL = normalizeSiteUrl(configuredSiteUrl);
 
 /**
  * Google Analytics 4 measurement ID (gtag.js / Google tag).
- * studio.aaronbowser-photography.com should reuse this same ID.
+ * studio.abowserphoto.com should reuse this same ID.
  */
 export const GA_MEASUREMENT_ID = "G-L8XCWNTH3N";
 
 export const BRAND_NAME = "Aaron Bowser Photography";
 export const LEGAL_NAME = "Aaron Bowser Photography UG (haftungsbeschränkt)";
-
-/** Public studio mailbox. */
-export const CONTACT_EMAIL = "info@aaronbowser-photography.com";
-
-/** Published in the site footer before this SEO pass. */
-export const CONTACT_PHONE_DISPLAY = "+49 157 83529270";
-export const CONTACT_PHONE_E164 = "+4915783529270";
 
 export const OG_IMAGE_PATH = "/og/aaron-bowser-photography-hagen-solingen.jpg";
 export const OG_IMAGE_WIDTH = 1200;
@@ -66,15 +85,12 @@ export type Studio = {
   summaryDe: string;
   summaryEn: string;
   /**
-   * Public page for this studio. Null until the page exists, so the
-   * interface must not render a link.
+   * Locale-less path. `withLocale` maps it to the public German or English slug.
+   * Null when the studio has no page of its own.
    */
   pagePath: string | null;
-  /** Plain-text hook. Not a link while pagePath is null. */
   detailLabelDe?: string;
   detailLabelEn?: string;
-  /** Reserved path for a future page. Do not link it yet. */
-  plannedPagePath?: string;
 };
 
 export const STUDIOS: readonly Studio[] = [
@@ -82,10 +98,10 @@ export const STUDIOS: readonly Studio[] = [
     id: "hagen",
     nameDe: "Studio Hagen",
     nameEn: "Hagen studio",
-    street: "Eckeseyer Str. 133",
-    postalCode: "58089",
-    city: "Hagen",
-    countryCode: "DE",
+    street: HAGEN_ADDRESS.street,
+    postalCode: HAGEN_ADDRESS.postalCode,
+    city: HAGEN_ADDRESS.city,
+    countryCode: HAGEN_ADDRESS.countryCode,
     latitude: 51.3771835,
     longitude: 7.454225,
     mapsUrl:
@@ -101,31 +117,28 @@ export const STUDIOS: readonly Studio[] = [
     id: "solingen",
     nameDe: "Studio Solingen",
     nameEn: "Solingen studio",
-    street: "Merscheider Str. 112",
-    postalCode: "42699",
-    city: "Solingen",
-    countryCode: "DE",
+    street: SOLINGEN_ADDRESS.street,
+    postalCode: SOLINGEN_ADDRESS.postalCode,
+    city: SOLINGEN_ADDRESS.city,
+    countryCode: SOLINGEN_ADDRESS.countryCode,
     latitude: 51.1641699,
     longitude: 7.020909,
     mapsUrl:
       "https://www.google.com/maps/place/Aaron+Bowser+Photography/@51.1641699,7.020909,17z/data=!4m6!3m5!1s0x47b8d36375b52c6f:0x36d573286e598635!8m2!3d51.1641699!4d7.020909!16s%2Fg%2F11vzycbxq5",
     areaSqm: 100,
-    summaryDe:
-      "Etwa 100 m² für größere Produktionen, zum Beispiel Teams, Commercial und aufwendigere Sets. Nur nach Termin. Studiovermietung möglich.",
-    summaryEn:
-      "About 100 m² for larger productions, such as team shoots, commercial work, and bigger set-ups. By appointment only. The studio can be rented.",
-    pagePath: null,
+    summaryDe: `Etwa 100 m² für größere Produktionen, zum Beispiel Teams, Commercial und aufwendigere Sets. ${appointmentOnlyLabel("de")}. Studiovermietung möglich.`,
+    summaryEn: `About 100 m² for larger productions, such as team shoots, commercial work, and bigger set-ups. ${appointmentOnlyLabel("en")}. The studio can be rented.`,
+    pagePath: "/fotostudio-solingen",
     detailLabelDe: "Studio Solingen – mehr erfahren",
-    detailLabelEn: "Studio Solingen — more to come",
-    plannedPagePath: "/studio-solingen",
+    detailLabelEn: "Learn more about the Solingen studio",
   },
 ];
 
 export const HAGEN_STUDIO = STUDIOS[0];
 export const SOLINGEN_STUDIO = STUDIOS[1];
 
-export function formatStudioLine(studio: Studio) {
-  return `${studio.street}, ${studio.postalCode} ${studio.city}`;
+export function formatStudioLine(studio: Pick<Studio, "street" | "postalCode" | "city">) {
+  return formatAddressLine(studio);
 }
 
 /** Facts already printed in the site footer. */
@@ -140,10 +153,28 @@ export const MANAGING_DIRECTOR = "Aaron Bowser";
 export const HOSTING_PROVIDER = "Vercel";
 
 /**
- * TODO(owner): Startpreis für Business-Porträts eintragen, zum Beispiel "ab 249 €".
- * null zeigt auf der Seite nur "Preis auf Anfrage".
+ * The only amounts published on the site.
+ * An application photo (Bewerbungsfoto) is €29 for 1 digital photo.
+ * A biometric passport photo (Passbild / biometrisches Passfoto) is €15.
+ * Every other service is an individual quote and must not publish an amount.
  */
-export const BUSINESS_PORTRAIT_PRICE_FROM: string | null = null;
+export const APPLICATION_PHOTO_PRICE_EUR = "29";
+export const PASSPORT_PHOTO_PRICE_EUR = "15";
+
+export function applicationPhotoPriceLine(locale: "de" | "en") {
+  return locale === "de" ? "€29 für 1 digitales Foto" : "€29 for 1 digital photo";
+}
+
+export function passportPhotoPriceLine() {
+  return "€15";
+}
+
+export function studioSittingPriceAnswer(locale: "de" | "en") {
+  if (locale === "de") {
+    return `Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}. LinkedIn- und Xing-Porträts aus demselben Termin sind auf Anfrage.`;
+  }
+  return `An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}. LinkedIn and Xing portraits from the same visit are on request.`;
+}
 
 export const SOCIAL_LINKS = [
   {

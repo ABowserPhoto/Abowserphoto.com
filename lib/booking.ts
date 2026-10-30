@@ -1,5 +1,6 @@
-import { getLocaleFromPathname, stripLocaleFromPathname } from "./i18n/config";
+import { getLocaleFromPathname, stripLocaleFromPathname, type Locale } from "./i18n/config";
 import { resolveCategorySegment } from "./routes";
+import { nicheHostForHostname } from "./subdomains";
 
 export const BOOKING_QUERY_KEY = "book";
 export const BOOKING_QUERY_VALUE = "1";
@@ -59,6 +60,36 @@ export function getInquiryCategory(pathname: string): InquiryCategory {
   return { slug: "general", label: "General" };
 }
 
+function generalInquiryCategory(): InquiryCategory {
+  return { slug: "general", label: INQUIRY_CATEGORY_LABELS.general };
+}
+
+/**
+ * Which booking form to show.
+ * Niche hosts keep their category when the address bar is still `/`, `/de`,
+ * or `/en`. `proxy.ts` rewrites those to the category page and does not
+ * redirect. The main site follows the path.
+ */
+export function resolveBookingContext(pathname: string, hostname = ""): {
+  isRealEstate: boolean;
+  inquiryCategory: InquiryCategory;
+} {
+  const niche = nicheHostForHostname(hostname);
+  if (niche?.slug === "real-estate") {
+    return { isRealEstate: true, inquiryCategory: generalInquiryCategory() };
+  }
+  if (niche && isInquiryCategorySlug(niche.slug)) {
+    return {
+      isRealEstate: false,
+      inquiryCategory: { slug: niche.slug, label: INQUIRY_CATEGORY_LABELS[niche.slug] },
+    };
+  }
+  if (isRealEstateBookingPath(pathname)) {
+    return { isRealEstate: true, inquiryCategory: generalInquiryCategory() };
+  }
+  return { isRealEstate: false, inquiryCategory: getInquiryCategory(pathname) };
+}
+
 export function resolveInquiryCategoryLabel(slug: string) {
   const cleaned = slug.trim();
   if (!isInquiryCategorySlug(cleaned)) return null;
@@ -81,27 +112,45 @@ export type BookingService = (typeof BOOKING_SERVICES)[number];
 export const PHOTO_PACKAGES = [
   {
     id: "bis-5-zimmer",
-    label: "Bis 5 Zimmer (Min. 10 Fotos) - €129",
+    label: {
+      de: "Bis 5 Zimmer (Min. 10 Fotos) — Preis auf Anfrage",
+      en: "Up to 5 rooms (min. 10 photos) — price on request",
+    },
   },
   {
     id: "bis-7-zimmer",
-    label: "Bis 7 Zimmer (Min. 15 Fotos) - €189",
+    label: {
+      de: "Bis 7 Zimmer (Min. 15 Fotos) — Preis auf Anfrage",
+      en: "Up to 7 rooms (min. 15 photos) — price on request",
+    },
   },
   {
     id: "bis-10-zimmer",
-    label: "Bis 10 Zimmer (Min. 25 Fotos) - €229",
+    label: {
+      de: "Bis 10 Zimmer (Min. 25 Fotos) — Preis auf Anfrage",
+      en: "Up to 10 rooms (min. 25 photos) — price on request",
+    },
   },
   {
     id: "30-fotos",
-    label: "30 Fotos - Preis nach Absprache",
+    label: {
+      de: "30 Fotos — Preis auf Anfrage",
+      en: "30 photos — price on request",
+    },
   },
   {
     id: "40-fotos",
-    label: "40 Fotos - Preis nach Absprache",
+    label: {
+      de: "40 Fotos — Preis auf Anfrage",
+      en: "40 photos — price on request",
+    },
   },
   {
     id: "50-fotos",
-    label: "50 Fotos - Preis nach Absprache",
+    label: {
+      de: "50 Fotos — Preis auf Anfrage",
+      en: "50 photos — price on request",
+    },
   },
 ] as const;
 export type PhotoPackage = (typeof PHOTO_PACKAGES)[number]["id"];
@@ -144,8 +193,8 @@ export function isPhotoPackage(value: string): value is PhotoPackage {
   return PHOTO_PACKAGES.some((photoPackage) => photoPackage.id === value);
 }
 
-export function getPhotoPackageLabel(value: PhotoPackage) {
-  return PHOTO_PACKAGES.find((photoPackage) => photoPackage.id === value)?.label ?? value;
+export function getPhotoPackageLabel(value: PhotoPackage, locale: Locale = "de") {
+  return PHOTO_PACKAGES.find((photoPackage) => photoPackage.id === value)?.label[locale] ?? value;
 }
 
 export function parseBookingServices(values: string[]): BookingService[] {

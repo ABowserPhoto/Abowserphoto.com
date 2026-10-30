@@ -1,3 +1,6 @@
+import { appointmentOnlyLabel, formatAddressLine, HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "./contact";
+import { applicationPhotoPriceLine, passportPhotoPriceLine, studioSittingPriceAnswer } from "./site";
+
 export type VirtualTourItem = {
   title: string;
   url: string;
@@ -19,6 +22,8 @@ export type ServiceItem = {
 export type FAQItem = {
   question: string;
   answer: string;
+  linkHref?: string;
+  linkLabel?: string;
 };
 
 export type CategoryContent = {
@@ -48,7 +53,7 @@ export type CategorySlug =
 
 export const sharedAbout = {
   title: "About Me",
-  description: `I am Aaron Bowser, a photographer for business portraits, weddings, commercial work, and real estate in North Rhine-Westphalia. The main studio is in Hagen, about 40 m², where I work every day. The Solingen studio, about 100 m², is for larger productions and by appointment only. The work spans wedding, commercial, editorial, and property photography, blending cinematic composition with authentic emotion.
+  description: `I am Aaron Bowser, a photographer for business portraits, weddings, commercial work, and real estate in North Rhine-Westphalia. The main studio is in Hagen, about 40 m², where I work every day. The Solingen studio, about 100 m², is for larger productions and ${appointmentOnlyLabel("en", { sentence: false })}. The work spans wedding, commercial, editorial, and property photography, blending cinematic composition with authentic emotion.
 
 Whether I am capturing a once-in-a-lifetime celebration, shaping a personal brand, or elevating a real estate listing, every project is approached with intention, craft, and a commitment to images that feel timeless and true.
 
@@ -89,9 +94,14 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         title: "Album Design",
         description: "Fine-art printed albums with curated narrative flow.",
       },
+      {
+        title: "Wedding Film",
+        description:
+          "A film from the same day as the photographs: the registry office, a symbolic ceremony, or the full day. The cut stays calm and is made with the film work.",
+      },
     ],
     aboutText:
-      "I photograph weddings in Hagen, Solingen, and across North Rhine-Westphalia with a cinematic and honest approach. That includes the civil ceremony, a symbolic ceremony, and the full day, with natural emotion and the details that belong to the people in the room.",
+      "I photograph weddings in Hagen, Solingen, and across North Rhine-Westphalia with a cinematic and honest approach. That includes the civil ceremony, a symbolic ceremony, and the full day, with natural emotion and the details that belong to the people in the room. A wedding film can follow the same day; it is produced with the film work, not cut afterwards from the stills.",
     aboutImage:
       "https://images.unsplash.com/photo-1529634806980-85c3dd6d34ac?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -221,8 +231,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         image: "/business-portraits/portfolio/business-fotografie-frau-hellblauer-anzug.webp",
       },
     ],
-    aboutText:
-      "I am Aaron Bowser, a photographer for business portraits, weddings, and commercial work. The main studio is in Hagen, Eckeseyer Str. 133, about 40 m². I work there every day, and portrait and business sessions are booked there by default. The Solingen studio, Merscheider Str. 112, is about 100 m² and is for larger productions, such as teams and bigger set-ups, by appointment only. It can also be rented. Studio Solingen — more to come; a page of its own will follow.\n\nFor companies the pictures should share one calm line on the website, on LinkedIn, and in the press. Before the session we agree where the portraits will be used and who should be in them. During the sitting I direct posture and expression.",
+    aboutText: `I am Aaron Bowser, a photographer for business portraits, weddings, and commercial work. The main studio is in Hagen, ${HAGEN_ADDRESS.street}, about 40 m². I work there every day, and portrait and business sessions are booked there by default. The Solingen studio, ${SOLINGEN_ADDRESS.street}, is about 100 m² and is for larger productions, such as teams and bigger set-ups, ${appointmentOnlyLabel("en", { sentence: false })}. It can also be rented. The Solingen studio has its own page, with the floor area and how a rental is arranged.\n\nFor companies the pictures should share one calm line on the website, on LinkedIn, and in the press. Before the session we agree where the portraits will be used and who should be in them. During the sitting I direct posture and expression.`,
     aboutImage:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -234,22 +243,19 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     slug: "studio",
     navLabel: "Application Photos",
     title: "Application Photos and Passport Photos in Hagen",
-    subtitle:
-      "Application photos and biometric passport photos at the Hagen studio, Eckeseyer Str. 133.",
+    subtitle: `Application photos and biometric passport photos at the Hagen studio, ${HAGEN_ADDRESS.street}. An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}.`,
     themeColor: "#446E8B",
     heroImage: "/business-portraits/hero/businessportrait-hero-frau-flieder-blazer.webp",
     portfolioImages: buildPortfolio("studio"),
     services: [
       {
         title: "Application Photos",
-        description:
-          "Portraits for a job application, a CV, and a company profile. Light, background, and expression are set for the place the picture will be used.",
+        description: `An application photo is ${applicationPhotoPriceLine("en")}. Portraits for a job application, a CV, and a company profile. Light, background, and expression are set for the place the picture will be used.`,
         image: "/business-portraits/portfolio/businessfoto-frau-weisse-bluse-studio.webp",
       },
       {
         title: "Passport Photos",
-        description:
-          "Biometric photographs for a German passport, an identity card, and a visa. The portrait is frontal, with a neutral expression, on a plain background, following the current official rules.",
+        description: `A biometric passport photo is ${passportPhotoPriceLine()}. Photographs for a German passport, an identity card, and a visa. The portrait is frontal, with a neutral expression, on a plain background, following the current official rules.`,
         image: "/business-portraits/portfolio/linkedin-foto-frau-grauer-hintergrund.webp",
       },
       {
@@ -259,18 +265,17 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         image: "/business-portraits/portfolio/mitarbeiterfoto-frau-sitzend-grau.webp",
       },
     ],
-    aboutText:
-      "I am Aaron Bowser. Application photos and passport photos are made at the Hagen studio, Eckeseyer Str. 133, about 40 m². I work there every day, and these sittings are booked there.\n\nAn application photo and a passport photo are different pictures. For the application we agree where it will be seen, then I direct posture and expression. The passport photo follows the current biometric rules: a frontal portrait, a neutral expression, and a plain background. Both can be made in the same visit.",
+    aboutText: `I am Aaron Bowser. Application photos and passport photos are made at the Hagen studio, ${HAGEN_ADDRESS.street}, about 40 m². I work there every day, and these sittings are booked there.\n\nAn application photo and a passport photo are different pictures. For the application we agree where it will be seen, then I direct posture and expression. The passport photo follows the current biometric rules: a frontal portrait, a neutral expression, and a plain background. Both can be made in the same visit.\n\nAn application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}.`,
     aboutImage:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
     faq: [
       {
         question: "Where are application and passport photos taken?",
-        answer: "At the Hagen studio, Eckeseyer Str. 133, 58089 Hagen.",
+        answer: `At the Hagen studio, ${formatAddressLine(HAGEN_ADDRESS)}.`,
       },
       {
         question: "What does a sitting cost?",
-        answer: "The fee is on request. We confirm the pictures you need before the appointment.",
+        answer: studioSittingPriceAnswer("en"),
       },
     ],
   },
@@ -374,7 +379,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     slug: "commercial",
     navLabel: "Commercial",
     title: "Commercial & Editorial",
-    subtitle: "Commercial and editorial photography for brands in North Rhine-Westphalia. The main studio is in Hagen. Larger productions use the Solingen studio, by appointment only.",
+    subtitle: `Commercial and editorial photography for brands in North Rhine-Westphalia. The main studio is in Hagen. Larger productions use the Solingen studio, ${appointmentOnlyLabel("en", { sentence: false })}.`,
     themeColor: "#FFB70F",
     heroImage:
       "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?auto=format&fit=crop&w=1920&q=80",
@@ -408,7 +413,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
       }
     ],
     aboutText:
-      "My commercial work is rooted in editorial storytelling—blending high-fashion sensibility with intentional narrative to create portraits that feel cinematic, refined, and publication-ready. The Hagen studio is about 40 m² and is where I work every day. Larger productions and set-ups use the Solingen studio, about 100 m², by appointment only. That studio can also be rented.",
+      `My commercial work is rooted in editorial storytelling—blending high-fashion sensibility with intentional narrative to create portraits that feel cinematic, refined, and publication-ready. The Hagen studio is about 40 m² and is where I work every day. Larger productions and set-ups use the Solingen studio, about 100 m², ${appointmentOnlyLabel("en", { sentence: false })}. That studio can also be rented.`,
     aboutImage:
       "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
     faq: [

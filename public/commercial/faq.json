@@ -2,11 +2,11 @@
   "de": [
     {
       "question": "Was kostet ein Commercial-Shooting?",
-      "answer": "Jedes Projekt ist anders. Der Preis hängt vom Umfang, von der Zahl der finalen Bilder, von der Produktion und von der Lizenz ab. Schreiben Sie mir die Eckdaten, dann bekommen Sie ein klares Angebot."
+      "answer": "Preis auf Anfrage. Jedes Projekt ist anders, deshalb erhalten Sie ein individuelles Angebot. Schreiben Sie mir den Umfang, die Zahl der finalen Bilder, die Produktion und die geplante Nutzung."
     },
     {
       "question": "Wie funktionieren Lizenz und Nutzungsrechte?",
-      "answer": "Sie erwerben das Recht, die Bilder für einen vereinbarten Zweck zu nutzen. Die Lizenz richtet sich nach Medium, Laufzeit und Gebiet. Wir klären die Nutzung vor dem Angebot, damit sie im Preis enthalten ist."
+      "answer": "Sie erwerben das Recht, die Bilder für einen vereinbarten Zweck zu nutzen. Die Lizenz richtet sich nach Medium, Laufzeit und Gebiet. Wir klären die Nutzung vor dem individuellen Angebot."
     },
     {
       "question": "Stellen Sie Hair, Make-up und Styling?",
@@ -14,7 +14,7 @@
     },
     {
       "question": "Wo findet das Shooting statt?",
-      "answer": "Vor Ort in Nordrhein-Westfalen, unter anderem in Hagen, Düsseldorf und Köln. Das Hauptstudio in Hagen, Eckeseyer Str. 133, hat etwa 40 m²; Aaron arbeitet dort täglich. Größere Produktionen und Sets kommen ins Studio Solingen, Merscheider Str. 112, etwa 100 m², nur nach Termin. Das Studio kann auch gemietet werden."
+      "answer": "Vor Ort in Nordrhein-Westfalen, unter anderem in Hagen, Düsseldorf und Köln. Das Hauptstudio in Hagen, {hagenStreet}, hat etwa 40 m²; Aaron arbeitet dort täglich. Größere Produktionen und Sets kommen ins Studio Solingen, {solingenStreet}, etwa 100 m², {appointmentDeLower}. Das Studio kann auch gemietet werden."
     },
     {
       "question": "Wann sind die bearbeiteten Bilder fertig?",
@@ -24,11 +24,11 @@
   "en": [
     {
       "question": "How much does a commercial photoshoot cost?",
-      "answer": "Every commercial project is unique. Pricing depends on the scope of the shoot, the number of final images required, production costs (like set design or talent), and image licensing usage. Please reach out with details about your project, and I will provide a custom, transparent quote tailored to your specific needs."
+      "answer": "The fee is on request. Every project is different, so you receive an individual quote. Send the scope, the number of final images, the production, and how you plan to use the pictures."
     },
     {
       "question": "How do image licensing and usage rights work?",
-      "answer": "In commercial photography, you purchase the rights to use the images for specific purposes. Usage fees are calculated based on where the images will appear (web, print, social media, packaging), the duration of use, and the geographic region. We will discuss exactly how you plan to use the images upfront so your quote includes the correct licensing with no surprises."
+      "answer": "You buy the right to use the pictures for an agreed purpose. The licence follows the medium, the term, and the territory. We confirm that use before the individual quote."
     },
     {
       "question": "Do you provide hair, makeup, and styling, or do we need to bring our own?",
@@ -36,7 +36,7 @@
     },
     {
       "question": "Where will the photoshoot take place? Do you have a studio?",
-      "answer": "I shoot on location across North Rhine-Westphalia, including Hagen, Düsseldorf, and Köln. The main studio is in Hagen at Eckeseyer Str. 133, about 40 m², and Aaron works there every day. Larger productions and set-ups use the Solingen studio at Merscheider Str. 112, about 100 m², by appointment only. That studio can also be rented."
+      "answer": "I shoot on location across North Rhine-Westphalia, including Hagen, Düsseldorf, and Köln. The main studio is in Hagen at {hagenStreet}, about 40 m², and Aaron works there every day. Larger productions and set-ups use the Solingen studio at {solingenStreet}, about 100 m², {appointmentEnLower}. That studio can also be rented."
     },
     {
       "question": "What is the turnaround time to receive the final edited images?",

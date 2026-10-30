@@ -29,8 +29,8 @@ export function withLocale(pathname: string, locale: Locale) {
   return `/${locale}${localized}`;
 }
 
-export function detectLocaleFromHeader(header: string | null): Locale {
-  if (!header) return defaultLocale;
+export function detectLocaleFromHeader(header: string | null, fallback: Locale = defaultLocale): Locale {
+  if (!header) return fallback;
   const preferred = header
     .split(",")
     .map((part) => {
@@ -48,5 +48,5 @@ export function detectLocaleFromHeader(header: string | null): Locale {
     if (entry.tag.startsWith("en")) return "en";
   }
 
-  return defaultLocale;
+  return fallback;
 }

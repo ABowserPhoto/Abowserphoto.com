@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { PageSection } from "../lib/i18n/pageSections";
 
 type PageSectionsProps = {
@@ -24,6 +25,19 @@ export default function PageSections({ sections }: PageSectionsProps) {
           <div className="mt-5 space-y-4 text-sm leading-relaxed text-[#322B2B]/80 sm:text-base">
             {section.paragraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+            ))}
+            {section.links?.map((item) => (
+              <p key={item.href}>
+                {item.href.startsWith("http") ? (
+                  <a href={item.href} className="underline underline-offset-2">
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link href={item.href} className="underline underline-offset-2">
+                    {item.label}
+                  </Link>
+                )}
+              </p>
             ))}
           </div>
         </section>

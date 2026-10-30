@@ -1,4 +1,12 @@
-import { BRAND_NAME, CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, formatStudioLine, STUDIOS } from "../../lib/site";
+import {
+  appointmentOnlyLabel,
+  CONTACT_EMAIL,
+  CONTACT_PHONE_DISPLAY,
+  contactEmailHref,
+  contactPhoneHref,
+  hagenHoursLine,
+} from "../../lib/contact";
+import { BRAND_NAME, formatStudioLine, STUDIOS } from "../../lib/site";
 
 type FooterSectionProps = {
   accentColor: string;
@@ -11,11 +19,19 @@ export default function FooterSection({ accentColor }: FooterSectionProps) {
         <div>
           <p className="text-lg font-semibold text-slate-900">{BRAND_NAME}</p>
           <p className="text-sm text-slate-600">
-            {CONTACT_EMAIL} | {CONTACT_PHONE_DISPLAY}
+            <a href={contactEmailHref()} className="underline-offset-2 hover:underline">
+              {CONTACT_EMAIL}
+            </a>
+            {" | "}
+            <a href={contactPhoneHref()} className="underline-offset-2 hover:underline">
+              {CONTACT_PHONE_DISPLAY}
+            </a>
           </p>
           {STUDIOS.map((studio) => (
             <p key={studio.id} className="text-sm text-slate-600">
               {studio.nameEn}: {formatStudioLine(studio)}
+              {". "}
+              {studio.id === "hagen" ? hagenHoursLine("en") : appointmentOnlyLabel("en")}
             </p>
           ))}
         </div>

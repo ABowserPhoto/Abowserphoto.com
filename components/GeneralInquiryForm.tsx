@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { submitGeneralInquiry } from "../actions/submitGeneralInquiry";
+import { inquiryLead, trackGenerateLead } from "../lib/analytics";
 import { todayInputValue, type InquiryCategory } from "../lib/booking";
 import { useDictionary, useLocale } from "../lib/i18n/LocaleProvider";
 import { createClient } from "../lib/supabase/client";
@@ -76,6 +77,13 @@ export default function GeneralInquiryForm({
           locale,
         });
         if (result.success) {
+          trackGenerateLead(
+            inquiryLead(
+              category.slug,
+              typeof window === "undefined" ? "" : window.location.pathname,
+              typeof window === "undefined" ? "" : window.location.hostname
+            )
+          );
           setIsSuccess(true);
           return;
         }

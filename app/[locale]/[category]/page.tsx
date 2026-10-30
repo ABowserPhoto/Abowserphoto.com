@@ -1,8 +1,11 @@
 import fs from "fs";
 import path from "path";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound, permanentRedirect } from "next/navigation";
 import CategoryTemplate from "../../../components/CategoryTemplate";
+import { FaqPageJsonLd, StudioServiceJsonLd } from "../../../components/JsonLd";
+import StudioOffHostNotice from "../../../components/StudioOffHostNotice";
 import { getAboutImageUrl, getImageDimensions, getLogoUrl } from "../../../lib/cms";
 import { categoryContentMap, categoryNavigation, type CategorySlug } from "../../../lib/content";
 import { readFaqFile } from "../../../lib/faqs";
@@ -13,6 +16,7 @@ import { getLocalizedCategory, getLocalizedSharedAbout } from "../../../lib/i18n
 import { getPageFaqs, getPageSections } from "../../../lib/i18n/pageSections";
 import { buildCategoryMetadata } from "../../../lib/i18n/seo";
 import { categorySegment, resolveCategorySegment } from "../../../lib/routes";
+import { nicheHostForHostname } from "../../../lib/subdomains";
 
 type CategoryPageProps = {
   params: Promise<{
@@ -34,7 +38,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const { locale: rawLocale, category } = await params;
   const slug = resolveCategorySegment(category);
   if (!isLocale(rawLocale) || !slug) return {};
-  return buildCategoryMetadata(rawLocale, slug);
+  const host = (await headers()).get("host");
+  return buildCategoryMetadata(rawLocale, slug, host);
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
@@ -49,6 +54,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!slug) notFound();
   if (category !== categorySegment(slug, locale)) {
     permanentRedirect(`/${locale}/${categorySegment(slug, locale)}`);
+  }
+
+  const host = (await headers()).get("host");
+  if (slug === "studio" && nicheHostForHostname(host ?? "")?.slug !== "studio") {
+    const dictionary = await getDictionary(locale);
+    return (
+      <StudioOffHostNotice
+        locale={locale}
+        dictionary={dictionary}
+        logoUrl={getLogoUrl()}
+        publicHost={host ?? ""}
+      />
+    );
   }
 
   const baseCategory = categoryContentMap[slug];
@@ -111,22 +129,26 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       : `${selectedCategory.aboutText}\n\n${sharedAbout.description}`;
 
   return (
-    <CategoryTemplate
-      category={selectedCategory}
-      portfolio={portfolio}
-      heroMedia={heroMedia}
-      services={servicesWithMedia}
-      logoUrl={logoUrl}
-      aboutData={{
-        title: sharedAbout.title,
-        description: aboutDescription,
-        imageUrl: aboutImageUrl,
-        imageAlt: aboutImageUrl ? getImageAlt(aboutImageUrl, locale) : sharedAbout.title,
-      }}
-      faqs={faqs}
-      pageSections={getPageSections(slug, locale)}
-      dictionary={dictionary}
-      locale={locale}
-    />
+    <>
+      {slug === "studio" ? <StudioServiceJsonLd locale={locale} /> : null}
+      {slug === "wedding" ? <FaqPageJsonLd items={faqs} /> : null}
+      <CategoryTemplate
+        category={selectedCategory}
+        portfolio={portfolio}
+        heroMedia={heroMedia}
+        services={servicesWithMedia}
+        logoUrl={logoUrl}
+        aboutData={{
+          title: sharedAbout.title,
+          description: aboutDescription,
+          imageUrl: aboutImageUrl,
+          imageAlt: aboutImageUrl ? getImageAlt(aboutImageUrl, locale) : sharedAbout.title,
+        }}
+        faqs={faqs}
+        pageSections={getPageSections(slug, locale)}
+        dictionary={dictionary}
+        locale={locale}
+      />
+    </>
   );
 }

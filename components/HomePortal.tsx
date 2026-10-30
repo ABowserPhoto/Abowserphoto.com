@@ -3,13 +3,11 @@
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { Major_Mono_Display } from "next/font/google";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PortalHeroSet } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
-import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
-import { categoryPath } from "../lib/routes";
+import { type PortalCategorySlug, portalCategoryUrl } from "../lib/subdomains";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const majorMono = Major_Mono_Display({
@@ -43,14 +41,11 @@ const PORTAL_CATEGORIES = [
   "business-portraits",
   "cinematography",
   "social-media-management",
-  "studio",
-] as const;
-
-type PortalCategory = (typeof PORTAL_CATEGORIES)[number];
+] as const satisfies readonly PortalCategorySlug[];
 
 type HoverLayout = "triptych" | "landscape-image" | "landscape-video";
 
-const HOVER_LAYOUT: Record<PortalCategory, HoverLayout> = {
+const HOVER_LAYOUT: Record<PortalCategorySlug, HoverLayout> = {
   commercial: "triptych",
   "business-portraits": "triptych",
   "social-media-management": "triptych",
@@ -61,7 +56,7 @@ const HOVER_LAYOUT: Record<PortalCategory, HoverLayout> = {
   cinematography: "landscape-video",
 };
 
-const HOVER_COLOR: Record<PortalCategory, string> = {
+const HOVER_COLOR: Record<PortalCategorySlug, string> = {
   commercial: "hover:bg-amber-500/60",
   "real-estate": "hover:bg-orange-600/60",
   wedding: "hover:bg-red-700/60",
@@ -96,10 +91,12 @@ type HomePortalProps = {
   portalHeroes: Record<string, PortalHeroSet>;
   locale: Locale;
   dictionary: Dictionary;
+  /** Request host for building absolute niche URLs on the server. */
+  publicHost?: string;
 };
 
 type Panel = {
-  key: PortalCategory;
+  key: PortalCategorySlug;
   index: number;
   label: string;
   href: string;
@@ -166,7 +163,15 @@ export default function HomePortal({
   portalHeroes,
   locale,
   dictionary,
+  publicHost = "",
 }: HomePortalProps) {
+  const [clientHost, setClientHost] = useState(publicHost);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setClientHost(window.location.host);
+    }
+  }, []);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoverEnabled, setHoverEnabled] = useState(false);
   const [linksReady, setLinksReady] = useState(false);
@@ -177,13 +182,14 @@ export default function HomePortal({
     target: trackRef,
     offset: ["start start", "end end"],
   });
-  const videoOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const aaronX = useTransform(scrollYProgress, [0, 1], ["0vw", "-100vw"]);
-  const bowserX = useTransform(scrollYProgress, [0, 1], ["0vw", "100vw"]);
-  const nameOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const baseOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const brandingOpacity = useTransform(scrollYProgress, [0.25, 0.9], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0.25, 0.9], [-50, 0]);
+  // Ranges run through 0 and 1 so the scroll-linked animation holds each phase
+  // instead of easing back toward the element's starting style.
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
+  const aaronX = useTransform(scrollYProgress, [0, 0.4, 1], ["0vw", "-100vw", "-100vw"]);
+  const bowserX = useTransform(scrollYProgress, [0, 0.4, 1], ["0vw", "100vw", "100vw"]);
+  const nameOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
+  const baseOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0, 1, 1]);
+  const logoOpacity = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 0, 1, 1]);
 
   const panels = useMemo<Panel[]>(
     () =>
@@ -191,12 +197,12 @@ export default function HomePortal({
         key,
         index,
         label: dictionary.home.niches[key],
-        href: withLocale(categoryPath(key, locale), locale),
+        href: portalCategoryUrl(key, { host: clientHost || publicHost, locale }),
         hoverColor: HOVER_COLOR[key],
         seoTitle: dictionary.seo[key].title,
         seoLabel: `${dictionary.home.niches[key]} — ${dictionary.nav.services}`,
       })),
-    [dictionary, locale]
+    [clientHost, dictionary, locale, publicHost]
   );
 
   useEffect(() => {
@@ -206,12 +212,12 @@ export default function HomePortal({
   }, [reduceMotion]);
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
-    const next = value > 0.45;
+    const next = value > 0.4;
     setHoverEnabled((current) => (current === next ? current : next));
 
     const video = videoRef.current;
     if (!video) return;
-    if (value > 0.98) {
+    if (value >= 0.4) {
       if (!video.paused) video.pause();
     } else if (video.paused) {
       void video.play().catch(() => undefined);
@@ -290,7 +296,7 @@ export default function HomePortal({
       {/* Bottom padding on desktop keeps the large signature clear of the bottom menu. */}
       <div className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-start px-4 pt-20 md:justify-center md:pb-32 md:pt-0">
         {logoUrl ? (
-          <motion.div style={{ opacity: brandingOpacity }}>
+          <motion.div style={{ opacity: logoOpacity }}>
             {logoUrl.toLowerCase().endsWith(".svg") ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} alt={dictionary.home.logoLabel} className={CENTER_LOGO_CLASS} />
@@ -307,12 +313,6 @@ export default function HomePortal({
             )}
           </motion.div>
         ) : null}
-        <motion.h1
-          style={{ opacity: brandingOpacity, y: titleY }}
-          className="mt-4 text-center text-xl font-bold uppercase tracking-widest text-white/80 drop-shadow-lg lg:text-2xl"
-        >
-          {dictionary.home.headline}
-        </motion.h1>
       </div>
 
       <nav
@@ -335,7 +335,7 @@ export default function HomePortal({
               ease: NAME_EASE,
             }}
           >
-            <Link
+            <a
               href={panel.href}
               title={panel.seoTitle}
               aria-label={panel.seoLabel}
@@ -349,7 +349,7 @@ export default function HomePortal({
               }`}
             >
               <span className="drop-shadow-md">{panel.label}</span>
-            </Link>
+            </a>
           </motion.div>
         ))}
       </nav>

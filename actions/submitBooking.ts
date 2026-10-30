@@ -80,7 +80,7 @@ async function createCalendarEvent(data: BookingFormData, companyName: string) {
           `Contact Number: ${data.contactNumber}`,
           `Contact Email Address: ${data.contactEmail}`,
           `Services: ${data.services.join(", ")}`,
-          `Photo Package: ${getPhotoPackageLabel(data.photoPackage)}`,
+          `Photo Package: ${getPhotoPackageLabel(data.photoPackage, resolveLocale(data.locale))}`,
           `Additional Details: ${data.additionalDetails?.trim() || "None"}`,
         ].join("\n"),
         start: {

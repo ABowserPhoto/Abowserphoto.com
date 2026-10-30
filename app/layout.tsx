@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import AccountModalBoundary from "../components/AccountModalBoundary";
 import BookingModalBoundary from "../components/BookingModalBoundary";
+import ContactClickListener from "../components/ContactClickListener";
 import CookieConsent from "../components/CookieConsent";
 import GoogleAnalytics from "../components/GoogleAnalytics";
 import JsonLd from "../components/JsonLd";
@@ -34,6 +35,7 @@ export default async function RootLayout({
           <AccountModalBoundary />
           <CookieConsent />
           <GoogleAnalytics />
+          <ContactClickListener />
         </LocaleProvider>
       </body>
     </html>

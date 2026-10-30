@@ -10,7 +10,7 @@ import {
   type Locale,
 } from "../lib/i18n/config";
 import { useLocale } from "../lib/i18n/LocaleProvider";
-import { nicheHostForHostname } from "../lib/subdomains";
+import { nicheHostForHostname, nicheLocaleSwitchPath } from "../lib/subdomains";
 
 type LanguageSwitcherProps = {
   className?: string;
@@ -27,9 +27,9 @@ export default function LanguageSwitcher({ className, onNavigated }: LanguageSwi
 
   function hrefFor(locale: Locale) {
     if (niche) {
-      // `/de` and `/en` stay on the subdomain. The proxy rewrites them to the
-      // localized landing page, so the category folder never enters the bar.
-      return `/${locale}`;
+      // Landing URLs stay `/de` and `/en` on this host. The proxy rewrites
+      // those to the localized category. Subpages keep their own path.
+      return nicheLocaleSwitchPath(pathname, locale, niche);
     }
     return withLocale(stripLocaleFromPathname(pathname), locale);
   }

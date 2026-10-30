@@ -10,7 +10,7 @@ import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
 import type { PageSection } from "../lib/i18n/pageSections";
-import { CONTACT_EMAIL } from "../lib/site";
+import { contactEmailHref } from "../lib/contact";
 import HeroSlider, { type HeroMediaItem } from "./HeroSlider";
 import Navbar from "./Navbar";
 import PageSections from "./PageSections";
@@ -161,7 +161,7 @@ export default function CategoryTemplate({
         onSectionClick={handleSectionClick}
         themeColor={category.themeColor}
         lightSectionRef={aboutRef}
-        homeHref={withLocale("/", locale)}
+        homeHref="/"
         labels={{
           book: dictionary.nav.book,
           home: dictionary.nav.home,
@@ -270,7 +270,7 @@ export default function CategoryTemplate({
                   ))}
               </div>
               <a
-                href={`mailto:${CONTACT_EMAIL}`}
+                href={contactEmailHref()}
                 className="mt-8 inline-flex rounded-full px-6 py-3 text-sm font-semibold text-white transition-opacity duration-300 hover:opacity-90"
                 style={{ backgroundColor: category.themeColor }}
               >
@@ -310,7 +310,20 @@ export default function CategoryTemplate({
                       <span style={{ color: category.themeColor }}>{isOpen ? "−" : "+"}</span>
                     </button>
                     {isOpen ? (
-                      <p className="px-5 pb-4 text-sm leading-relaxed text-[#322B2B]/80">{item.answer}</p>
+                      <div className="px-5 pb-4 text-sm leading-relaxed text-[#322B2B]/80">
+                        <p>{item.answer}</p>
+                        {item.linkHref && item.linkLabel ? (
+                          item.linkHref.startsWith("http") ? (
+                            <a href={item.linkHref} className="mt-3 inline-block underline underline-offset-2">
+                              {item.linkLabel}
+                            </a>
+                          ) : (
+                            <Link href={item.linkHref} className="mt-3 inline-block underline underline-offset-2">
+                              {item.linkLabel}
+                            </Link>
+                          )
+                        ) : null}
+                      </div>
                     ) : null}
                   </motion.article>
                 );
