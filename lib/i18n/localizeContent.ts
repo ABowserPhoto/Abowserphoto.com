@@ -1,4 +1,5 @@
 import { appointmentOnlyLabel, HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "../contact";
+import { applicationPhotoPriceLine, passportPhotoPriceLine } from "../site";
 import {
   categoryContentMap,
   sharedAbout,
@@ -195,18 +196,16 @@ const germanCategoryCopy: Partial<
   studio: {
     navLabel: "Studio Hagen",
     title: "Bewerbungsfotos und Passbilder in Hagen",
-    subtitle: `Bewerbungsfotos und biometrische Passbilder im Studio Hagen, ${HAGEN_ADDRESS.street}.`,
-    aboutText: `Ich bin Aaron Bowser. Bewerbungsfotos und Passbilder entstehen im Studio Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Dort arbeite ich täglich, und diese Termine werden hier gebucht.\n\nEin Bewerbungsfoto und ein Passbild sind zwei verschiedene Bilder. Für die Bewerbung klären wir, wo das Foto erscheinen soll, danach leite ich Haltung und Ausdruck an. Das Passbild folgt den aktuellen biometrischen Vorgaben: frontal, mit neutralem Ausdruck, vor einem einfarbigen Hintergrund. Beides kann in einem Termin entstehen.`,
+    subtitle: `Bewerbungsfotos und biometrische Passbilder im Studio Hagen, ${HAGEN_ADDRESS.street}. Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}.`,
+    aboutText: `Ich bin Aaron Bowser. Bewerbungsfotos und Passbilder entstehen im Studio Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Dort arbeite ich täglich, und diese Termine werden hier gebucht.\n\nEin Bewerbungsfoto und ein Passbild sind zwei verschiedene Bilder. Für die Bewerbung klären wir, wo das Foto erscheinen soll, danach leite ich Haltung und Ausdruck an. Das Passbild folgt den aktuellen biometrischen Vorgaben: frontal, mit neutralem Ausdruck, vor einem einfarbigen Hintergrund. Beides kann in einem Termin entstehen.\n\nEin Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}.`,
     services: [
       {
         title: "Bewerbungsfotos",
-        description:
-          "Porträts für Bewerbung, Lebenslauf und Firmenprofil. Licht, Hintergrund und Ausdruck richten sich danach, wo das Bild verwendet wird.",
+        description: `Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Porträts für Bewerbung, Lebenslauf und Firmenprofil. Licht, Hintergrund und Ausdruck richten sich danach, wo das Bild verwendet wird.`,
       },
       {
         title: "Passbilder",
-        description:
-          "Biometrische Aufnahmen für Reisepass, Personalausweis und Visum. Das Porträt ist frontal, der Ausdruck neutral, der Hintergrund einfarbig, nach den aktuellen amtlichen Vorgaben.",
+        description: `Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}. Aufnahmen für Reisepass, Personalausweis und Visum. Das Porträt ist frontal, der Ausdruck neutral, der Hintergrund einfarbig, nach den aktuellen amtlichen Vorgaben.`,
       },
       {
         title: "LinkedIn- und Xing-Porträts",

@@ -1,6 +1,6 @@
 import type { FAQItem, CategorySlug } from "../content";
 import { appointmentOnlyLabel } from "../contact";
-import { BUSINESS_PORTRAIT_PRICE_FROM, formatStudioLine, HAGEN_STUDIO, SOLINGEN_STUDIO } from "../site";
+import { formatStudioLine, HAGEN_STUDIO, SOLINGEN_STUDIO, studioSittingPriceAnswer } from "../site";
 import type { Locale } from "./config";
 
 export type PageSection = {
@@ -12,18 +12,6 @@ export type PageSection = {
 
 const hagen = formatStudioLine(HAGEN_STUDIO);
 const solingen = formatStudioLine(SOLINGEN_STUDIO);
-
-function priceSentence(locale: Locale) {
-  if (BUSINESS_PORTRAIT_PRICE_FROM) {
-    return locale === "de"
-      ? `Das Honorar für Business-Porträts beginnt bei ${BUSINESS_PORTRAIT_PRICE_FROM}. Den genauen Umfang, also Personen, Ort und Anzahl der finalen Bilder, legen wir vor dem Termin fest.`
-      : `Business portraits start at ${BUSINESS_PORTRAIT_PRICE_FROM}. We confirm people, location, and the number of final images before the session.`;
-  }
-
-  return locale === "de"
-    ? "Das Honorar richtet sich nach Personenzahl, Ort und Umfang. Einen öffentlichen Startpreis gibt es noch nicht, deshalb gilt bis auf Weiteres: Preis auf Anfrage."
-    : "The fee depends on the number of people, the location, and the scope. A public starting price is not set yet, so the fee is on request.";
-}
 
 const weddingSections: Record<Locale, PageSection[]> = {
   de: [
@@ -65,7 +53,8 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
     },
     {
       question: "Was kostet ein Business-Porträt?",
-      answer: priceSentence("de"),
+      answer:
+        "Das Honorar richtet sich nach Personenzahl, Ort und Umfang. Sie erhalten ein individuelles Angebot.",
     },
     {
       question: "Wie läuft das Shooting ab?",
@@ -90,7 +79,8 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
     },
     {
       question: "What does a business portrait cost?",
-      answer: priceSentence("en"),
+      answer:
+        "The fee depends on the number of people, the location, and the scope. You receive an individual quote.",
     },
     {
       question: "How does a session run?",
@@ -159,8 +149,7 @@ const studioFaqs: Record<Locale, FAQItem[]> = {
     },
     {
       question: "Was kostet der Termin?",
-      answer:
-        "Das Honorar ist auf Anfrage. Vor dem Termin legen wir fest, welche Bilder Sie brauchen: Bewerbungsfoto, Passbild oder beides.",
+      answer: studioSittingPriceAnswer("de"),
     },
     {
       question: "Wie läuft das Shooting ab?",
@@ -180,8 +169,7 @@ const studioFaqs: Record<Locale, FAQItem[]> = {
     },
     {
       question: "What does a sitting cost?",
-      answer:
-        "The fee is on request. Before the appointment we confirm which pictures you need: an application photo, a passport photo, or both.",
+      answer: studioSittingPriceAnswer("en"),
     },
     {
       question: "How does the sitting work?",

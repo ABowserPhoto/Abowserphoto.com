@@ -157,10 +157,28 @@ export const MANAGING_DIRECTOR = "Aaron Bowser";
 export const HOSTING_PROVIDER = "Vercel";
 
 /**
- * TODO(owner): Startpreis für Business-Porträts eintragen, zum Beispiel "ab 249 €".
- * null zeigt auf der Seite nur "Preis auf Anfrage".
+ * The only amounts published on the site.
+ * An application photo (Bewerbungsfoto) is €29 for 1 digital photo.
+ * A biometric passport photo (Passbild / biometrisches Passfoto) is €15.
+ * Every other service is an individual quote and must not publish an amount.
  */
-export const BUSINESS_PORTRAIT_PRICE_FROM: string | null = null;
+export const APPLICATION_PHOTO_PRICE_EUR = "29";
+export const PASSPORT_PHOTO_PRICE_EUR = "15";
+
+export function applicationPhotoPriceLine(locale: "de" | "en") {
+  return locale === "de" ? "€29 für 1 digitales Foto" : "€29 for 1 digital photo";
+}
+
+export function passportPhotoPriceLine() {
+  return "€15";
+}
+
+export function studioSittingPriceAnswer(locale: "de" | "en") {
+  if (locale === "de") {
+    return `Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}. LinkedIn- und Xing-Porträts aus demselben Termin sind auf Anfrage.`;
+  }
+  return `An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}. LinkedIn and Xing portraits from the same visit are on request.`;
+}
 
 export const SOCIAL_LINKS = [
   {

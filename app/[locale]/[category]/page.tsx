@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound, permanentRedirect } from "next/navigation";
 import CategoryTemplate from "../../../components/CategoryTemplate";
+import { StudioServiceJsonLd } from "../../../components/JsonLd";
 import { getAboutImageUrl, getImageDimensions, getLogoUrl } from "../../../lib/cms";
 import { categoryContentMap, categoryNavigation, type CategorySlug } from "../../../lib/content";
 import { readFaqFile } from "../../../lib/faqs";
@@ -113,22 +114,25 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       : `${selectedCategory.aboutText}\n\n${sharedAbout.description}`;
 
   return (
-    <CategoryTemplate
-      category={selectedCategory}
-      portfolio={portfolio}
-      heroMedia={heroMedia}
-      services={servicesWithMedia}
-      logoUrl={logoUrl}
-      aboutData={{
-        title: sharedAbout.title,
-        description: aboutDescription,
-        imageUrl: aboutImageUrl,
-        imageAlt: aboutImageUrl ? getImageAlt(aboutImageUrl, locale) : sharedAbout.title,
-      }}
-      faqs={faqs}
-      pageSections={getPageSections(slug, locale)}
-      dictionary={dictionary}
-      locale={locale}
-    />
+    <>
+      {slug === "studio" ? <StudioServiceJsonLd locale={locale} /> : null}
+      <CategoryTemplate
+        category={selectedCategory}
+        portfolio={portfolio}
+        heroMedia={heroMedia}
+        services={servicesWithMedia}
+        logoUrl={logoUrl}
+        aboutData={{
+          title: sharedAbout.title,
+          description: aboutDescription,
+          imageUrl: aboutImageUrl,
+          imageAlt: aboutImageUrl ? getImageAlt(aboutImageUrl, locale) : sharedAbout.title,
+        }}
+        faqs={faqs}
+        pageSections={getPageSections(slug, locale)}
+        dictionary={dictionary}
+        locale={locale}
+      />
+    </>
   );
 }
