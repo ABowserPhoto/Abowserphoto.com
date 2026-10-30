@@ -10,7 +10,7 @@ import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
 import type { PageSection } from "../lib/i18n/pageSections";
-import { CONTACT_EMAIL } from "../lib/site";
+import { contactEmailHref } from "../lib/contact";
 import HeroSlider, { type HeroMediaItem } from "./HeroSlider";
 import Navbar from "./Navbar";
 import PageSections from "./PageSections";
@@ -270,7 +270,7 @@ export default function CategoryTemplate({
                   ))}
               </div>
               <a
-                href={`mailto:${CONTACT_EMAIL}`}
+                href={contactEmailHref()}
                 className="mt-8 inline-flex rounded-full px-6 py-3 text-sm font-semibold text-white transition-opacity duration-300 hover:opacity-90"
                 style={{ backgroundColor: category.themeColor }}
               >

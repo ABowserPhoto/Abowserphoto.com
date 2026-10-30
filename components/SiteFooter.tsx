@@ -3,10 +3,16 @@ import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
 import {
-  BRAND_NAME,
-  COMPANY_REGISTER,
+  appointmentOnlyLabel,
   CONTACT_EMAIL,
   CONTACT_PHONE_DISPLAY,
+  contactEmailHref,
+  contactPhoneHref,
+  hagenHoursLine,
+} from "../lib/contact";
+import {
+  BRAND_NAME,
+  COMPANY_REGISTER,
   LEGAL_NAME,
   SOCIAL_LINKS,
   STUDIOS,
@@ -30,13 +36,13 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
             </p>
             <p className="text-[#322B2B]">{BRAND_NAME}</p>
             <a
-              href={`tel:${CONTACT_PHONE_DISPLAY.replace(/\s/g, "")}`}
+              href={contactPhoneHref()}
               className="block text-[#322B2B] transition-opacity duration-300 hover:opacity-80"
             >
               {CONTACT_PHONE_DISPLAY}
             </a>
             <a
-              href={`mailto:${CONTACT_EMAIL}`}
+              href={contactEmailHref()}
               className="block break-words text-[#322B2B] transition-opacity duration-300 hover:opacity-80"
             >
               {CONTACT_EMAIL}
@@ -64,6 +70,9 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
                 </a>
                 <span className="mt-1 block text-[#322B2B]/80">
                   {locale === "de" ? studio.summaryDe : studio.summaryEn}
+                </span>
+                <span className="mt-1 block text-[#322B2B]">
+                  {studio.id === "hagen" ? hagenHoursLine(locale) : appointmentOnlyLabel(locale)}
                 </span>
                 {studio.detailLabelDe && studio.detailLabelEn ? (
                   <span className="mt-1 block text-[#322B2B]">

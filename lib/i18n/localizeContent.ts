@@ -1,3 +1,4 @@
+import { appointmentOnlyLabel, HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "../contact";
 import {
   categoryContentMap,
   sharedAbout,
@@ -10,7 +11,7 @@ import { getDictionarySync } from "./getDictionary";
 
 const germanSharedAbout = {
   title: "Über mich",
-  description: `Ich bin Aaron Bowser, Fotograf für Business-Porträts, Hochzeiten, Commercial und Immobilien in Nordrhein-Westfalen. Das Hauptstudio in Hagen hat etwa 40 m²; dort arbeite ich täglich. Das Studio Solingen, etwa 100 m², ist für größere Produktionen und nur nach Termin. Die Arbeit umfasst Hochzeit, Commercial, Editorial und Immobilienfotografie, mit filmischer Bildsprache und authentischer Emotion.
+  description: `Ich bin Aaron Bowser, Fotograf für Business-Porträts, Hochzeiten, Commercial und Immobilien in Nordrhein-Westfalen. Das Hauptstudio in Hagen hat etwa 40 m²; dort arbeite ich täglich. Das Studio Solingen, etwa 100 m², ist für größere Produktionen und ${appointmentOnlyLabel("de", { sentence: false })}. Die Arbeit umfasst Hochzeit, Commercial, Editorial und Immobilienfotografie, mit filmischer Bildsprache und authentischer Emotion.
 
 Ob ich einen einmaligen Moment festhalte, eine persönliche Marke forme oder ein Immobilienexposé aufwerte: Jedes Projekt wird mit Intention, Handwerk und dem Anspruch angegangen, Bilder zu schaffen, die zeitlos und wahrhaftig wirken.
 
@@ -78,9 +79,9 @@ const germanCategoryCopy: Partial<
     navLabel: "Commercial",
     title: "Commercial-Fotografie in Hagen & Solingen",
     subtitle:
-      "Fashion, Beauty, Produkt und Editorial für Marken. Größere Produktionen im Studio Solingen, nur nach Termin, sonst im Studio Hagen oder vor Ort in Nordrhein-Westfalen.",
+      `Fashion, Beauty, Produkt und Editorial für Marken. Größere Produktionen im Studio Solingen, ${appointmentOnlyLabel("de", { sentence: false })}, sonst im Studio Hagen oder vor Ort in Nordrhein-Westfalen.`,
     aboutText:
-      "Meine Commercial-Arbeit verbindet Editorial-Storytelling mit einer klaren Modeästhetik: cinematic, präzise und publikationsreif. Das Hauptstudio in Hagen hat etwa 40 m²; Aaron arbeitet dort täglich. Größere Produktionen und Sets kommen ins Studio Solingen, etwa 100 m², nur nach Termin. Das Studio kann auch gemietet werden.",
+      `Meine Commercial-Arbeit verbindet Editorial-Storytelling mit einer klaren Modeästhetik: cinematic, präzise und publikationsreif. Das Hauptstudio in Hagen hat etwa 40 m²; Aaron arbeitet dort täglich. Größere Produktionen und Sets kommen ins Studio Solingen, etwa 100 m², ${appointmentOnlyLabel("de", { sentence: false })}. Das Studio kann auch gemietet werden.`,
     services: [
       {
         title: "Porträts und Model-Portfolios",
@@ -162,8 +163,7 @@ const germanCategoryCopy: Partial<
     title: "Business-Porträts in Hagen & Solingen",
     subtitle:
       "Executive-Headshots, Mitarbeiterfotos und LinkedIn-Profilbilder für Unternehmen in Hagen, Solingen und Nordrhein-Westfalen.",
-    aboutText:
-      "Ich bin Aaron Bowser und fotografiere Business-Porträts, Hochzeiten und Commercial. Das Hauptstudio liegt in Hagen, Eckeseyer Str. 133, auf etwa 40 m². Dort arbeite ich täglich, und Porträt- sowie Business-Sitzungen finden in der Regel hier statt. Das Studio Solingen, Merscheider Str. 112, hat etwa 100 m² und ist für größere Produktionen gedacht, zum Beispiel Teams und aufwendigere Sets, nur nach Termin. Es kann auch gemietet werden. Studio Solingen – mehr erfahren; die eigene Seite folgt.\n\nFür Unternehmen geht es um Bilder, die auf der Website, bei LinkedIn und in der Presse dieselbe ruhige Haltung haben: klares Licht, ein Gesicht, das man ernst nimmt, und eine Bildsprache, die zum Haus passt. Vor der Aufnahme klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Im Shooting leite ich Haltung und Ausdruck an.",
+    aboutText: `Ich bin Aaron Bowser und fotografiere Business-Porträts, Hochzeiten und Commercial. Das Hauptstudio liegt in Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Dort arbeite ich täglich, und Porträt- sowie Business-Sitzungen finden in der Regel hier statt. Das Studio Solingen, ${SOLINGEN_ADDRESS.street}, hat etwa 100 m² und ist für größere Produktionen gedacht, zum Beispiel Teams und aufwendigere Sets, ${appointmentOnlyLabel("de", { sentence: false })}. Es kann auch gemietet werden. Studio Solingen – mehr erfahren; die eigene Seite folgt.\n\nFür Unternehmen geht es um Bilder, die auf der Website, bei LinkedIn und in der Presse dieselbe ruhige Haltung haben: klares Licht, ein Gesicht, das man ernst nimmt, und eine Bildsprache, die zum Haus passt. Vor der Aufnahme klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Im Shooting leite ich Haltung und Ausdruck an.`,
     services: [
       {
         title: "Executive-Headshots",
@@ -195,9 +195,8 @@ const germanCategoryCopy: Partial<
   studio: {
     navLabel: "Studio Hagen",
     title: "Bewerbungsfotos und Passbilder in Hagen",
-    subtitle: "Bewerbungsfotos und biometrische Passbilder im Studio Hagen, Eckeseyer Str. 133.",
-    aboutText:
-      "Ich bin Aaron Bowser. Bewerbungsfotos und Passbilder entstehen im Studio Hagen, Eckeseyer Str. 133, auf etwa 40 m². Dort arbeite ich täglich, und diese Termine werden hier gebucht.\n\nEin Bewerbungsfoto und ein Passbild sind zwei verschiedene Bilder. Für die Bewerbung klären wir, wo das Foto erscheinen soll, danach leite ich Haltung und Ausdruck an. Das Passbild folgt den aktuellen biometrischen Vorgaben: frontal, mit neutralem Ausdruck, vor einem einfarbigen Hintergrund. Beides kann in einem Termin entstehen.",
+    subtitle: `Bewerbungsfotos und biometrische Passbilder im Studio Hagen, ${HAGEN_ADDRESS.street}.`,
+    aboutText: `Ich bin Aaron Bowser. Bewerbungsfotos und Passbilder entstehen im Studio Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Dort arbeite ich täglich, und diese Termine werden hier gebucht.\n\nEin Bewerbungsfoto und ein Passbild sind zwei verschiedene Bilder. Für die Bewerbung klären wir, wo das Foto erscheinen soll, danach leite ich Haltung und Ausdruck an. Das Passbild folgt den aktuellen biometrischen Vorgaben: frontal, mit neutralem Ausdruck, vor einem einfarbigen Hintergrund. Beides kann in einem Termin entstehen.`,
     services: [
       {
         title: "Bewerbungsfotos",
