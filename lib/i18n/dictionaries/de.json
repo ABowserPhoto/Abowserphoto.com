@@ -14,7 +14,7 @@
     "account": "Konto",
     "signOut": "Abmelden",
     "contact": "Kontakt",
-    "inquire": "Anfragen",
+    "inquire": "Angebot anfragen",
     "viewFullPortfolio": "Vollständiges Portfolio",
     "selectedWork": "Ausgewählte Arbeiten",
     "fullPortfolio": "Vollständiges Portfolio",
@@ -52,8 +52,8 @@
       "description": "Fotostudio in Hagen ({hagenStreet}) für Business, Hochzeit & Commercial. Aaron Bowser Photography — auch Studio Solingen. Termin anfragen."
     },
     "real-estate": {
-      "title": "Immobilienfotografie Hagen & NRW | ab €189 | Aaron Bowser",
-      "description": "Exposé-Fotos für Makler in Hagen, Solingen & NRW. Pakete ab €189 (+ Buchungsgebühr). Studio Hagen. Schnelle Lieferung — jetzt anfragen."
+      "title": "Immobilienfotografie Hagen & NRW | Aaron Bowser",
+      "description": "Exposé-Fotos für Makler in Hagen, Solingen & NRW. Studio Hagen. Schnelle Lieferung — Angebot anfragen."
     },
     "commercial": {
       "title": "Commercial-Fotografie in Hagen & Solingen",
@@ -73,7 +73,7 @@
     },
     "studio": {
       "title": "Bewerbungsfotos und Passbilder in Hagen",
-      "description": "Bewerbungsfotos und biometrische Passbilder im Studio Hagen, {hagenStreet}. Bewerbung, Passbild und LinkedIn-Porträt in einem Termin."
+      "description": "Bewerbungsfoto €29 für 1 digitales Foto, biometrisches Passfoto €15. Studio Hagen, {hagenStreet}. Bewerbung, Passbild und LinkedIn-Porträt in einem Termin."
     },
     "cinematography": {
       "title": "Filmproduktion & Brand Films",

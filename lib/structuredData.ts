@@ -4,13 +4,17 @@ import {
   CONTACT_PHONE_TEL,
   hagenOpeningHoursSpecification,
 } from "./contact";
+import { withLocale, type Locale } from "./i18n/config";
 import { absoluteUrl } from "./i18n/seo";
+import { categoryPath } from "./routes";
 import {
+  APPLICATION_PHOTO_PRICE_EUR,
   BRAND_NAME,
   COMPANY_REGISTER,
   HAGEN_STUDIO,
   LEGAL_NAME,
   OG_IMAGE_PATH,
+  PASSPORT_PHOTO_PRICE_EUR,
   SITE_URL,
   SOCIAL_PROFILE_URLS,
   SOLINGEN_STUDIO,
@@ -67,7 +71,8 @@ function studioNode(studio: Studio) {
  * One photography practice with two studio locations.
  * Opening hours belong to the Hagen address (the practice and the Hagen studio).
  * The Solingen studio does not publish opening hours.
- * Unknown fields (priceRange) are omitted.
+ * No priceRange and no priced offers. The only public prices are the
+ * application-photo and passport-photo offers from `buildStudioServiceJsonLd`.
  */
 export function buildBusinessJsonLd() {
   const organization: Record<string, unknown> = {
@@ -104,5 +109,51 @@ export function buildBusinessJsonLd() {
   return {
     "@context": "https://schema.org",
     "@graph": [organization, studioNode(HAGEN_STUDIO), studioNode(SOLINGEN_STUDIO)],
+  };
+}
+
+/**
+ * Priced offers for the two services that publish a fee.
+ * Rendered on the studio pages, where those services are described.
+ */
+export function buildStudioServiceJsonLd(locale: Locale) {
+  const de = locale === "de";
+  const pageUrl = absoluteUrl(withLocale(categoryPath("studio", locale), locale));
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": `${SITE_URL}/#service-application-photo`,
+        name: de ? "Bewerbungsfoto" : "Application photo",
+        serviceType: de ? "Bewerbungsfoto" : "Application photo",
+        description: de ? "1 digitales Foto" : "1 digital photo",
+        url: pageUrl,
+        provider: { "@id": `${SITE_URL}/#organization` },
+        offers: {
+          "@type": "Offer",
+          price: APPLICATION_PHOTO_PRICE_EUR,
+          priceCurrency: "EUR",
+          description: de ? "1 digitales Foto" : "1 digital photo",
+        },
+      },
+      {
+        "@type": "Service",
+        "@id": `${SITE_URL}/#service-passport-photo`,
+        name: de ? "Biometrisches Passfoto" : "Passport photo",
+        alternateName: de ? "Passbild" : "Biometric passport photo",
+        serviceType: de ? "Passbild" : "Passport photo",
+        description: de ? "Biometrisches Passfoto" : "Biometric passport photo",
+        url: pageUrl,
+        provider: { "@id": `${SITE_URL}/#organization` },
+        offers: {
+          "@type": "Offer",
+          price: PASSPORT_PHOTO_PRICE_EUR,
+          priceCurrency: "EUR",
+          description: de ? "Biometrisches Passfoto" : "Biometric passport photo",
+        },
+      },
+    ],
   };
 }

@@ -6,6 +6,7 @@ import {
   BOOKING_SERVICES,
   PHOTO_PACKAGES,
   PROPERTY_STATUSES,
+  getPhotoPackageLabel,
   isPhotoPackage,
   isPropertyStatus,
   parseBookingServices,
@@ -325,7 +326,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
             placeholder={booking.selectPhotoPackage}
             options={PHOTO_PACKAGES.map((photoPackage) => ({
               value: photoPackage.id,
-              label: photoPackage.label,
+              label: getPhotoPackageLabel(photoPackage.id, locale),
             }))}
           />
         </div>

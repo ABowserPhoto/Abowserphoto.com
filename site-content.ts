@@ -9,13 +9,11 @@ export const siteContent = {
         id: "interior",
         title: "Interior & Exterior Stills",
         description: "High-end editorial photography designed to sell properties faster.",
-        price: "Starting at €250",
       },
       {
         id: "drone",
         title: "Aerial Photography",
         description: "Showcase the property's footprint and surrounding landscape.",
-        price: "Starting at €150",
       }
     ],
     bookingText: "Book your real estate shoot today.",
@@ -28,13 +26,11 @@ export const siteContent = {
         id: "full-day",
         title: "Full Day Coverage",
         description: "From getting ready to the last dance. Nothing missed.",
-        price: "Starting at €2,500",
       },
       {
         id: "elopement",
         title: "Intimate Elopements",
         description: "For couples who want a private, cinematic experience.",
-        price: "Starting at €1,200",
       }
     ],
     bookingText: "Secure your wedding date.",

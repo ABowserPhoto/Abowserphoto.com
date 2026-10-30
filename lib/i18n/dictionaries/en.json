@@ -14,7 +14,7 @@
     "account": "Account",
     "signOut": "Sign Out",
     "contact": "Contact",
-    "inquire": "Inquire",
+    "inquire": "Request a quote",
     "viewFullPortfolio": "View Full Portfolio",
     "selectedWork": "Selected Work",
     "fullPortfolio": "Full Portfolio",
@@ -52,8 +52,8 @@
       "description": "Photo studio in Hagen ({hagenStreet}) for business, wedding & commercial. Also Solingen studio. Book a session."
     },
     "real-estate": {
-      "title": "Real Estate Photography Hagen & NRW | from €189 | Aaron Bowser",
-      "description": "Listing photos for agents in Hagen, Solingen & NRW. Packages from €189 (+ booking fee). Hagen studio. Fast delivery — enquire now."
+      "title": "Real Estate Photography Hagen & NRW | Aaron Bowser",
+      "description": "Listing photos for agents in Hagen, Solingen & NRW. Hagen studio. Fast delivery — request a quote."
     },
     "commercial": {
       "title": "Commercial Photography in Hagen and Solingen",
@@ -73,7 +73,7 @@
     },
     "studio": {
       "title": "Application Photos and Passport Photos in Hagen",
-      "description": "Application photos and biometric passport photos at the Hagen studio, {hagenStreet}. Application portraits, passport photos, and LinkedIn pictures in one visit."
+      "description": "Application photo €29 for 1 digital photo, biometric passport photo €15. Hagen studio, {hagenStreet}. Application portraits, passport photos, and LinkedIn pictures in one visit."
     },
     "cinematography": {
       "title": "Cinematography & Brand Films",

@@ -1,4 +1,5 @@
 import { appointmentOnlyLabel, formatAddressLine, HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "./contact";
+import { applicationPhotoPriceLine, passportPhotoPriceLine, studioSittingPriceAnswer } from "./site";
 
 export type VirtualTourItem = {
   title: string;
@@ -235,21 +236,19 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
     slug: "studio",
     navLabel: "Application Photos",
     title: "Application Photos and Passport Photos in Hagen",
-    subtitle: `Application photos and biometric passport photos at the Hagen studio, ${HAGEN_ADDRESS.street}.`,
+    subtitle: `Application photos and biometric passport photos at the Hagen studio, ${HAGEN_ADDRESS.street}. An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}.`,
     themeColor: "#446E8B",
     heroImage: "/business-portraits/hero/businessportrait-hero-frau-flieder-blazer.webp",
     portfolioImages: buildPortfolio("studio"),
     services: [
       {
         title: "Application Photos",
-        description:
-          "Portraits for a job application, a CV, and a company profile. Light, background, and expression are set for the place the picture will be used.",
+        description: `An application photo is ${applicationPhotoPriceLine("en")}. Portraits for a job application, a CV, and a company profile. Light, background, and expression are set for the place the picture will be used.`,
         image: "/business-portraits/portfolio/businessfoto-frau-weisse-bluse-studio.webp",
       },
       {
         title: "Passport Photos",
-        description:
-          "Biometric photographs for a German passport, an identity card, and a visa. The portrait is frontal, with a neutral expression, on a plain background, following the current official rules.",
+        description: `A biometric passport photo is ${passportPhotoPriceLine()}. Photographs for a German passport, an identity card, and a visa. The portrait is frontal, with a neutral expression, on a plain background, following the current official rules.`,
         image: "/business-portraits/portfolio/linkedin-foto-frau-grauer-hintergrund.webp",
       },
       {
@@ -259,7 +258,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         image: "/business-portraits/portfolio/mitarbeiterfoto-frau-sitzend-grau.webp",
       },
     ],
-    aboutText: `I am Aaron Bowser. Application photos and passport photos are made at the Hagen studio, ${HAGEN_ADDRESS.street}, about 40 m². I work there every day, and these sittings are booked there.\n\nAn application photo and a passport photo are different pictures. For the application we agree where it will be seen, then I direct posture and expression. The passport photo follows the current biometric rules: a frontal portrait, a neutral expression, and a plain background. Both can be made in the same visit.`,
+    aboutText: `I am Aaron Bowser. Application photos and passport photos are made at the Hagen studio, ${HAGEN_ADDRESS.street}, about 40 m². I work there every day, and these sittings are booked there.\n\nAn application photo and a passport photo are different pictures. For the application we agree where it will be seen, then I direct posture and expression. The passport photo follows the current biometric rules: a frontal portrait, a neutral expression, and a plain background. Both can be made in the same visit.\n\nAn application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}.`,
     aboutImage:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -269,7 +268,7 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
       },
       {
         question: "What does a sitting cost?",
-        answer: "The fee is on request. We confirm the pictures you need before the appointment.",
+        answer: studioSittingPriceAnswer("en"),
       },
     ],
   },
