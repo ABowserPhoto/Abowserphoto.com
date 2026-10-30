@@ -56,28 +56,32 @@
       "description": "Exposé-Fotos für Makler in Hagen, Solingen & NRW. Studio Hagen. Schnelle Lieferung — Angebot anfragen."
     },
     "commercial": {
-      "title": "Commercial-Fotografie in Hagen & Solingen",
-      "description": "Fashion-, Beauty-, Produkt- und Editorial-Fotografie für Marken. Studios in Hagen und Solingen, Einsätze in Nordrhein-Westfalen."
+      "title": "Commercial-Fotograf Hagen & Solingen | Aaron Bowser",
+      "description": "Fashion-, Beauty-, Produkt- & Editorial-Fotografie für Marken. Studios in Hagen (40 m²) und Solingen (100 m²), Einsätze in ganz NRW. Jetzt anfragen."
     },
     "wedding": {
-      "title": "Hochzeitsfotograf Hagen & Solingen",
-      "description": "Hochzeitsfotograf für die freie Trauung, den ganzen Tag und das Standesamt in Solingen und Hagen. Reportage mit ruhiger, filmischer Bildsprache."
+      "title": "Hochzeitsfotograf Hagen & Solingen | Foto & Video",
+      "description": "Hochzeitsfotos & Hochzeitsvideo in Hagen, Solingen & NRW: Standesamt, freie Trauung, ganzer Tag. Ruhige, filmische Reportage. Jetzt Termin anfragen."
     },
     "food": {
-      "title": "Food-Fotografie in NRW",
-      "description": "Food- und Getränkefotografie für Restaurants, Speisekarten und Produkte. Studios in Hagen und Solingen."
+      "title": "Food-Fotografie Hagen & NRW | Aaron Bowser Photography",
+      "description": "Food- & Getränkefotos für Restaurants, Speisekarten und Produkte – im Studio Hagen, Solingen oder vor Ort in NRW. Jetzt Shooting anfragen."
     },
     "business-portraits": {
-      "title": "Business-Porträts in Hagen & Solingen",
-      "description": "Business-Porträts im Studio Hagen, dem Alltagstudio. Größere Teams im Studio Solingen, {appointmentDeLower}. Shootings auch im Büro."
+      "title": "Businessfotos Hagen & Solingen | Business-Porträts",
+      "description": "Business-Porträts & Teamfotos im Fotostudio Hagen oder in Ihrem Büro. Größere Teams im Studio Solingen. Schnelle Auswahl – jetzt Termin anfragen."
     },
     "studio": {
-      "title": "Bewerbungsfotos und Passbilder in Hagen",
-      "description": "Bewerbungsfoto €29 für 1 digitales Foto, biometrisches Passfoto €15. Studio Hagen, {hagenStreet}. Bewerbung, Passbild und LinkedIn-Porträt in einem Termin."
+      "title": "Bewerbungsfotos & Passbilder Hagen | Fotostudio",
+      "description": "Bewerbungsfotos & biometrische Passbilder im Fotostudio Hagen, {hagenStreet}. Mo–Sa 10–20 Uhr, So 9–12 Uhr. Ohne lange Wartezeit."
     },
     "cinematography": {
-      "title": "Filmproduktion & Brand Films",
-      "description": "Bewegtbild für Marken, Events und Kampagnen – von Brand Films bis Social Reels."
+      "title": "Videograf & Filmproduktion Hagen | Aaron Bowser",
+      "description": "Imagefilme, Brand Films, Hochzeitsvideos & Social Reels aus Hagen für NRW. Konzept, Dreh und Schnitt aus einer Hand. Jetzt Projekt anfragen."
+    },
+    "solingen": {
+      "title": "Fotostudio mieten Solingen | 100 m² | Aaron Bowser",
+      "description": "Fotostudio in Solingen mieten: ca. 100 m², {solingenStreet}, für Produktionen, Teams & Commercial. Nur nach Termin – jetzt Verfügbarkeit anfragen."
     },
     "social-media-management": {
       "title": "Social-Media-Management",
@@ -85,7 +89,12 @@
     },
     "commercial-portfolio": {
       "title": "Commercial Portfolio Archiv",
-      "description": "Das vollständige Commercial- und Editorial-Portfolio von Aaron Bowser Photography."
+      "description": "Das vollständige Commercial- und Editorial-Portfolio von Aaron Bowser Photography.",
+      "intro": [
+        "Dieses Archiv versammelt die Commercial- und Editorial-Arbeiten von Aaron Bowser Photography. Es sind Aufträge für Marken: Mode, Beauty, Produkt und redaktionelle Serien. Keine einzelne Kampagne und kein loses Moodboard, sondern die Haltung, in der die Bilder über mehrere Aufträge hinweg entstehen.",
+        "Ein Teil der Aufnahmen kommt aus dem Fotostudio Hagen, dem Alltagstudio mit etwa 40 Quadratmetern. Dort wird täglich gearbeitet. Kleinere Sets, Porträts und Produktbilder haben dort ihren Platz. Größere Produktionen, Teams und Aufbauten, die Fläche und Ruhe brauchen, kommen ins Studio Solingen. Es hat etwa 100 Quadratmeter, ist nur nach Vereinbarung zugänglich und kann für eine Produktion gemietet werden. Wenn Kollektion oder Produkt nicht ins Studio gehören, wird vor Ort in Nordrhein-Westfalen fotografiert.",
+        "In der Auswahl liegen Lookbooks neben Beauty-Details, klaren Produktbildern und editorialen Porträts. Licht, Ausschnitt und Ton sollen über die Serien hinweg erkennbar bleiben, damit eine Marke auf der Website, im Lookbook und in der Kampagne dieselbe Haltung zeigt. Wer eine Produktion plant, sieht hier, wie die Arbeit aussieht, bevor über Ort, Verwendung und Umfang gesprochen wird."
+      ]
     },
     "account": {
       "title": "Kundenkonto",

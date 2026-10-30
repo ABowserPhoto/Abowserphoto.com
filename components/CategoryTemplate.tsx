@@ -310,7 +310,20 @@ export default function CategoryTemplate({
                       <span style={{ color: category.themeColor }}>{isOpen ? "−" : "+"}</span>
                     </button>
                     {isOpen ? (
-                      <p className="px-5 pb-4 text-sm leading-relaxed text-[#322B2B]/80">{item.answer}</p>
+                      <div className="px-5 pb-4 text-sm leading-relaxed text-[#322B2B]/80">
+                        <p>{item.answer}</p>
+                        {item.linkHref && item.linkLabel ? (
+                          item.linkHref.startsWith("http") ? (
+                            <a href={item.linkHref} className="mt-3 inline-block underline underline-offset-2">
+                              {item.linkLabel}
+                            </a>
+                          ) : (
+                            <Link href={item.linkHref} className="mt-3 inline-block underline underline-offset-2">
+                              {item.linkLabel}
+                            </Link>
+                          )
+                        ) : null}
+                      </div>
                     ) : null}
                   </motion.article>
                 );

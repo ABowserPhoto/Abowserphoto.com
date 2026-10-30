@@ -4,9 +4,11 @@ import {
   CONTACT_PHONE_TEL,
   hagenOpeningHoursSpecification,
 } from "./contact";
+import type { FAQItem } from "./content";
 import { withLocale, type Locale } from "./i18n/config";
 import { absoluteUrl } from "./i18n/seo";
-import { categoryPath } from "./routes";
+import { solingenStudioPath } from "./routes";
+import { nicheOrigin } from "./subdomains";
 import {
   APPLICATION_PHOTO_PRICE_EUR,
   BRAND_NAME,
@@ -37,7 +39,10 @@ function studioNode(studio: Studio) {
     "@type": ["LocalBusiness", "ProfessionalService", "Photographer"],
     "@id": `${SITE_URL}/#studio-${studio.id}`,
     name: `${BRAND_NAME} ${studio.nameDe}`,
-    url: SITE_URL,
+    url:
+      studio.id === "solingen"
+        ? absoluteUrl(withLocale(solingenStudioPath("de"), "de"))
+        : SITE_URL,
     email: CONTACT_EMAIL,
     telephone: CONTACT_PHONE_TEL,
     image: absoluteUrl(OG_IMAGE_PATH),
@@ -118,7 +123,7 @@ export function buildBusinessJsonLd() {
  */
 export function buildStudioServiceJsonLd(locale: Locale) {
   const de = locale === "de";
-  const pageUrl = absoluteUrl(withLocale(categoryPath("studio", locale), locale));
+  const pageUrl = `${nicheOrigin("studio")}/${locale}`;
 
   return {
     "@context": "https://schema.org",
@@ -155,5 +160,53 @@ export function buildStudioServiceJsonLd(locale: Locale) {
         },
       },
     ],
+  };
+}
+
+/** Place + LocalBusiness for the Solingen studio page. No hours and no price. */
+export function buildSolingenPlaceJsonLd(locale: Locale) {
+  const de = locale === "de";
+  const pageUrl = absoluteUrl(withLocale(solingenStudioPath(locale), locale));
+  return {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "Place"],
+    "@id": `${pageUrl}#place`,
+    name: de ? `${BRAND_NAME} Studio Solingen` : `${BRAND_NAME} Solingen studio`,
+    url: pageUrl,
+    image: absoluteUrl(OG_IMAGE_PATH),
+    email: CONTACT_EMAIL,
+    telephone: CONTACT_PHONE_TEL,
+    address: postalAddress(SOLINGEN_STUDIO),
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: SOLINGEN_STUDIO.latitude,
+      longitude: SOLINGEN_STUDIO.longitude,
+    },
+    hasMap: SOLINGEN_STUDIO.mapsUrl,
+    description: de
+      ? `Fotostudio in Solingen, etwa ${SOLINGEN_STUDIO.areaSqm} m², für größere Produktionen. ${appointmentOnlyLabel("de")}. Das Studio kann gemietet werden. Keine Bewerbungsfotos und keine Passbilder.`
+      : `Photo studio in Solingen, about ${SOLINGEN_STUDIO.areaSqm} m², for larger productions. ${appointmentOnlyLabel("en")}. The studio can be rented. No application photos and no passport photos.`,
+    floorSize: {
+      "@type": "QuantitativeValue",
+      value: SOLINGEN_STUDIO.areaSqm,
+      unitCode: "MTK",
+      unitText: "m²",
+    },
+    parentOrganization: { "@id": `${SITE_URL}/#organization` },
+  };
+}
+
+export function buildFaqPageJsonLd(items: FAQItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
   };
 }

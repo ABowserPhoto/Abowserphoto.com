@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound, permanentRedirect } from "next/navigation";
 import CategoryTemplate from "../../../components/CategoryTemplate";
-import { StudioServiceJsonLd } from "../../../components/JsonLd";
+import { FaqPageJsonLd, StudioServiceJsonLd } from "../../../components/JsonLd";
+import StudioOffHostNotice from "../../../components/StudioOffHostNotice";
 import { getAboutImageUrl, getImageDimensions, getLogoUrl } from "../../../lib/cms";
 import { categoryContentMap, categoryNavigation, type CategorySlug } from "../../../lib/content";
 import { readFaqFile } from "../../../lib/faqs";
@@ -15,6 +16,7 @@ import { getLocalizedCategory, getLocalizedSharedAbout } from "../../../lib/i18n
 import { getPageFaqs, getPageSections } from "../../../lib/i18n/pageSections";
 import { buildCategoryMetadata } from "../../../lib/i18n/seo";
 import { categorySegment, resolveCategorySegment } from "../../../lib/routes";
+import { nicheHostForHostname } from "../../../lib/subdomains";
 
 type CategoryPageProps = {
   params: Promise<{
@@ -52,6 +54,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!slug) notFound();
   if (category !== categorySegment(slug, locale)) {
     permanentRedirect(`/${locale}/${categorySegment(slug, locale)}`);
+  }
+
+  const host = (await headers()).get("host");
+  if (slug === "studio" && nicheHostForHostname(host ?? "")?.slug !== "studio") {
+    const dictionary = await getDictionary(locale);
+    return (
+      <StudioOffHostNotice
+        locale={locale}
+        dictionary={dictionary}
+        logoUrl={getLogoUrl()}
+        publicHost={host ?? ""}
+      />
+    );
   }
 
   const baseCategory = categoryContentMap[slug];
@@ -116,6 +131,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <>
       {slug === "studio" ? <StudioServiceJsonLd locale={locale} /> : null}
+      {slug === "wedding" ? <FaqPageJsonLd items={faqs} /> : null}
       <CategoryTemplate
         category={selectedCategory}
         portfolio={portfolio}

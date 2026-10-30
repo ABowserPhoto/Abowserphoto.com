@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
   LOCALE_COOKIE,
+  defaultLocale,
   detectLocaleFromHeader,
   getLocaleFromPathname,
   isLocale,
@@ -25,10 +26,10 @@ function isSkippedPath(pathname: string) {
   );
 }
 
-function resolveLocale(req: NextRequest): Locale {
+function resolveLocale(req: NextRequest, fallback: Locale): Locale {
   const cookieLocale = req.cookies.get(LOCALE_COOKIE)?.value;
   if (cookieLocale && isLocale(cookieLocale)) return cookieLocale;
-  return detectLocaleFromHeader(req.headers.get("accept-language"));
+  return detectLocaleFromHeader(req.headers.get("accept-language"), fallback);
 }
 
 function applyLocaleHeaders(response: NextResponse, locale: Locale) {
@@ -114,8 +115,11 @@ export async function proxy(req: NextRequest) {
     return redirectToPath(req, supabaseResponse, "/de", "de");
   }
 
-  const locale = resolveLocale(req);
   const niche = nicheHostForHostname(hostname);
+  // Niche hosts are German-market sites. The fallback locale is German.
+  // A cookie or an explicit Accept-Language of en/de still wins. The rewrite
+  // stays on this hostname.
+  const locale = resolveLocale(req, niche ? "de" : defaultLocale);
   if (niche) {
     // `/`, `/de`, and `/en` are the public category URL. A locale prefix wins
     // over the cookie. The rewrite leaves the browser on this host.

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
+import HomeIntro from "../../components/HomeIntro";
 import HomePortal from "../../components/HomePortal";
+import SiteFooter from "../../components/SiteFooter";
 import { getLogoUrl } from "../../lib/cms";
 import { readHomeBaseImages, readHomeIntroVideo, readPortalHeroSets } from "../../lib/gallery";
 import { isLocale, type Locale } from "../../lib/i18n/config";
@@ -31,14 +33,18 @@ export default async function HomePage({ params }: HomePageProps) {
   const publicHost = headersList.get("host") ?? "";
 
   return (
-    <HomePortal
-      logoUrl={logoUrl}
-      introVideoUrl={introVideoUrl}
-      baseImages={baseImages}
-      portalHeroes={portalHeroes}
-      locale={locale}
-      dictionary={dictionary}
-      publicHost={publicHost}
-    />
+    <>
+      <HomePortal
+        logoUrl={logoUrl}
+        introVideoUrl={introVideoUrl}
+        baseImages={baseImages}
+        portalHeroes={portalHeroes}
+        locale={locale}
+        dictionary={dictionary}
+        publicHost={publicHost}
+      />
+      <HomeIntro locale={locale} publicHost={publicHost} />
+      <SiteFooter locale={locale} dictionary={dictionary} />
+    </>
   );
 }

@@ -10,6 +10,7 @@ import {
   contactPhoneHref,
   hagenHoursLine,
 } from "../lib/contact";
+import { absoluteUrl } from "../lib/i18n/seo";
 import {
   BRAND_NAME,
   COMPANY_REGISTER,
@@ -75,9 +76,18 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
                   {studio.id === "hagen" ? hagenHoursLine(locale) : appointmentOnlyLabel(locale)}
                 </span>
                 {studio.detailLabelDe && studio.detailLabelEn ? (
-                  <span className="mt-1 block text-[#322B2B]">
-                    {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
-                  </span>
+                  studio.pagePath ? (
+                    <a
+                      href={absoluteUrl(withLocale(studio.pagePath, locale))}
+                      className="mt-1 inline-block underline underline-offset-2"
+                    >
+                      {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
+                    </a>
+                  ) : (
+                    <span className="mt-1 block text-[#322B2B]">
+                      {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
+                    </span>
+                  )
                 ) : null}
               </p>
             ))}
