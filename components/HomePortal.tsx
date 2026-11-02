@@ -1,15 +1,26 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useAnimation,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Major_Mono_Display } from "next/font/google";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import type { MotionValue } from "framer-motion";
 import type { PortalHeroSet } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
 import { type PortalCategorySlug, portalCategoryUrl } from "../lib/subdomains";
 import LanguageSwitcher from "./LanguageSwitcher";
+import SiteFooter from "./SiteFooter";
 
 const majorMono = Major_Mono_Display({
   weight: "400",
@@ -22,16 +33,16 @@ const HERO_CAP_SCALE = 1.65;
 /**
  * Major Mono Display advance width (740 / 1000 upem). Lowercase and uppercase
  * glyphs share this 0.74em advance, so mixing an uppercase initial with
- * lowercase letters does not change the 60% column width.
+ * lowercase letters does not change the column share.
  */
 const MAJOR_MONO_ADVANCE_EM = 0.74;
 const HERO_TRACKING_EM = 0.04;
 
-/** Font size that makes one hero word about 60% of its column (the column is the container). */
+/** Font size that makes one hero word about 30% of its column, half the previous scale. */
 function heroNameFontSize(letterCount: number) {
   const widthEm =
     (HERO_CAP_SCALE + letterCount - 1) * MAJOR_MONO_ADVANCE_EM + HERO_TRACKING_EM * (letterCount - 1);
-  return `calc(60cqw / ${widthEm})`;
+  return `calc(30cqw / ${widthEm})`;
 }
 
 const PORTAL_CATEGORIES = [
@@ -57,17 +68,6 @@ const HOVER_LAYOUT: Record<PortalCategorySlug, HoverLayout> = {
   cinematography: "landscape-video",
 };
 
-const HOVER_COLOR: Record<PortalCategorySlug, string> = {
-  commercial: "hover:bg-amber-500/60",
-  "real-estate": "hover:bg-orange-600/60",
-  wedding: "hover:bg-red-700/60",
-  food: "hover:bg-blue-600/60",
-  "business-portraits": "hover:bg-lime-600/60",
-  cinematography: "hover:bg-teal-600/60",
-  "social-media-management": "hover:bg-purple-600/60",
-  studio: "hover:bg-stone-500/60",
-};
-
 /** Staggered so the links arrive in a mixed order after the names settle. */
 const randomDelays = [0.4, 0.1, 0.5, 0.2, 0.6, 0.3, 0.7, 0.45];
 
@@ -80,10 +80,8 @@ const CENTER_LOGO_CLASS =
 
 const STORY_TEXT = "CHOOSE YOUR VISUAL STORY";
 const GLYPHS = ["X", "#", "8", "%"] as const;
-/** Light grid fades in once the three scroll phases have finished. */
-const LIGHT_THEME_ON = 0.98;
-const LIGHT_THEME_OFF = 0.9;
-const LIGHT_FADE = { duration: 1.5, ease: "easeInOut" as const };
+/** Leading circle is 33% larger than the previous 18px mark. */
+const CURSOR_SIZES = [24, 13, 9, 6] as const;
 
 /** Linear map from `start`→`end` into `from`→`to`, held outside that window. */
 function segment(progress: number, start: number, end: number, from: number, to: number) {
@@ -126,6 +124,7 @@ const NAME_CLASS = `${majorMono.className} mx-auto w-fit whitespace-nowrap text-
 const NAME_ENTRANCE_S = 2.5 * 1.25;
 
 type HomePortalProps = {
+  children: ReactNode;
   logoUrl: string | null;
   /** Portrait film from `public/home/hero`, or null when that folder has no video. */
   introVideoUrl: string | null;
@@ -145,7 +144,6 @@ type Panel = {
   index: number;
   label: string;
   href: string;
-  hoverColor: string;
   seoTitle: string;
   seoLabel: string;
 };
@@ -201,7 +199,190 @@ function BackgroundFrames({
   );
 }
 
+/** Scroll index for the menu hop. -1 before 0.5; last link from 0.75 onward. */
+function hopIndexFor(progress: number, count: number) {
+  if (count <= 0 || progress < 0.5) return -1;
+  const span = Math.min(1, (progress - 0.5) / 0.25);
+  return Math.round(span * (count - 1));
+}
+
+function CursorDot({
+  x,
+  y,
+  size,
+  color,
+  opacity,
+}: {
+  x: MotionValue<number>;
+  y: MotionValue<number>;
+  size: number;
+  color: MotionValue<string>;
+  opacity: MotionValue<number>;
+}) {
+  return (
+    <motion.span
+      aria-hidden
+      className="pointer-events-none fixed top-0 left-0 z-[80] rounded-full"
+      style={{
+        width: size,
+        height: size,
+        x,
+        y,
+        marginLeft: -size / 2,
+        marginTop: -size / 2,
+        backgroundColor: color,
+        opacity,
+      }}
+    />
+  );
+}
+
+/** Horizontal center of the link, at the top edge, so the shape can rest above the label. */
+function linkAnchor(link: HTMLElement, nav: HTMLElement) {
+  const linkBox = link.getBoundingClientRect();
+  const navBox = nav.getBoundingClientRect();
+  return {
+    x: linkBox.left - navBox.left + linkBox.width / 2,
+    y: linkBox.top - navBox.top,
+  };
+}
+
+function MenuLine({
+  hopIndex,
+  color,
+  navRef,
+  linkRefs,
+}: {
+  hopIndex: number;
+  color: MotionValue<string>;
+  navRef: RefObject<HTMLElement | null>;
+  linkRefs: RefObject<(HTMLAnchorElement | null)[]>;
+}) {
+  const reduceMotion = useReducedMotion();
+  const position = useAnimation();
+  const placed = useRef(false);
+
+  useLayoutEffect(() => {
+    let frame = 0;
+    let cancelled = false;
+
+    const place = (allowSlide: boolean) => {
+      const nav = navRef.current;
+      const link = hopIndex >= 0 ? linkRefs.current[hopIndex] : null;
+      if (!nav || !link) {
+        if (hopIndex < 0) {
+          placed.current = false;
+          void position.start({ opacity: 0, transition: { duration: 0.12 } });
+        }
+        return false;
+      }
+
+      const next = linkAnchor(link, nav);
+      if (!placed.current || reduceMotion || !allowSlide) {
+        position.set({ x: next.x, y: next.y, opacity: 1 });
+      } else {
+        void position.start({
+          x: next.x,
+          y: next.y,
+          opacity: 1,
+          transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+        });
+      }
+      placed.current = true;
+      return true;
+    };
+
+    if (!place(true)) frame = requestAnimationFrame(() => {
+      if (!cancelled) place(true);
+    });
+
+    const onResize = () => {
+      place(false);
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [hopIndex, linkRefs, navRef, position, reduceMotion]);
+
+  return (
+    <motion.div
+      aria-hidden
+      animate={position}
+      initial={{ opacity: 0 }}
+      className="pointer-events-none absolute top-0 left-0 z-10"
+    >
+      <motion.span
+        className="absolute bottom-2 left-0 h-8 w-[1px] -translate-x-1/2"
+        style={{ backgroundColor: color }}
+      />
+    </motion.div>
+  );
+}
+
+function CustomCursor({ color }: { color: MotionValue<string> }) {
+  const reduceMotion = useReducedMotion();
+  const mouseX = useMotionValue(-200);
+  const mouseY = useMotionValue(-200);
+  const opacity = useMotionValue(0);
+  const trailX1 = useSpring(mouseX, { stiffness: 520, damping: 28, mass: 0.35 });
+  const trailY1 = useSpring(mouseY, { stiffness: 520, damping: 28, mass: 0.35 });
+  const trailX2 = useSpring(trailX1, { stiffness: 260, damping: 32, mass: 0.55 });
+  const trailY2 = useSpring(trailY1, { stiffness: 260, damping: 32, mass: 0.55 });
+  const trailX3 = useSpring(trailX2, { stiffness: 140, damping: 36, mass: 0.8 });
+  const trailY3 = useSpring(trailY2, { stiffness: 140, damping: 36, mass: 0.8 });
+
+  useEffect(() => {
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    if (!finePointer) return;
+    const onMove = (event: MouseEvent) => {
+      mouseX.set(event.clientX);
+      mouseY.set(event.clientY);
+      opacity.set(1);
+    };
+    const onLeave = () => opacity.set(0);
+    window.addEventListener("mousemove", onMove);
+    document.documentElement.addEventListener("mouseleave", onLeave);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      document.documentElement.removeEventListener("mouseleave", onLeave);
+    };
+  }, [mouseX, mouseY, opacity]);
+
+  const points = reduceMotion
+    ? [
+        { x: mouseX, y: mouseY },
+        { x: mouseX, y: mouseY },
+        { x: mouseX, y: mouseY },
+        { x: mouseX, y: mouseY },
+      ]
+    : [
+        { x: mouseX, y: mouseY },
+        { x: trailX1, y: trailY1 },
+        { x: trailX2, y: trailY2 },
+        { x: trailX3, y: trailY3 },
+      ];
+
+  return (
+    <>
+      {points.map((point, index) => (
+        <CursorDot
+          key={index}
+          x={point.x}
+          y={point.y}
+          size={CURSOR_SIZES[index] ?? 6}
+          color={color}
+          opacity={opacity}
+        />
+      ))}
+    </>
+  );
+}
+
 export default function HomePortal({
+  children,
   logoUrl,
   introVideoUrl,
   baseImages,
@@ -218,30 +399,58 @@ export default function HomePortal({
       setClientHost(window.location.host);
     }
   }, []);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [hoverEnabled, setHoverEnabled] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hopIndex, setHopIndex] = useState(-1);
   const [linksReady, setLinksReady] = useState(false);
   const [lightTheme, setLightTheme] = useState(false);
+  const [glassOpen, setGlassOpen] = useState(false);
   const reduceMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const trackRef = useRef<HTMLElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const linkRefCallbacks = useRef<Array<(node: HTMLAnchorElement | null) => void>>([]);
+  const refForLink = (index: number) => {
+    const existing = linkRefCallbacks.current[index];
+    if (existing) return existing;
+    const callback = (node: HTMLAnchorElement | null) => {
+      linkRefs.current[index] = node;
+    };
+    linkRefCallbacks.current[index] = callback;
+    return callback;
+  };
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ["start start", "end end"],
   });
-  // Function ranges stay on this portal's scroll progress. Array ranges are
-  // promoted to a document scroll timeline, which finishes only at the page end.
-  // Phase 1 (0–0.4): film out, names out, dark grid in. Then hold.
-  const videoOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.4, 1, 0));
-  const aaronX = useTransform(scrollYProgress, (value) => `${segment(value, 0, 0.4, 0, -100)}vw`);
-  const bowserX = useTransform(scrollYProgress, (value) => `${segment(value, 0, 0.4, 0, 100)}vw`);
-  const nameOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.4, 1, 0));
-  const baseOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.4, 0, 1));
-  // Phase 2 (0.4–0.7): logo fades in. It stays at 0 until 0.4.
-  const logoOpacity = useTransform(scrollYProgress, (value) => segment(value, 0.4, 0.7, 0, 1));
-  // Phase 3 (0.7–1): unscramble. Hidden until this phase starts.
-  const textProgress = useTransform(scrollYProgress, (value) => segment(value, 0.7, 1, 0, 1));
-  const titleOpacity = useTransform(scrollYProgress, (value) => segment(value, 0.7, 0.78, 0, 1));
+  // Function maps stay on this track. Array maps are promoted to the document
+  // scroll timeline and drift when anything else adds page height.
+  // 0–0.5 keeps the earlier dark-sequence ratios: film 0–0.4, logo 0.4–0.7, text 0.7–1.
+  const videoOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.2, 1, 0));
+  const aaronX = useTransform(scrollYProgress, (value) => `${segment(value, 0, 0.2, 0, -100)}vw`);
+  const bowserX = useTransform(scrollYProgress, (value) => `${segment(value, 0, 0.2, 0, 100)}vw`);
+  const nameOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.2, 1, 0));
+  const baseOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.2, 0, 1));
+  const logoOpacity = useTransform(scrollYProgress, (value) => segment(value, 0.2, 0.35, 0, 1));
+  const textProgress = useTransform(scrollYProgress, (value) => segment(value, 0.35, 0.5, 0, 1));
+  const titleOpacity = useTransform(scrollYProgress, (value) => segment(value, 0.35, 0.39, 0, 1));
+  const lightOpacity = useTransform(scrollYProgress, (value) => segment(value, 0.75, 0.85, 0, 1));
+  const glassOpacity = useTransform(scrollYProgress, (value) => segment(value, 0.85, 1, 0, 1));
+  const glassY = useTransform(scrollYProgress, (value) => segment(value, 0.85, 1, 48, 0));
+  const cursorColor = useTransform(scrollYProgress, (value) => {
+    const mix = segment(value, 0.75, 0.85, 0, 1);
+    const channel = Math.round(255 * (1 - mix));
+    return `rgb(${channel}, ${channel}, ${channel})`;
+  });
+  // Same 0.75–0.85 white → #1F2937 map as an array transform. The function
+  // form stays on this track instead of the document scroll timeline.
+  const uiColor = useTransform(scrollYProgress, (value) => {
+    const mix = segment(value, 0.75, 0.85, 0, 1);
+    const channel = (from: number, to: number) => Math.round(from + (to - from) * mix);
+    return `rgb(${channel(255, 0x1f)}, ${channel(255, 0x29)}, ${channel(255, 0x37)})`;
+  });
 
   const panels = useMemo<Panel[]>(
     () =>
@@ -250,7 +459,6 @@ export default function HomePortal({
         index,
         label: dictionary.home.niches[key],
         href: portalCategoryUrl(key, { host: clientHost || publicHost, locale }),
-        hoverColor: HOVER_COLOR[key],
         seoTitle: dictionary.seo[key].title,
         seoLabel: `${dictionary.home.niches[key]} — ${dictionary.nav.services}`,
       })),
@@ -263,55 +471,60 @@ export default function HomePortal({
     return () => window.clearTimeout(timeoutId);
   }, [reduceMotion]);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    const previous = root.style.cursor;
+    root.style.cursor = "none";
+    return () => {
+      root.style.cursor = previous;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const root = document.documentElement;
+    const previous = root.style.overflow;
+    root.style.overflow = "hidden";
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      root.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [isMobileMenuOpen]);
+
   useMotionValueEvent(scrollYProgress, "change", (value) => {
-    const next = value > 0.4;
-    setHoverEnabled((current) => (current === next ? current : next));
-    setLightTheme((current) => {
-      if (value >= LIGHT_THEME_ON) return true;
-      if (value < LIGHT_THEME_OFF) return false;
-      return current;
-    });
+    const nextHop = hopIndexFor(value, PORTAL_CATEGORIES.length);
+    setHopIndex((current) => (current === nextHop ? current : nextHop));
+    const lit = value >= 0.8;
+    setLightTheme((current) => (current === lit ? current : lit));
+    const open = value > 0.86;
+    setGlassOpen((current) => (current === open ? current : open));
 
     const video = videoRef.current;
     if (!video) return;
-    if (value >= 0.4) {
+    if (value >= 0.2) {
       if (!video.paused) video.pause();
     } else if (video.paused) {
       void video.play().catch(() => undefined);
     }
   });
 
-  const activeKey = activeIndex === null ? null : PORTAL_CATEGORIES[activeIndex];
-  const hoveredKey = hoverEnabled ? activeKey : null;
+  const hoveredKey = hoveredIndex === null ? null : PORTAL_CATEGORIES[hoveredIndex];
   const hoveredHero = hoveredKey ? portalHeroes[hoveredKey] : null;
   const nameEntrance = { duration: reduceMotion ? 0 : NAME_ENTRANCE_S, ease: NAME_EASE };
 
   return (
-    <main ref={trackRef} className="relative h-[200vh] bg-black">
+    <>
+    <CustomCursor color={cursorColor} />
+    <main ref={trackRef} className="relative h-[400vh] cursor-none bg-black [&_*]:cursor-none">
       <div className="sticky top-0 h-screen overflow-hidden">
       <div className="absolute inset-0 overflow-hidden" aria-hidden>
         <motion.div className="absolute inset-0 flex" style={{ opacity: baseOpacity }}>
           <BackgroundFrames images={baseImages} videoUrl={null} layout="triptych" />
         </motion.div>
-
-        <AnimatePresence>
-          {hoveredKey && hoveredHero ? (
-            <motion.div
-              key={hoveredKey}
-              className="absolute inset-0 z-10"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={HOVER_FADE}
-            >
-              <BackgroundFrames
-                images={hoveredHero.images}
-                videoUrl={hoveredHero.videoUrl}
-                layout={HOVER_LAYOUT[hoveredKey]}
-              />
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
 
         <motion.video
           ref={videoRef}
@@ -327,14 +540,31 @@ export default function HomePortal({
         />
 
         <motion.div
-          className="pointer-events-none absolute inset-0 z-[25] bg-slate-50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: lightTheme ? 1 : 0 }}
-          transition={reduceMotion ? { duration: 0 } : LIGHT_FADE}
+          className="pointer-events-none absolute inset-0 z-[25] bg-white"
+          style={{ opacity: lightOpacity }}
           aria-hidden
         >
           <BackgroundFrames images={lightImages} videoUrl={null} layout="triptych" />
         </motion.div>
+
+        <AnimatePresence>
+          {hoveredKey && hoveredHero ? (
+            <motion.div
+              key={hoveredKey}
+              className="pointer-events-none absolute inset-0 z-[26]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={HOVER_FADE}
+            >
+              <BackgroundFrames
+                images={hoveredHero.images}
+                videoUrl={hoveredHero.videoUrl}
+                layout={HOVER_LAYOUT[hoveredKey]}
+              />
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
 
       <div className="@container pointer-events-none absolute inset-y-0 left-0 z-30 flex w-1/3 items-center justify-center">
@@ -365,7 +595,7 @@ export default function HomePortal({
         {logoUrl ? (
           <motion.div
             style={{ opacity: logoOpacity }}
-            className={`transition-[filter] duration-[1500ms] ease-in-out ${lightTheme ? "brightness-0" : "brightness-0 invert"}`}
+            className={lightTheme ? "brightness-0" : "brightness-0 invert"}
           >
             {logoUrl.toLowerCase().endsWith(".svg") ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -385,7 +615,7 @@ export default function HomePortal({
         ) : null}
         <motion.p
           style={{ opacity: titleOpacity }}
-          className={`mt-6 max-w-[min(90vw,42rem)] text-center text-xl font-bold uppercase tracking-widest transition-colors duration-[1500ms] ease-in-out lg:text-2xl ${
+          className={`mt-6 max-w-[min(90vw,42rem)] text-center text-xl font-bold uppercase tracking-widest lg:text-2xl ${
             lightTheme ? "text-[#322B2B]" : "text-white/85"
           }`}
         >
@@ -394,53 +624,146 @@ export default function HomePortal({
         </motion.p>
       </div>
 
-      <nav
-        className="absolute bottom-6 left-4 z-50 flex w-max max-w-[90vw] flex-col gap-3 md:bottom-12 md:left-1/2 md:-translate-x-1/2 md:flex-row md:flex-wrap md:justify-center"
-        aria-label={dictionary.nav.services}
-        onMouseLeave={() => setActiveIndex(null)}
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) setActiveIndex(null);
-        }}
+      <motion.div
+        className="absolute left-1/2 top-[5vh] z-[45] h-[90vh] w-[min(92vw,46rem)] -translate-x-1/2 overflow-y-auto rounded-2xl border border-white/20 bg-white/30 p-8 shadow-xl backdrop-blur-md"
+        style={{ opacity: glassOpacity, y: glassY, pointerEvents: glassOpen ? "auto" : "none" }}
       >
-        {panels.map((panel) => (
+        {children}
+      </motion.div>
+
+      <AnimatePresence>
+        {isFooterVisible ? (
           <motion.div
-            key={panel.key}
-            className={linksReady ? undefined : "pointer-events-none"}
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: reduceMotion ? 0 : NAME_ENTRANCE_S + (randomDelays[panel.index] ?? 0),
-              duration: reduceMotion ? 0 : 0.55,
-              ease: NAME_EASE,
-            }}
+            key="home-footer"
+            className="absolute inset-x-0 bottom-0 z-[55] max-h-[70vh] overflow-y-auto bg-[#F4F1ED] pb-28"
+            initial={{ y: reduceMotion ? 0 : "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: reduceMotion ? 0 : "100%" }}
+            transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
-            <a
-              href={panel.href}
-              title={panel.seoTitle}
-              aria-label={panel.seoLabel}
-              aria-current={panel.index === activeIndex ? "true" : undefined}
-              onMouseEnter={() => setActiveIndex(panel.index)}
-              onFocus={() => setActiveIndex(panel.index)}
-              className={`block w-fit rounded-xl border border-white/20 bg-black/40 px-6 py-3 text-left text-sm font-medium uppercase tracking-[0.18em] text-white shadow-lg backdrop-blur-md transition-all duration-300 sm:text-base ${panel.hoverColor} ${
-                activeIndex === null || panel.index === activeIndex
-                  ? "opacity-100"
-                  : "opacity-70 hover:opacity-100"
-              }`}
-            >
-              <span className="drop-shadow-md">{panel.label}</span>
-            </a>
+            <SiteFooter locale={locale} dictionary={dictionary} />
           </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      <div className="absolute bottom-6 left-4 z-[70] flex w-max max-w-[90vw] flex-col items-start gap-3 md:bottom-12 md:left-1/2 md:-translate-x-1/2 md:items-center">
+      <motion.button
+        type="button"
+        className="block md:hidden"
+        style={{ color: uiColor }}
+        aria-expanded={isMobileMenuOpen}
+        aria-label={dictionary.nav.menu}
+        onClick={() => setIsMobileMenuOpen(true)}
+      >
+        <span className="flex flex-col gap-1.5" aria-hidden>
+          <span className="block h-px w-7 bg-current" />
+          <span className="block h-px w-7 bg-current" />
+          <span className="block h-px w-7 bg-current" />
+        </span>
+      </motion.button>
+      <motion.nav
+        ref={navRef}
+        className="relative hidden flex-col gap-3 md:flex md:flex-row md:flex-wrap md:justify-center md:gap-0"
+        style={{ color: uiColor }}
+        aria-label={dictionary.nav.services}
+      >
+        <MenuLine hopIndex={hopIndex} color={uiColor} navRef={navRef} linkRefs={linkRefs} />
+        {panels.map((panel) => (
+          <Fragment key={panel.key}>
+            <motion.div
+              className={linksReady ? undefined : "pointer-events-none"}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: reduceMotion ? 0 : NAME_ENTRANCE_S + (randomDelays[panel.index] ?? 0),
+                duration: reduceMotion ? 0 : 0.55,
+                ease: NAME_EASE,
+              }}
+            >
+              <a
+                ref={refForLink(panel.index)}
+                href={panel.href}
+                title={panel.seoTitle}
+                aria-label={panel.seoLabel}
+                aria-current={hopIndex === panel.index ? "true" : undefined}
+                onMouseEnter={() => setHoveredIndex(panel.index)}
+                onMouseLeave={(event) => {
+                  const next = event.relatedTarget;
+                  if (next instanceof Node && event.currentTarget.closest("nav")?.contains(next)) return;
+                  setHoveredIndex(null);
+                }}
+                className={`block w-fit text-left text-sm font-medium uppercase tracking-[0.18em] transition-opacity duration-300 sm:text-base ${
+                  hoveredIndex === null || hoveredIndex === panel.index
+                    ? "opacity-100"
+                    : "opacity-70 hover:opacity-100"
+                }`}
+              >
+                {panel.label}
+              </a>
+            </motion.div>
+            {panel.index < panels.length - 1 ? (
+              <span aria-hidden className="mx-4 h-4 w-[1px] self-center bg-current opacity-40" />
+            ) : null}
+          </Fragment>
         ))}
-      </nav>
+      </motion.nav>
+      <button
+        type="button"
+        onClick={() => setIsFooterVisible(!isFooterVisible)}
+        aria-expanded={isFooterVisible}
+        className={`text-xs uppercase tracking-widest opacity-50 hover:opacity-100 ${
+          lightTheme ? "text-black" : "text-white"
+        }`}
+      >
+        Info & Legal
+      </button>
+      </div>
+
+      <AnimatePresence>
+        {isMobileMenuOpen ? (
+          <motion.div
+            key="mobile-menu"
+            className="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-black/95 backdrop-blur-xl"
+            initial={{ opacity: reduceMotion ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: reduceMotion ? 1 : 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.35 }}
+          >
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label={dictionary.nav.close}
+              className="absolute top-6 right-6 text-white"
+            >
+              <span aria-hidden className="block text-3xl leading-none">
+                ×
+              </span>
+            </button>
+            <nav aria-label={dictionary.nav.services} className="flex flex-col items-center">
+              {panels.map((panel) => (
+                <a
+                  key={panel.key}
+                  href={panel.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="mb-8 text-3xl font-light text-white"
+                >
+                  {panel.label}
+                </a>
+              ))}
+            </nav>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[60] flex items-start justify-end gap-4 px-4 py-4 sm:px-6 sm:py-5">
         <LanguageSwitcher
-          className={`pointer-events-auto flex shrink-0 items-center gap-1.5 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors duration-[1500ms] ease-in-out ${
+          className={`pointer-events-auto flex shrink-0 items-center gap-1.5 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
             lightTheme ? "text-[#322B2B]" : "text-[#F4F1ED]"
           }`}
         />
       </div>
       </div>
     </main>
+    </>
   );
 }

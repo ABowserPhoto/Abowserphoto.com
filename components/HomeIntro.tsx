@@ -31,21 +31,19 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
   const paragraphs = homeIntroParagraphs(locale, publicHost);
 
   return (
-    <section className="bg-[#F4F1ED] text-[#322B2B]">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
-        <h1 className="text-3xl font-light leading-tight tracking-tight text-[#322B2B] sm:text-4xl lg:text-5xl">
-          {headline}
-        </h1>
-        <div className="mt-8 space-y-5 text-sm leading-relaxed text-[#322B2B]/85 sm:text-base">
-          {paragraphs.map((paragraph, index) => (
-            <p key={index}>
-              {paragraph.map((segment, segmentIndex) => (
-                <IntroLink key={segmentIndex} segment={segment} />
-              ))}
-            </p>
-          ))}
-        </div>
+    <article className="text-[#322B2B]">
+      <h1 className="text-2xl font-light leading-tight tracking-tight text-[#322B2B] sm:text-3xl">
+        {headline}
+      </h1>
+      <div className="mt-5 space-y-4 text-sm leading-relaxed text-[#322B2B]/90">
+        {paragraphs.map((paragraph, index) => (
+          <p key={index}>
+            {paragraph.map((segment, segmentIndex) => (
+              <IntroLink key={segmentIndex} segment={segment} />
+            ))}
+          </p>
+        ))}
       </div>
-    </section>
+    </article>
   );
 }
