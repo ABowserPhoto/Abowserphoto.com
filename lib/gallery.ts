@@ -100,7 +100,16 @@ export function readHomeIntroVideo(locale: Locale): string | null {
 
 /** Up to three portraits from `public/home/images`, in the same filename order. */
 export function readHomeBaseImages(locale: Locale): string[] {
-  return readMediaDirectory(path.join(process.cwd(), "public", "home", "images"), "/home/images", locale)
+  return readHomeImages("images", locale);
+}
+
+/** Up to three light portraits from `public/home/light-theme`, in filename order. */
+export function readHomeLightImages(locale: Locale): string[] {
+  return readHomeImages("light-theme", locale);
+}
+
+function readHomeImages(folder: "images" | "light-theme", locale: Locale): string[] {
+  return readMediaDirectory(path.join(process.cwd(), "public", "home", folder), `/home/${folder}`, locale)
     .filter((item) => item.type === "image")
     .slice(0, 3)
     .map((item) => item.url);

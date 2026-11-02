@@ -5,7 +5,7 @@ import HomeIntro from "../../components/HomeIntro";
 import HomePortal from "../../components/HomePortal";
 import SiteFooter from "../../components/SiteFooter";
 import { getLogoUrl } from "../../lib/cms";
-import { readHomeBaseImages, readHomeIntroVideo, readPortalHeroSets } from "../../lib/gallery";
+import { readHomeBaseImages, readHomeIntroVideo, readHomeLightImages, readPortalHeroSets } from "../../lib/gallery";
 import { isLocale, type Locale } from "../../lib/i18n/config";
 import { getDictionary } from "../../lib/i18n/getDictionary";
 import { buildHomeMetadata } from "../../lib/i18n/seo";
@@ -28,6 +28,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const logoUrl = getLogoUrl();
   const introVideoUrl = readHomeIntroVideo(locale);
   const baseImages = readHomeBaseImages(locale);
+  const lightImages = readHomeLightImages(locale);
   const portalHeroes = readPortalHeroSets(locale);
   const headersList = await headers();
   const publicHost = headersList.get("host") ?? "";
@@ -38,6 +39,7 @@ export default async function HomePage({ params }: HomePageProps) {
         logoUrl={logoUrl}
         introVideoUrl={introVideoUrl}
         baseImages={baseImages}
+        lightImages={lightImages}
         portalHeroes={portalHeroes}
         locale={locale}
         dictionary={dictionary}

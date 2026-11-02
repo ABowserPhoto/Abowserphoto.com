@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, use
 import { Major_Mono_Display } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { MotionValue } from "framer-motion";
 import type { PortalHeroSet } from "../lib/gallery";
 import type { Locale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
@@ -73,9 +74,51 @@ const randomDelays = [0.4, 0.1, 0.5, 0.2, 0.6, 0.3, 0.7, 0.45];
 const NAME_EASE = [0.16, 1, 0.3, 1] as const;
 const HOVER_FADE = { duration: 0.8, ease: "easeInOut" as const };
 
-/** 120% of a column: 1.2 × (33.333vw − 10.66px). */
+/** 120% of a column: 1.2 × (33.333vw − 10.66px). Tone (white or black) is applied by the parent. */
 const CENTER_LOGO_CLASS =
-  "h-auto max-h-[35vh] w-[calc(40vw-12.8px)] max-w-none object-contain brightness-0 invert drop-shadow-lg";
+  "h-auto max-h-[35vh] w-[calc(40vw-12.8px)] max-w-none object-contain drop-shadow-lg";
+
+const STORY_TEXT = "CHOOSE YOUR VISUAL STORY";
+const GLYPHS = ["X", "#", "8", "%"] as const;
+/** Light grid fades in once the three scroll phases have finished. */
+const LIGHT_THEME_ON = 0.98;
+const LIGHT_THEME_OFF = 0.9;
+const LIGHT_FADE = { duration: 1.5, ease: "easeInOut" as const };
+
+/** Linear map from `start`→`end` into `from`→`to`, held outside that window. */
+function segment(progress: number, start: number, end: number, from: number, to: number) {
+  if (progress <= start) return from;
+  if (progress >= end) return to;
+  return from + ((progress - start) / (end - start)) * (to - from);
+}
+
+function scrambledText(text: string, progress: number) {
+  const clamped = Math.min(1, Math.max(0, progress));
+  const revealCount = clamped >= 1 ? text.length : Math.floor(clamped * text.length);
+  let result = "";
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index] ?? "";
+    if (character === " ") result += " ";
+    else if (index < revealCount) result += character;
+    else result += GLYPHS[index % GLYPHS.length];
+  }
+  return result;
+}
+
+function ScrambleText({ progress, text }: { progress: MotionValue<number>; text: string }) {
+  const reduceMotion = useReducedMotion();
+  const [value, setValue] = useState(text);
+
+  useMotionValueEvent(progress, "change", (current) => {
+    setValue(reduceMotion ? text : scrambledText(text, current));
+  });
+
+  useEffect(() => {
+    setValue(reduceMotion ? text : scrambledText(text, progress.get()));
+  }, [progress, reduceMotion, text]);
+
+  return <span aria-hidden="true">{value}</span>;
+}
 
 const NAME_CLASS = `${majorMono.className} mx-auto w-fit whitespace-nowrap text-center normal-case leading-none tracking-[0.04em] text-[#F4F1ED]`;
 
@@ -88,6 +131,8 @@ type HomePortalProps = {
   introVideoUrl: string | null;
   /** Up to three portraits from `public/home/images`. */
   baseImages: string[];
+  /** Up to three light portraits from `public/home/light-theme`. */
+  lightImages: string[];
   portalHeroes: Record<string, PortalHeroSet>;
   locale: Locale;
   dictionary: Dictionary;
@@ -160,6 +205,7 @@ export default function HomePortal({
   logoUrl,
   introVideoUrl,
   baseImages,
+  lightImages,
   portalHeroes,
   locale,
   dictionary,
@@ -175,6 +221,7 @@ export default function HomePortal({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoverEnabled, setHoverEnabled] = useState(false);
   const [linksReady, setLinksReady] = useState(false);
+  const [lightTheme, setLightTheme] = useState(false);
   const reduceMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const trackRef = useRef<HTMLElement>(null);
@@ -182,14 +229,19 @@ export default function HomePortal({
     target: trackRef,
     offset: ["start start", "end end"],
   });
-  // Ranges run through 0 and 1 so the scroll-linked animation holds each phase
-  // instead of easing back toward the element's starting style.
-  const videoOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
-  const aaronX = useTransform(scrollYProgress, [0, 0.4, 1], ["0vw", "-100vw", "-100vw"]);
-  const bowserX = useTransform(scrollYProgress, [0, 0.4, 1], ["0vw", "100vw", "100vw"]);
-  const nameOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0, 0]);
-  const baseOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0, 1, 1]);
-  const logoOpacity = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 0, 1, 1]);
+  // Function ranges stay on this portal's scroll progress. Array ranges are
+  // promoted to a document scroll timeline, which finishes only at the page end.
+  // Phase 1 (0–0.4): film out, names out, dark grid in. Then hold.
+  const videoOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.4, 1, 0));
+  const aaronX = useTransform(scrollYProgress, (value) => `${segment(value, 0, 0.4, 0, -100)}vw`);
+  const bowserX = useTransform(scrollYProgress, (value) => `${segment(value, 0, 0.4, 0, 100)}vw`);
+  const nameOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.4, 1, 0));
+  const baseOpacity = useTransform(scrollYProgress, (value) => segment(value, 0, 0.4, 0, 1));
+  // Phase 2 (0.4–0.7): logo fades in. It stays at 0 until 0.4.
+  const logoOpacity = useTransform(scrollYProgress, (value) => segment(value, 0.4, 0.7, 0, 1));
+  // Phase 3 (0.7–1): unscramble. Hidden until this phase starts.
+  const textProgress = useTransform(scrollYProgress, (value) => segment(value, 0.7, 1, 0, 1));
+  const titleOpacity = useTransform(scrollYProgress, (value) => segment(value, 0.7, 0.78, 0, 1));
 
   const panels = useMemo<Panel[]>(
     () =>
@@ -214,6 +266,11 @@ export default function HomePortal({
   useMotionValueEvent(scrollYProgress, "change", (value) => {
     const next = value > 0.4;
     setHoverEnabled((current) => (current === next ? current : next));
+    setLightTheme((current) => {
+      if (value >= LIGHT_THEME_ON) return true;
+      if (value < LIGHT_THEME_OFF) return false;
+      return current;
+    });
 
     const video = videoRef.current;
     if (!video) return;
@@ -268,6 +325,16 @@ export default function HomePortal({
           style={{ opacity: videoOpacity }}
           className="pointer-events-none absolute top-0 left-0 z-20 block h-[100dvh] w-full bg-black object-cover md:left-1/3 md:w-1/3"
         />
+
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-[25] bg-slate-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: lightTheme ? 1 : 0 }}
+          transition={reduceMotion ? { duration: 0 } : LIGHT_FADE}
+          aria-hidden
+        >
+          <BackgroundFrames images={lightImages} videoUrl={null} layout="triptych" />
+        </motion.div>
       </div>
 
       <div className="@container pointer-events-none absolute inset-y-0 left-0 z-30 flex w-1/3 items-center justify-center">
@@ -296,7 +363,10 @@ export default function HomePortal({
       {/* Bottom padding on desktop keeps the large signature clear of the bottom menu. */}
       <div className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-start px-4 pt-20 md:justify-center md:pb-32 md:pt-0">
         {logoUrl ? (
-          <motion.div style={{ opacity: logoOpacity }}>
+          <motion.div
+            style={{ opacity: logoOpacity }}
+            className={`transition-[filter] duration-[1500ms] ease-in-out ${lightTheme ? "brightness-0" : "brightness-0 invert"}`}
+          >
             {logoUrl.toLowerCase().endsWith(".svg") ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} alt={dictionary.home.logoLabel} className={CENTER_LOGO_CLASS} />
@@ -313,6 +383,15 @@ export default function HomePortal({
             )}
           </motion.div>
         ) : null}
+        <motion.p
+          style={{ opacity: titleOpacity }}
+          className={`mt-6 max-w-[min(90vw,42rem)] text-center text-xl font-bold uppercase tracking-widest transition-colors duration-[1500ms] ease-in-out lg:text-2xl ${
+            lightTheme ? "text-[#322B2B]" : "text-white/85"
+          }`}
+        >
+          <span className="sr-only">{STORY_TEXT}</span>
+          <ScrambleText progress={textProgress} text={STORY_TEXT} />
+        </motion.p>
       </div>
 
       <nav
@@ -355,7 +434,11 @@ export default function HomePortal({
       </nav>
 
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[60] flex items-start justify-end gap-4 px-4 py-4 sm:px-6 sm:py-5">
-        <LanguageSwitcher className="pointer-events-auto flex shrink-0 items-center gap-1.5 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#F4F1ED]" />
+        <LanguageSwitcher
+          className={`pointer-events-auto flex shrink-0 items-center gap-1.5 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors duration-[1500ms] ease-in-out ${
+            lightTheme ? "text-[#322B2B]" : "text-[#F4F1ED]"
+          }`}
+        />
       </div>
       </div>
     </main>
