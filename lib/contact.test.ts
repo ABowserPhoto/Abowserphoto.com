@@ -212,17 +212,15 @@ test("rendered copy reads addresses, phone, and hours from the contact config", 
   assert.equal(english.seo.solingen.description.includes(SOLINGEN_ADDRESS.street), true);
   assert.equal(english.seo.studio.description.includes("{"), false);
   assert.equal(
-    getLocalizedCategory("business-portraits", "de").aboutText.includes(
-      appointmentOnlyLabel("de", { sentence: false })
-    ),
+    getLocalizedCategory("business-portraits", "de").aboutText.includes(HAGEN_ADDRESS.street),
     true
   );
   assert.equal(
-    getLocalizedCategory("business-portraits", "en").aboutText.includes(
-      appointmentOnlyLabel("en", { sentence: false })
-    ),
+    getLocalizedCategory("business-portraits", "en").aboutText.includes(HAGEN_ADDRESS.street),
     true
   );
+  assert.equal(getLocalizedCategory("studio", "de").aboutText.includes(HAGEN_ADDRESS.street), true);
+  assert.equal(getLocalizedCategory("studio", "en").aboutText.includes(HAGEN_ADDRESS.street), true);
 
   const faqs = readFaqFile("commercial", "de");
   const where = faqs.find((item) => item.answer.includes(HAGEN_ADDRESS.street));
