@@ -1,4 +1,4 @@
-import { appointmentOnlyLabel, HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "../contact";
+import { appointmentOnlyLabel, HAGEN_ADDRESS } from "../contact";
 import { applicationPhotoPriceLine, passportPhotoPriceLine } from "../site";
 import {
   categoryContentMap,
@@ -12,11 +12,6 @@ import { getDictionarySync } from "./getDictionary";
 
 const germanSharedAbout = {
   title: "Über mich",
-  description: `Ich bin Aaron Bowser, Fotograf für Business-Porträts, Hochzeiten, Commercial und Immobilien in Nordrhein-Westfalen. Das Hauptstudio in Hagen hat etwa 40 m²; dort arbeite ich täglich. Das Studio Solingen, etwa 100 m², ist für größere Produktionen und ${appointmentOnlyLabel("de", { sentence: false })}. Die Arbeit umfasst Hochzeit, Commercial, Editorial und Immobilienfotografie, mit filmischer Bildsprache und authentischer Emotion.
-
-Ob ich einen einmaligen Moment festhalte, eine persönliche Marke forme oder ein Immobilienexposé aufwerte: Jedes Projekt wird mit Intention, Handwerk und dem Anspruch angegangen, Bilder zu schaffen, die zeitlos und wahrhaftig wirken.
-
-Bei Interior- und Immobilienaufnahmen helfe ich Maklern, Entwicklern und Eigentümern, Interessenten in Käufer zu verwandeln. Von gemütlichen Wohnungen bis zu modernen Gewerbeflächen zeige ich Charakter, Licht und Potenzial jedes Raums. Mit präziser Lichtführung, sorgfältiger Nachbearbeitung und einem klaren Client-Erlebnis liefern wir verkaufsstarke, marktreife Bilder – schnell und zuverlässig.`,
 };
 
 const germanCategoryCopy: Partial<
@@ -36,8 +31,9 @@ const germanCategoryCopy: Partial<
     title: "Immobilienfotografie NRW",
     subtitle:
       "Immobilienbilder für Exposés in Nordrhein-Westfalen, mit Studios in Hagen und Solingen.",
-    aboutText:
-      "Meine Immobilienarbeit fokussiert Raum, Licht und Perspektive – damit jede Immobilie einladend, präzise und premium wirkt.",
+    aboutText: `Ich bin Aaron Bowser, Immobilienfotograf aus Hagen, und fotografiere Wohnungen, Häuser und Gewerbeflächen in Hagen, Solingen und ganz NRW. Mir geht es um Raum, Licht und Perspektive: Bilder, die eine Immobilie einladend und zugleich ehrlich zeigen, so wie Interessenten sie bei der Besichtigung erleben.
+
+Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Neben Innen- und Außenaufnahmen gehören Twilight-Aufnahmen, Drohnenfotos, 360°-Rundgänge, kurze Highlight-Videos und digitales Homestaging dazu. Mit sorgfältiger Lichtführung und Nachbearbeitung entstehen Bilder fürs Exposé und für Immobilienportale, die schnell und zuverlässig bei Ihnen sind.`,
     services: [
       {
         title: "Innenaufnahmen",
@@ -81,8 +77,9 @@ const germanCategoryCopy: Partial<
     title: "Commercial-Fotografie in Hagen & Solingen",
     subtitle:
       `Fashion, Beauty, Produkt und Editorial für Marken. Größere Produktionen im Studio Solingen, ${appointmentOnlyLabel("de", { sentence: false })}, sonst im Studio Hagen oder vor Ort in Nordrhein-Westfalen.`,
-    aboutText:
-      `Meine Commercial-Arbeit verbindet Editorial-Storytelling mit einer klaren Modeästhetik: cinematic, präzise und publikationsreif. Das Hauptstudio in Hagen hat etwa 40 m²; Aaron arbeitet dort täglich. Größere Produktionen und Sets kommen ins Studio Solingen, etwa 100 m², ${appointmentOnlyLabel("de", { sentence: false })}. Das Studio kann auch gemietet werden.`,
+    aboutText: `Ich bin Aaron Bowser und fotografiere Fashion, Beauty, Produkte, Editorials und Model-Portfolios für Marken, Designer und Agenturen in NRW. Meine Commercial-Fotografie verbindet Editorial-Storytelling mit einer klaren Modeästhetik: filmisch, präzise und publikationsreif.
+
+Kleinere Produktionen entstehen in meinem Studio in Hagen, etwa 40 m², wo ich täglich arbeite. Für größere Sets und Kampagnen steht das Studio Solingen mit etwa 100 m² nach Vereinbarung bereit; es kann auch für eigene Produktionen gemietet werden. Auf Wunsch fotografiere ich auch vor Ort.`,
     services: [
       {
         title: "Porträts und Model-Portfolios",
@@ -116,8 +113,9 @@ const germanCategoryCopy: Partial<
     title: "Hochzeitsfotograf Hagen & Solingen",
     subtitle:
       "Reportage für die freie Trauung, den ganzen Tag und das Standesamt in Solingen und Hagen.",
-    aboutText:
-      "Ich fotografiere Hochzeiten in Hagen, Solingen und in Nordrhein-Westfalen, cinematic und ehrlich. Natürliche Emotion und die Details, die zu den Menschen im Raum gehören, vom Standesamt bis zum Ende des Tages. Ein Hochzeitsvideo kann denselben Tag begleiten; der Film entsteht in der Filmproduktion, nicht als nachträglicher Zusammenschnitt aus den Fotos.",
+    aboutText: `Ich bin Aaron Bowser, Hochzeitsfotograf aus Hagen, und begleite Paare in Hagen, Solingen und ganz NRW. Ob Standesamt, freie Trauung oder der ganze Tag: Ich fotografiere ruhig, nah und ehrlich, mit filmischer Bildsprache und einem Blick für die echten Momente und die Details, die zu Ihnen gehören.
+
+Vor der Hochzeit lernen wir uns kennen, auf Wunsch auch beim Paarshooting. Am Ende steht eine Geschichte eures Tages, gern als gedrucktes Album. Ein Hochzeitsvideo kann denselben Tag begleiten; es entsteht eigenständig in der Filmproduktion.`,
     services: [
       {
         title: "Ganztägige Reportage",
@@ -147,8 +145,9 @@ const germanCategoryCopy: Partial<
     navLabel: "Food",
     title: "Food-Fotografie in NRW",
     subtitle: "Bilder für Restaurants, Speisekarten und Produkte, aus den Studios in Hagen und Solingen oder vor Ort.",
-    aboutText:
-      "Food-Fotografie mit Blick auf Textur, Licht und Appetit, für Karte, Packung und Bildschirm.",
+    aboutText: `Ich bin Aaron Bowser, Food-Fotograf aus Hagen, und fotografiere für Restaurants, Cafés, Lebensmittelmarken und Produzenten in Hagen, Solingen und ganz NRW. Mich interessieren Textur, Licht und Atmosphäre – Bilder, bei denen man Lust bekommt, sofort zu probieren.
+
+Vom Styling bis zur finalen Farbbearbeitung entstehen Food-Fotos für Speisekarte, Verpackung, Website und Social Media, im Studio in Hagen oder direkt bei Ihnen vor Ort in der Küche.`,
     services: [
       {
         title: "Speisekarten",
@@ -169,7 +168,9 @@ const germanCategoryCopy: Partial<
     title: "Business-Porträts in Hagen & Solingen",
     subtitle:
       "Executive-Headshots, Mitarbeiterfotos und LinkedIn-Profilbilder für Unternehmen in Hagen, Solingen und Nordrhein-Westfalen.",
-    aboutText: `Ich bin Aaron Bowser und fotografiere Business-Porträts, Hochzeiten und Commercial. Das Hauptstudio liegt in Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Dort arbeite ich täglich, und Porträt- sowie Business-Sitzungen finden in der Regel hier statt. Das Studio Solingen, ${SOLINGEN_ADDRESS.street}, hat etwa 100 m² und ist für größere Produktionen gedacht, zum Beispiel Teams und aufwendigere Sets, ${appointmentOnlyLabel("de", { sentence: false })}. Es kann auch gemietet werden. Das Studio Solingen hat eine eigene Seite, mit der Fläche und der Art, wie eine Miete angefragt wird.\n\nFür Unternehmen geht es um Bilder, die auf der Website, bei LinkedIn und in der Presse dieselbe ruhige Haltung haben: klares Licht, ein Gesicht, das man ernst nimmt, und eine Bildsprache, die zum Haus passt. Vor der Aufnahme klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Im Shooting leite ich Haltung und Ausdruck an.`,
+    aboutText: `Ich bin Aaron Bowser und fotografiere Business-Porträts, Mitarbeiterfotos, Teamfotos und LinkedIn-Profilbilder für Unternehmen und Selbstständige in Hagen, Solingen und NRW. Mein Studio in Hagen (${HAGEN_ADDRESS.street}, etwa 40 m²) ist mein täglicher Arbeitsort; dort finden Porträtsitzungen in der Regel statt. Für größere Teams und aufwendigere Sets nutze ich das Studio Solingen, etwa 100 m², nach Vereinbarung – oder ich baue das Licht direkt in Ihrem Büro auf.
+
+Vor dem Shooting klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Während der Sitzung leite ich Haltung und Ausdruck an, damit Website, LinkedIn und Presse dieselbe ruhige, stimmige Bildsprache tragen.`,
     services: [
       {
         title: "Executive-Headshots",
@@ -202,7 +203,11 @@ const germanCategoryCopy: Partial<
     navLabel: "Studio Hagen",
     title: "Bewerbungsfotos und Passbilder in Hagen",
     subtitle: `Bewerbungsfotos und biometrische Passbilder im Studio Hagen, ${HAGEN_ADDRESS.street}. Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}.`,
-    aboutText: `Ich bin Aaron Bowser. Bewerbungsfotos und Passbilder entstehen im Studio Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Dort arbeite ich täglich, und diese Termine werden hier gebucht.\n\nEin Bewerbungsfoto und ein Passbild sind zwei verschiedene Bilder. Für die Bewerbung klären wir, wo das Foto erscheinen soll, danach leite ich Haltung und Ausdruck an. Das Passbild folgt den aktuellen biometrischen Vorgaben: frontal, mit neutralem Ausdruck, vor einem einfarbigen Hintergrund. Beides kann in einem Termin entstehen.\n\nEin Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}.`,
+    aboutText: `Ich bin Aaron Bowser. Bewerbungsfotos und biometrische Passbilder mache ich in meinem Studio in Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Hier arbeite ich jeden Tag, und hier werden diese Termine gebucht.
+
+Für Ihr Bewerbungsfoto klären wir zuerst, wo es erscheinen soll – Lebenslauf, LinkedIn oder Xing –, dann leite ich Haltung und Ausdruck an, damit Sie natürlich und sympathisch wirken. Das Passbild folgt den aktuellen biometrischen Vorgaben für Reisepass, Personalausweis und Visum. Beides geht in einem Termin.
+
+Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}.`,
     services: [
       {
         title: "Bewerbungsfotos",
@@ -223,8 +228,9 @@ const germanCategoryCopy: Partial<
     navLabel: "Film & Video",
     title: "Filmproduktion",
     subtitle: "Bewegtbild für Marken, Events und Kampagnen, aus Hagen und Solingen.",
-    aboutText:
-      "Von Brand Films bis zu kurzen Social-Filmen: Bewegung mit klarer Erzählung und einer ruhigen Bildsprache.",
+    aboutText: `Ich bin Aaron Bowser und produziere Imagefilme, Brand Films, Eventfilme und Social Reels für Unternehmen und Marken in Hagen, Solingen und NRW. Mir geht es um eine klare Erzählung, bewusstes Timing, ruhige Kamerabewegungen und ein sorgfältiges Color Grading – damit jeder Film filmisch wirkt und im Marketing wirklich funktioniert.
+
+Gedreht wird bei Ihnen vor Ort, auf Ihrer Veranstaltung oder für größere Sets im Studio Solingen mit etwa 100 m² nach Vereinbarung.`,
     services: [
       {
         title: "Brand Films",
@@ -244,8 +250,9 @@ const germanCategoryCopy: Partial<
     navLabel: "Social Media",
     title: "Social-Media-Management",
     subtitle: "Planung, Veröffentlichung und Pflege für Marken mit einem festen visuellen Auftritt.",
-    aboutText:
-      "Kreation und Planung für Marken, die regelmäßig veröffentlichen und den Auftritt messen wollen.",
+    aboutText: `Ich bin Aaron Bowser und betreue Social-Media-Kanäle für Unternehmen und Marken in Hagen, Solingen und NRW. Ich verbinde eigene Foto- und Videoproduktion mit Strategie: Redaktionsplan, Veröffentlichung, Texte, Community-Pflege und eine Auswertung, die zeigt, was funktioniert.
+
+So bleibt Ihr Auftritt auf Instagram, LinkedIn und Co. regelmäßig, visuell stimmig und messbar – ohne dass Sie sich jede Woche selbst darum kümmern müssen.`,
     services: [
       {
         title: "Redaktionspläne",

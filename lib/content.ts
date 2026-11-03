@@ -1,4 +1,4 @@
-import { appointmentOnlyLabel, formatAddressLine, HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "./contact";
+import { appointmentOnlyLabel, formatAddressLine, HAGEN_ADDRESS } from "./contact";
 import { applicationPhotoPriceLine, passportPhotoPriceLine, studioSittingPriceAnswer } from "./site";
 
 export type VirtualTourItem = {
@@ -53,11 +53,6 @@ export type CategorySlug =
 
 export const sharedAbout = {
   title: "About Me",
-  description: `I am Aaron Bowser, a photographer for business portraits, weddings, commercial work, and real estate in North Rhine-Westphalia. The main studio is in Hagen, about 40 m², where I work every day. The Solingen studio, about 100 m², is for larger productions and ${appointmentOnlyLabel("en", { sentence: false })}. The work spans wedding, commercial, editorial, and property photography, blending cinematic composition with authentic emotion.
-
-Whether I am capturing a once-in-a-lifetime celebration, shaping a personal brand, or elevating a real estate listing, every project is approached with intention, craft, and a commitment to images that feel timeless and true.
-
-When shooting interiors and real estate, I help agents, developers, and homeowners turn browsers into buyers. From cozy residential homes to modern commercial spaces, my goal is to highlight the unique character, natural light, and true potential of every room. By combining advanced lighting techniques, meticulous post-production, and a seamless client experience, I deliver stunning, market-ready photos with the speed and reliability your business demands.`,
 };
 
 function buildPortfolio(seed: string) {
@@ -100,8 +95,9 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
           "A film from the same day as the photographs: the registry office, a symbolic ceremony, or the full day. The cut stays calm and is made with the film work.",
       },
     ],
-    aboutText:
-      "I photograph weddings in Hagen, Solingen, and across North Rhine-Westphalia with a cinematic and honest approach. That includes the civil ceremony, a symbolic ceremony, and the full day, with natural emotion and the details that belong to the people in the room. A wedding film can follow the same day; it is produced with the film work, not cut afterwards from the stills.",
+    aboutText: `I'm Aaron Bowser, a wedding photographer based in Hagen, photographing couples in Hagen, Solingen and across North Rhine-Westphalia. Civil ceremony, symbolic ceremony or the full day: I work calmly and close, with a cinematic eye for honest moments and the details that belong to you.
+
+Before the day we get to know each other, with an engagement shoot if you like. What you receive is the story of your day, also as a printed album. A wedding film can follow the same day, produced as its own film rather than cut from the stills.`,
     aboutImage:
       "https://images.unsplash.com/photo-1529634806980-85c3dd6d34ac?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -181,8 +177,9 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         afterImage: "/real-estate/services/homestaging-nachher.webp",
       },
     ],
-    aboutText:
-      "My real estate work focuses on space, light, and perspective to ensure each property feels inviting, accurate, and premium across platforms.",
+    aboutText: `I'm Aaron Bowser, a real estate photographer based in Hagen, photographing apartments, houses and commercial spaces in Hagen, Solingen and across North Rhine-Westphalia. I focus on space, light and perspective, so every property looks inviting and true to what buyers see at a viewing.
+
+I work with agents, developers, property managers and owners. Alongside interior and exterior photography I offer twilight shots, drone photography, 360° virtual tours, short highlight videos and virtual staging, delivering listing-ready images for exposés and property portals, quickly and reliably.`,
     aboutImage:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -231,7 +228,9 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         image: "/business-portraits/portfolio/business-fotografie-frau-hellblauer-anzug.webp",
       },
     ],
-    aboutText: `I am Aaron Bowser, a photographer for business portraits, weddings, and commercial work. The main studio is in Hagen, ${HAGEN_ADDRESS.street}, about 40 m². I work there every day, and portrait and business sessions are booked there by default. The Solingen studio, ${SOLINGEN_ADDRESS.street}, is about 100 m² and is for larger productions, such as teams and bigger set-ups, ${appointmentOnlyLabel("en", { sentence: false })}. It can also be rented. The Solingen studio has its own page, with the floor area and how a rental is arranged.\n\nFor companies the pictures should share one calm line on the website, on LinkedIn, and in the press. Before the session we agree where the portraits will be used and who should be in them. During the sitting I direct posture and expression.`,
+    aboutText: `I'm Aaron Bowser, photographing business portraits, staff and team photos and LinkedIn headshots for companies and professionals in Hagen, Solingen and across NRW. My Hagen studio (${HAGEN_ADDRESS.street}, about 40 m²) is where I work every day and where most portrait sessions take place. Larger teams and bigger set-ups use the Solingen studio, about 100 m², by appointment – or I bring the lighting to your office.
+
+Before the session we agree where the portraits will be used and who should be in them. During the sitting I guide posture and expression, so your website, LinkedIn and press share one calm, consistent look.`,
     aboutImage:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -265,7 +264,11 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         image: "/business-portraits/portfolio/mitarbeiterfoto-frau-sitzend-grau.webp",
       },
     ],
-    aboutText: `I am Aaron Bowser. Application photos and passport photos are made at the Hagen studio, ${HAGEN_ADDRESS.street}, about 40 m². I work there every day, and these sittings are booked there.\n\nAn application photo and a passport photo are different pictures. For the application we agree where it will be seen, then I direct posture and expression. The passport photo follows the current biometric rules: a frontal portrait, a neutral expression, and a plain background. Both can be made in the same visit.\n\nAn application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}.`,
+    aboutText: `I'm Aaron Bowser. I take application photos and biometric passport photos at my Hagen studio, ${HAGEN_ADDRESS.street}, about 40 m², where I work every day and where these sessions are booked.
+
+For your application photo we first agree where it will be used – CV, LinkedIn or Xing – and then I guide posture and expression so you look natural and approachable. Passport photos follow the current biometric rules for passports, ID cards and visas. Both can be done in one visit.
+
+An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}.`,
     aboutImage:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -302,8 +305,9 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         description: "Recurring short-form sets tailored for social growth.",
       },
     ],
-    aboutText:
-      "From styling to final color grading, I craft food visuals that highlight texture, atmosphere, and appetite appeal across every channel.",
+    aboutText: `I'm Aaron Bowser, a food photographer based in Hagen, working with restaurants, cafés, food brands and producers in Hagen, Solingen and across NRW. I care about texture, light and atmosphere – images that make people want to taste right away.
+
+From styling to final colour grading, I create food photography for menus, packaging, websites and social media, in my Hagen studio or on location in your kitchen.`,
     aboutImage:
       "https://images.unsplash.com/photo-1488992783499-418eb1f62d08?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -334,8 +338,9 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         description: "Short cinematic edits optimized for social platforms.",
       },
     ],
-    aboutText:
-      "I design motion sequences with intentional pacing, camera movement, and grading so each frame feels cinematic and commercially useful.",
+    aboutText: `I'm Aaron Bowser, producing brand films, corporate videos, event films and social reels for companies and brands in Hagen, Solingen and across NRW. I focus on clear storytelling, intentional pacing, calm camera movement and careful colour grading, so every film feels cinematic and works hard for your marketing.
+
+We film on location, at your event, or for larger set-ups in the Solingen studio (about 100 m²) by appointment.`,
     aboutImage:
       "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -366,8 +371,9 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         description: "Actionable analytics with content and campaign recommendations.",
       },
     ],
-    aboutText:
-      "I combine creative production with practical strategy to help brands publish consistently and grow with measurable content performance.",
+    aboutText: `I'm Aaron Bowser, managing social media for companies and brands in Hagen, Solingen and across NRW. I combine my own photo and video production with strategy: content calendars, publishing, copywriting, community management and reporting that shows what works.
+
+Your presence on Instagram, LinkedIn and beyond stays consistent, visually coherent and measurable – without you having to handle it every week.`,
     aboutImage:
       "https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&w=1000&q=80",
     faq: [
@@ -412,8 +418,9 @@ export const categoryContentMap: Record<CategorySlug, CategoryContent> = {
         image: "/commercial/services/editorial-fotografie.webp",
       }
     ],
-    aboutText:
-      `My commercial work is rooted in editorial storytelling—blending high-fashion sensibility with intentional narrative to create portraits that feel cinematic, refined, and publication-ready. The Hagen studio is about 40 m² and is where I work every day. Larger productions and set-ups use the Solingen studio, about 100 m², ${appointmentOnlyLabel("en", { sentence: false })}. That studio can also be rented.`,
+    aboutText: `I'm Aaron Bowser, photographing fashion, beauty, product, editorial and model portfolios for brands, designers and agencies in North Rhine-Westphalia. My commercial work blends editorial storytelling with a clean fashion aesthetic – cinematic, precise and publication-ready.
+
+Smaller productions happen at my Hagen studio, about 40 m², where I work every day. For larger sets and campaigns, the Solingen studio (about 100 m²) is available by appointment and can also be rented for your own productions. On-location shoots are possible too.`,
     aboutImage:
       "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
     faq: [

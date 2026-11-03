@@ -123,10 +123,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const pageFaqs = getPageFaqs(slug, locale);
   const fileFaqs = readFaqFile(slug, locale);
   const faqs = pageFaqs.length > 0 ? pageFaqs : fileFaqs.length > 0 ? fileFaqs : selectedCategory.faq;
-  const aboutDescription =
-    slug === "business-portraits" || slug === "studio"
-      ? selectedCategory.aboutText
-      : `${selectedCategory.aboutText}\n\n${sharedAbout.description}`;
+  const aboutDescription = selectedCategory.aboutText;
 
   return (
     <>
