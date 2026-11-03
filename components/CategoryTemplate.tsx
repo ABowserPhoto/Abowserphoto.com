@@ -13,6 +13,7 @@ import type { PageSection } from "../lib/i18n/pageSections";
 import { contactEmailHref } from "../lib/contact";
 import HeroSlider, { type HeroMediaItem } from "./HeroSlider";
 import Navbar from "./Navbar";
+import CustomCursor from "./ui/CustomCursor";
 import PageSections from "./PageSections";
 import PortfolioGrid from "./PortfolioGrid";
 import ServicesScroll from "./ServicesScroll";
@@ -153,7 +154,8 @@ export default function CategoryTemplate({
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F1ED] text-[#322B2B]">
+    <div className="min-h-screen cursor-none bg-[#F4F1ED] text-[#322B2B] [&_*]:cursor-none">
+      <CustomCursor />
       <Navbar
         logoUrl={logoUrl}
         sections={visibleSectionLinks}

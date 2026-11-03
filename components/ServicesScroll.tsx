@@ -5,9 +5,9 @@ import Link from "next/link";
 import {
   AnimatePresence,
   motion,
+  useMotionValue,
   useMotionValueEvent,
   useScroll,
-  useTransform,
   type MotionValue,
 } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -114,12 +114,22 @@ function ServiceImageLayer({
   const start = index / totalLength;
   const end = (index + 1) / totalLength;
 
-  // Continuous zoom across the full service window (grows until handoff).
-  const scale = useTransform(scrollYProgress, [start, end], [1, 1.15]);
+  // Continuous zoom across this service's slice. Written from the section's
+  // scroll value so the peak stays a 15% zoom inside the viewport frame.
+  const scale = useMotionValue(1);
+  const applyScale = (value: number) => {
+    if (value <= start) scale.set(1);
+    else if (value >= end) scale.set(1.15);
+    else scale.set(1 + ((value - start) / (end - start)) * 0.15);
+  };
+  useMotionValueEvent(scrollYProgress, "change", applyScale);
+  useEffect(() => {
+    applyScale(scrollYProgress.get());
+  }, [scrollYProgress, start, end, scale]);
 
   return (
     <motion.div
-      className="absolute inset-0 origin-center transition-opacity duration-[1400ms] ease-in-out"
+      className="absolute inset-0 origin-center bg-black transition-opacity duration-[1400ms] ease-in-out"
       style={{
         scale,
         opacity: isActive ? 1 : 0,
@@ -140,8 +150,8 @@ function ServiceImageLayer({
           src={service.imageUrl}
           alt={service.title}
           fill
-          sizes="(max-width: 768px) 100vw, 80vw"
-          className="object-contain"
+          sizes="100vw"
+          className="object-cover md:object-contain"
           priority={priority}
         />
       ) : (
@@ -346,29 +356,26 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
       className="relative z-30 w-full bg-black"
       style={{ height: `${Math.max(count, 1) * 100}dvh` }}
     >
-      <div className="sticky top-0 flex h-[100dvh] w-full flex-col overflow-x-hidden">
-        <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-20 sm:gap-5 sm:px-8 sm:pb-8 md:block md:pb-6">
-          {/* Centered media — stacked layers cross-fade + scroll-linked scale */}
-          <div className="relative min-h-0 w-full max-w-5xl flex-1 md:absolute md:inset-0 md:m-auto md:h-full md:max-h-[70dvh] md:flex-none">
-            <div className="relative mx-auto h-full max-h-[42dvh] w-full sm:max-h-[50dvh] md:max-h-none">
-              {services.map((service, index) => (
-                <ServiceImageLayer
-                  key={`${service.title}-${index}`}
-                  service={service}
-                  index={index}
-                  totalLength={count}
-                  scrollYProgress={scrollYProgress}
-                  isActive={index === activeIndex}
-                  priority={index === 0}
-                />
-              ))}
-            </div>
-          </div>
+      <div className="sticky top-0 flex h-screen w-full flex-col overflow-hidden">
+        <div className="relative h-full w-full">
+          {/* Mobile frame is 90vh. Desktop fills the viewport height; portrait frames letterbox on black. */}
+          <div className="relative h-[90vh] w-full overflow-hidden bg-black md:absolute md:inset-0 md:h-screen">
+            {services.map((service, index) => (
+              <ServiceImageLayer
+                key={`${service.title}-${index}`}
+                service={service}
+                index={index}
+                totalLength={count}
+                scrollYProgress={scrollYProgress}
+                isActive={index === activeIndex}
+                priority={index === 0}
+              />
+            ))}
 
-          {/* Glassmorphism copy card — grows with content; no fixed height clipping */}
-          <div className="pointer-events-none relative z-20 flex w-full shrink-0 justify-center md:absolute md:inset-x-auto md:left-[max(1.25rem,calc(50%-30rem))] md:bottom-[10%] md:top-auto md:w-[min(24rem,42vw)] md:justify-start">
+          {/* Glass card floats inside the image frame so the sticky screen cannot clip it. */}
+          <div className="pointer-events-none absolute bottom-8 left-4 right-4 z-10 md:bottom-[10%] md:left-[max(1.25rem,calc(50%-30rem))] md:right-auto md:w-[min(24rem,42vw)]">
             <div
-              className="pointer-events-auto h-auto w-full max-w-md max-h-[46dvh] overflow-x-hidden overflow-y-auto rounded-2xl border border-white/25 px-5 pb-7 pt-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:max-w-lg sm:px-6 sm:pb-8 sm:pt-6 md:max-h-none md:max-w-none md:overflow-visible"
+              className="pointer-events-auto h-auto w-full max-h-[calc(90vh-4rem)] max-w-md overflow-x-hidden overflow-y-auto rounded-2xl border border-white/25 px-5 pb-7 pt-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:max-w-lg sm:px-6 sm:pb-8 sm:pt-6 md:max-h-none md:max-w-none md:overflow-visible"
               style={{
                 background: "rgba(255, 255, 255, 0.15)",
                 backdropFilter: "blur(12px)",
@@ -442,6 +449,7 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
                 {renderServiceCta(activeService)}
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>

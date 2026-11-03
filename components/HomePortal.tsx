@@ -4,11 +4,9 @@ import {
   AnimatePresence,
   motion,
   useAnimation,
-  useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
-  useSpring,
   useTransform,
 } from "framer-motion";
 import { Major_Mono_Display } from "next/font/google";
@@ -21,6 +19,7 @@ import type { Dictionary } from "../lib/i18n/getDictionary";
 import { type PortalCategorySlug, portalCategoryUrl } from "../lib/subdomains";
 import LanguageSwitcher from "./LanguageSwitcher";
 import SiteFooter from "./SiteFooter";
+import CustomCursor from "./ui/CustomCursor";
 
 const majorMono = Major_Mono_Display({
   weight: "400",
@@ -80,8 +79,6 @@ const CENTER_LOGO_CLASS =
 
 const STORY_TEXT = "CHOOSE YOUR VISUAL STORY";
 const GLYPHS = ["X", "#", "8", "%"] as const;
-/** Leading circle is 33% larger than the previous 18px mark. */
-const CURSOR_SIZES = [24, 13, 9, 6] as const;
 
 /** Linear map from `start`→`end` into `from`→`to`, held outside that window. */
 function segment(progress: number, start: number, end: number, from: number, to: number) {
@@ -206,37 +203,6 @@ function hopIndexFor(progress: number, count: number) {
   return Math.round(span * (count - 1));
 }
 
-function CursorDot({
-  x,
-  y,
-  size,
-  color,
-  opacity,
-}: {
-  x: MotionValue<number>;
-  y: MotionValue<number>;
-  size: number;
-  color: MotionValue<string>;
-  opacity: MotionValue<number>;
-}) {
-  return (
-    <motion.span
-      aria-hidden
-      className="pointer-events-none fixed top-0 left-0 z-[80] rounded-full"
-      style={{
-        width: size,
-        height: size,
-        x,
-        y,
-        marginLeft: -size / 2,
-        marginTop: -size / 2,
-        backgroundColor: color,
-        opacity,
-      }}
-    />
-  );
-}
-
 /** Horizontal center of the link, at the top edge, so the shape can rest above the label. */
 function linkAnchor(link: HTMLElement, nav: HTMLElement) {
   const linkBox = link.getBoundingClientRect();
@@ -319,65 +285,6 @@ function MenuLine({
         style={{ backgroundColor: color }}
       />
     </motion.div>
-  );
-}
-
-function CustomCursor({ color }: { color: MotionValue<string> }) {
-  const reduceMotion = useReducedMotion();
-  const mouseX = useMotionValue(-200);
-  const mouseY = useMotionValue(-200);
-  const opacity = useMotionValue(0);
-  const trailX1 = useSpring(mouseX, { stiffness: 520, damping: 28, mass: 0.35 });
-  const trailY1 = useSpring(mouseY, { stiffness: 520, damping: 28, mass: 0.35 });
-  const trailX2 = useSpring(trailX1, { stiffness: 260, damping: 32, mass: 0.55 });
-  const trailY2 = useSpring(trailY1, { stiffness: 260, damping: 32, mass: 0.55 });
-  const trailX3 = useSpring(trailX2, { stiffness: 140, damping: 36, mass: 0.8 });
-  const trailY3 = useSpring(trailY2, { stiffness: 140, damping: 36, mass: 0.8 });
-
-  useEffect(() => {
-    const finePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!finePointer) return;
-    const onMove = (event: MouseEvent) => {
-      mouseX.set(event.clientX);
-      mouseY.set(event.clientY);
-      opacity.set(1);
-    };
-    const onLeave = () => opacity.set(0);
-    window.addEventListener("mousemove", onMove);
-    document.documentElement.addEventListener("mouseleave", onLeave);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      document.documentElement.removeEventListener("mouseleave", onLeave);
-    };
-  }, [mouseX, mouseY, opacity]);
-
-  const points = reduceMotion
-    ? [
-        { x: mouseX, y: mouseY },
-        { x: mouseX, y: mouseY },
-        { x: mouseX, y: mouseY },
-        { x: mouseX, y: mouseY },
-      ]
-    : [
-        { x: mouseX, y: mouseY },
-        { x: trailX1, y: trailY1 },
-        { x: trailX2, y: trailY2 },
-        { x: trailX3, y: trailY3 },
-      ];
-
-  return (
-    <>
-      {points.map((point, index) => (
-        <CursorDot
-          key={index}
-          x={point.x}
-          y={point.y}
-          size={CURSOR_SIZES[index] ?? 6}
-          color={color}
-          opacity={opacity}
-        />
-      ))}
-    </>
   );
 }
 
@@ -470,15 +377,6 @@ export default function HomePortal({
     const timeoutId = window.setTimeout(() => setLinksReady(true), reduceMotion ? 0 : NAME_ENTRANCE_S * 1000);
     return () => window.clearTimeout(timeoutId);
   }, [reduceMotion]);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const previous = root.style.cursor;
-    root.style.cursor = "none";
-    return () => {
-      root.style.cursor = previous;
-    };
-  }, []);
 
   useEffect(() => {
     if (!isMobileMenuOpen) return;
