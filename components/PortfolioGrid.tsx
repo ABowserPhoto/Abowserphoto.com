@@ -26,7 +26,7 @@ type PortfolioGridProps = {
   /** Localized count line, already including the number. */
   countLabel: string;
   /** Grid tile aspect bias. Defaults to portrait for people/editorial work. */
-  orientation?: "portrait" | "landscape";
+  orientation?: "portrait" | "landscape" | "natural";
 };
 
 // Tall tiles for people / editorial photography.
@@ -74,6 +74,41 @@ export default function PortfolioGrid({
 
   if (images.length === 0) {
     return null;
+  }
+
+  if (orientation === "natural") {
+    return (
+      <div className="relative z-0 w-full border-t border-[#1a1a1a] bg-black py-14" aria-label={title}>
+        <div className="mb-6 px-4 text-center">
+          <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-white/50">{label}</p>
+          <span className="mt-1 block text-sm font-medium text-[#F4F1ED]/85">{countLabel}</span>
+        </div>
+        <div className="columns-1 gap-[5px] sm:columns-2 lg:columns-3">
+          {displayImages.map((image, index) => (
+            <button
+              key={image.src}
+              type="button"
+              className={`group mb-[5px] block w-full break-inside-avoid overflow-hidden border border-[#1f1f1f] bg-[#202020] text-left transition-opacity duration-300 ${
+                hoveredImage && hoveredImage !== image.src ? "opacity-50" : ""
+              }`}
+              style={{ borderColor: index === 0 ? `${themeColor}55` : undefined }}
+              onMouseEnter={() => setHoveredImage(image.src)}
+              onMouseLeave={() => setHoveredImage(null)}
+              onClick={() => onImageClick?.(image)}
+            >
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={image.width ?? 3}
+                height={image.height ?? 2}
+                sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                className="h-auto w-full transition duration-300 group-hover:brightness-110"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (

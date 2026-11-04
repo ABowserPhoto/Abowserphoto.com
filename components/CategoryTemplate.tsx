@@ -172,8 +172,13 @@ export default function CategoryTemplate({
       />
 
       <main>
-        <section id="hero" className="relative min-h-screen w-full">
-          <HeroSlider media={heroMedia} title={category.title} subtitle={category.subtitle} />
+        <section id="hero" className={category.slug === "food" ? "relative w-full" : "relative min-h-screen w-full"}>
+          <HeroSlider
+            media={heroMedia}
+            title={category.title}
+            subtitle={category.subtitle}
+            align={category.slug === "food" ? "left" : "center"}
+          />
         </section>
 
         <section id="portfolio" className="relative z-0 isolate bg-black">
@@ -186,7 +191,9 @@ export default function CategoryTemplate({
               showFullPortfolioCta ? dictionary.nav.selectedWork : dictionary.nav.fullPortfolio
             }
             countLabel={dictionary.nav.showcaseCount.replace("{count}", String(gridImages.length))}
-            orientation={category.slug === "real-estate" ? "landscape" : "portrait"}
+            orientation={
+              category.slug === "real-estate" ? "landscape" : category.slug === "food" ? "natural" : "portrait"
+            }
           />
           {showFullPortfolioCta ? (
             <div className="relative z-10 flex justify-center bg-black px-4 pb-16 pt-4">

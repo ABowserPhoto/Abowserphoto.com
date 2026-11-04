@@ -498,5 +498,93 @@
   "/wedding/portfolio/hochzeitsfoto-mariam-9.webp": {
     "de": "Neuntes Hochzeitsfoto von Mariam.",
     "en": "Ninth wedding photograph of Mariam."
+  },
+  "/food/hero/food-hero-1-desktop.jpg": {
+    "de": "Überbackene Gemüsepizza auf weißem Teller oben rechts auf einer dunklen Schieferplatte",
+    "en": "Baked vegetable pizza on a white plate at the top right of a dark slate surface"
+  },
+  "/food/hero/food-hero-1-mobile.jpg": {
+    "de": "Überbackene Gemüsepizza auf weißem Teller unten links auf dunkler Schieferfläche",
+    "en": "Baked vegetable pizza on a white plate at the lower left of a dark slate surface"
+  },
+  "/food/hero/food-hero-2-desktop.jpg": {
+    "de": "Zwei Pizzen auf weißen Tellern rechts auf dunklem Schiefer mit viel freier Fläche",
+    "en": "Two pizzas on white plates at the right of a dark slate surface, with open space beside them"
+  },
+  "/food/hero/food-hero-2-mobile.jpg": {
+    "de": "Pizzen auf weißen Tellern am unteren Bildrand einer dunklen Schieferplatte",
+    "en": "Pizzas on white plates along the bottom edge of a dark slate surface"
+  },
+  "/food/hero/food-hero-3-desktop.jpg": {
+    "de": "Gemüsepizza auf weißem Teller unten rechts auf dunkler Schieferplatte",
+    "en": "Vegetable pizza on a white plate at the lower right of a dark slate surface"
+  },
+  "/food/hero/food-hero-3-mobile.jpg": {
+    "de": "Pizza auf weißem Teller im unteren Bereich einer dunklen Schieferfläche",
+    "en": "Pizza on a white plate in the lower part of a dark slate surface"
+  },
+  "/food/portfolio/food-platter-falafel.jpg": {
+    "de": "Falafel mit Joghurtdip, Granatapfelkernen, Salat und Zitrone auf Holzplatte",
+    "en": "Falafel with yoghurt dip, pomegranate seeds, salad and lemon on a wooden board"
+  },
+  "/food/portfolio/food-chicken-fried-salt.jpg": {
+    "de": "Hand streut Salz über knuspriges Brathähnchen mit Gemüse vor schwarzem Hintergrund",
+    "en": "A hand sprinkling salt over crispy fried chicken with vegetables against a black background"
+  },
+  "/food/portfolio/food-bowl-falafel.jpg": {
+    "de": "Holzschale mit Falafel, Hummus, Kichererbsen, Gurke, Karotten und Granatapfel vor dunklem Hintergrund",
+    "en": "Wooden bowl of falafel, hummus, chickpeas, cucumber, carrots and pomegranate against a dark background"
+  },
+  "/food/portfolio/food-bowl-kofta-feta.jpg": {
+    "de": "Holzschale mit Köfte, Feta, Karotten und Nüssen auf grauem Steintisch",
+    "en": "Wooden bowl of kofta, feta, carrots and nuts on a grey stone table"
+  },
+  "/food/portfolio/food-bowls-overhead.jpg": {
+    "de": "Fünf bunte Bowls in Holzschalen von oben fotografiert",
+    "en": "Five colourful bowls in wooden dishes, photographed from above"
+  },
+  "/food/portfolio/food-pizza-spread.jpg": {
+    "de": "Pizzen, Salat und Pasta von oben auf einem gedeckten Tisch",
+    "en": "Pizzas, salad and pasta from above on a set table"
+  },
+  "/food/portfolio/food-bowls-burger-spread.jpg": {
+    "de": "Bowls, Burger und Beilagen auf dunklem Tisch von oben",
+    "en": "Bowls, burgers and sides from above on a dark table"
+  },
+  "/food/portfolio/food-pizza-closeup.jpg": {
+    "de": "Nahaufnahme einer goldbraun gebackenen Pizza mit Käse",
+    "en": "Close-up of a golden-brown baked pizza with cheese"
+  },
+  "/food/portfolio/food-salad-pasta-table.jpg": {
+    "de": "Salat mit Rindfleisch und Parmesan, Pasta und Pizza auf Holztisch",
+    "en": "Beef and parmesan salad, pasta and pizza on a wooden table"
+  },
+  "/food/portfolio/food-spaghetti-pomodoro.jpg": {
+    "de": "Spaghetti Pomodoro mit Basilikum, daneben Brot und überbackene Pasta",
+    "en": "Spaghetti pomodoro with basil, beside bread and baked pasta"
+  },
+  "/food/portfolio/food-asian-spread-1.jpg": {
+    "de": "Asiatische Gerichte in dunklen Schalen auf rustikalem Holztisch von oben",
+    "en": "Asian dishes in dark bowls on a rustic wooden table, photographed from above"
+  },
+  "/food/portfolio/food-tempura-shrimp.jpg": {
+    "de": "Tempura-Garnelen mit Chilisauce auf dunkler Schale",
+    "en": "Tempura prawns with chilli sauce on a dark plate"
+  },
+  "/food/portfolio/food-tempura-curry.jpg": {
+    "de": "Tempura und rotes Curry mit Reis in dunkler Schale",
+    "en": "Tempura and red curry with rice in a dark bowl"
+  },
+  "/food/portfolio/food-asian-spread-2.jpg": {
+    "de": "Gedeckter Tisch mit asiatischen Gerichten, Limetten und Saucen von oben",
+    "en": "A set table of Asian dishes, limes and sauces, photographed from above"
+  },
+  "/food/portfolio/food-platter-spread.jpg": {
+    "de": "Pizza, Falafel, Salate und Sushi auf Holzbrettern von oben",
+    "en": "Pizza, falafel, salads and sushi on wooden boards, photographed from above"
+  },
+  "/food/portfolio/food-chicken-fried-closeup.jpg": {
+    "de": "Nahaufnahme von knusprigem Brathähnchen, dahinter Taboulé-Salat",
+    "en": "Close-up of crispy fried chicken, with tabbouleh salad behind it"
   }
 }

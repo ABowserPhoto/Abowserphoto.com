@@ -288,9 +288,25 @@ An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport
     title: "Food Photography",
     subtitle: "Flavor-forward images for restaurants, brands, and product launches.",
     themeColor: "#E2A121",
-    heroImage:
-      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1920&q=80",
-    portfolioImages: buildPortfolio("food"),
+    heroImage: "/food/hero/food-hero-1-desktop.jpg",
+    portfolioImages: [
+      "/food/portfolio/food-asian-spread-1.jpg",
+      "/food/portfolio/food-asian-spread-2.jpg",
+      "/food/portfolio/food-bowl-falafel.jpg",
+      "/food/portfolio/food-bowl-kofta-feta.jpg",
+      "/food/portfolio/food-bowls-burger-spread.jpg",
+      "/food/portfolio/food-bowls-overhead.jpg",
+      "/food/portfolio/food-chicken-fried-closeup.jpg",
+      "/food/portfolio/food-chicken-fried-salt.jpg",
+      "/food/portfolio/food-pizza-closeup.jpg",
+      "/food/portfolio/food-pizza-spread.jpg",
+      "/food/portfolio/food-platter-falafel.jpg",
+      "/food/portfolio/food-platter-spread.jpg",
+      "/food/portfolio/food-salad-pasta-table.jpg",
+      "/food/portfolio/food-spaghetti-pomodoro.jpg",
+      "/food/portfolio/food-tempura-curry.jpg",
+      "/food/portfolio/food-tempura-shrimp.jpg",
+    ],
     services: [
       {
         title: "Menu Photography",
@@ -308,8 +324,7 @@ An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport
     aboutText: `I'm Aaron Bowser, a food photographer based in Hagen, working with restaurants, cafés, food brands and producers in Hagen, Solingen and across NRW. I care about texture, light and atmosphere – images that make people want to taste right away.
 
 From styling to final colour grading, I create food photography for menus, packaging, websites and social media, in my Hagen studio or on location in your kitchen.`,
-    aboutImage:
-      "https://images.unsplash.com/photo-1488992783499-418eb1f62d08?auto=format&fit=crop&w=1000&q=80",
+    aboutImage: "/food/portfolio/food-bowls-overhead.jpg",
     faq: [
       { question: "Can you shoot in our kitchen?", answer: "Yes, sessions can be run on location or in a controlled studio setup." },
       { question: "Do you provide styling support?", answer: "Yes, styling direction and prop planning can be included." },
