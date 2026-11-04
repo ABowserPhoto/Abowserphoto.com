@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 export type HeroMediaItem = {
   url: string;
+  mobileUrl?: string;
+  mobileAlt?: string;
   type: "image" | "video";
   alt?: string;
 };
@@ -41,31 +43,47 @@ export default function HeroSlider({
   const activeMedia = media[activeIndex];
 
   if (align === "left") {
-    const image = activeMedia?.type === "image" ? activeMedia : media.find((item) => item.type === "image");
     return (
       <section className="relative w-full bg-black pt-20">
-        <div className="relative mx-auto w-full max-w-[min(100%,calc((100svh-5rem)*16/9))]">
-          <div className="relative aspect-video w-full">
-            {image ? (
-              <Image
-                src={image.url}
-                alt={image.alt || title}
-                fill
-                priority
-                sizes="100vw"
-                className="object-contain object-center"
-              />
-            ) : (
+        <div className="relative mx-auto w-full md:max-w-[min(100%,calc((100svh-5rem)*16/9))]">
+          <div className="relative aspect-[4/5] w-full md:aspect-video">
+            {media.length === 0 ? (
               <div className="absolute inset-0 bg-gradient-to-br from-black via-[#111111] to-[#1a1a1a]" />
+            ) : (
+              <AnimatePresence>
+                <motion.div
+                  key={`${activeMedia.url}-${activeIndex}`}
+                  className="absolute inset-0"
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.2, ease: "easeInOut" }}
+                >
+                  {activeMedia.type === "image" ? (
+                    <ArtDirectedHeroImage item={activeMedia} title={title} priority={activeIndex === 0} />
+                  ) : (
+                    <video
+                      src={activeMedia.url}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                      className="h-full w-full object-cover"
+                    />
+                  )}
+                </motion.div>
+              </AnimatePresence>
             )}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 via-[22%] to-transparent to-[46%]" />
-            <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[46%] items-center px-8 text-left md:flex lg:px-12">
+
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 via-[16%] to-transparent to-[40%] md:bg-gradient-to-r md:from-black/60 md:via-black/30 md:via-[30%] md:to-transparent md:to-[58%]"
+              aria-hidden="true"
+            />
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex h-[40%] items-center px-6 text-left sm:px-8 md:inset-y-0 md:left-0 md:h-auto md:w-1/2 md:px-10 lg:px-14">
               <HeroCopy title={title} subtitle={subtitle} align="left" />
             </div>
           </div>
-        </div>
-        <div className="px-6 pb-10 pt-6 text-left md:hidden">
-          <HeroCopy title={title} subtitle={subtitle} align="left" compact />
         </div>
       </section>
     );
@@ -119,6 +137,41 @@ export default function HeroSlider({
   );
 }
 
+function ArtDirectedHeroImage({
+  item,
+  title,
+  priority,
+}: {
+  item: HeroMediaItem;
+  title: string;
+  priority: boolean;
+}) {
+  return (
+    <>
+      <Image
+        src={item.url}
+        alt={item.alt || title}
+        fill
+        priority={priority}
+        sizes="100vw"
+        className={
+          item.mobileUrl ? "hidden object-cover object-center md:block" : "object-cover object-center"
+        }
+      />
+      {item.mobileUrl ? (
+        <Image
+          src={item.mobileUrl}
+          alt={item.mobileAlt || item.alt || title}
+          fill
+          priority={priority}
+          sizes="100vw"
+          className="object-cover object-center md:hidden"
+        />
+      ) : null}
+    </>
+  );
+}
+
 function HeroCopy({
   title,
   subtitle,
@@ -137,9 +190,11 @@ function HeroCopy({
       </p>
       <h1
         className={
-          compact
-            ? "mt-3 text-3xl font-light leading-tight tracking-tight text-[#F4F1ED]"
-            : "mt-5 text-4xl font-light leading-tight tracking-tight text-[#F4F1ED] sm:text-5xl lg:text-6xl"
+          align === "left"
+            ? "mt-3 text-3xl font-light leading-tight tracking-tight text-[#F4F1ED] md:mt-5 md:text-5xl lg:text-6xl"
+            : compact
+              ? "mt-3 text-3xl font-light leading-tight tracking-tight text-[#F4F1ED]"
+              : "mt-5 text-4xl font-light leading-tight tracking-tight text-[#F4F1ED] sm:text-5xl lg:text-6xl"
         }
       >
         {title}
@@ -147,7 +202,7 @@ function HeroCopy({
       <p
         className={
           align === "left"
-            ? "mt-4 max-w-full text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base"
+            ? "mt-3 max-w-xl text-sm leading-relaxed text-[#F4F1ED]/90 md:mt-4 md:text-base"
             : "mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-[#F4F1ED]/85 sm:text-base lg:text-lg"
         }
       >

@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { getImageDimensions } from "./cms";
 import { categoryContentMap, type CategorySlug } from "./content";
 import { businessPortraitGallery } from "./galleries/businessPortraits";
 import type { Locale } from "./i18n/config";
@@ -22,7 +23,12 @@ export function getImageAlt(src: string, locale: Locale) {
     : "Photograph by Aaron Bowser Photography.";
 }
 
-function readImageFiles(directoryPath: string, publicPrefix: string, locale: Locale): GalleryImage[] {
+function readImageFiles(
+  directoryPath: string,
+  publicPrefix: string,
+  locale: Locale,
+  withDimensions = false
+): GalleryImage[] {
   try {
     return fs
       .readdirSync(directoryPath)
@@ -30,7 +36,13 @@ function readImageFiles(directoryPath: string, publicPrefix: string, locale: Loc
       .sort((a, b) => a.localeCompare(b, "de"))
       .map((file) => {
         const src = `${publicPrefix}/${file}`;
-        return { src, alt: getImageAlt(src, locale) };
+        const dimensions = withDimensions ? getImageDimensions(src) : null;
+        return {
+          src,
+          alt: getImageAlt(src, locale),
+          width: dimensions?.width,
+          height: dimensions?.height,
+        };
       });
   } catch {
     return [];
@@ -50,12 +62,16 @@ export function readPortfolio(slug: CategorySlug, locale: Locale): GalleryImage[
   return readImageFiles(
     path.join(process.cwd(), "public", slug, "portfolio"),
     `/${slug}/portfolio`,
-    locale
+    locale,
+    slug === "food"
   );
 }
 
 export type HeroMediaItem = {
   url: string;
+  /** Paired crop for small screens, when the hero folder has a `-mobile` file. */
+  mobileUrl?: string;
+  mobileAlt?: string;
   type: "image" | "video";
   alt: string;
 };
@@ -83,9 +99,30 @@ function readMediaDirectory(directoryPath: string, publicPrefix: string, locale:
   }
 }
 
-/** Reads a `public/<folder>/hero` directory the same way category sliders do. */
+const HERO_MOBILE_FILE = /-mobile(\.[^.]+)$/i;
+
+/**
+ * Reads a `public/<folder>/hero` directory the same way category sliders do.
+ * A `name-desktop` file with a `name-mobile` sibling becomes one slide: the
+ * desktop crop is the slide, and the mobile crop is its small-screen art direction.
+ */
 function readHeroDirectory(folder: string, locale: Locale): HeroMediaItem[] {
-  return readMediaDirectory(path.join(process.cwd(), "public", folder, "hero"), `/${folder}/hero`, locale);
+  const items = readMediaDirectory(path.join(process.cwd(), "public", folder, "hero"), `/${folder}/hero`, locale);
+  const byFile = new Map(items.map((item) => [path.basename(item.url), item]));
+  const slides: HeroMediaItem[] = [];
+
+  for (const item of items) {
+    const file = path.basename(item.url);
+    if (HERO_MOBILE_FILE.test(file)) continue;
+
+    const mobileFile = file.replace(/-desktop(\.[^.]+)$/i, "-mobile$1");
+    const mobile = mobileFile !== file ? byFile.get(mobileFile) : undefined;
+    slides.push(
+      mobile ? { ...item, mobileUrl: mobile.url, mobileAlt: mobile.alt } : item
+    );
+  }
+
+  return slides;
 }
 
 export function readHeroMedia(slug: CategorySlug, locale: Locale) {

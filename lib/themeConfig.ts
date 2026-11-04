@@ -67,7 +67,7 @@ export const themeConfig: Record<string, CategoryTheme> = {
     label: "Food",
     primary: "#F77800",
     palette: ["#F77800", "#FFB70F", "#BA1F00", "#9E9900", "#F4F1ED"],
-    heroImage: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1600&q=80",
+    heroImage: "/food/hero/food-hero-1-desktop.jpg",
     heroTagline: "Mouthwatering visuals crafted for menus, campaigns, and social.",
     services: ["Menu Photography", "Product Styling", "Social Media Food Content"],
     about:
