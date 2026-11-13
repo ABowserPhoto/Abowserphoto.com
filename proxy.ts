@@ -50,7 +50,11 @@ function redirectToPath(
 ) {
   const redirectUrl = req.nextUrl.clone();
   redirectUrl.pathname = pathname;
-  const redirect = NextResponse.redirect(redirectUrl, 308);
+  // A request like `/de/deutsch/` marks the URL as trailing-slash, and Next
+  // would then emit `/de/`. Rebuild so the destination is the path we set.
+  const target = new URL(redirectUrl.href);
+  target.pathname = pathname;
+  const redirect = NextResponse.redirect(target, 308);
   return applyLocaleHeaders(copySessionOntoResponse(supabaseResponse, redirect), locale);
 }
 
@@ -87,6 +91,18 @@ function normalizePathname(pathname: string) {
   return pathname;
 }
 
+/**
+ * Old site URLs under `/deutsch`. No locale means the German homepage.
+ * An `en` or `de` prefix is kept. Other paths return null.
+ */
+function legacyDeutschLocale(pathname: string): Locale | null {
+  const parts = normalizePathname(pathname).toLowerCase().split("/").filter(Boolean);
+  const [first, second] = parts;
+  if (first === "deutsch") return "de";
+  if (first && isLocale(first) && second === "deutsch") return first;
+  return null;
+}
+
 export async function proxy(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = (req.headers.get("host") || "").split(":")[0];
@@ -96,6 +112,13 @@ export async function proxy(req: NextRequest) {
     redirectUrl.hostname = "www.aaronbowser-photography.com";
     redirectUrl.protocol = "https:";
     redirectUrl.port = "";
+    const legacyLocale = legacyDeutschLocale(url.pathname);
+    if (legacyLocale) {
+      redirectUrl.pathname = `/${legacyLocale}`;
+      const target = new URL(redirectUrl.href);
+      target.pathname = `/${legacyLocale}`;
+      return NextResponse.redirect(target, 308);
+    }
     return NextResponse.redirect(redirectUrl, 308);
   }
 
@@ -106,6 +129,8 @@ export async function proxy(req: NextRequest) {
     return supabaseResponse;
   }
 
+  // These three paths already redirect on every host, including niche hosts.
+  // next.config.ts does the same. Any other /deutsch URL is main-host only.
   const legacyGerman = pathname.toLowerCase();
   if (
     legacyGerman === "/deutsch" ||
@@ -120,6 +145,18 @@ export async function proxy(req: NextRequest) {
   // A cookie or an explicit Accept-Language of en/de still wins. The rewrite
   // stays on this hostname.
   const locale = resolveLocale(req, niche ? "de" : defaultLocale);
+
+  // `/deutsch/indhttpsex` and `/{en|de}/deutsch/...` are broken legacy links.
+  // Send them to that locale's homepage. Niche hosts are skipped: an unknown
+  // path there is rewritten onto the same host below, and must not leave it.
+  // `/de` and `/en` are not matched, so this cannot loop with the `/` → locale redirect.
+  if (!niche) {
+    const legacyLocale = legacyDeutschLocale(pathname);
+    if (legacyLocale && pathname.toLowerCase() !== `/${legacyLocale}`) {
+      return redirectToPath(req, supabaseResponse, `/${legacyLocale}`, legacyLocale);
+    }
+  }
+
   if (niche) {
     // `/`, `/de`, and `/en` are the public category URL. A locale prefix wins
     // over the cookie. The rewrite leaves the browser on this host.

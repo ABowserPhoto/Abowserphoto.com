@@ -183,6 +183,126 @@ test("niche hosts serve assets, locale roots, and internal links without leaving
   assert.equal(rewriteUrl(devLanding)?.pathname, "/de/business-portraits");
 });
 
+test("legacy /deutsch URLs on the main hosts redirect to the locale homepage", async () => {
+  const www = "www.aaronbowser-photography.com";
+  const cases: Array<{ path: string; locale: "de" | "en"; language?: string; cookie?: string }> = [
+    { path: "/deutsch/indhttpsex", locale: "de", language: "en", cookie: "NEXT_LOCALE=en" },
+    { path: "/deutsch/index", locale: "de", language: "en" },
+    { path: "/deutsch", locale: "de" },
+    { path: "/Deutsch/Indhttpsex", locale: "de" },
+    { path: "/deutsch/foo/bar", locale: "de" },
+    { path: "/de/deutsch/indhttpsex", locale: "de", cookie: "NEXT_LOCALE=en" },
+    { path: "/de/deutsch/index", locale: "de" },
+    { path: "/de/deutsch/", locale: "de" },
+    { path: "/en/deutsch/indhttpsex", locale: "en", language: "de", cookie: "NEXT_LOCALE=de" },
+    { path: "/en/deutsch/index", locale: "en" },
+    { path: "/en/deutsch/index/", locale: "en" },
+    { path: "/EN/deutsch/foo", locale: "en" },
+  ];
+
+  for (const entry of cases) {
+    const response = await proxy(
+      request(www, entry.path, { language: entry.language, cookie: entry.cookie })
+    );
+    const location = locationUrl(response);
+    assert.equal(response.status, 308, entry.path);
+    assert.equal(location?.hostname, www, entry.path);
+    assert.equal(location?.pathname, `/${entry.locale}`, entry.path);
+    assert.equal(rewriteUrl(response), null, entry.path);
+  }
+
+  const withQuery = await proxy(request(www, "/deutsch/indhttpsex?utm=legacy"));
+  assert.equal(locationUrl(withQuery)?.pathname, "/de");
+  assert.equal(locationUrl(withQuery)?.search, "?utm=legacy");
+
+  const localhost = await proxy(request("localhost:3001", "/en/deutsch/indhttpsex"));
+  const localhostLocation = locationUrl(localhost);
+  assert.equal(localhost.status, 308);
+  assert.equal(localhostLocation?.hostname, "localhost");
+  assert.equal(localhostLocation?.port, "3001");
+  assert.equal(localhostLocation?.pathname, "/en");
+
+  const apexPaths = [
+    ["/deutsch/indhttpsex", "/de"],
+    ["/deutsch/index", "/de"],
+    ["/de/deutsch/index", "/de"],
+    ["/en/deutsch/indhttpsex", "/en"],
+    ["/en/deutsch/index/", "/en"],
+    ["/en/deutsch/index?ref=old", "/en"],
+  ] as const;
+  for (const [path, pathname] of apexPaths) {
+    const apex = await proxy(request("aaronbowser-photography.com", path));
+    const location = locationUrl(apex);
+    assert.equal(apex.status, 308, path);
+    assert.equal(location?.protocol, "https:", path);
+    assert.equal(location?.hostname, www, path);
+    assert.equal(location?.pathname, pathname, path);
+    assert.equal(location?.port, "", path);
+  }
+  assert.equal(locationUrl(await proxy(request("aaronbowser-photography.com", "/en/deutsch/index?ref=old")))?.search, "?ref=old");
+
+  const germanHome = await proxy(request(www, "/de", { language: "en", cookie: "NEXT_LOCALE=en" }));
+  assert.equal(locationUrl(germanHome), null);
+  assert.equal(rewriteUrl(germanHome), null);
+  const englishHome = await proxy(request(www, "/en", { language: "de", cookie: "NEXT_LOCALE=de" }));
+  assert.equal(locationUrl(englishHome), null);
+  assert.equal(rewriteUrl(englishHome), null);
+  const root = await proxy(request(www, "/"));
+  assert.equal(locationUrl(root)?.pathname, "/en");
+  assert.equal(locationUrl(root)?.hostname, www);
+
+  const unrelated = await proxy(request(www, "/food/deutsch"));
+  assert.equal(locationUrl(unrelated)?.pathname, "/en/food/deutsch");
+});
+
+test("niche hosts do not send legacy /deutsch URLs to another host", async () => {
+  const commercial = "commercial.abowserphoto.com";
+  const broken = await proxy(request(commercial, "/deutsch/indhttpsex", { language: "en" }));
+  assert.equal(broken.status, 200);
+  assert.equal(locationUrl(broken), null);
+  assert.equal(rewriteUrl(broken)?.hostname, commercial);
+  assert.equal(rewriteUrl(broken)?.pathname, "/en/commercial");
+
+  const english = await proxy(request(commercial, "/en/deutsch/index", { cookie: "NEXT_LOCALE=de" }));
+  assert.equal(locationUrl(english), null);
+  assert.equal(rewriteUrl(english)?.hostname, commercial);
+  assert.equal(rewriteUrl(english)?.pathname, "/en/commercial");
+
+  const german = await proxy(request(commercial, "/de/deutsch/indhttpsex"));
+  assert.equal(locationUrl(german), null);
+  assert.equal(rewriteUrl(german)?.hostname, commercial);
+  assert.equal(rewriteUrl(german)?.pathname, "/de/commercial-fotografie");
+
+  const exact = await proxy(request(commercial, "/deutsch/index"));
+  const exactLocation = locationUrl(exact);
+  assert.equal(exact.status, 308);
+  assert.equal(exactLocation?.hostname, commercial);
+  assert.equal(exactLocation?.pathname, "/de");
+
+  const longApex = "immo.aaronbowser-photography.com";
+  const onLongApex = await proxy(request(longApex, "/en/deutsch/indhttpsex"));
+  assert.equal(locationUrl(onLongApex), null);
+  assert.equal(rewriteUrl(onLongApex)?.hostname, longApex);
+  assert.equal(rewriteUrl(onLongApex)?.pathname, "/en/real-estate");
+
+  const dev = await proxy(request("food.localhost:3001", "/deutsch/indhttpsex"));
+  assert.equal(locationUrl(dev), null);
+  assert.equal(rewriteUrl(dev)?.hostname, "food.localhost");
+  assert.equal(rewriteUrl(dev)?.port, "3001");
+  assert.equal(rewriteUrl(dev)?.pathname, "/de/food-fotografie");
+
+  const landing = await proxy(request(commercial, "/"));
+  assert.equal(landing.status, 200);
+  assert.equal(locationUrl(landing), null);
+  assert.equal(rewriteUrl(landing)?.hostname, commercial);
+  assert.equal(rewriteUrl(landing)?.pathname, "/de/commercial-fotografie");
+
+  const localeRoot = await proxy(request(commercial, "/en"));
+  assert.equal(locationUrl(localeRoot), null);
+  assert.equal(rewriteUrl(localeRoot)?.hostname, commercial);
+  assert.equal(rewriteUrl(localeRoot)?.pathname, "/en/commercial");
+});
+
 test("the apex still redirects to www and the main site does not rewrite categories", async () => {
   const apex = await proxy(request("aaronbowser-photography.com", "/de"));
   assert.equal(apex.status, 308);
