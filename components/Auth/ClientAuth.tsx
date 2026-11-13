@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { notifyAdminOfRegistration } from "../../actions/notifyAdminOfRegistration";
+import { trackSignUp } from "../../lib/analytics";
 import { BOOKING_QUERY_KEY, BOOKING_QUERY_VALUE } from "../../lib/booking";
 import { useDictionary, useLocale } from "../../lib/i18n/LocaleProvider";
 import { createClient } from "../../lib/supabase/client";
@@ -95,6 +96,7 @@ export default function ClientAuth({
 
       const isNewUser = Boolean(data.user) && (data.user?.identities?.length ?? 1) > 0;
       if (isNewUser) {
+        trackSignUp();
         try {
           await notifyAdminOfRegistration({
             firstName: firstName.trim(),

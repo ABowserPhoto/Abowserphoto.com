@@ -7,6 +7,7 @@ import {
   CONTACT_CLICK_EVENT,
   GENERATE_LEAD_EVENT,
   IMMOBILIEN_BOOKING_FORM_NAME,
+  SIGN_UP_EVENT,
   canTrackAnalytics,
   contactLinkFromTarget,
   handleContactClick,
@@ -18,6 +19,7 @@ import {
   serviceForInquirySlug,
   trackEvent,
   trackGenerateLead,
+  trackSignUp,
 } from "./analytics";
 import { resolveBookingContext, type InquiryCategorySlug } from "./booking";
 import { COOKIE_CONSENT_STORAGE_KEY } from "./cookieConsent";
@@ -230,6 +232,34 @@ test("generate_lead is sent only after a successful submit", () => {
   }
 });
 
+test("sign_up is sent only after a successful new account signup", () => {
+  const source = readSource("components/Auth/ClientAuth.tsx");
+  assert.equal(source.includes("trackGenerateLead"), false);
+  assert.equal(source.includes("generate_lead"), false);
+
+  const call = source.indexOf("trackSignUp(");
+  assert.ok(call > 0, "ClientAuth calls trackSignUp");
+  assert.equal(source.indexOf("trackSignUp(", call + 1), -1);
+
+  const signInStart = source.indexOf('if (mode === "sign-in")');
+  const signUpCall = source.indexOf("supabase.auth.signUp(");
+  assert.ok(signInStart >= 0 && signInStart < signUpCall);
+  assert.equal(source.slice(signInStart, signUpCall).includes("trackSignUp"), false);
+
+  const errorCheck = source.indexOf("if (error)", signUpCall);
+  const newUserCheck = source.indexOf("if (isNewUser)", signUpCall);
+  const signOut = source.indexOf(".signOut(", signUpCall);
+  assert.ok(errorCheck > signUpCall);
+  assert.ok(newUserCheck > errorCheck);
+  assert.ok(call > newUserCheck);
+  assert.ok(signOut > call);
+
+  const errorBranch = source.slice(errorCheck, source.indexOf("const isNewUser", errorCheck));
+  assert.match(errorBranch, /return;/);
+  assert.equal(errorBranch.includes("trackSignUp"), false);
+  assert.match(source.slice(Math.max(0, call - 80), call), /if\s*\(\s*isNewUser\s*\)\s*\{/);
+});
+
 test("contact links are tel or mailto only", () => {
   assert.deepEqual(contactLinkFromTarget(clickTarget("tel:+15550001111") as unknown as EventTarget), {
     link_type: "tel",
@@ -265,30 +295,37 @@ test("trackEvent is a no-op during SSR, in dev, without consent, or without gtag
   };
 
   assert.equal(trackGenerateLead({ form_name: "general_inquiry", service: "general" }), false);
+  assert.equal(trackSignUp(), false);
   assert.equal(trackEvent(GENERATE_LEAD_EVENT, { form_name: "general_inquiry", service: "general", host: "x" }), false);
+  assert.equal(trackEvent(SIGN_UP_EVENT, { method: "email", host: "x" }), false);
 
   const restoreDev = installBrowser({ nodeEnv: "development", consent: "all", gtag });
   assert.equal(canTrackAnalytics(), false);
   assert.equal(trackGenerateLead(immobilienBookingLead()), false);
+  assert.equal(trackSignUp(), false);
   restoreDev();
 
   const restoreTest = installBrowser({ nodeEnv: "test", consent: "all", gtag });
   assert.equal(trackEvent(CONTACT_CLICK_EVENT, { link_type: "tel", link_url: "tel:+1", host: "h" }), false);
+  assert.equal(trackSignUp(), false);
   restoreTest();
 
   const restoreEssential = installBrowser({ consent: "essential", gtag });
   assert.equal(canTrackAnalytics(), false);
   assert.equal(trackGenerateLead(immobilienBookingLead()), false);
+  assert.equal(trackSignUp(), false);
   restoreEssential();
 
   const restoreMissing = installBrowser({ consent: "all" });
   assert.equal(canTrackAnalytics(), false);
   assert.equal(trackGenerateLead(immobilienBookingLead()), false);
+  assert.equal(trackSignUp(), false);
   restoreMissing();
 
   const restoreDisabled = installBrowser({ consent: "all", gtag, analyticsDisabled: true });
   assert.equal(canTrackAnalytics(), false);
   assert.equal(trackGenerateLead(immobilienBookingLead()), false);
+  assert.equal(trackSignUp(), false);
   restoreDisabled();
 
   assert.equal(calls.length, 0);
@@ -318,6 +355,62 @@ test("trackEvent sends generate_lead and contact_click only when the tag is allo
   assert.equal(trackGenerateLead(inquiryLead("food", "/de", "food.abowserphoto.com")), false);
 
   restore();
+});
+
+test("trackSignUp sends sign_up with method, host, and the page service", () => {
+  const calls: unknown[][] = [];
+  const restore = installBrowser({
+    consent: "all",
+    hostname: "studio.abowserphoto.com",
+    pathname: "/de/passfotos",
+    gtag: (...args: unknown[]) => {
+      calls.push(args);
+    },
+  });
+
+  assert.equal(trackSignUp(), true);
+  assert.deepEqual(calls, [
+    [
+      "event",
+      "sign_up",
+      {
+        method: "email",
+        host: "studio.abowserphoto.com",
+        service: "passfoto",
+      },
+    ],
+  ]);
+  assert.equal(calls.some((entry) => entry[1] === "generate_lead"), false);
+
+  restore();
+
+  const homeCalls: unknown[][] = [];
+  const restoreHome = installBrowser({
+    consent: "all",
+    hostname: "www.aaronbowser-photography.com",
+    pathname: "/de",
+    gtag: (...args: unknown[]) => {
+      homeCalls.push(args);
+    },
+  });
+
+  assert.equal(trackSignUp(), true);
+  assert.deepEqual(homeCalls[0], [
+    "event",
+    "sign_up",
+    {
+      method: "email",
+      host: "www.aaronbowser-photography.com",
+    },
+  ]);
+  assert.equal(Object.hasOwn(homeCalls[0][2] as object, "service"), false);
+
+  window.gtag = () => {
+    throw new Error("gtag failed");
+  };
+  assert.equal(trackSignUp(), false);
+
+  restoreHome();
 });
 
 test("delegated click listener covers links added after it is installed", () => {

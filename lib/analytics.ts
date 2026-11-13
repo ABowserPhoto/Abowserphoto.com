@@ -1,5 +1,5 @@
 /**
- * GA4 events for leads and contact clicks.
+ * GA4 events for leads, account sign-ups, and contact clicks.
  *
  * `trackEvent` does nothing during SSR, outside production, without analytics
  * consent, or when `window.gtag` is missing. The cookie banner is the consent
@@ -14,6 +14,7 @@ import { GA_MEASUREMENT_ID } from "./site";
 import { nicheHostForHostname } from "./subdomains";
 
 export const GENERATE_LEAD_EVENT = "generate_lead";
+export const SIGN_UP_EVENT = "sign_up";
 export const CONTACT_CLICK_EVENT = "contact_click";
 
 export const IMMOBILIEN_BOOKING_FORM_NAME = "immobilien_booking";
@@ -48,7 +49,10 @@ const INQUIRY_FORM_NAMES = {
   general: "general_inquiry",
 } as const satisfies Record<InquiryCategorySlug, string>;
 
-export type AnalyticsEventName = typeof GENERATE_LEAD_EVENT | typeof CONTACT_CLICK_EVENT;
+export type AnalyticsEventName =
+  | typeof GENERATE_LEAD_EVENT
+  | typeof SIGN_UP_EVENT
+  | typeof CONTACT_CLICK_EVENT;
 
 export type GenerateLeadParams = {
   form_name: string;
@@ -184,6 +188,16 @@ export function trackGenerateLead(input: Pick<GenerateLeadParams, "form_name" | 
     form_name: input.form_name,
     service: input.service,
     host: window.location.hostname,
+  });
+}
+
+/** GA4 recommended `sign_up`. Service is omitted when the page is not a category. */
+export function trackSignUp() {
+  if (typeof window === "undefined") return false;
+  return trackEvent(SIGN_UP_EVENT, {
+    method: "email",
+    host: window.location.hostname,
+    service: pageService(window.location.pathname, window.location.hostname),
   });
 }
 
