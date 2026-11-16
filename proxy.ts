@@ -10,6 +10,7 @@ import {
   type Locale,
 } from "./lib/i18n/config";
 import { localizePublicPath } from "./lib/routes";
+import { renderNicheRobots, renderNicheSitemap } from "./lib/niche-crawl";
 import { isNicheOnHostPath, nicheHostForHostname } from "./lib/subdomains";
 import { copySessionOntoResponse, updateSession } from "./lib/supabase/middleware";
 
@@ -105,7 +106,26 @@ function legacyDeutschLocale(pathname: string): Locale | null {
 
 export async function proxy(req: NextRequest) {
   const url = req.nextUrl;
-  const hostname = (req.headers.get("host") || "").split(":")[0];
+  const requestHost = req.headers.get("host") || "";
+  const hostname = requestHost.split(":")[0];
+  const pathname = normalizePathname(url.pathname);
+
+  // Niche hosts keep their own robots.txt and sitemap.xml. www still falls
+  // through to app/robots.ts and app/sitemap.ts. This is not a redirect and
+  // does not rewrite the page routes below.
+  if (pathname === "/robots.txt" || pathname === "/sitemap.xml") {
+    if (nicheHostForHostname(hostname)) {
+      const body =
+        pathname === "/robots.txt" ? renderNicheRobots(requestHost) : renderNicheSitemap(requestHost);
+      const contentType =
+        pathname === "/robots.txt" ? "text/plain; charset=utf-8" : "application/xml; charset=utf-8";
+      return new NextResponse(body, {
+        status: 200,
+        headers: { "Content-Type": contentType },
+      });
+    }
+    return NextResponse.next();
+  }
 
   if (hostname === "aaronbowser-photography.com") {
     const redirectUrl = url.clone();
@@ -123,7 +143,6 @@ export async function proxy(req: NextRequest) {
   }
 
   const supabaseResponse = await updateSession(req);
-  const pathname = normalizePathname(url.pathname);
 
   if (isSkippedPath(pathname)) {
     return supabaseResponse;
@@ -198,5 +217,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|.*\\..*).*)"],
+  matcher: ["/robots.txt", "/sitemap.xml", "/((?!_next/static|_next/image|.*\\..*).*)"],
 };

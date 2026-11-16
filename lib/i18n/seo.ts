@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { CategorySlug } from "../content";
 import { categoryPath, solingenStudioPath } from "../routes";
+import { nicheDocumentCopy } from "../niche-landing";
 import { nicheHostForHostname, nicheOrigin, PORTAL_CATEGORY_SUBDOMAIN } from "../subdomains";
 import {
   BRAND_NAME,
@@ -172,20 +173,25 @@ export function buildCategoryMetadata(
           },
         ]
       : [ogImage];
+  // The five public niches use their own title and description on their host.
+  // www, and every other host, keep the dictionary copy.
+  const landing = nicheDocumentCopy(slug, locale, requestHost);
+  const documentTitle = landing?.title ?? seo.title;
+  const description = landing?.description ?? seo.description;
   const { title, openGraphTitle } = resolveDocumentTitle(
-    seo.title,
+    documentTitle,
     dict.brand,
-    COMPLETE_DOCUMENT_TITLES.has(slug)
+    Boolean(landing) || COMPLETE_DOCUMENT_TITLES.has(slug)
   );
   const metadata: Metadata = {
     title,
-    description: seo.description,
+    description,
     alternates: {
       canonical,
       languages: languageAlternatesOn(pathFor, origin),
     },
     openGraph: {
-      ...openGraphFor(locale, path, openGraphTitle, seo.description, images),
+      ...openGraphFor(locale, path, openGraphTitle, description, images),
       url: canonical,
     },
   };
