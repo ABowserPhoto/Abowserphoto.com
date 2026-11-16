@@ -15,6 +15,7 @@ import { getDictionary } from "../../../lib/i18n/getDictionary";
 import { getLocalizedCategory, getLocalizedSharedAbout } from "../../../lib/i18n/localizeContent";
 import { getPageFaqs, getPageSections } from "../../../lib/i18n/pageSections";
 import { buildCategoryMetadata } from "../../../lib/i18n/seo";
+import { nicheDocumentCopy } from "../../../lib/niche-landing";
 import { categorySegment, resolveCategorySegment } from "../../../lib/routes";
 import { nicheHostForHostname } from "../../../lib/subdomains";
 
@@ -70,7 +71,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const baseCategory = categoryContentMap[slug];
-  const selectedCategory = getLocalizedCategory(slug, locale);
+  const localizedCategory = getLocalizedCategory(slug, locale);
+  // Same component and the same heading styles. Only the words change, and
+  // only on this category's own niche host.
+  const landing = nicheDocumentCopy(slug, locale, host);
+  const selectedCategory = landing
+    ? { ...localizedCategory, title: landing.h1 }
+    : localizedCategory;
   const dictionary = await getDictionary(locale);
   const sharedAbout = getLocalizedSharedAbout(locale);
 
