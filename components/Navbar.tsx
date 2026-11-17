@@ -119,8 +119,9 @@ export default function Navbar({
   const logoDarkOpacity = useTransform(blend, [0, 0.55, 1], [0, 1, 1]);
   const bookBorder = useTransform(blend, [0, 1], ["rgba(244, 241, 237, 0.35)", "rgba(50, 43, 43, 0.25)"]);
   const bookText = useTransform(blend, [0, 1], ["rgba(244, 241, 237, 1)", "rgba(50, 43, 43, 0.95)"]);
-  const menuBorder = useTransform(blend, [0, 1], ["rgba(255, 255, 255, 0.25)", "rgba(50, 43, 43, 0.2)"]);
-  const menuText = useTransform(blend, [0, 1], ["rgba(244, 241, 237, 1)", "rgba(50, 43, 43, 0.9)"]);
+  const menuBorder = useTransform(blend, [0, 1], ["rgba(244, 241, 237, 0.55)", "rgba(50, 43, 43, 0.28)"]);
+  const menuText = useTransform(blend, [0, 1], ["rgba(244, 241, 237, 1)", "rgba(50, 43, 43, 0.95)"]);
+  const menuBg = useTransform(blend, [0, 1], ["rgba(50, 43, 43, 0.86)", "rgba(244, 241, 237, 0.94)"]);
 
   useEffect(() => {
     function onScroll() {
@@ -223,8 +224,8 @@ export default function Navbar({
 
         <motion.button
           type="button"
-          className="rounded-md border px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] md:hidden"
-          style={{ borderColor: menuBorder, color: menuText }}
+          className="inline-flex h-12 min-w-12 shrink-0 items-center justify-center rounded-md border px-3.5 text-[11px] font-semibold uppercase tracking-[0.15em] shadow-[0_10px_28px_rgba(0,0,0,0.28)] md:hidden"
+          style={{ borderColor: menuBorder, color: menuText, backgroundColor: menuBg }}
           onClick={() => setMenuOpen((value) => !value)}
           aria-expanded={menuOpen}
           aria-controls="mobile-navbar-menu"

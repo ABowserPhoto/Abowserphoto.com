@@ -358,6 +358,24 @@ export default function HomePortal({
     const channel = (from: number, to: number) => Math.round(from + (to - from) * mix);
     return `rgb(${channel(255, 0x1f)}, ${channel(255, 0x29)}, ${channel(255, 0x37)})`;
   });
+  // Filled chip so the icon stays readable on both the dark film and the light stills.
+  const menuButtonBackground = useTransform(scrollYProgress, (value) => {
+    const mix = segment(value, 0.75, 0.85, 0, 1);
+    const channel = (from: number, to: number) => Math.round(from + (to - from) * mix);
+    const alpha = (0.86 + (0.94 - 0.86) * mix).toFixed(2);
+    return `rgba(${channel(50, 244)}, ${channel(43, 241)}, ${channel(43, 237)}, ${alpha})`;
+  });
+  const menuButtonForeground = useTransform(scrollYProgress, (value) => {
+    const mix = segment(value, 0.75, 0.85, 0, 1);
+    const channel = (from: number, to: number) => Math.round(from + (to - from) * mix);
+    return `rgb(${channel(244, 50)}, ${channel(241, 43)}, ${channel(237, 43)})`;
+  });
+  const menuButtonBorder = useTransform(scrollYProgress, (value) => {
+    const mix = segment(value, 0.75, 0.85, 0, 1);
+    const channel = (from: number, to: number) => Math.round(from + (to - from) * mix);
+    const alpha = (0.55 + (0.28 - 0.55) * mix).toFixed(2);
+    return `rgba(${channel(244, 50)}, ${channel(241, 43)}, ${channel(237, 43)}, ${alpha})`;
+  });
 
   const panels = useMemo<Panel[]>(
     () =>
@@ -523,7 +541,7 @@ export default function HomePortal({
       </div>
 
       <motion.div
-        className="absolute left-1/2 top-[5vh] z-[45] h-[90vh] w-[min(92vw,46rem)] -translate-x-1/2 overflow-y-auto rounded-2xl border border-white/20 bg-white/30 p-8 shadow-xl backdrop-blur-md"
+        className="absolute left-1/2 top-[5vh] z-[45] h-[90vh] w-[min(92vw,46rem)] -translate-x-1/2 overflow-y-auto rounded-2xl border border-white/20 bg-white/30 p-8 shadow-xl backdrop-blur-md max-md:top-20 max-md:h-[calc(100dvh-6.25rem)]"
         style={{ opacity: glassOpacity, y: glassY, pointerEvents: glassOpen ? "auto" : "none" }}
       >
         {children}
@@ -545,20 +563,6 @@ export default function HomePortal({
       </AnimatePresence>
 
       <div className="absolute bottom-6 left-4 z-[70] flex w-max max-w-[90vw] flex-col items-start gap-3 md:bottom-12 md:left-1/2 md:-translate-x-1/2 md:items-center">
-      <motion.button
-        type="button"
-        className="block md:hidden"
-        style={{ color: uiColor }}
-        aria-expanded={isMobileMenuOpen}
-        aria-label={dictionary.nav.menu}
-        onClick={() => setIsMobileMenuOpen(true)}
-      >
-        <span className="flex flex-col gap-1.5" aria-hidden>
-          <span className="block h-px w-7 bg-current" />
-          <span className="block h-px w-7 bg-current" />
-          <span className="block h-px w-7 bg-current" />
-        </span>
-      </motion.button>
       <motion.nav
         ref={navRef}
         className="relative hidden flex-col gap-3 md:flex md:flex-row md:flex-wrap md:justify-center md:gap-0"
@@ -631,13 +635,13 @@ export default function HomePortal({
               type="button"
               onClick={() => setIsMobileMenuOpen(false)}
               aria-label={dictionary.nav.close}
-              className="absolute top-6 right-6 text-white"
+              className="absolute top-4 right-4 flex h-12 w-12 items-center justify-center rounded-md border border-white/45 bg-[#322B2B]/80 text-[#F4F1ED] shadow-[0_10px_28px_rgba(0,0,0,0.35)]"
             >
               <span aria-hidden className="block text-3xl leading-none">
                 ×
               </span>
             </button>
-            <nav aria-label={dictionary.nav.services} className="flex flex-col items-center">
+            <nav id="home-mobile-menu" aria-label={dictionary.nav.services} className="flex flex-col items-center">
               {panels.map((panel) => (
                 <a
                   key={panel.key}
@@ -653,7 +657,26 @@ export default function HomePortal({
         ) : null}
       </AnimatePresence>
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[60] flex items-start justify-end gap-4 px-4 py-4 sm:px-6 sm:py-5">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[70] flex items-center justify-end gap-4 px-4 py-4 sm:px-6 sm:py-5">
+        <motion.button
+          type="button"
+          className="pointer-events-auto mr-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-md border shadow-[0_10px_28px_rgba(0,0,0,0.35)] md:hidden"
+          style={{
+            backgroundColor: menuButtonBackground,
+            color: menuButtonForeground,
+            borderColor: menuButtonBorder,
+          }}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="home-mobile-menu"
+          aria-label={dictionary.nav.menu}
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <span className="flex flex-col gap-[5px]" aria-hidden>
+            <span className="block h-0.5 w-5 bg-current" />
+            <span className="block h-0.5 w-5 bg-current" />
+            <span className="block h-0.5 w-5 bg-current" />
+          </span>
+        </motion.button>
         <LanguageSwitcher
           className={`pointer-events-auto flex shrink-0 items-center gap-1.5 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
             lightTheme ? "text-[#322B2B]" : "text-[#F4F1ED]"

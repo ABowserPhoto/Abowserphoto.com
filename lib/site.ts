@@ -69,6 +69,67 @@ export const BUSINESS_PORTRAITS_OG_ALT = {
   en: "Business portrait of a smiling woman in a lilac blazer, used as the preview image for business portraits.",
 } as const;
 
+/**
+ * Share images for niche category pages. Each file is a 1200×630 JPEG made
+ * from a photo already published on that category. Real estate is the only
+ * entry that uses a property photograph.
+ */
+export const NICHE_OG_IMAGES = {
+  commercial: {
+    path: "/og/og-commercial.jpg",
+    alt: {
+      de: "Produktfotografie einer Pipettenflasche vor ruhigem Hintergrund.",
+      en: "Product photograph of a dropper bottle against a quiet background.",
+    },
+  },
+  "real-estate": {
+    path: "/og/og-real-estate.jpg",
+    alt: {
+      de: "Immobilienfoto einer Gewerbefläche im Airport City bei Sonnenuntergang.",
+      en: "Photograph of a commercial property at Airport City in sunset light.",
+    },
+  },
+  wedding: {
+    path: "/og/og-wedding.jpg",
+    alt: {
+      de: "Hochzeitsfoto eines Paares, die Braut im weißen Kleid und der Bräutigam im hellen Anzug.",
+      en: "Wedding photograph of a couple, the bride in a white dress and the groom in a light suit.",
+    },
+  },
+  food: {
+    path: "/og/og-food.jpg",
+    alt: {
+      de: "Food-Fotografie einer Falafel-Schale mit Hummus, Gemüse und Granatapfel.",
+      en: "Food photograph of a falafel bowl with hummus, vegetables, and pomegranate.",
+    },
+  },
+  "business-portraits": {
+    path: BUSINESS_PORTRAITS_OG_IMAGE_PATH,
+    alt: BUSINESS_PORTRAITS_OG_ALT,
+  },
+  studio: {
+    path: "/og/og-studio.jpg",
+    alt: {
+      de: "Bewerbungsfoto einer lächelnden Frau in weißer Bluse vor grauem Studiohintergrund.",
+      en: "Application photo of a smiling woman in a white blouse against a grey studio background.",
+    },
+  },
+  "social-media-management": {
+    path: "/og/og-social.jpg",
+    alt: {
+      de: "Social-Media-Motiv mit Like-Symbolen, Herzen und Emojis.",
+      en: "Social-media image with like icons, hearts, and emoji.",
+    },
+  },
+  cinematography: {
+    path: "/og/og-film.jpg",
+    alt: {
+      de: "Standbild aus einer Filmproduktion: eine Person filmt mit einer Kamera.",
+      en: "Still from a film production: a person filming with a camera.",
+    },
+  },
+} as const;
+
 export type Studio = {
   id: "hagen" | "solingen";
   nameDe: string;

@@ -5,10 +5,7 @@ import { nicheDocumentCopy } from "../niche-landing";
 import { nicheHostForHostname, nicheOrigin, PORTAL_CATEGORY_SUBDOMAIN } from "../subdomains";
 import {
   BRAND_NAME,
-  BUSINESS_PORTRAITS_OG_ALT,
-  BUSINESS_PORTRAITS_OG_IMAGE_HEIGHT,
-  BUSINESS_PORTRAITS_OG_IMAGE_PATH,
-  BUSINESS_PORTRAITS_OG_IMAGE_WIDTH,
+  NICHE_OG_IMAGES,
   OG_IMAGE_ALT,
   OG_IMAGE_HEIGHT,
   OG_IMAGE_PATH,
@@ -54,6 +51,28 @@ const ogImage = {
   height: OG_IMAGE_HEIGHT,
   alt: OG_IMAGE_ALT,
 };
+
+function categoryShareImage(locale: Locale, slug: CategorySlug) {
+  const image = NICHE_OG_IMAGES[slug];
+  return {
+    url: absoluteUrl(image.path),
+    width: OG_IMAGE_WIDTH,
+    height: OG_IMAGE_HEIGHT,
+    alt: image.alt[locale],
+  };
+}
+
+function twitterImage(image: {
+  url: string;
+  width?: number;
+  height?: number;
+  alt: string;
+}): Metadata["twitter"] {
+  return {
+    card: "summary_large_image",
+    images: [image],
+  };
+}
 
 function languageAlternates(pathnameFor: (locale: Locale) => string) {
   return {
@@ -162,17 +181,8 @@ export function buildCategoryMetadata(
     origin ? `/${entry}` : withLocale(categoryPath(slug, entry), entry);
   const path = pathFor(locale);
   const canonical = urlOnOrigin(path, origin);
-  const images =
-    slug === "business-portraits"
-      ? [
-          {
-            url: BUSINESS_PORTRAITS_OG_IMAGE_PATH,
-            width: BUSINESS_PORTRAITS_OG_IMAGE_WIDTH,
-            height: BUSINESS_PORTRAITS_OG_IMAGE_HEIGHT,
-            alt: BUSINESS_PORTRAITS_OG_ALT[locale],
-          },
-        ]
-      : [ogImage];
+  const image = categoryShareImage(locale, slug);
+  const images = [image];
   // The five public niches use their own title and description on their host.
   // www, and every other host, keep the dictionary copy.
   const landing = nicheDocumentCopy(slug, locale, requestHost);
@@ -194,6 +204,7 @@ export function buildCategoryMetadata(
       ...openGraphFor(locale, path, openGraphTitle, description, images),
       url: canonical,
     },
+    twitter: twitterImage(image),
   };
 
   // The www URL is only a pointer. The indexable page is the studio host.
@@ -240,6 +251,7 @@ export function buildSimplePageMetadata(
       ? nicheOrigin(niche.subdomain, requestHost)
       : null;
   const canonical = urlOnOrigin(path, origin);
+  const image = key === "commercial-portfolio" ? categoryShareImage(locale, "commercial") : ogImage;
 
   const metadata: Metadata = {
     title: seo.title,
@@ -249,9 +261,10 @@ export function buildSimplePageMetadata(
       languages: languageAlternatesOn(pathFor, origin),
     },
     openGraph: {
-      ...openGraphFor(locale, path, `${seo.title} | ${dict.brand}`, seo.description),
+      ...openGraphFor(locale, path, `${seo.title} | ${dict.brand}`, seo.description, [image]),
       url: canonical,
     },
+    twitter: twitterImage(image),
   };
 
   if (key === "account" || key === "book") {
