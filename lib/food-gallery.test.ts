@@ -5,6 +5,7 @@ import { readHeroMedia, readPortfolio, readPortalHeroSets } from "./gallery";
 import { themeConfig } from "./themeConfig";
 
 const FOOD_PORTFOLIO = [
+  "/food/portfolio/food-asian-salad.jpg",
   "/food/portfolio/food-asian-spread-1.jpg",
   "/food/portfolio/food-asian-spread-2.jpg",
   "/food/portfolio/food-bowl-falafel.jpg",
@@ -52,6 +53,8 @@ const GERMAN_ALTS: Record<string, string> = {
     "Salat mit Rindfleisch und Parmesan, Pasta und Pizza auf Holztisch",
   "/food/portfolio/food-spaghetti-pomodoro.jpg":
     "Spaghetti Pomodoro mit Basilikum, daneben Brot und überbackene Pasta",
+  "/food/portfolio/food-asian-salad.jpg":
+    "Asiatischer Kohl-Karotten-Salat mit Frühlingszwiebeln in roter Schale auf Schiefer, im Hintergrund Edamame und Getränke",
   "/food/portfolio/food-asian-spread-1.jpg":
     "Asiatische Gerichte in dunklen Schalen auf rustikalem Holztisch von oben",
   "/food/portfolio/food-tempura-shrimp.jpg": "Tempura-Garnelen mit Chilisauce auf dunkler Schale",
@@ -63,7 +66,7 @@ const GERMAN_ALTS: Record<string, string> = {
     "Nahaufnahme von knusprigem Brathähnchen, dahinter Taboulé-Salat",
 };
 
-test("food portfolio is Aaron's sixteen photographs at their own size", () => {
+test("food portfolio is Aaron's photographs at their own size", () => {
   const german = readPortfolio("food", "de");
   const english = readPortfolio("food", "en");
 
