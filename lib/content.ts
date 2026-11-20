@@ -290,6 +290,7 @@ An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport
     themeColor: "#E2A121",
     heroImage: "/food/hero/food-hero-1-desktop.jpg",
     portfolioImages: [
+      "/food/portfolio/food-asian-salad.jpg",
       "/food/portfolio/food-asian-spread-1.jpg",
       "/food/portfolio/food-asian-spread-2.jpg",
       "/food/portfolio/food-bowl-falafel.jpg",
