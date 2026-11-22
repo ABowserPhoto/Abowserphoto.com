@@ -166,7 +166,7 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
   {
     services,
     themeColor,
-    inquireLabel = "Inquire",
+    inquireLabel = "Book a shoot",
     watchVideoLabel = "Watch Video",
     viewTourLabel = "View 360° Tour",
   },
