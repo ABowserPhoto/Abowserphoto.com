@@ -237,6 +237,9 @@
     "contactPhone": "Kontakttelefon",
     "services": "Leistungen",
     "photoPackage": "Fotopaket",
+    "photos": "Fotos",
+    "individualPhotos": "Einzelfotos",
+    "selectIndividualPhotos": "Anzahl wählen",
     "selectPhotoPackage": "Fotopaket wählen",
     "additionalDetails": "Weitere Angaben",
     "additionalPlaceholder": "Zugangshinweise, Zeitwünsche oder weiteres Wichtiges",
@@ -247,7 +250,7 @@
     "submitting": "Wird gesendet...",
     "selectPropertyStatus": "Bitte wählen Sie einen Objektstatus.",
     "selectAtLeastOneService": "Bitte wählen Sie mindestens eine Leistung.",
-    "selectPhotoPackageError": "Bitte wählen Sie ein Fotopaket.",
+    "selectPhotoPackageError": "Bitte wählen Sie ein Fotopaket oder Einzelfotos.",
     "addDetails": "Bitte ergänzen Sie Details zum Fotoshooting.",
     "completeFields": "Bitte füllen Sie alle Pflichtfelder aus.",
     "validEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
@@ -274,7 +277,9 @@
       "Drohne": "Drohne",
       "360 Degree Tour": "360°-Tour",
       "Digital Homestaging": "Digitales Homestaging",
-      "Highlight Video": "Highlight-Video"
+      "Highlight Video": "Highlight-Video",
+      "Walk Thru Video": "Walk-Through-Video",
+      "Agent branding Video": "Makler-Branding-Video"
     }
   }
 }

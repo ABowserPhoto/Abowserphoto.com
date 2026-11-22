@@ -106,54 +106,23 @@ export const BOOKING_SERVICES = [
   "360 Degree Tour",
   "Digital Homestaging",
   "Highlight Video",
+  "Walk Thru Video",
+  "Agent branding Video",
 ] as const;
 export type BookingService = (typeof BOOKING_SERVICES)[number];
 
 export const PHOTO_PACKAGES = [
-  {
-    id: "bis-5-zimmer",
-    label: {
-      de: "Bis 5 Zimmer (Min. 10 Fotos) — Preis auf Anfrage",
-      en: "Up to 5 rooms (min. 10 photos) — price on request",
-    },
-  },
-  {
-    id: "bis-7-zimmer",
-    label: {
-      de: "Bis 7 Zimmer (Min. 15 Fotos) — Preis auf Anfrage",
-      en: "Up to 7 rooms (min. 15 photos) — price on request",
-    },
-  },
-  {
-    id: "bis-10-zimmer",
-    label: {
-      de: "Bis 10 Zimmer (Min. 25 Fotos) — Preis auf Anfrage",
-      en: "Up to 10 rooms (min. 25 photos) — price on request",
-    },
-  },
-  {
-    id: "30-fotos",
-    label: {
-      de: "30 Fotos — Preis auf Anfrage",
-      en: "30 photos — price on request",
-    },
-  },
-  {
-    id: "40-fotos",
-    label: {
-      de: "40 Fotos — Preis auf Anfrage",
-      en: "40 photos — price on request",
-    },
-  },
-  {
-    id: "50-fotos",
-    label: {
-      de: "50 Fotos — Preis auf Anfrage",
-      en: "50 photos — price on request",
-    },
-  },
+  { id: "bis-5-zimmer", photos: 10 },
+  { id: "bis-7-zimmer", photos: 15 },
+  { id: "bis-10-zimmer", photos: 25 },
+  { id: "30-fotos", photos: 30 },
+  { id: "40-fotos", photos: 40 },
+  { id: "50-fotos", photos: 50 },
 ] as const;
 export type PhotoPackage = (typeof PHOTO_PACKAGES)[number]["id"];
+
+export const INDIVIDUAL_PHOTO_COUNTS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+export type IndividualPhotoCount = (typeof INDIVIDUAL_PHOTO_COUNTS)[number];
 
 export const BOOKING_TIME_SLOTS = [
   "08:00",
@@ -193,8 +162,42 @@ export function isPhotoPackage(value: string): value is PhotoPackage {
   return PHOTO_PACKAGES.some((photoPackage) => photoPackage.id === value);
 }
 
+export function isIndividualPhotoCount(value: number): value is IndividualPhotoCount {
+  return (INDIVIDUAL_PHOTO_COUNTS as readonly number[]).includes(value);
+}
+
 export function getPhotoPackageLabel(value: PhotoPackage, locale: Locale = "de") {
-  return PHOTO_PACKAGES.find((photoPackage) => photoPackage.id === value)?.label[locale] ?? value;
+  const photos = PHOTO_PACKAGES.find((photoPackage) => photoPackage.id === value)?.photos;
+  if (!photos) return value;
+  return locale === "de" ? `${photos}-Foto-Paket` : `${photos} photo package`;
+}
+
+export function getIndividualPhotoLabel(count: IndividualPhotoCount, locale: Locale = "de") {
+  if (locale === "de") return count === 1 ? "1 Foto" : `${count} Fotos`;
+  return count === 1 ? "1 photo" : `${count} photos`;
+}
+
+export type PhotoChoice =
+  | { photoPackage: PhotoPackage; individualPhotoCount: null }
+  | { photoPackage: null; individualPhotoCount: IndividualPhotoCount };
+
+/** A package and an individual quantity cannot be chosen together. */
+export function resolvePhotoChoice(
+  photoPackage: string | null,
+  individualPhotoCount: number | null
+): PhotoChoice | null {
+  const packageId = photoPackage && isPhotoPackage(photoPackage) ? photoPackage : null;
+  const count =
+    individualPhotoCount != null && isIndividualPhotoCount(individualPhotoCount)
+      ? individualPhotoCount
+      : null;
+  if (packageId && count == null) {
+    return { photoPackage: packageId, individualPhotoCount: null };
+  }
+  if (count != null && !packageId) {
+    return { photoPackage: null, individualPhotoCount: count };
+  }
+  return null;
 }
 
 export function parseBookingServices(values: string[]): BookingService[] {

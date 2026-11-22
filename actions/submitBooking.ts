@@ -2,10 +2,11 @@
 
 import {
   isBookingTimeSlot,
-  isPhotoPackage,
   isPropertyStatus,
   parseBookingServices,
+  resolvePhotoChoice,
   type BookingService,
+  type IndividualPhotoCount,
   type PhotoPackage,
   type PropertyStatus,
 } from "../lib/booking";
@@ -22,7 +23,8 @@ export type BookingFormData = {
   contactNumber: string;
   contactEmail: string;
   services: BookingService[];
-  photoPackage: PhotoPackage;
+  photoPackage: PhotoPackage | null;
+  individualPhotoCount: IndividualPhotoCount | null;
   additionalDetails?: string;
   locale?: string;
 };
@@ -70,8 +72,12 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
   const contactNumber = data.contactNumber.trim();
   const contactEmail = data.contactEmail.trim();
   const services = parseBookingServices(data.services ?? []);
-  const photoPackage = data.photoPackage;
+  const photoChoice = resolvePhotoChoice(data.photoPackage, data.individualPhotoCount);
   const additionalDetails = (data.additionalDetails ?? "").replace(/\r\n/g, "\n").trim().slice(0, 2000);
+
+  if (!photoChoice) {
+    return { success: false, message: booking.selectPhotoPackageError };
+  }
 
   if (
     !locationAddress ||
@@ -82,7 +88,6 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
     !contactNumber ||
     !contactEmail ||
     services.length === 0 ||
-    !isPhotoPackage(photoPackage) ||
     !isBookingTimeSlot(requestedTime)
   ) {
     return { success: false, message: booking.completeFields };
@@ -122,7 +127,8 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
       locationAddress,
       propertyStatus,
       services,
-      photoPackage,
+      photoPackage: photoChoice.photoPackage,
+      individualPhotoCount: photoChoice.individualPhotoCount,
     });
   } catch (error) {
     return { success: false, message: bookingFailureMessage(error, booking) };

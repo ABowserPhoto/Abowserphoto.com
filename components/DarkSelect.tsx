@@ -17,6 +17,8 @@ type DarkSelectProps = {
   loadingLabel?: string;
   emptyLabel?: string;
   resetKey?: string;
+  value?: string;
+  onChange?: (value: string) => void;
 };
 
 export default function DarkSelect({
@@ -29,27 +31,33 @@ export default function DarkSelect({
   loadingLabel = "Checking availability...",
   emptyLabel,
   resetKey,
+  value,
+  onChange,
 }: DarkSelectProps) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [uncontrolledValue, setUncontrolledValue] = useState("");
   const rootRef = useRef<HTMLDivElement>(null);
   const listId = useId();
-  const selected = options.find((option) => option.value === value);
+  const isControlled = value !== undefined;
+  const selectedValue = isControlled ? value : uncontrolledValue;
+  const selected = options.find((option) => option.value === selectedValue);
   const isDisabled = disabled || loading;
   const displayLabel = loading
     ? loadingLabel
     : selected?.label ?? (options.length === 0 && emptyLabel ? emptyLabel : placeholder);
 
   useEffect(() => {
-    setValue("");
+    if (isControlled) return;
+    setUncontrolledValue("");
     setOpen(false);
-  }, [resetKey]);
+  }, [resetKey, isControlled]);
 
   useEffect(() => {
-    if (value && !options.some((option) => option.value === value)) {
-      setValue("");
+    if (isControlled || !selectedValue) return;
+    if (!options.some((option) => option.value === selectedValue)) {
+      setUncontrolledValue("");
     }
-  }, [options, value]);
+  }, [isControlled, options, selectedValue]);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -72,7 +80,7 @@ export default function DarkSelect({
 
   return (
     <div ref={rootRef} className="relative">
-      <input type="hidden" name={name} value={value} />
+      <input type="hidden" name={name} value={selectedValue} />
       <button
         id={id}
         type="button"
@@ -105,7 +113,7 @@ export default function DarkSelect({
           className="mt-1 max-h-60 w-full overflow-auto border border-gray-800 bg-[#1A1A1A] py-1"
         >
           {options.map((option) => {
-            const isSelected = option.value === value;
+            const isSelected = option.value === selectedValue;
             return (
               <li key={option.value} role="option" aria-selected={isSelected}>
                 <button
@@ -114,7 +122,8 @@ export default function DarkSelect({
                     isSelected ? "bg-[#2A2A2A]" : "bg-[#1A1A1A]"
                   }`}
                   onClick={() => {
-                    setValue(option.value);
+                    if (!isControlled) setUncontrolledValue(option.value);
+                    onChange?.(option.value);
                     setOpen(false);
                   }}
                 >

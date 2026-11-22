@@ -237,6 +237,9 @@
     "contactPhone": "Contact Phone Number",
     "services": "Services",
     "photoPackage": "Photo Package",
+    "photos": "Photos",
+    "individualPhotos": "Individual photos",
+    "selectIndividualPhotos": "Select a quantity",
     "selectPhotoPackage": "Select a photo package",
     "additionalDetails": "Additional Details",
     "additionalPlaceholder": "Access notes, timing preferences, or anything else we should know",
@@ -247,7 +250,7 @@
     "submitting": "Submitting...",
     "selectPropertyStatus": "Please select a property status.",
     "selectAtLeastOneService": "Please select at least one service.",
-    "selectPhotoPackageError": "Please select a photo package.",
+    "selectPhotoPackageError": "Please select a photo package or individual photos.",
     "addDetails": "Please add details of the photoshoot.",
     "completeFields": "Please complete all required fields.",
     "validEmail": "Please enter a valid contact email address.",
@@ -274,7 +277,9 @@
       "Drohne": "Drone",
       "360 Degree Tour": "360° Tour",
       "Digital Homestaging": "Digital Homestaging",
-      "Highlight Video": "Highlight Video"
+      "Highlight Video": "Highlight Video",
+      "Walk Thru Video": "Walk Thru Video",
+      "Agent branding Video": "Agent branding Video"
     }
   }
 }
