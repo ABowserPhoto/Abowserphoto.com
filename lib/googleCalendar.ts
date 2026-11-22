@@ -2,7 +2,9 @@ import { google } from "googleapis";
 import {
   BOOKING_TIME_SLOTS,
   addCalendarDays,
+  addOneHour,
   getSlotRange,
+  normalizeTime,
   slotOverlapsBusy,
   zonedDateTimeToUtc,
 } from "./booking";
@@ -82,4 +84,88 @@ export async function queryAvailableTimesForDate(date: string) {
     if (start.getTime() <= now) return false;
     return !slotOverlapsBusy(date, time, busy, timeZone);
   });
+}
+
+/** Pending requests use this prefix and stay opaque, so free/busy keeps the slot held. */
+export const REQUEST_EVENT_PREFIX = "ANFRAGE – ";
+
+export type BookingCalendarStatus = "tentative" | "confirmed";
+
+export type BookingCalendarEvent = {
+  summary: string;
+  description: string;
+  location?: string;
+  date: string;
+  time: string;
+  timeZone?: string;
+  status: BookingCalendarStatus;
+};
+
+export function calendarSummary(summary: string, status: BookingCalendarStatus) {
+  const base = summary.startsWith(REQUEST_EVENT_PREFIX)
+    ? summary.slice(REQUEST_EVENT_PREFIX.length)
+    : summary;
+  switch (status) {
+    case "tentative":
+      return `${REQUEST_EVENT_PREFIX}${base}`;
+    case "confirmed":
+      return base;
+    default: {
+      const neverStatus: never = status;
+      return neverStatus;
+    }
+  }
+}
+
+export function isMissingCalendarEvent(error: unknown) {
+  if (typeof error !== "object" || error === null) return false;
+  const record = error as { code?: unknown; status?: unknown; response?: { status?: unknown } };
+  const codes = [record.code, record.status, record.response?.status];
+  return codes.some((code) => code === 404 || code === 410 || code === "404" || code === "410");
+}
+
+export async function insertBookingCalendarEvent(input: BookingCalendarEvent) {
+  const { calendar, calendarId, timeZone } = getCalendarClient();
+  const zone = input.timeZone || timeZone;
+  const startTime = normalizeTime(input.time);
+  const response = await calendar.events.insert({
+    calendarId,
+    requestBody: {
+      summary: calendarSummary(input.summary, input.status),
+      description: input.description,
+      ...(input.location ? { location: input.location } : {}),
+      status: input.status,
+      transparency: "opaque",
+      start: { dateTime: `${input.date}T${startTime}`, timeZone: zone },
+      end: { dateTime: `${input.date}T${addOneHour(input.time)}`, timeZone: zone },
+    },
+  });
+
+  const id = response.data.id;
+  if (!id) throw new Error("Google Calendar did not return an event id.");
+  return { id, htmlLink: response.data.htmlLink ?? null, timeZone: zone };
+}
+
+export async function confirmBookingCalendarEvent(eventId: string, summary: string, description: string) {
+  const { calendar, calendarId } = getCalendarClient();
+  await calendar.events.patch({
+    calendarId,
+    eventId,
+    requestBody: {
+      summary: calendarSummary(summary, "confirmed"),
+      description,
+      status: "confirmed",
+      transparency: "opaque",
+    },
+  });
+}
+
+export async function deleteBookingCalendarEvent(eventId: string) {
+  const { calendar, calendarId } = getCalendarClient();
+  try {
+    await calendar.events.delete({ calendarId, eventId });
+  } catch (error) {
+    if (isMissingCalendarEvent(error)) return;
+    throw error;
+  }
 }

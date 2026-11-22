@@ -1,19 +1,15 @@
 "use server";
 
 import {
-  addOneHour,
-  extractCity,
-  getPhotoPackageLabel,
   isBookingTimeSlot,
   isPhotoPackage,
   isPropertyStatus,
-  normalizeTime,
   parseBookingServices,
   type BookingService,
   type PhotoPackage,
   type PropertyStatus,
 } from "../lib/booking";
-import { getCalendarClient, queryAvailableTimesForDate } from "../lib/googleCalendar";
+import { bookingFailureMessage, placeShootRequest } from "../lib/bookingRequests";
 import { getAuthCopy, getBookingCopy, resolveLocale } from "../lib/i18n/messages";
 import { createClient } from "../lib/supabase/server";
 
@@ -60,43 +56,6 @@ async function getApprovedClient(
   }
 
   return existingByUser;
-}
-
-async function createCalendarEvent(data: BookingFormData, companyName: string) {
-  const { calendar, calendarId, timeZone } = getCalendarClient();
-  const startTime = normalizeTime(data.requestedTime);
-  const endTime = addOneHour(data.requestedTime);
-  const city = extractCity(data.locationAddress);
-
-  try {
-    await calendar.events.insert({
-      calendarId,
-      requestBody: {
-        summary: `Immobilien - ${companyName} - ${city}`,
-        location: data.locationAddress,
-        description: [
-          `Property Status: ${data.propertyStatus}`,
-          `Contact Name: ${data.contactName}`,
-          `Contact Number: ${data.contactNumber}`,
-          `Contact Email Address: ${data.contactEmail}`,
-          `Services: ${data.services.join(", ")}`,
-          `Photo Package: ${getPhotoPackageLabel(data.photoPackage, resolveLocale(data.locale))}`,
-          `Additional Details: ${data.additionalDetails?.trim() || "None"}`,
-        ].join("\n"),
-        start: {
-          dateTime: `${data.requestedDate}T${startTime}`,
-          timeZone,
-        },
-        end: {
-          dateTime: `${data.requestedDate}T${endTime}`,
-          timeZone,
-        },
-      },
-    });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(message);
-  }
 }
 
 export async function submitBooking(data: BookingFormData): Promise<SubmitBookingResult> {
@@ -148,33 +107,25 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
   }
 
   try {
-    const availableTimes = await queryAvailableTimesForDate(requestedDate);
-    if (!availableTimes.includes(requestedTime)) {
-      return {
-        success: false,
-        message: booking.timeUnavailable,
-      };
-    }
-
-    await createCalendarEvent(
-      {
-        locationAddress,
-        requestedDate,
-        requestedTime,
-        propertyStatus,
-        contactName,
-        contactNumber,
-        contactEmail,
-        services,
-        photoPackage,
-        additionalDetails,
-      },
-      client.company_name
-    );
+    await placeShootRequest({
+      kind: "immobilien",
+      locale,
+      userId: userData.user.id,
+      companyName: client.company_name,
+      contactName,
+      contactEmail,
+      accountEmail: userData.user.email ?? null,
+      contactPhone: contactNumber,
+      requestedDate,
+      requestedTime,
+      notes: additionalDetails,
+      locationAddress,
+      propertyStatus,
+      services,
+      photoPackage,
+    });
   } catch (error) {
-    const message = error instanceof Error ? error.message : booking.calendarEventFailed;
-    console.error("Google Calendar sync failed:", error);
-    return { success: false, message };
+    return { success: false, message: bookingFailureMessage(error, booking) };
   }
 
   return {

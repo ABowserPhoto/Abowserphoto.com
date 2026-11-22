@@ -241,6 +241,7 @@
     "timeUnavailable": "Diese Uhrzeit ist nicht mehr verfügbar. Bitte wählen Sie einen anderen Slot.",
     "calendarUnavailable": "Kalenderverfügbarkeit konnte nicht geprüft werden.",
     "calendarEventFailed": "Kalendereintrag konnte nicht erstellt werden.",
+    "saveFailed": "Die Anfrage konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
     "invalidDate": "Bitte wählen Sie ein gültiges Datum.",
     "notConfigured": "Buchung ist noch nicht konfiguriert. Bitte Supabase-URL und Publishable Key hinterlegen.",
     "checkingAccount": "Konto wird geprüft...",
