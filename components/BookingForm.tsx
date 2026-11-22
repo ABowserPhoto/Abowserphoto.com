@@ -4,16 +4,18 @@ import { useState, useTransition } from "react";
 import { submitBooking, type BookingFormData } from "../actions/submitBooking";
 import { immobilienBookingLead, trackGenerateLead } from "../lib/analytics";
 import {
+  BOOKING_BUNDLES,
   BOOKING_SERVICES,
   INDIVIDUAL_PHOTO_COUNTS,
   PHOTO_PACKAGES,
   PROPERTY_STATUSES,
   getIndividualPhotoLabel,
   getPhotoPackageLabel,
+  isBookingBundle,
   isPropertyStatus,
-  parseBookingServices,
-  resolvePhotoChoice,
+  resolveImmobilienSelection,
   todayInputValue,
+  type BookingBundle,
   type BookingService,
   type PropertyStatus,
 } from "../lib/booking";
@@ -27,6 +29,14 @@ const inputClassName =
 
 const choiceClassName =
   "flex cursor-pointer items-center gap-3 rounded-none border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED] transition-colors duration-300 has-[:checked]:border-[#F4F1ED]/60";
+
+const bundleChoiceClassName =
+  "flex cursor-pointer items-start gap-3 rounded-none border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED] transition-colors duration-300 has-[:checked]:border-[#F4F1ED]/60";
+
+const lockedClassName =
+  "flex cursor-default items-start gap-3 rounded-none border border-[#F4F1ED]/50 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED]";
+
+type OfferChoice = "" | "custom" | BookingBundle;
 
 type BookingFormProps = {
   userEmail?: string | null;
@@ -44,6 +54,8 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
   const [selectedDate, setSelectedDate] = useState("");
   const [photoPackage, setPhotoPackage] = useState("");
   const [individualCount, setIndividualCount] = useState("");
+  const [offer, setOffer] = useState<OfferChoice>("");
+  const [highlightRoom, setHighlightRoom] = useState("");
   const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate, locale);
 
   async function handleSignOut() {
@@ -60,6 +72,12 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
 
   function serviceLabel(service: BookingService) {
     return booking.serviceLabels[service] ?? service;
+  }
+
+  function selectOffer(next: Exclude<OfferChoice, "">) {
+    setOffer(next);
+    if (next !== "custom") setIndividualCount("");
+    if (next !== "premium-home") setHighlightRoom("");
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -84,19 +102,33 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
       return;
     }
 
-    const services = parseBookingServices(formData.getAll("services").map(String));
-    if (services.length === 0) {
-      setErrorMessage(booking.selectAtLeastOneService);
-      return;
-    }
-
-    const photoChoice = resolvePhotoChoice(
-      photoPackage,
-      individualCount === "" ? null : Number(individualCount)
-    );
-    if (!photoChoice) {
-      setErrorMessage(booking.selectPhotoPackageError);
-      return;
+    const selection = resolveImmobilienSelection({
+      offer,
+      services: formData.getAll("services").map(String),
+      photoPackage: photoPackage || null,
+      individualPhotoCount: individualCount === "" ? null : Number(individualCount),
+      highlightRoom,
+    });
+    if (!selection.ok) {
+      switch (selection.reason) {
+        case "offer":
+          setErrorMessage(booking.selectOffer);
+          return;
+        case "services":
+          setErrorMessage(booking.selectAtLeastOneService);
+          return;
+        case "photos":
+          setErrorMessage(booking.selectPhotoPackageError);
+          return;
+        case "bundle-photos":
+          setErrorMessage(booking.selectBundlePhotoPackage);
+          return;
+        default: {
+          const neverReason: never = selection.reason;
+          setErrorMessage(neverReason);
+          return;
+        }
+      }
     }
 
     const payload: BookingFormData = {
@@ -107,9 +139,11 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
       contactName: String(formData.get("contactName") ?? ""),
       contactNumber: String(formData.get("contactNumber") ?? ""),
       contactEmail: String(formData.get("contactEmail") ?? ""),
-      services,
-      photoPackage: photoChoice.photoPackage,
-      individualPhotoCount: photoChoice.individualPhotoCount,
+      services: selection.selection.services,
+      photoPackage: selection.selection.photoPackage,
+      individualPhotoCount: selection.selection.individualPhotoCount,
+      offer,
+      highlightRoom,
       additionalDetails: String(formData.get("additionalDetails") ?? ""),
       locale,
     };
@@ -311,69 +345,179 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
 
         <fieldset>
           <legend className="mb-3 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
-            {booking.selectService} *
+            {booking.selection} *
           </legend>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {BOOKING_SERVICES.map((service) => (
-              <label key={service} className={choiceClassName}>
-                <input type="checkbox" name="services" value={service} className="accent-[#F4F1ED]" />
-                {serviceLabel(service)}
-              </label>
-            ))}
+          <div className="grid grid-cols-1 gap-2">
+            {BOOKING_BUNDLES.map((bundleId) => {
+              const bundle = booking.bundles[bundleId];
+              return (
+                <label key={bundleId} className={bundleChoiceClassName}>
+                  <input
+                    type="radio"
+                    name="offer"
+                    value={bundleId}
+                    checked={offer === bundleId}
+                    onChange={() => selectOffer(bundleId)}
+                    className="mt-1 accent-[#F4F1ED]"
+                  />
+                  <span className="min-w-0">
+                    <span className="block font-medium">{bundle.name}</span>
+                    <span className="mt-1 block text-xs leading-relaxed text-[#F4F1ED]/75">{bundle.description}</span>
+                  </span>
+                </label>
+              );
+            })}
+            <label className={bundleChoiceClassName}>
+              <input
+                type="radio"
+                name="offer"
+                value="custom"
+                checked={offer === "custom"}
+                onChange={() => selectOffer("custom")}
+                className="mt-1 accent-[#F4F1ED]"
+              />
+              <span className="min-w-0">
+                <span className="block font-medium">{booking.buildYourOwn}</span>
+                <span className="mt-1 block text-xs leading-relaxed text-[#F4F1ED]/70">{booking.buildYourOwnHint}</span>
+              </span>
+            </label>
           </div>
         </fieldset>
 
-        <fieldset>
-          <legend className="mb-3 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
-            {booking.photos} *
-          </legend>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        {isBookingBundle(offer) ? (
+          <div className="space-y-5">
             <div>
               <label
                 htmlFor="photoPackage"
                 className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
               >
-                {booking.photoPackage}
+                {booking.photoPackage} *
               </label>
               <DarkSelect
                 id="photoPackage"
                 name="photoPackage"
                 placeholder={booking.selectPhotoPackage}
                 value={photoPackage}
-                onChange={(next) => {
-                  setPhotoPackage(next);
-                  if (next) setIndividualCount("");
-                }}
+                onChange={setPhotoPackage}
                 options={PHOTO_PACKAGES.map((item) => ({
                   value: item.id,
                   label: getPhotoPackageLabel(item.id, locale),
                 }))}
               />
             </div>
-            <div>
-              <label
-                htmlFor="individualPhotos"
-                className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
-              >
-                {booking.individualPhotos}
-              </label>
-              <DarkSelect
-                id="individualPhotos"
-                name="individualPhotos"
-                placeholder={booking.selectIndividualPhotos}
-                value={individualCount}
-                onChange={(next) => {
-                  setIndividualCount(next);
-                  if (next) setPhotoPackage("");
-                }}
-                options={INDIVIDUAL_PHOTO_COUNTS.map((count) => ({
-                  value: String(count),
-                  label: getIndividualPhotoLabel(count, locale),
-                }))}
-              />
-            </div>
+            <ul aria-label={booking.included} className="grid grid-cols-1 gap-2">
+              {booking.bundles[offer].inclusions.map((item) => (
+                <li key={item} className={lockedClassName}>
+                  <input
+                    type="checkbox"
+                    checked
+                    readOnly
+                    disabled
+                    tabIndex={-1}
+                    onChange={() => undefined}
+                    className="mt-0.5 accent-[#F4F1ED] disabled:opacity-100"
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block leading-snug">{item}</span>
+                    <span className="mt-1 block text-[10px] uppercase tracking-[0.14em] text-[#F4F1ED]/55">
+                      {booking.included}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {offer === "premium-home" ? (
+              <div>
+                <label
+                  htmlFor="highlightRoom"
+                  className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+                >
+                  {booking.highlightRoom}
+                </label>
+                <input
+                  id="highlightRoom"
+                  name="highlightRoom"
+                  type="text"
+                  maxLength={200}
+                  value={highlightRoom}
+                  onChange={(event) => setHighlightRoom(event.target.value)}
+                  placeholder={booking.highlightRoomPlaceholder}
+                  className={inputClassName}
+                />
+              </div>
+            ) : null}
           </div>
-        </fieldset>
+        ) : null}
+
+        {offer === "custom" ? (
+          <>
+            <fieldset>
+              <legend className="mb-3 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
+                {booking.selectService} *
+              </legend>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {BOOKING_SERVICES.map((service) => (
+                  <label key={service} className={choiceClassName}>
+                    <input type="checkbox" name="services" value={service} className="accent-[#F4F1ED]" />
+                    {serviceLabel(service)}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend className="mb-3 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
+                {booking.photos} *
+              </legend>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="photoPackage"
+                    className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+                  >
+                    {booking.photoPackage}
+                  </label>
+                  <DarkSelect
+                    id="photoPackage"
+                    name="photoPackage"
+                    placeholder={booking.selectPhotoPackage}
+                    value={photoPackage}
+                    onChange={(next) => {
+                      setPhotoPackage(next);
+                      if (next) setIndividualCount("");
+                    }}
+                    options={PHOTO_PACKAGES.map((item) => ({
+                      value: item.id,
+                      label: getPhotoPackageLabel(item.id, locale),
+                    }))}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="individualPhotos"
+                    className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+                  >
+                    {booking.individualPhotos}
+                  </label>
+                  <DarkSelect
+                    id="individualPhotos"
+                    name="individualPhotos"
+                    placeholder={booking.selectIndividualPhotos}
+                    value={individualCount}
+                    onChange={(next) => {
+                      setIndividualCount(next);
+                      if (next) setPhotoPackage("");
+                    }}
+                    options={INDIVIDUAL_PHOTO_COUNTS.map((count) => ({
+                      value: String(count),
+                      label: getIndividualPhotoLabel(count, locale),
+                    }))}
+                  />
+                </div>
+              </div>
+            </fieldset>
+          </>
+        ) : null}
 
         <div>
           <label

@@ -3,6 +3,7 @@ import {
   extractCity,
   normalizeTime,
   resolveInquiryCategoryLabel,
+  type BookingBundle,
   type BookingService,
   type IndividualPhotoCount,
   type PhotoPackage,
@@ -10,6 +11,9 @@ import {
 } from "./booking";
 import {
   adminDetailRows,
+  bundleDetailRows,
+  bundleFromRow,
+  highlightRoomFromRow,
   isShootKind,
   isShootStatus,
   keepLines,
@@ -63,6 +67,8 @@ export type PlaceShootRequestInput =
       services: BookingService[];
       photoPackage: PhotoPackage | null;
       individualPhotoCount: IndividualPhotoCount | null;
+      bundle: BookingBundle | null;
+      highlightRoom: string | null;
     })
   | (SharedPlace & {
       kind: "inquiry";
@@ -119,7 +125,7 @@ function calendarDescription(details: RequestDetails, pending: boolean) {
   ];
   if (details.address) lines.push(`Address: ${details.address}`);
   if (details.propertyStatus) lines.push(`Property status: ${copy.propertyStatuses[details.propertyStatus]}`);
-  for (const row of photoChoiceRows(details, "de")) {
+  for (const row of [...bundleDetailRows(details, "de"), ...photoChoiceRows(details, "de")]) {
     lines.push(`${row.label}: ${row.value}`);
   }
   if (details.notes) lines.push("", "Notes:", details.notes);
@@ -165,6 +171,8 @@ function detailsFromInput(input: PlaceShootRequestInput, timeZone: string): Requ
         services: input.services,
         photoPackage: input.photoPackage,
         individualPhotoCount: input.individualPhotoCount,
+        bundle: input.bundle,
+        highlightRoom: input.highlightRoom,
         categorySlug: null,
       };
     case "inquiry":
@@ -176,6 +184,8 @@ function detailsFromInput(input: PlaceShootRequestInput, timeZone: string): Requ
         services: [],
         photoPackage: null,
         individualPhotoCount: null,
+        bundle: null,
+        highlightRoom: null,
         categorySlug: input.categorySlug,
       };
     default: {
@@ -200,6 +210,8 @@ function detailsFromRow(row: BookingRequestRow): RequestDetails {
     services: servicesFromRow(row.services),
     photoPackage: photoPackageFromRow(row.photo_package),
     individualPhotoCount: individualPhotoCountFromRow(row.individual_photo_count),
+    bundle: bundleFromRow(row.bundle),
+    highlightRoom: highlightRoomFromRow(row.highlight_room),
     categorySlug: row.category_slug,
     notes: row.notes,
     requestedDate: row.requested_date,
@@ -248,6 +260,8 @@ async function insertPendingRequest(input: {
     services: input.details.services,
     photo_package: input.details.photoPackage,
     individual_photo_count: input.details.individualPhotoCount,
+    bundle: input.details.bundle,
+    highlight_room: input.details.highlightRoom,
     category_slug: input.details.categorySlug,
     notes: input.details.notes,
     requested_date: input.details.requestedDate,

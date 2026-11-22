@@ -1,13 +1,16 @@
 import {
   addOneHour,
+  BOOKING_SERVICES,
   getIndividualPhotoLabel,
   getPhotoPackageLabel,
+  isBookingBundle,
   isBookingService,
   isIndividualPhotoCount,
   isPhotoPackage,
   isPropertyStatus,
   normalizeTime,
   zonedDateTimeToUtc,
+  type BookingBundle,
   type BookingService,
   type IndividualPhotoCount,
   type PhotoPackage,
@@ -34,6 +37,8 @@ export type RequestDetails = {
   services: BookingService[];
   photoPackage: PhotoPackage | null;
   individualPhotoCount: IndividualPhotoCount | null;
+  bundle: BookingBundle | null;
+  highlightRoom: string | null;
   categorySlug: string | null;
   notes: string | null;
   requestedDate: string;
@@ -111,6 +116,25 @@ export function isShootStatus(value: string): value is ShootStatus {
 
 export function photoPackageName(id: PhotoPackage, locale: Locale) {
   return getPhotoPackageLabel(id, locale).replace(/\s+[—–-]\s+.*$/u, "").trim();
+}
+
+export function bundleDetailRows(
+  details: Pick<RequestDetails, "bundle" | "highlightRoom">,
+  locale: Locale
+): DetailRow[] {
+  if (!details.bundle) return [];
+  const bundle = getBookingCopy(locale).bundles[details.bundle];
+  const rows: DetailRow[] = [
+    { label: locale === "de" ? "Paket" : "Package", value: bundle.name },
+    { label: locale === "de" ? "Enthalten" : "Included", value: bundle.includedSummary },
+  ];
+  if (details.highlightRoom) {
+    rows.push({
+      label: locale === "de" ? "Highlight-Raum" : "Highlight room",
+      value: details.highlightRoom,
+    });
+  }
+  return rows;
 }
 
 export function photoChoiceRows(
@@ -208,6 +232,7 @@ export function adminDetailRows(details: RequestDetails): DetailRow[] {
     rows.push({ label: "Objektstatus", value: copy.propertyStatuses[details.propertyStatus] });
   }
 
+  rows.push(...bundleDetailRows(details, "de"));
   rows.push(...photoChoiceRows(details, "de"));
   if (details.notes) rows.push({ label: "Notizen", value: details.notes });
   if (details.calendarUrl) rows.push({ label: "Kalender", value: details.calendarUrl });
@@ -224,12 +249,22 @@ export function clientDetailRows(details: RequestDetails): DetailRow[] {
   ];
   if (details.address) rows.push({ label: locale === "de" ? "Adresse" : "Address", value: details.address });
   rows.push({ label: locale === "de" ? "Leistung" : "Service", value: serviceLabel(details, locale) });
+  rows.push(...bundleDetailRows(details, locale));
   rows.push(...photoChoiceRows(details, locale));
   return rows;
 }
 
+const LEGACY_BOOKING_SERVICES: Record<string, BookingService> = {
+  "Agent branding Video": "Agent Branding Video",
+};
+
 export function servicesFromRow(values: string[] | null) {
-  return (values ?? []).filter(isBookingService);
+  const selected = new Set<BookingService>();
+  for (const value of values ?? []) {
+    const mapped = LEGACY_BOOKING_SERVICES[value] ?? value;
+    if (isBookingService(mapped)) selected.add(mapped);
+  }
+  return BOOKING_SERVICES.filter((service) => selected.has(service));
 }
 
 export function propertyStatusFromRow(value: string | null) {
@@ -242,4 +277,13 @@ export function photoPackageFromRow(value: string | null) {
 
 export function individualPhotoCountFromRow(value: number | null) {
   return value != null && isIndividualPhotoCount(value) ? value : null;
+}
+
+export function bundleFromRow(value: string | null) {
+  return value && isBookingBundle(value) ? value : null;
+}
+
+export function highlightRoomFromRow(value: string | null) {
+  const cleaned = value?.replace(/\s+/g, " ").trim() ?? "";
+  return cleaned.length > 0 ? cleaned.slice(0, 200) : null;
 }

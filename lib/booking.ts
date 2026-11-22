@@ -107,9 +107,12 @@ export const BOOKING_SERVICES = [
   "Digital Homestaging",
   "Highlight Video",
   "Walk Thru Video",
-  "Agent branding Video",
+  "Agent Branding Video",
 ] as const;
 export type BookingService = (typeof BOOKING_SERVICES)[number];
+
+export const BOOKING_BUNDLES = ["premium-home", "luxury-makler"] as const;
+export type BookingBundle = (typeof BOOKING_BUNDLES)[number];
 
 export const PHOTO_PACKAGES = [
   { id: "bis-5-zimmer", photos: 10 },
@@ -198,6 +201,82 @@ export function resolvePhotoChoice(
     return { photoPackage: null, individualPhotoCount: count };
   }
   return null;
+}
+
+export function isBookingBundle(value: string): value is BookingBundle {
+  return (BOOKING_BUNDLES as readonly string[]).includes(value);
+}
+
+export function bundleIncludedServices(bundle: BookingBundle): BookingService[] {
+  switch (bundle) {
+    case "premium-home":
+      return ["Highlight Video", "Drohne"];
+    case "luxury-makler":
+      return ["Walk Thru Video", "Drohne"];
+    default: {
+      const neverBundle: never = bundle;
+      return neverBundle;
+    }
+  }
+}
+
+export function cleanHighlightRoom(value: string) {
+  const cleaned = value.replace(/[\r\n]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 200);
+  return cleaned.length > 0 ? cleaned : null;
+}
+
+export type ImmobilienSelection = {
+  bundle: BookingBundle | null;
+  services: BookingService[];
+  photoPackage: PhotoPackage | null;
+  individualPhotoCount: IndividualPhotoCount | null;
+  highlightRoom: string | null;
+};
+
+export type ImmobilienSelectionResult =
+  | { ok: true; selection: ImmobilienSelection }
+  | { ok: false; reason: "offer" | "services" | "photos" | "bundle-photos" };
+
+/** A bundle locks its included services and still needs a photo package. Custom keeps today's choice. */
+export function resolveImmobilienSelection(input: {
+  offer: string;
+  services: readonly string[];
+  photoPackage: string | null;
+  individualPhotoCount: number | null;
+  highlightRoom: string;
+}): ImmobilienSelectionResult {
+  if (input.offer === "custom") {
+    const services = parseBookingServices([...input.services]);
+    if (services.length === 0) return { ok: false, reason: "services" };
+    const photos = resolvePhotoChoice(input.photoPackage, input.individualPhotoCount);
+    if (!photos) return { ok: false, reason: "photos" };
+    return {
+      ok: true,
+      selection: {
+        bundle: null,
+        services,
+        photoPackage: photos.photoPackage,
+        individualPhotoCount: photos.individualPhotoCount,
+        highlightRoom: null,
+      },
+    };
+  }
+
+  if (!isBookingBundle(input.offer)) return { ok: false, reason: "offer" };
+
+  const photos = resolvePhotoChoice(input.photoPackage, null);
+  if (!photos?.photoPackage) return { ok: false, reason: "bundle-photos" };
+
+  return {
+    ok: true,
+    selection: {
+      bundle: input.offer,
+      services: bundleIncludedServices(input.offer),
+      photoPackage: photos.photoPackage,
+      individualPhotoCount: null,
+      highlightRoom: input.offer === "premium-home" ? cleanHighlightRoom(input.highlightRoom) : null,
+    },
+  };
 }
 
 export function parseBookingServices(values: string[]): BookingService[] {
