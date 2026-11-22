@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { submitBooking, type BookingFormData } from "../actions/submitBooking";
 import { immobilienBookingLead, trackGenerateLead } from "../lib/analytics";
 import {
@@ -14,11 +14,27 @@ import {
   isBookingBundle,
   isPropertyStatus,
   resolveImmobilienSelection,
+  resolvePhotoChoice,
   todayInputValue,
   type BookingBundle,
   type BookingService,
+  type ImmobilienSelection,
   type PropertyStatus,
 } from "../lib/booking";
+import {
+  buildPriceSnapshot,
+  bundlePriceItemKey,
+  formatEstimatedTotal,
+  formatSnapshotLine,
+  individualPhotoItemKey,
+  loadOwnPriceCatalog,
+  optionPriceTexts,
+  photoPackageItemKey,
+  priceCopy,
+  priceNoteLines,
+  servicePriceItemKeys,
+  type PriceCatalog,
+} from "../lib/clientPricing";
 import { useDictionary, useLocale } from "../lib/i18n/LocaleProvider";
 import { createClient } from "../lib/supabase/client";
 import { useAvailableTimes } from "../lib/useAvailableTimes";
@@ -56,7 +72,21 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
   const [individualCount, setIndividualCount] = useState("");
   const [offer, setOffer] = useState<OfferChoice>("");
   const [highlightRoom, setHighlightRoom] = useState("");
+  const [services, setServices] = useState<BookingService[]>([]);
+  const [catalog, setCatalog] = useState<PriceCatalog | null>(null);
   const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate, locale);
+
+  useEffect(() => {
+    let active = true;
+    const supabase = createClient();
+    void loadOwnPriceCatalog(supabase).then((result) => {
+      if (!active) return;
+      setCatalog(result.status === "ready" && result.catalog.items.length > 0 ? result.catalog : null);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   async function handleSignOut() {
     setIsSigningOut(true);
@@ -78,6 +108,44 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
     setOffer(next);
     if (next !== "custom") setIndividualCount("");
     if (next !== "premium-home") setHighlightRoom("");
+  }
+
+  function toggleService(service: BookingService) {
+    setServices((current) =>
+      current.includes(service) ? current.filter((item) => item !== service) : [...current, service]
+    );
+  }
+
+  const priceSnapshot = useMemo(() => {
+    if (!catalog) return null;
+    const photos =
+      offer === "custom"
+        ? resolvePhotoChoice(photoPackage || null, individualCount === "" ? null : Number(individualCount))
+        : resolvePhotoChoice(photoPackage || null, null);
+    const selection: ImmobilienSelection = isBookingBundle(offer)
+      ? {
+          bundle: offer,
+          services: [],
+          photoPackage: photos?.photoPackage ?? null,
+          individualPhotoCount: null,
+          highlightRoom: null,
+        }
+      : {
+          bundle: null,
+          services: offer === "custom" ? services : [],
+          photoPackage: photos?.photoPackage ?? null,
+          individualPhotoCount: photos?.individualPhotoCount ?? null,
+          highlightRoom: null,
+        };
+    return buildPriceSnapshot(catalog, selection);
+  }, [catalog, offer, services, photoPackage, individualCount]);
+
+  function optionLabel(label: string, price: string | null) {
+    return price ? `${label} · ${price}` : label;
+  }
+
+  function singlePrice(keys: Parameters<typeof optionPriceTexts>[1]) {
+    return optionPriceTexts(catalog, keys, locale)[0] ?? null;
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -104,7 +172,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
 
     const selection = resolveImmobilienSelection({
       offer,
-      services: formData.getAll("services").map(String),
+      services,
       photoPackage: photoPackage || null,
       individualPhotoCount: individualCount === "" ? null : Number(individualCount),
       highlightRoom,
@@ -350,6 +418,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           <div className="grid grid-cols-1 gap-2">
             {BOOKING_BUNDLES.map((bundleId) => {
               const bundle = booking.bundles[bundleId];
+              const bundlePrice = singlePrice([bundlePriceItemKey(bundleId)]);
               return (
                 <label key={bundleId} className={bundleChoiceClassName}>
                   <input
@@ -361,7 +430,14 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                     className="mt-1 accent-[#F4F1ED]"
                   />
                   <span className="min-w-0">
-                    <span className="block font-medium">{bundle.name}</span>
+                    <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <span className="font-medium">{bundle.name}</span>
+                      {bundlePrice ? (
+                        <span className="ml-auto text-right text-xs font-normal leading-snug text-[#F4F1ED]/70">
+                          {bundlePrice}
+                        </span>
+                      ) : null}
+                    </span>
                     <span className="mt-1 block text-xs leading-relaxed text-[#F4F1ED]/75">{bundle.description}</span>
                   </span>
                 </label>
@@ -401,7 +477,10 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                 onChange={setPhotoPackage}
                 options={PHOTO_PACKAGES.map((item) => ({
                   value: item.id,
-                  label: getPhotoPackageLabel(item.id, locale),
+                  label: optionLabel(
+                    getPhotoPackageLabel(item.id, locale),
+                    singlePrice([photoPackageItemKey(item.id)])
+                  ),
                 }))}
               />
             </div>
@@ -456,12 +535,35 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                 {booking.selectService} *
               </legend>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {BOOKING_SERVICES.map((service) => (
-                  <label key={service} className={choiceClassName}>
-                    <input type="checkbox" name="services" value={service} className="accent-[#F4F1ED]" />
-                    {serviceLabel(service)}
-                  </label>
-                ))}
+                {BOOKING_SERVICES.map((service) => {
+                  const priceTexts = optionPriceTexts(catalog, servicePriceItemKeys(service), locale);
+                  return (
+                    <label key={service} className={choiceClassName}>
+                      <input
+                        type="checkbox"
+                        name="services"
+                        value={service}
+                        checked={services.includes(service)}
+                        onChange={() => toggleService(service)}
+                        className="accent-[#F4F1ED]"
+                      />
+                      {priceTexts.length > 0 ? (
+                        <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-3 gap-y-1">
+                          <span className="leading-snug">{serviceLabel(service)}</span>
+                          <span className="ml-auto text-right text-xs leading-snug text-[#F4F1ED]/70">
+                            {priceTexts.map((text) => (
+                              <span key={text} className="block">
+                                {text}
+                              </span>
+                            ))}
+                          </span>
+                        </span>
+                      ) : (
+                        serviceLabel(service)
+                      )}
+                    </label>
+                  );
+                })}
               </div>
             </fieldset>
 
@@ -488,7 +590,10 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                     }}
                     options={PHOTO_PACKAGES.map((item) => ({
                       value: item.id,
-                      label: getPhotoPackageLabel(item.id, locale),
+                      label: optionLabel(
+                        getPhotoPackageLabel(item.id, locale),
+                        singlePrice([photoPackageItemKey(item.id)])
+                      ),
                     }))}
                   />
                 </div>
@@ -510,13 +615,44 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                     }}
                     options={INDIVIDUAL_PHOTO_COUNTS.map((count) => ({
                       value: String(count),
-                      label: getIndividualPhotoLabel(count, locale),
+                      label: optionLabel(
+                        getIndividualPhotoLabel(count, locale),
+                        singlePrice([individualPhotoItemKey()])
+                      ),
                     }))}
                   />
                 </div>
               </div>
             </fieldset>
           </>
+        ) : null}
+
+        {priceSnapshot ? (
+          <div className="border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED]" aria-live="polite">
+            <ul className="space-y-2">
+              {priceSnapshot.lines.map((line) => (
+                <li key={line.itemKey} className="flex items-start justify-between gap-3">
+                  <span className="min-w-0 leading-snug">
+                    {(locale === "de" ? line.labelDe : line.labelEn) || line.itemKey}
+                  </span>
+                  <span className="shrink-0 text-right text-xs leading-snug text-[#F4F1ED]/70">
+                    {formatSnapshotLine(line, locale)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 flex items-start justify-between gap-3 border-t border-gray-800 pt-3">
+              <span className="text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
+                {priceCopy(locale).estimatedTotal}
+              </span>
+              <span className="text-right leading-snug">{formatEstimatedTotal(priceSnapshot, locale)}</span>
+            </div>
+            {priceNoteLines(priceSnapshot, locale).map((line) => (
+              <p key={line} className="mt-2 text-xs leading-relaxed text-[#F4F1ED]/60">
+                {line}
+              </p>
+            ))}
+          </div>
         ) : null}
 
         <div>

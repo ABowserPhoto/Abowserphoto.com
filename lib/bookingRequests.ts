@@ -21,6 +21,7 @@ import {
   photoChoiceRows,
   photoPackageFromRow,
   propertyStatusFromRow,
+  requestPriceSnapshot,
   safeHttpUrl,
   serviceLabel,
   servicesFromRow,
@@ -37,6 +38,7 @@ import {
   isMissingCalendarEvent,
   queryAvailableTimesForDate,
 } from "./googleCalendar";
+import { priceSnapshotToJson, type PriceSnapshot } from "./clientPricing";
 import type { Locale } from "./i18n/config";
 import { getBookingCopy, resolveLocale } from "./i18n/messages";
 import { sendShootDecisionEmail, sendShootRequestEmails } from "./mail";
@@ -69,6 +71,7 @@ export type PlaceShootRequestInput =
       individualPhotoCount: IndividualPhotoCount | null;
       bundle: BookingBundle | null;
       highlightRoom: string | null;
+      priceSnapshot: PriceSnapshot | null;
     })
   | (SharedPlace & {
       kind: "inquiry";
@@ -159,6 +162,7 @@ function detailsFromInput(input: PlaceShootRequestInput, timeZone: string): Requ
     requestedTime: input.requestedTime,
     timeZone,
     calendarUrl: null,
+    priceSnapshot: input.kind === "immobilien" ? input.priceSnapshot : null,
   };
 
   switch (input.kind) {
@@ -218,6 +222,7 @@ function detailsFromRow(row: BookingRequestRow): RequestDetails {
     requestedTime: row.requested_time,
     timeZone: row.time_zone,
     calendarUrl: safeHttpUrl(row.calendar_html_link),
+    priceSnapshot: requestPriceSnapshot(row.price_snapshot),
   };
 }
 
@@ -270,6 +275,7 @@ async function insertPendingRequest(input: {
     event_summary: input.summary,
     calendar_event_id: input.calendarEventId,
     calendar_html_link: input.calendarHtmlLink,
+    price_snapshot: priceSnapshotToJson(input.details.priceSnapshot),
   });
 
   if (error) {

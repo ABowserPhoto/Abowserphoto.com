@@ -17,6 +17,7 @@ export type Database = {
           is_approved: boolean;
           last_name: string | null;
           phone_number: string | null;
+          pricing_tier: string | null;
           user_id: string | null;
         };
         Insert: {
@@ -32,6 +33,7 @@ export type Database = {
           is_approved?: boolean;
           last_name?: string | null;
           phone_number?: string | null;
+          pricing_tier?: string | null;
           user_id?: string | null;
         };
         Update: {
@@ -47,7 +49,47 @@ export type Database = {
           is_approved?: boolean;
           last_name?: string | null;
           phone_number?: string | null;
+          pricing_tier?: string | null;
           user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      pricing_tier_prices: {
+        Row: {
+          active: boolean;
+          id: string;
+          item_key: string;
+          label_de: string | null;
+          label_en: string | null;
+          price_net_cents: number | null;
+          sort_order: number | null;
+          tier: string;
+          unit: string;
+          updated_at: string;
+        };
+        Insert: {
+          active?: boolean;
+          id?: string;
+          item_key: string;
+          label_de?: string | null;
+          label_en?: string | null;
+          price_net_cents?: number | null;
+          sort_order?: number | null;
+          tier: string;
+          unit?: string;
+          updated_at?: string;
+        };
+        Update: {
+          active?: boolean;
+          id?: string;
+          item_key?: string;
+          label_de?: string | null;
+          label_en?: string | null;
+          price_net_cents?: number | null;
+          sort_order?: number | null;
+          tier?: string;
+          unit?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -186,6 +228,7 @@ export type Database = {
           highlight_room: string | null;
           notes: string | null;
           photo_package: string | null;
+          price_snapshot: Json | null;
           property_status: string | null;
           requested_date: string;
           requested_time: string;
@@ -216,6 +259,7 @@ export type Database = {
           location_address?: string | null;
           notes?: string | null;
           photo_package?: string | null;
+          price_snapshot?: Json | null;
           property_status?: string | null;
           requested_date: string;
           requested_time: string;
@@ -246,6 +290,7 @@ export type Database = {
           location_address?: string | null;
           notes?: string | null;
           photo_package?: string | null;
+          price_snapshot?: Json | null;
           property_status?: string | null;
           requested_date?: string;
           requested_time?: string;

@@ -16,7 +16,17 @@ import {
   type PhotoPackage,
   type PropertyStatus,
 } from "./booking";
+import {
+  formatEstimatedTotal,
+  formatSnapshotLine,
+  priceCopy,
+  priceNoteLines,
+  priceSnapshotFromJson,
+  tierLabel,
+  type PriceSnapshot,
+} from "./clientPricing";
 import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY } from "./contact";
+import type { Json } from "./database.types";
 import type { Locale } from "./i18n/config";
 import { getBookingCopy } from "./i18n/messages";
 import { BRAND_NAME } from "./site";
@@ -45,6 +55,7 @@ export type RequestDetails = {
   requestedTime: string;
   timeZone: string;
   calendarUrl: string | null;
+  priceSnapshot: PriceSnapshot | null;
 };
 
 export type DetailRow = {
@@ -234,6 +245,7 @@ export function adminDetailRows(details: RequestDetails): DetailRow[] {
 
   rows.push(...bundleDetailRows(details, "de"));
   rows.push(...photoChoiceRows(details, "de"));
+  rows.push(...priceDetailRows(details, "de"));
   if (details.notes) rows.push({ label: "Notizen", value: details.notes });
   if (details.calendarUrl) rows.push({ label: "Kalender", value: details.calendarUrl });
   return rows;
@@ -251,7 +263,31 @@ export function clientDetailRows(details: RequestDetails): DetailRow[] {
   rows.push({ label: locale === "de" ? "Leistung" : "Service", value: serviceLabel(details, locale) });
   rows.push(...bundleDetailRows(details, locale));
   rows.push(...photoChoiceRows(details, locale));
+  rows.push(...priceDetailRows(details, locale));
   return rows;
+}
+
+export function priceDetailRows(details: Pick<RequestDetails, "priceSnapshot">, locale: Locale): DetailRow[] {
+  const snapshot = details.priceSnapshot;
+  if (!snapshot) return [];
+  const copy = priceCopy(locale);
+  const rows: DetailRow[] = [{ label: copy.pricingTier, value: tierLabel(snapshot.tier) }];
+  for (const line of snapshot.lines) {
+    const label = (locale === "de" ? line.labelDe : line.labelEn).trim() || line.itemKey;
+    rows.push({ label, value: formatSnapshotLine(line, locale) });
+  }
+  rows.push({ label: copy.estimatedTotal, value: formatEstimatedTotal(snapshot, locale) });
+  const note = priceNoteText(snapshot, locale);
+  if (note) rows.push({ label: copy.noteLabel, value: note });
+  return rows;
+}
+
+export function priceNoteText(snapshot: PriceSnapshot, locale: Locale) {
+  return priceNoteLines(snapshot, locale).join("\n");
+}
+
+export function requestPriceSnapshot(value: Json | null | undefined) {
+  return priceSnapshotFromJson(value);
 }
 
 const LEGACY_BOOKING_SERVICES: Record<string, BookingService> = {
