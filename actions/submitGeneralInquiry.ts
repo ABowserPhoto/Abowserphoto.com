@@ -1,13 +1,7 @@
 "use server";
 
-import {
-  isBookingTimeSlot,
-  isValidBookingDate,
-  normalizeTime,
-  addOneHour,
-  resolveInquiryCategoryLabel,
-} from "../lib/booking";
-import { getCalendarClient, queryAvailableTimesForDate } from "../lib/googleCalendar";
+import { isBookingTimeSlot, isValidBookingDate, resolveInquiryCategoryLabel } from "../lib/booking";
+import { bookingFailureMessage, placeShootRequest } from "../lib/bookingRequests";
 import { getAuthCopy, getBookingCopy, resolveLocale } from "../lib/i18n/messages";
 import { createClient } from "../lib/supabase/server";
 
@@ -50,44 +44,6 @@ async function getApprovedClient(
   }
 
   return data;
-}
-
-async function createInquiryEvent(
-  data: GeneralInquiryFormData,
-  categoryLabel: string,
-  companyName: string
-) {
-  const { calendar, calendarId, timeZone } = getCalendarClient();
-  const startTime = normalizeTime(data.requestedTime);
-  const endTime = addOneHour(data.requestedTime);
-
-  try {
-    await calendar.events.insert({
-      calendarId,
-      requestBody: {
-        summary: `${categoryLabel} Inquiry - ${companyName}`,
-        description: [
-          `Contact Name: ${data.contactName}`,
-          `Contact Email Address: ${data.contactEmail}`,
-          `Contact Phone Number: ${data.contactPhone}`,
-          "",
-          "Details of the Photoshoot:",
-          data.details,
-        ].join("\n"),
-        start: {
-          dateTime: `${data.requestedDate}T${startTime}`,
-          timeZone,
-        },
-        end: {
-          dateTime: `${data.requestedDate}T${endTime}`,
-          timeZone,
-        },
-      },
-    });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(message);
-  }
 }
 
 export async function submitGeneralInquiry(
@@ -135,31 +91,22 @@ export async function submitGeneralInquiry(
   }
 
   try {
-    const availableTimes = await queryAvailableTimesForDate(requestedDate);
-    if (!availableTimes.includes(requestedTime)) {
-      return {
-        success: false,
-        message: booking.timeUnavailable,
-      };
-    }
-
-    await createInquiryEvent(
-      {
-        categorySlug: data.categorySlug,
-        requestedDate,
-        requestedTime,
-        contactName,
-        contactEmail,
-        contactPhone,
-        details,
-      },
-      categoryLabel,
-      sanitizeLine(client.company_name)
-    );
+    await placeShootRequest({
+      kind: "inquiry",
+      locale,
+      userId: userData.user.id,
+      companyName: sanitizeLine(client.company_name),
+      contactName,
+      contactEmail,
+      accountEmail: userData.user.email ?? null,
+      contactPhone,
+      requestedDate,
+      requestedTime,
+      notes: details,
+      categorySlug: data.categorySlug,
+    });
   } catch (error) {
-    const message = error instanceof Error ? error.message : booking.calendarEventFailed;
-    console.error("Google Calendar inquiry sync failed:", error);
-    return { success: false, message };
+    return { success: false, message: bookingFailureMessage(error, booking) };
   }
 
   return {

@@ -241,6 +241,7 @@
     "timeUnavailable": "That time is no longer available. Please choose another slot.",
     "calendarUnavailable": "We could not check calendar availability.",
     "calendarEventFailed": "We could not create the calendar event.",
+    "saveFailed": "We could not save your request. Please try again.",
     "invalidDate": "Please select a valid date.",
     "notConfigured": "Booking is not configured yet. Add the Supabase project URL and publishable key to enable sign-in and requests.",
     "checkingAccount": "Checking your account...",
