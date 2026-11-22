@@ -457,6 +457,56 @@ test("solingen and application-photo paths never redirect across hosts", async (
   assert.equal(rewriteUrl(nicheSolingen)?.pathname, "/de/hochzeitsfotograf");
 });
 
+test("password reset pages stay on the niche host", async () => {
+  const immo = nicheHostForHostname("immo.abowserphoto.com");
+  assert.ok(immo);
+  assert.equal(isNicheOnHostPath("/de/forgot-password", "real-estate"), true);
+  assert.equal(isNicheOnHostPath("/en/reset-password", "food"), true);
+  assert.equal(nicheLocaleSwitchPath("/de/forgot-password", "en", immo), "/en/forgot-password");
+  assert.equal(nicheLocaleSwitchPath("/en/reset-password", "de", immo), "/de/reset-password");
+  assert.equal(nicheLocaleSwitchPath("/forgot-password", "de", immo), "/de/forgot-password");
+
+  for (const pathname of [
+    "/de/forgot-password",
+    "/en/forgot-password",
+    "/de/reset-password",
+    "/en/reset-password",
+  ]) {
+    const response = await proxy(request("immo.abowserphoto.com", pathname));
+    assert.equal(response.status, 200, pathname);
+    assert.equal(locationUrl(response), null, pathname);
+    assert.equal(rewriteUrl(response), null, pathname);
+    assert.equal(response.headers.get("x-middleware-next"), "1", pathname);
+  }
+
+  const bare = await proxy(request("wedding.abowserphoto.com", "/forgot-password", { language: "de" }));
+  assert.equal(bare.status, 308);
+  const bareLocation = locationUrl(bare);
+  assert.equal(bareLocation?.hostname, "wedding.abowserphoto.com");
+  assert.equal(bareLocation?.pathname, "/de/forgot-password");
+  assert.equal(bareLocation?.protocol, "https:");
+
+  const www = await proxy(request("www.aaronbowser-photography.com", "/en/reset-password"));
+  assert.equal(locationUrl(www), null);
+  assert.equal(rewriteUrl(www), null);
+  assert.equal(www.headers.get("x-middleware-next"), "1");
+
+  const apex = await proxy(request("aaronbowser-photography.com", "/de/reset-password?code=abc"));
+  assert.equal(apex.status, 308);
+  const apexLocation = locationUrl(apex);
+  assert.equal(apexLocation?.hostname, "www.aaronbowser-photography.com");
+  assert.equal(apexLocation?.pathname, "/de/reset-password");
+  assert.equal(apexLocation?.searchParams.get("code"), "abc");
+
+  const recovery = await proxy(request("immo.localhost:3001", "/en/reset-password?code=abc"));
+  const recoveryLocation = locationUrl(recovery);
+  assert.equal(recoveryLocation?.hostname, "immo.localhost");
+  assert.equal(recoveryLocation?.port, "3001");
+  assert.equal(recoveryLocation?.pathname, "/en/reset-password");
+  assert.equal(recoveryLocation?.searchParams.get("code"), null);
+  assert.equal(recoveryLocation?.searchParams.get("error"), "invalid");
+});
+
 test("application photos on the main site canonicalize to the studio host", () => {
   const german = buildCategoryMetadata("de", "studio", "www.aaronbowser-photography.com");
   assert.equal(german.alternates?.canonical, "https://studio.abowserphoto.com/de");

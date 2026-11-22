@@ -57,8 +57,8 @@ export type NicheHost = (typeof NICHE_HOSTS)[number];
 
 /**
  * Pages that are not the niche landing but must still render on that host:
- * legal, account, booking, and this category's own routes (including the
- * commercial portfolio).
+ * legal, account, booking, password reset, and this category's own routes
+ * (including the commercial portfolio).
  */
 const NICHE_SHARED_ROOTS = new Set([
   "impressum",
@@ -67,6 +67,8 @@ const NICHE_SHARED_ROOTS = new Set([
   "account",
   "book",
   "booking",
+  "forgot-password",
+  "reset-password",
 ]);
 
 export function nicheHostForHostname(hostname: string): NicheHost | null {
