@@ -14,7 +14,7 @@
     "account": "Konto",
     "signOut": "Abmelden",
     "contact": "Kontakt",
-    "inquire": "Angebot anfragen",
+    "inquire": "Shooting buchen",
     "viewFullPortfolio": "Vollständiges Portfolio",
     "selectedWork": "Ausgewählte Arbeiten",
     "fullPortfolio": "Vollständiges Portfolio",
@@ -53,23 +53,23 @@
     },
     "real-estate": {
       "title": "Immobilienfotografie Hagen & NRW | Aaron Bowser",
-      "description": "Exposé-Fotos für Makler in Hagen, Solingen & NRW. Studio Hagen. Schnelle Lieferung — Angebot anfragen."
+      "description": "Exposé-Fotos für Makler in Hagen, Solingen & NRW. Studio Hagen. Schnelle Lieferung — Shooting buchen."
     },
     "commercial": {
       "title": "Commercial-Fotograf Hagen & Solingen | Aaron Bowser",
-      "description": "Fashion-, Beauty-, Produkt- & Editorial-Fotografie für Marken. Studios in Hagen (40 m²) und Solingen (100 m²), Einsätze in ganz NRW. Jetzt anfragen."
+      "description": "Fashion-, Beauty-, Produkt- & Editorial-Fotografie für Marken. Studios in Hagen (40 m²) und Solingen (100 m²), Einsätze in ganz NRW. Jetzt Shooting buchen."
     },
     "wedding": {
       "title": "Hochzeitsfotograf Hagen & Solingen | Foto & Video",
-      "description": "Hochzeitsfotos & Hochzeitsvideo in Hagen, Solingen & NRW: Standesamt, freie Trauung, ganzer Tag. Ruhige, filmische Reportage. Jetzt Termin anfragen."
+      "description": "Hochzeitsfotos & Hochzeitsvideo in Hagen, Solingen & NRW: Standesamt, freie Trauung, ganzer Tag. Ruhige, filmische Reportage. Jetzt Shooting buchen."
     },
     "food": {
       "title": "Food-Fotografie Hagen & NRW | Aaron Bowser Photography",
-      "description": "Food- & Getränkefotos für Restaurants, Speisekarten und Produkte – im Studio Hagen, Solingen oder vor Ort in NRW. Jetzt Shooting anfragen."
+      "description": "Food- & Getränkefotos für Restaurants, Speisekarten und Produkte – im Studio Hagen, Solingen oder vor Ort in NRW. Jetzt Shooting buchen."
     },
     "business-portraits": {
       "title": "Businessfotos Hagen & Solingen | Business-Porträts",
-      "description": "Business-Porträts & Teamfotos im Fotostudio Hagen oder in Ihrem Büro. Größere Teams im Studio Solingen. Schnelle Auswahl – jetzt Termin anfragen."
+      "description": "Business-Porträts & Teamfotos im Fotostudio Hagen oder in Ihrem Büro. Größere Teams im Studio Solingen. Schnelle Auswahl – jetzt Shooting buchen."
     },
     "studio": {
       "title": "Bewerbungsfotos & Passbilder Hagen | Fotostudio",
@@ -77,7 +77,7 @@
     },
     "cinematography": {
       "title": "Videograf & Filmproduktion Hagen | Aaron Bowser",
-      "description": "Imagefilme, Brand Films, Hochzeitsvideos & Social Reels aus Hagen für NRW. Konzept, Dreh und Schnitt aus einer Hand. Jetzt Projekt anfragen."
+      "description": "Imagefilme, Brand Films, Hochzeitsvideos & Social Reels aus Hagen für NRW. Konzept, Dreh und Schnitt aus einer Hand. Jetzt Shooting buchen."
     },
     "solingen": {
       "title": "Fotostudio mieten Solingen | 100 m² | Aaron Bowser",
@@ -101,8 +101,8 @@
       "description": "Profil, Buchungen, Foto-Ordner und Rechnungen verwalten."
     },
     "book": {
-      "title": "Anfrage",
-      "description": "Fotoshooting bei Aaron Bowser Photography anfragen."
+      "title": "Shooting buchen",
+      "description": "Shooting buchen bei Aaron Bowser Photography."
     },
     "impressum": {
       "title": "Impressum",
@@ -136,7 +136,7 @@
     "clientAccess": "Kundenzugang",
     "signInToBook": "Anmelden zum Buchen",
     "createYourAccount": "Konto erstellen",
-    "intro": "Für eine Fotoshoot-Anfrage benötigen Sie ein freigeschaltetes Konto. Melden Sie sich an oder erstellen Sie ein Konto.",
+    "intro": "Um ein Shooting zu buchen, benötigen Sie ein freigeschaltetes Konto. Melden Sie sich an oder erstellen Sie ein Konto.",
     "signIn": "Anmelden",
     "signUp": "Registrieren",
     "createAccount": "Konto erstellen",
@@ -213,7 +213,7 @@
     "error": "Buchung konnte nicht gesendet werden.",
     "inquirySuccess": "Ihre Anfrage ist eingegangen. Wir prüfen die Details und melden uns in Kürze.",
     "inquiryError": "Anfrage konnte nicht gesendet werden.",
-    "requestAShoot": "Shoot anfragen",
+    "requestAShoot": "Shooting buchen",
     "realEstateTitle": "Immobilien-Buchung",
     "realEstateIntro": "Teilen Sie Objektdaten und Wunschtermin. Wir bestätigen die Verfügbarkeit in Kürze.",
     "inquiryIntro": "Teilen Sie ein paar Details und Ihren Wunschtermin. Wir bestätigen die Verfügbarkeit in Kürze.",
@@ -237,22 +237,25 @@
     "contactPhone": "Kontakttelefon",
     "services": "Leistungen",
     "photoPackage": "Fotopaket",
+    "photos": "Fotos",
+    "individualPhotos": "Einzelfotos",
+    "selectIndividualPhotos": "Anzahl wählen",
     "selectPhotoPackage": "Fotopaket wählen",
     "additionalDetails": "Weitere Angaben",
     "additionalPlaceholder": "Zugangshinweise, Zeitwünsche oder weiteres Wichtiges",
     "details": "Details zum Fotoshooting",
     "detailsPlaceholder": "Erzählen Sie uns von Shoot, Location und Vorbereitung",
-    "submitRequest": "Anfrage senden",
-    "submitInquiry": "Anfrage senden",
+    "submitRequest": "Shooting buchen",
+    "submitInquiry": "Shooting buchen",
     "submitting": "Wird gesendet...",
     "selectPropertyStatus": "Bitte wählen Sie einen Objektstatus.",
     "selectAtLeastOneService": "Bitte wählen Sie mindestens eine Leistung.",
-    "selectPhotoPackageError": "Bitte wählen Sie ein Fotopaket.",
+    "selectPhotoPackageError": "Bitte wählen Sie ein Fotopaket oder Einzelfotos.",
     "addDetails": "Bitte ergänzen Sie Details zum Fotoshooting.",
     "completeFields": "Bitte füllen Sie alle Pflichtfelder aus.",
     "validEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
     "signInToSubmit": "Bitte melden Sie sich an, um eine Buchung zu senden.",
-    "signInToInquire": "Bitte melden Sie sich an, um eine Anfrage zu senden.",
+    "signInToInquire": "Bitte melden Sie sich an, um ein Shooting zu buchen.",
     "signInToCheck": "Bitte melden Sie sich an, um die Verfügbarkeit zu prüfen.",
     "timeUnavailable": "Diese Uhrzeit ist nicht mehr verfügbar. Bitte wählen Sie einen anderen Slot.",
     "calendarUnavailable": "Kalenderverfügbarkeit konnte nicht geprüft werden.",
@@ -274,7 +277,9 @@
       "Drohne": "Drohne",
       "360 Degree Tour": "360°-Tour",
       "Digital Homestaging": "Digitales Homestaging",
-      "Highlight Video": "Highlight-Video"
+      "Highlight Video": "Highlight-Video",
+      "Walk Thru Video": "Walk-Through-Video",
+      "Agent branding Video": "Makler-Branding-Video"
     }
   }
 }

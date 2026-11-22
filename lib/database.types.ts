@@ -181,6 +181,7 @@ export type Database = {
           kind: string;
           locale: string;
           location_address: string | null;
+          individual_photo_count: number | null;
           notes: string | null;
           photo_package: string | null;
           property_status: string | null;
@@ -205,6 +206,7 @@ export type Database = {
           decided_at?: string | null;
           event_summary: string;
           id?: string;
+          individual_photo_count?: number | null;
           kind: string;
           locale: string;
           location_address?: string | null;
@@ -232,6 +234,7 @@ export type Database = {
           decided_at?: string | null;
           event_summary?: string;
           id?: string;
+          individual_photo_count?: number | null;
           kind?: string;
           locale?: string;
           location_address?: string | null;

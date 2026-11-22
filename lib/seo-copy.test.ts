@@ -56,11 +56,11 @@ test("scan titles and meta descriptions stay within length and match the German 
   });
   assert.equal(
     german.seo.wedding.description,
-    "Hochzeitsfotos & Hochzeitsvideo in Hagen, Solingen & NRW: Standesamt, freie Trauung, ganzer Tag. Ruhige, filmische Reportage. Jetzt Termin anfragen."
+    "Hochzeitsfotos & Hochzeitsvideo in Hagen, Solingen & NRW: Standesamt, freie Trauung, ganzer Tag. Ruhige, filmische Reportage. Jetzt Shooting buchen."
   );
   assert.equal(
     german.seo["business-portraits"].description,
-    "Business-Porträts & Teamfotos im Fotostudio Hagen oder in Ihrem Büro. Größere Teams im Studio Solingen. Schnelle Auswahl – jetzt Termin anfragen."
+    "Business-Porträts & Teamfotos im Fotostudio Hagen oder in Ihrem Büro. Größere Teams im Studio Solingen. Schnelle Auswahl – jetzt Shooting buchen."
   );
   assert.equal(
     german.seo.solingen.description,
@@ -68,15 +68,15 @@ test("scan titles and meta descriptions stay within length and match the German 
   );
   assert.equal(
     german.seo.cinematography.description,
-    "Imagefilme, Brand Films, Hochzeitsvideos & Social Reels aus Hagen für NRW. Konzept, Dreh und Schnitt aus einer Hand. Jetzt Projekt anfragen."
+    "Imagefilme, Brand Films, Hochzeitsvideos & Social Reels aus Hagen für NRW. Konzept, Dreh und Schnitt aus einer Hand. Jetzt Shooting buchen."
   );
   assert.equal(
     german.seo.food.description,
-    "Food- & Getränkefotos für Restaurants, Speisekarten und Produkte – im Studio Hagen, Solingen oder vor Ort in NRW. Jetzt Shooting anfragen."
+    "Food- & Getränkefotos für Restaurants, Speisekarten und Produkte – im Studio Hagen, Solingen oder vor Ort in NRW. Jetzt Shooting buchen."
   );
   assert.equal(
     german.seo.commercial.description,
-    "Fashion-, Beauty-, Produkt- & Editorial-Fotografie für Marken. Studios in Hagen (40 m²) und Solingen (100 m²), Einsätze in ganz NRW. Jetzt anfragen."
+    "Fashion-, Beauty-, Produkt- & Editorial-Fotografie für Marken. Studios in Hagen (40 m²) und Solingen (100 m²), Einsätze in ganz NRW. Jetzt Shooting buchen."
   );
   assert.equal(
     german.seo.studio.description,

@@ -5,12 +5,14 @@ import { submitBooking, type BookingFormData } from "../actions/submitBooking";
 import { immobilienBookingLead, trackGenerateLead } from "../lib/analytics";
 import {
   BOOKING_SERVICES,
+  INDIVIDUAL_PHOTO_COUNTS,
   PHOTO_PACKAGES,
   PROPERTY_STATUSES,
+  getIndividualPhotoLabel,
   getPhotoPackageLabel,
-  isPhotoPackage,
   isPropertyStatus,
   parseBookingServices,
+  resolvePhotoChoice,
   todayInputValue,
   type BookingService,
   type PropertyStatus,
@@ -40,6 +42,8 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
+  const [photoPackage, setPhotoPackage] = useState("");
+  const [individualCount, setIndividualCount] = useState("");
   const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate, locale);
 
   async function handleSignOut() {
@@ -86,8 +90,11 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
       return;
     }
 
-    const photoPackage = String(formData.get("photoPackage") ?? "");
-    if (!isPhotoPackage(photoPackage)) {
+    const photoChoice = resolvePhotoChoice(
+      photoPackage,
+      individualCount === "" ? null : Number(individualCount)
+    );
+    if (!photoChoice) {
       setErrorMessage(booking.selectPhotoPackageError);
       return;
     }
@@ -101,7 +108,8 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
       contactNumber: String(formData.get("contactNumber") ?? ""),
       contactEmail: String(formData.get("contactEmail") ?? ""),
       services,
-      photoPackage,
+      photoPackage: photoChoice.photoPackage,
+      individualPhotoCount: photoChoice.individualPhotoCount,
       additionalDetails: String(formData.get("additionalDetails") ?? ""),
       locale,
     };
@@ -315,23 +323,57 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           </div>
         </fieldset>
 
-        <div>
-          <label
-            htmlFor="photoPackage"
-            className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
-          >
-            {booking.photoPackage} *
-          </label>
-          <DarkSelect
-            id="photoPackage"
-            name="photoPackage"
-            placeholder={booking.selectPhotoPackage}
-            options={PHOTO_PACKAGES.map((photoPackage) => ({
-              value: photoPackage.id,
-              label: getPhotoPackageLabel(photoPackage.id, locale),
-            }))}
-          />
-        </div>
+        <fieldset>
+          <legend className="mb-3 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
+            {booking.photos} *
+          </legend>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="photoPackage"
+                className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+              >
+                {booking.photoPackage}
+              </label>
+              <DarkSelect
+                id="photoPackage"
+                name="photoPackage"
+                placeholder={booking.selectPhotoPackage}
+                value={photoPackage}
+                onChange={(next) => {
+                  setPhotoPackage(next);
+                  if (next) setIndividualCount("");
+                }}
+                options={PHOTO_PACKAGES.map((item) => ({
+                  value: item.id,
+                  label: getPhotoPackageLabel(item.id, locale),
+                }))}
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="individualPhotos"
+                className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+              >
+                {booking.individualPhotos}
+              </label>
+              <DarkSelect
+                id="individualPhotos"
+                name="individualPhotos"
+                placeholder={booking.selectIndividualPhotos}
+                value={individualCount}
+                onChange={(next) => {
+                  setIndividualCount(next);
+                  if (next) setPhotoPackage("");
+                }}
+                options={INDIVIDUAL_PHOTO_COUNTS.map((count) => ({
+                  value: String(count),
+                  label: getIndividualPhotoLabel(count, locale),
+                }))}
+              />
+            </div>
+          </div>
+        </fieldset>
 
         <div>
           <label

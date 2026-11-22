@@ -1,12 +1,15 @@
 import {
   addOneHour,
+  getIndividualPhotoLabel,
   getPhotoPackageLabel,
   isBookingService,
+  isIndividualPhotoCount,
   isPhotoPackage,
   isPropertyStatus,
   normalizeTime,
   zonedDateTimeToUtc,
   type BookingService,
+  type IndividualPhotoCount,
   type PhotoPackage,
   type PropertyStatus,
 } from "./booking";
@@ -30,6 +33,7 @@ export type RequestDetails = {
   propertyStatus: PropertyStatus | null;
   services: BookingService[];
   photoPackage: PhotoPackage | null;
+  individualPhotoCount: IndividualPhotoCount | null;
   categorySlug: string | null;
   notes: string | null;
   requestedDate: string;
@@ -109,6 +113,29 @@ export function photoPackageName(id: PhotoPackage, locale: Locale) {
   return getPhotoPackageLabel(id, locale).replace(/\s+[—–-]\s+.*$/u, "").trim();
 }
 
+export function photoChoiceRows(
+  details: Pick<RequestDetails, "photoPackage" | "individualPhotoCount">,
+  locale: Locale
+): DetailRow[] {
+  if (details.photoPackage) {
+    return [
+      {
+        label: locale === "de" ? "Fotopaket" : "Photo package",
+        value: photoPackageName(details.photoPackage, locale),
+      },
+    ];
+  }
+  if (details.individualPhotoCount) {
+    return [
+      {
+        label: locale === "de" ? "Einzelfotos" : "Individual photos",
+        value: getIndividualPhotoLabel(details.individualPhotoCount, locale),
+      },
+    ];
+  }
+  return [];
+}
+
 export function formatClock(value: string) {
   const [hours = "00", minutes = "00"] = normalizeTime(value).split(":");
   return `${hours}:${minutes}`;
@@ -181,8 +208,7 @@ export function adminDetailRows(details: RequestDetails): DetailRow[] {
     rows.push({ label: "Objektstatus", value: copy.propertyStatuses[details.propertyStatus] });
   }
 
-  const pack = details.photoPackage ? photoPackageName(details.photoPackage, "de") : null;
-  if (pack) rows.push({ label: "Fotopaket", value: pack });
+  rows.push(...photoChoiceRows(details, "de"));
   if (details.notes) rows.push({ label: "Notizen", value: details.notes });
   if (details.calendarUrl) rows.push({ label: "Kalender", value: details.calendarUrl });
   return rows;
@@ -198,6 +224,7 @@ export function clientDetailRows(details: RequestDetails): DetailRow[] {
   ];
   if (details.address) rows.push({ label: locale === "de" ? "Adresse" : "Address", value: details.address });
   rows.push({ label: locale === "de" ? "Leistung" : "Service", value: serviceLabel(details, locale) });
+  rows.push(...photoChoiceRows(details, locale));
   return rows;
 }
 
@@ -211,4 +238,8 @@ export function propertyStatusFromRow(value: string | null) {
 
 export function photoPackageFromRow(value: string | null) {
   return value && isPhotoPackage(value) ? value : null;
+}
+
+export function individualPhotoCountFromRow(value: number | null) {
+  return value != null && isIndividualPhotoCount(value) ? value : null;
 }

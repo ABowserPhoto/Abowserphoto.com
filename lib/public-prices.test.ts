@@ -117,6 +117,8 @@ test("removed public prices stay out of metadata, packages, and structured data"
       const label = getPhotoPackageLabel(photoPackage.id, locale);
       assert.equal(label.includes("€"), false);
       assert.equal(/\d+\s*€|€\s*\d+/.test(label), false);
+      assert.equal(/preis|price|anfrage|request/i.test(label), false);
+      assert.match(label, locale === "de" ? /^\d+-Foto-Paket$/ : /^\d+ photo package$/);
     }
 
     const business = getPageFaqs("business-portraits", locale)

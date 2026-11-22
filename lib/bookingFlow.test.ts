@@ -4,6 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { createApprovalToken, hashApprovalToken, isApprovalToken } from "./approvalToken";
+import { getIndividualPhotoLabel, getPhotoPackageLabel, resolvePhotoChoice } from "./booking";
 import { photoPackageName, type RequestDetails } from "./bookingDetails";
 import { respondToDecisionPost } from "./bookingDecisionHttp";
 import { renderDecisionPage } from "./bookingDecisionPage";
@@ -29,6 +30,7 @@ const details: RequestDetails = {
   propertyStatus: "Empty",
   services: ["Interior", "Drohne"],
   photoPackage: "bis-5-zimmer",
+  individualPhotoCount: null,
   categorySlug: null,
   notes: "Bitte klingeln",
   requestedDate: "2026-11-22",
@@ -60,9 +62,32 @@ test("calendar requests are marked ANFRAGE until they are confirmed", () => {
 });
 
 test("package names used in mail do not carry a price", () => {
-  assert.equal(photoPackageName("bis-5-zimmer", "de"), "Bis 5 Zimmer (Min. 10 Fotos)");
-  assert.equal(photoPackageName("bis-5-zimmer", "en"), "Up to 5 rooms (min. 10 photos)");
-  assert.equal(money(photoPackageName("bis-5-zimmer", "de")), false);
+  assert.equal(photoPackageName("bis-5-zimmer", "de"), "10-Foto-Paket");
+  assert.equal(photoPackageName("bis-5-zimmer", "en"), "10 photo package");
+  assert.equal(photoPackageName("bis-7-zimmer", "de"), "15-Foto-Paket");
+  assert.equal(photoPackageName("bis-10-zimmer", "en"), "25 photo package");
+  assert.equal(photoPackageName("30-fotos", "de"), "30-Foto-Paket");
+  assert.equal(photoPackageName("40-fotos", "en"), "40 photo package");
+  assert.equal(photoPackageName("50-fotos", "de"), "50-Foto-Paket");
+  assert.equal(money(getPhotoPackageLabel("bis-5-zimmer", "de")), false);
+  assert.equal(/preis|price|anfrage|request|€/i.test(photoPackageName("bis-5-zimmer", "de")), false);
+});
+
+test("a package and an individual quantity cannot be selected together", () => {
+  assert.deepEqual(resolvePhotoChoice("bis-7-zimmer", null), {
+    photoPackage: "bis-7-zimmer",
+    individualPhotoCount: null,
+  });
+  assert.deepEqual(resolvePhotoChoice(null, 3), {
+    photoPackage: null,
+    individualPhotoCount: 3,
+  });
+  assert.equal(resolvePhotoChoice("bis-7-zimmer", 3), null);
+  assert.equal(resolvePhotoChoice("", null), null);
+  assert.equal(resolvePhotoChoice(null, 0), null);
+  assert.equal(resolvePhotoChoice(null, 10), null);
+  assert.equal(getIndividualPhotoLabel(1, "en"), "1 photo");
+  assert.equal(getIndividualPhotoLabel(9, "de"), "9 Fotos");
 });
 
 test("the studio email asks Aaron to approve and does not publish a price", () => {
@@ -79,7 +104,39 @@ test("the studio email asks Aaron to approve and does not publish a price", () =
   assert.match(message.html, /\/api\/booking\/decline\?token=/);
   assert.match(message.text, /Annehmen:/);
   assert.match(message.text, /Ablehnen:/);
+  assert.match(message.text, /10-Foto-Paket/);
+  assert.match(message.text, /Innenaufnahmen/);
   assert.equal(money(message.html + message.text), false);
+});
+
+test("individual photos and the new video services are named in both emails", () => {
+  const individual: RequestDetails = {
+    ...details,
+    photoPackage: null,
+    individualPhotoCount: 3,
+    services: ["Interior", "Walk Thru Video", "Agent branding Video"],
+  };
+  const studio = buildBusinessRequestEmail(individual, "d".repeat(43));
+  const client = buildClientReceivedEmail(individual);
+  const confirmed = buildClientConfirmedEmail(individual);
+  const clientEn = buildClientReceivedEmail({ ...individual, locale: "en" });
+  assert.match(studio.text, /Einzelfotos/);
+  assert.match(studio.text, /3 Fotos/);
+  assert.match(studio.text, /Walk-Through-Video/);
+  assert.match(studio.text, /Makler-Branding-Video/);
+  assert.doesNotMatch(studio.text, /Fotopaket/);
+  assert.match(client.text, /Einzelfotos/);
+  assert.match(client.text, /3 Fotos/);
+  assert.match(client.text, /Walk-Through-Video/);
+  assert.match(client.text, /Makler-Branding-Video/);
+  assert.match(confirmed.text, /Einzelfotos/);
+  assert.match(confirmed.text, /3 Fotos/);
+  assert.match(confirmed.text, /Walk-Through-Video/);
+  assert.match(clientEn.text, /Individual photos/);
+  assert.match(clientEn.text, /3 photos/);
+  assert.match(clientEn.text, /Walk Thru Video/);
+  assert.match(clientEn.text, /Agent branding Video/);
+  assert.equal(money(studio.text + client.text + clientEn.text), false);
 });
 
 test("the client first hears that the request was received, not that it is confirmed", () => {
@@ -91,6 +148,8 @@ test("the client first hears that the request was received, not that it is confi
   assert.match(german.text, /info@aaronbowser-photography.com/);
   assert.doesNotMatch(german.html, /\/api\/booking\/approve/);
   assert.doesNotMatch(german.text, /Bitte klingeln/);
+  assert.match(german.text, /10-Foto-Paket/);
+  assert.match(english.text, /10 photo package/);
   assert.equal(english.subject, "Request received");
   assert.match(english.text, /not a booking confirmation/);
   assert.equal(money(german.html + german.text + english.html + english.text), false);
