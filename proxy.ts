@@ -13,6 +13,7 @@ import { localizePublicPath } from "./lib/routes";
 import { renderNicheRobots, renderNicheSitemap } from "./lib/niche-crawl";
 import { isNicheOnHostPath, nicheHostForHostname } from "./lib/subdomains";
 import { copySessionOntoResponse, updateSession } from "./lib/supabase/middleware";
+import { redirectAfterRecoveryExchange } from "./lib/supabase/recovery";
 
 const PUBLIC_FILE = /\.[^/]+$/;
 const RESERVED_ROOT = new Set(["api", "auth", "_next"]);
@@ -141,6 +142,9 @@ export async function proxy(req: NextRequest) {
     }
     return NextResponse.redirect(redirectUrl, 308);
   }
+
+  const recoveryRedirect = await redirectAfterRecoveryExchange(req);
+  if (recoveryRedirect) return recoveryRedirect;
 
   const supabaseResponse = await updateSession(req);
 

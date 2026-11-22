@@ -1,11 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { notifyAdminOfRegistration } from "../../actions/notifyAdminOfRegistration";
 import { trackSignUp } from "../../lib/analytics";
 import { BOOKING_QUERY_KEY, BOOKING_QUERY_VALUE } from "../../lib/booking";
 import { useDictionary, useLocale } from "../../lib/i18n/LocaleProvider";
+import { forgotPasswordPath } from "../../lib/passwordReset";
 import { createClient } from "../../lib/supabase/client";
+import { authTextLinkClassName } from "./fieldStyles";
 
 const inputClassName =
   "w-full rounded-none border border-gray-800 bg-transparent px-4 py-3 text-sm text-[#F4F1ED] outline-none transition-colors duration-300 placeholder:text-[#F4F1ED]/40 focus:border-[#F4F1ED]/60";
@@ -313,6 +316,11 @@ export default function ClientAuth({
               onChange={(event) => setPassword(event.target.value)}
               className={inputClassName}
             />
+            {mode === "sign-in" ? (
+              <Link href={forgotPasswordPath(locale)} className={`mt-3 ${authTextLinkClassName}`}>
+                {auth.forgotPassword}
+              </Link>
+            ) : null}
           </div>
 
           {errorMessage ? (

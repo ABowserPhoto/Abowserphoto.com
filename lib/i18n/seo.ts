@@ -12,6 +12,7 @@ import {
   OG_IMAGE_WIDTH,
   SITE_URL,
 } from "../site";
+import { requestOrigin } from "../passwordReset";
 import type { Locale } from "./config";
 import { withLocale } from "./config";
 import { getDictionarySync } from "./getDictionary";
@@ -289,5 +290,39 @@ export function buildLegalMetadata(
       languages: languageAlternates((entry) => withLocale(`/${key}`, entry)),
     },
     openGraph: openGraphFor(locale, path, `${seo.title} | ${dict.brand}`, seo.description),
+  };
+}
+
+type PasswordFlow = "forgot-password" | "reset-password";
+
+function passwordFlowCopy(locale: Locale, flow: PasswordFlow) {
+  const auth = getDictionarySync(locale).auth;
+  switch (flow) {
+    case "forgot-password":
+      return { title: auth.forgotPasswordTitle, description: auth.forgotPasswordIntro };
+    case "reset-password":
+      return { title: auth.resetPasswordTitle, description: auth.resetPasswordIntro };
+    default: {
+      const unreachable: never = flow;
+      return unreachable;
+    }
+  }
+}
+
+/** Noindex. Canonical stays on the host that served the page. */
+export function buildPasswordFlowMetadata(
+  locale: Locale,
+  flow: PasswordFlow,
+  requestHost?: string | null
+): Metadata {
+  const copy = passwordFlowCopy(locale, flow);
+  const path = withLocale(`/${flow}`, locale);
+  const host = requestHost?.split(",")[0]?.trim();
+  const canonical = host ? `${requestOrigin(host)}${path}` : absoluteUrl(path);
+  return {
+    title: copy.title,
+    description: copy.description,
+    robots: { index: false, follow: false },
+    alternates: { canonical },
   };
 }
