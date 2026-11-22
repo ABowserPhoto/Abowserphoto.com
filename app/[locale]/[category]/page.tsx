@@ -113,6 +113,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       title: service.title,
       description: service.description,
       imageUrl,
+      imageAlt: slug === "food" && imageUrl ? getImageAlt(imageUrl, locale) : null,
       imageWidth: imageDimensions?.width ?? null,
       imageHeight: imageDimensions?.height ?? null,
       mediaType: baseService?.mediaType,

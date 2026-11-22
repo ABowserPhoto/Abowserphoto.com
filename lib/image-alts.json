@@ -500,28 +500,12 @@
     "en": "Ninth wedding photograph of Mariam."
   },
   "/food/hero/food-hero-1-desktop.jpg": {
-    "de": "Überbackene Gemüsepizza auf weißem Teller oben rechts auf einer dunklen Schieferplatte",
-    "en": "Baked vegetable pizza on a white plate at the top right of a dark slate surface"
+    "de": "Sushirolle mit Lachs und scharfer Sauce auf schwarzem Schiefer, darüber die Flamme eines Brenners, mit Ingwer und Wasabi",
+    "en": "Salmon sushi roll with spicy sauce on black slate, a torch flame above it, with ginger and wasabi"
   },
   "/food/hero/food-hero-1-mobile.jpg": {
-    "de": "Überbackene Gemüsepizza auf weißem Teller unten links auf dunkler Schieferfläche",
-    "en": "Baked vegetable pizza on a white plate at the lower left of a dark slate surface"
-  },
-  "/food/hero/food-hero-2-desktop.jpg": {
-    "de": "Zwei Pizzen auf weißen Tellern rechts auf dunklem Schiefer mit viel freier Fläche",
-    "en": "Two pizzas on white plates at the right of a dark slate surface, with open space beside them"
-  },
-  "/food/hero/food-hero-2-mobile.jpg": {
-    "de": "Pizzen auf weißen Tellern am unteren Bildrand einer dunklen Schieferplatte",
-    "en": "Pizzas on white plates along the bottom edge of a dark slate surface"
-  },
-  "/food/hero/food-hero-3-desktop.jpg": {
-    "de": "Gemüsepizza auf weißem Teller unten rechts auf dunkler Schieferplatte",
-    "en": "Vegetable pizza on a white plate at the lower right of a dark slate surface"
-  },
-  "/food/hero/food-hero-3-mobile.jpg": {
-    "de": "Pizza auf weißem Teller im unteren Bereich einer dunklen Schieferfläche",
-    "en": "Pizza on a white plate in the lower part of a dark slate surface"
+    "de": "Nahaufnahme einer flambierten Sushirolle mit scharfer Sauce auf Schiefer, Wasabi im Vordergrund und die Flamme darüber",
+    "en": "Close-up of a torched sushi roll with spicy sauce on slate, wasabi in front and the flame above"
   },
   "/food/portfolio/food-platter-falafel.jpg": {
     "de": "Falafel mit Joghurtdip, Granatapfelkernen, Salat und Zitrone auf Holzplatte",
@@ -543,25 +527,65 @@
     "de": "Fünf bunte Bowls in Holzschalen von oben fotografiert",
     "en": "Five colourful bowls in wooden dishes, photographed from above"
   },
-  "/food/portfolio/food-pizza-spread.jpg": {
-    "de": "Pizzen, Salat und Pasta von oben auf einem gedeckten Tisch",
-    "en": "Pizzas, salad and pasta from above on a set table"
+  "/food/portfolio/food-breakfast-spread.jpg": {
+    "de": "Frühstückstisch von oben mit Croissant, Brot, Brezel, Pfannkuchen mit Obst, Orangensaft, Apfelcrumble, Salat und einem roten Gericht auf weißem Holz",
+    "en": "Breakfast table from above with croissant, bread, a pretzel, pancakes with fruit, orange juice, apple crumble, salad and a red dish on white wood"
   },
   "/food/portfolio/food-bowls-burger-spread.jpg": {
     "de": "Bowls, Burger und Beilagen auf dunklem Tisch von oben",
     "en": "Bowls, burgers and sides from above on a dark table"
   },
-  "/food/portfolio/food-pizza-closeup.jpg": {
-    "de": "Nahaufnahme einer goldbraun gebackenen Pizza mit Käse",
-    "en": "Close-up of a golden-brown baked pizza with cheese"
+  "/food/portfolio/food-dessert-waffle-donuts.jpg": {
+    "de": "Waffel mit Marshmallows und Schokolade, Donuts, Cheesecake und Milchshake auf hellblauem Tisch, dazwischen Beeren",
+    "en": "Waffle with marshmallows and chocolate, donuts, cheesecake and a milkshake on a light blue table, with berries between them"
+  },
+  "/food/portfolio/food-dim-sum-steamers.jpg": {
+    "de": "Bunte Teigtaschen in Bambusdämpfern auf rotem Holztisch, von oben",
+    "en": "Colourful dumplings in bamboo steamers on a red wooden table, photographed from above"
+  },
+  "/food/portfolio/food-donut-plate.jpg": {
+    "de": "Donuts auf einem türkisen Teller am linken Bildrand, der Rest eine hellblaue Tischfläche",
+    "en": "Donuts on a turquoise plate at the left edge, the rest a light blue table"
+  },
+  "/food/portfolio/food-fries-four-trays.jpg": {
+    "de": "Vier Frittenschalen von oben auf grauem Stein: Fleisch mit Gurke und Feta, Guacamole mit Tomate, braune Sauce mit Sahne und Nüssen, und Süßkartoffelpommes",
+    "en": "Four trays of fries from above on grey stone: meat with cucumber and feta, guacamole with tomato, brown sauce with cream and nuts, and sweet potato fries"
+  },
+  "/food/portfolio/food-fries-loaded.jpg": {
+    "de": "Nahaufnahme von Fritten mit Käsesauce, Jalapeños und Röstzwiebeln in einer Frittenküche-Schale, darum weitere belegte Fritten",
+    "en": "Close-up of fries with cheese sauce, jalapeños and crisp onions in a Frittenküche tray, with more loaded fries around it"
+  },
+  "/food/portfolio/food-fries-three-trays.jpg": {
+    "de": "Drei Frittenschalen von oben auf grauem Stein: Fleisch mit Gurke, Feta und Sauce, Süßkartoffelpommes, und braune Sauce mit Sahne und Nüssen",
+    "en": "Three trays of fries from above on grey stone: meat with cucumber, feta and sauce, sweet potato fries, and brown sauce with cream and nuts"
+  },
+  "/food/portfolio/food-noodle-salad-bowl.jpg": {
+    "de": "Vietnamesische Nudelsalat-Schale mit Reisnudeln, Gurke, Karotten, Sprossen, Kräutern und Seetang auf grauem Stein",
+    "en": "Vietnamese noodle salad bowl with rice noodles, cucumber, carrots, sprouts, herbs and seaweed on grey stone"
   },
   "/food/portfolio/food-salad-pasta-table.jpg": {
-    "de": "Salat mit Rindfleisch und Parmesan, Pasta und Pizza auf Holztisch",
-    "en": "Beef and parmesan salad, pasta and pizza on a wooden table"
+    "de": "Salat mit Rindfleisch und Parmesan, Pasta und überbackene Nudeln auf Holztisch",
+    "en": "Beef and parmesan salad, pasta and baked pasta on a wooden table"
+  },
+  "/food/portfolio/food-shrimp-salad-bowl.jpg": {
+    "de": "Garnelensalat mit Gurke, Erdnüssen, knusprigen Crackern und roten Chilifäden in dunkler Schale auf grauem Stein",
+    "en": "Prawn salad with cucumber, peanuts, crisp crackers and red chilli threads in a dark bowl on grey stone"
   },
   "/food/portfolio/food-spaghetti-pomodoro.jpg": {
     "de": "Spaghetti Pomodoro mit Basilikum, daneben Brot und überbackene Pasta",
     "en": "Spaghetti pomodoro with basil, beside bread and baked pasta"
+  },
+  "/food/portfolio/food-spicy-noodle-soup.jpg": {
+    "de": "Scharfe Nudelsuppe mit Fleischbällchen, Rind und hellen Wurstscheiben in schwarzer Schale, daneben Kräuter, Limette und Sprossen auf grauem Stein",
+    "en": "Spicy noodle soup with meatballs, beef and pale sausage slices in a black bowl, with herbs, lime and sprouts on grey stone"
+  },
+  "/food/portfolio/food-sushi-boat.jpg": {
+    "de": "Sushi und Lachs auf einem Holzboot, umgeben von blauen Tellern mit Nigiri und Maki auf einem Holztisch",
+    "en": "Sushi and salmon on a wooden boat, surrounded by blue plates of nigiri and maki on a wooden table"
+  },
+  "/food/portfolio/food-sushi-roll-torch.jpg": {
+    "de": "Sushirolle mit Lachs und scharfer Sauce auf schwarzem Schiefer, darüber die Flamme eines Brenners, mit Ingwer und Wasabi",
+    "en": "Salmon sushi roll with spicy sauce on black slate, a torch flame above it, with ginger and wasabi"
   },
   "/food/portfolio/food-asian-salad.jpg": {
     "de": "Asiatischer Kohl-Karotten-Salat mit Frühlingszwiebeln in roter Schale auf Schiefer, im Hintergrund Edamame und Getränke",
@@ -583,9 +607,13 @@
     "de": "Gedeckter Tisch mit asiatischen Gerichten, Limetten und Saucen von oben",
     "en": "A set table of Asian dishes, limes and sauces, photographed from above"
   },
-  "/food/portfolio/food-platter-spread.jpg": {
-    "de": "Pizza, Falafel, Salate und Sushi auf Holzbrettern von oben",
-    "en": "Pizza, falafel, salads and sushi on wooden boards, photographed from above"
+  "/food/portfolio/food-veggie-momo.jpg": {
+    "de": "Gemüse-Momo im Kreis um eine Schale mit oranger Sauce, daneben Gewürze, Chutneys und ein Mango-Lassi auf dunklem Holz",
+    "en": "Vegetable momos in a circle around a bowl of orange sauce, with spices, chutneys and a mango lassi on dark wood"
+  },
+  "/food/portfolio/food-waffle-candy.jpg": {
+    "de": "Schokoladenwaffel mit Marshmallows und bunten Streuseln auf rosa Teller, daneben Donuts, Beeren und ein Zuckerstreuer auf hellblauem Tisch",
+    "en": "Chocolate waffle with marshmallows and colourful sprinkles on a pink plate, beside donuts, berries and a sugar shaker on a light blue table"
   },
   "/food/portfolio/food-chicken-fried-closeup.jpg": {
     "de": "Nahaufnahme von knusprigem Brathähnchen, dahinter Taboulé-Salat",
