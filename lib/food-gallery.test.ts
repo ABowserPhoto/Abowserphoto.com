@@ -12,31 +12,34 @@ const FOOD_PORTFOLIO = [
   "/food/portfolio/food-bowl-kofta-feta.jpg",
   "/food/portfolio/food-bowls-burger-spread.jpg",
   "/food/portfolio/food-bowls-overhead.jpg",
+  "/food/portfolio/food-breakfast-spread.jpg",
   "/food/portfolio/food-chicken-fried-closeup.jpg",
   "/food/portfolio/food-chicken-fried-salt.jpg",
-  "/food/portfolio/food-pizza-closeup.jpg",
-  "/food/portfolio/food-pizza-spread.jpg",
+  "/food/portfolio/food-dessert-waffle-donuts.jpg",
+  "/food/portfolio/food-dim-sum-steamers.jpg",
+  "/food/portfolio/food-donut-plate.jpg",
+  "/food/portfolio/food-fries-four-trays.jpg",
+  "/food/portfolio/food-fries-loaded.jpg",
+  "/food/portfolio/food-fries-three-trays.jpg",
+  "/food/portfolio/food-noodle-salad-bowl.jpg",
   "/food/portfolio/food-platter-falafel.jpg",
-  "/food/portfolio/food-platter-spread.jpg",
   "/food/portfolio/food-salad-pasta-table.jpg",
+  "/food/portfolio/food-shrimp-salad-bowl.jpg",
   "/food/portfolio/food-spaghetti-pomodoro.jpg",
+  "/food/portfolio/food-spicy-noodle-soup.jpg",
+  "/food/portfolio/food-sushi-boat.jpg",
+  "/food/portfolio/food-sushi-roll-torch.jpg",
   "/food/portfolio/food-tempura-curry.jpg",
   "/food/portfolio/food-tempura-shrimp.jpg",
+  "/food/portfolio/food-veggie-momo.jpg",
+  "/food/portfolio/food-waffle-candy.jpg",
 ];
 
 const GERMAN_ALTS: Record<string, string> = {
   "/food/hero/food-hero-1-desktop.jpg":
-    "Überbackene Gemüsepizza auf weißem Teller oben rechts auf einer dunklen Schieferplatte",
+    "Sushirolle mit Lachs und scharfer Sauce auf schwarzem Schiefer, darüber die Flamme eines Brenners, mit Ingwer und Wasabi",
   "/food/hero/food-hero-1-mobile.jpg":
-    "Überbackene Gemüsepizza auf weißem Teller unten links auf dunkler Schieferfläche",
-  "/food/hero/food-hero-2-desktop.jpg":
-    "Zwei Pizzen auf weißen Tellern rechts auf dunklem Schiefer mit viel freier Fläche",
-  "/food/hero/food-hero-2-mobile.jpg":
-    "Pizzen auf weißen Tellern am unteren Bildrand einer dunklen Schieferplatte",
-  "/food/hero/food-hero-3-desktop.jpg":
-    "Gemüsepizza auf weißem Teller unten rechts auf dunkler Schieferplatte",
-  "/food/hero/food-hero-3-mobile.jpg":
-    "Pizza auf weißem Teller im unteren Bereich einer dunklen Schieferfläche",
+    "Nahaufnahme einer flambierten Sushirolle mit scharfer Sauce auf Schiefer, Wasabi im Vordergrund und die Flamme darüber",
   "/food/portfolio/food-platter-falafel.jpg":
     "Falafel mit Joghurtdip, Granatapfelkernen, Salat und Zitrone auf Holzplatte",
   "/food/portfolio/food-chicken-fried-salt.jpg":
@@ -46,13 +49,35 @@ const GERMAN_ALTS: Record<string, string> = {
   "/food/portfolio/food-bowl-kofta-feta.jpg":
     "Holzschale mit Köfte, Feta, Karotten und Nüssen auf grauem Steintisch",
   "/food/portfolio/food-bowls-overhead.jpg": "Fünf bunte Bowls in Holzschalen von oben fotografiert",
-  "/food/portfolio/food-pizza-spread.jpg": "Pizzen, Salat und Pasta von oben auf einem gedeckten Tisch",
+  "/food/portfolio/food-breakfast-spread.jpg":
+    "Frühstückstisch von oben mit Croissant, Brot, Brezel, Pfannkuchen mit Obst, Orangensaft, Apfelcrumble, Salat und einem roten Gericht auf weißem Holz",
   "/food/portfolio/food-bowls-burger-spread.jpg": "Bowls, Burger und Beilagen auf dunklem Tisch von oben",
-  "/food/portfolio/food-pizza-closeup.jpg": "Nahaufnahme einer goldbraun gebackenen Pizza mit Käse",
+  "/food/portfolio/food-dessert-waffle-donuts.jpg":
+    "Waffel mit Marshmallows und Schokolade, Donuts, Cheesecake und Milchshake auf hellblauem Tisch, dazwischen Beeren",
+  "/food/portfolio/food-dim-sum-steamers.jpg":
+    "Bunte Teigtaschen in Bambusdämpfern auf rotem Holztisch, von oben",
+  "/food/portfolio/food-donut-plate.jpg":
+    "Donuts auf einem türkisen Teller am linken Bildrand, der Rest eine hellblaue Tischfläche",
+  "/food/portfolio/food-fries-four-trays.jpg":
+    "Vier Frittenschalen von oben auf grauem Stein: Fleisch mit Gurke und Feta, Guacamole mit Tomate, braune Sauce mit Sahne und Nüssen, und Süßkartoffelpommes",
+  "/food/portfolio/food-fries-loaded.jpg":
+    "Nahaufnahme von Fritten mit Käsesauce, Jalapeños und Röstzwiebeln in einer Frittenküche-Schale, darum weitere belegte Fritten",
+  "/food/portfolio/food-fries-three-trays.jpg":
+    "Drei Frittenschalen von oben auf grauem Stein: Fleisch mit Gurke, Feta und Sauce, Süßkartoffelpommes, und braune Sauce mit Sahne und Nüssen",
+  "/food/portfolio/food-noodle-salad-bowl.jpg":
+    "Vietnamesische Nudelsalat-Schale mit Reisnudeln, Gurke, Karotten, Sprossen, Kräutern und Seetang auf grauem Stein",
   "/food/portfolio/food-salad-pasta-table.jpg":
-    "Salat mit Rindfleisch und Parmesan, Pasta und Pizza auf Holztisch",
+    "Salat mit Rindfleisch und Parmesan, Pasta und überbackene Nudeln auf Holztisch",
+  "/food/portfolio/food-shrimp-salad-bowl.jpg":
+    "Garnelensalat mit Gurke, Erdnüssen, knusprigen Crackern und roten Chilifäden in dunkler Schale auf grauem Stein",
   "/food/portfolio/food-spaghetti-pomodoro.jpg":
     "Spaghetti Pomodoro mit Basilikum, daneben Brot und überbackene Pasta",
+  "/food/portfolio/food-spicy-noodle-soup.jpg":
+    "Scharfe Nudelsuppe mit Fleischbällchen, Rind und hellen Wurstscheiben in schwarzer Schale, daneben Kräuter, Limette und Sprossen auf grauem Stein",
+  "/food/portfolio/food-sushi-boat.jpg":
+    "Sushi und Lachs auf einem Holzboot, umgeben von blauen Tellern mit Nigiri und Maki auf einem Holztisch",
+  "/food/portfolio/food-sushi-roll-torch.jpg":
+    "Sushirolle mit Lachs und scharfer Sauce auf schwarzem Schiefer, darüber die Flamme eines Brenners, mit Ingwer und Wasabi",
   "/food/portfolio/food-asian-salad.jpg":
     "Asiatischer Kohl-Karotten-Salat mit Frühlingszwiebeln in roter Schale auf Schiefer, im Hintergrund Edamame und Getränke",
   "/food/portfolio/food-asian-spread-1.jpg":
@@ -61,7 +86,10 @@ const GERMAN_ALTS: Record<string, string> = {
   "/food/portfolio/food-tempura-curry.jpg": "Tempura und rotes Curry mit Reis in dunkler Schale",
   "/food/portfolio/food-asian-spread-2.jpg":
     "Gedeckter Tisch mit asiatischen Gerichten, Limetten und Saucen von oben",
-  "/food/portfolio/food-platter-spread.jpg": "Pizza, Falafel, Salate und Sushi auf Holzbrettern von oben",
+  "/food/portfolio/food-veggie-momo.jpg":
+    "Gemüse-Momo im Kreis um eine Schale mit oranger Sauce, daneben Gewürze, Chutneys und ein Mango-Lassi auf dunklem Holz",
+  "/food/portfolio/food-waffle-candy.jpg":
+    "Schokoladenwaffel mit Marshmallows und bunten Streuseln auf rosa Teller, daneben Donuts, Beeren und ein Zuckerstreuer auf hellblauem Tisch",
   "/food/portfolio/food-chicken-fried-closeup.jpg":
     "Nahaufnahme von knusprigem Brathähnchen, dahinter Taboulé-Salat",
 };
@@ -83,7 +111,12 @@ test("food portfolio is Aaron's photographs at their own size", () => {
     assert.equal(image.alt, GERMAN_ALTS[image.src]);
     assert.equal(typeof image.width, "number");
     assert.equal(typeof image.height, "number");
-    assert.notEqual(image.width, image.height);
+    // The momo plate was delivered as a square. Every other frame keeps its own ratio.
+    if (image.src === "/food/portfolio/food-veggie-momo.jpg") {
+      assert.equal(image.width, image.height);
+    } else {
+      assert.notEqual(image.width, image.height);
+    }
   }
 
   for (let index = 0; index < english.length; index += 1) {
@@ -94,25 +127,17 @@ test("food portfolio is Aaron's photographs at their own size", () => {
   }
 });
 
-test("food hero rotates three art-directed frames", () => {
+test("food hero is one art-directed frame of the torched sushi roll", () => {
   const german = readHeroMedia("food", "de");
   const english = readHeroMedia("food", "en");
 
   assert.deepEqual(
     german.map((item) => item.url),
-    [
-      "/food/hero/food-hero-1-desktop.jpg",
-      "/food/hero/food-hero-2-desktop.jpg",
-      "/food/hero/food-hero-3-desktop.jpg",
-    ]
+    ["/food/hero/food-hero-1-desktop.jpg"]
   );
   assert.deepEqual(
     german.map((item) => item.mobileUrl),
-    [
-      "/food/hero/food-hero-1-mobile.jpg",
-      "/food/hero/food-hero-2-mobile.jpg",
-      "/food/hero/food-hero-3-mobile.jpg",
-    ]
+    ["/food/hero/food-hero-1-mobile.jpg"]
   );
 
   for (const item of german) {
@@ -121,12 +146,26 @@ test("food hero rotates three art-directed frames", () => {
     assert.equal(item.mobileAlt, GERMAN_ALTS[item.mobileUrl ?? ""]);
   }
 
-  assert.notEqual(english[1]?.alt, german[1]?.alt);
-  assert.notEqual(english[1]?.mobileAlt, german[1]?.mobileAlt);
+  assert.notEqual(english[0]?.alt, german[0]?.alt);
+  assert.notEqual(english[0]?.mobileAlt, german[0]?.mobileAlt);
 
   const portal = readPortalHeroSets("de").food;
   assert.deepEqual(portal.images, german.map((item) => item.url));
   assert.equal(portal.videoUrl, null);
+});
+
+test("food photography does not show a pizza", () => {
+  const texts = [
+    ...readPortfolio("food", "de").flatMap((image) => [image.src, image.alt]),
+    ...readPortfolio("food", "en").map((image) => image.alt),
+    ...readHeroMedia("food", "de").flatMap((item) => [item.url, item.mobileUrl ?? "", item.alt, item.mobileAlt ?? ""]),
+    ...readHeroMedia("food", "en").flatMap((item) => [item.alt, item.mobileAlt ?? ""]),
+    ...categoryContentMap.food.services.flatMap((service) => [service.title, service.image ?? ""]),
+  ];
+
+  for (const text of texts) {
+    assert.equal(/pizza/i.test(text), false, text);
+  }
 });
 
 test("food category content no longer points at stock photography", () => {

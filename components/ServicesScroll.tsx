@@ -24,6 +24,7 @@ export type ServiceScrollItem = {
   title: string;
   description: string;
   imageUrl: string | null;
+  imageAlt?: string | null;
   mediaType?: "embed" | "video";
   embedUrl?: string;
   videoUrl?: string;
@@ -148,7 +149,7 @@ function ServiceImageLayer({
       ) : service.imageUrl ? (
         <Image
           src={service.imageUrl}
-          alt={service.title}
+          alt={service.imageAlt || service.title}
           fill
           sizes="100vw"
           className="object-cover md:object-contain"

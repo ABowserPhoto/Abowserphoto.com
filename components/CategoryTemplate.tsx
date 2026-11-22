@@ -23,6 +23,7 @@ type ServiceWithMedia = {
   title: string;
   description: string;
   imageUrl: string | null;
+  imageAlt?: string | null;
   imageWidth: number | null;
   imageHeight: number | null;
   mediaType?: "embed" | "video";
