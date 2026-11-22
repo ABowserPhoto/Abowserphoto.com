@@ -3,8 +3,7 @@
 import {
   isBookingTimeSlot,
   isPropertyStatus,
-  parseBookingServices,
-  resolvePhotoChoice,
+  resolveImmobilienSelection,
   type BookingService,
   type IndividualPhotoCount,
   type PhotoPackage,
@@ -25,6 +24,8 @@ export type BookingFormData = {
   services: BookingService[];
   photoPackage: PhotoPackage | null;
   individualPhotoCount: IndividualPhotoCount | null;
+  offer: string;
+  highlightRoom?: string;
   additionalDetails?: string;
   locale?: string;
 };
@@ -71,13 +72,14 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
   const contactName = data.contactName.trim();
   const contactNumber = data.contactNumber.trim();
   const contactEmail = data.contactEmail.trim();
-  const services = parseBookingServices(data.services ?? []);
-  const photoChoice = resolvePhotoChoice(data.photoPackage, data.individualPhotoCount);
+  const selection = resolveImmobilienSelection({
+    offer: data.offer ?? "",
+    services: data.services ?? [],
+    photoPackage: data.photoPackage,
+    individualPhotoCount: data.individualPhotoCount,
+    highlightRoom: data.highlightRoom ?? "",
+  });
   const additionalDetails = (data.additionalDetails ?? "").replace(/\r\n/g, "\n").trim().slice(0, 2000);
-
-  if (!photoChoice) {
-    return { success: false, message: booking.selectPhotoPackageError };
-  }
 
   if (
     !locationAddress ||
@@ -87,10 +89,26 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
     !contactName ||
     !contactNumber ||
     !contactEmail ||
-    services.length === 0 ||
     !isBookingTimeSlot(requestedTime)
   ) {
     return { success: false, message: booking.completeFields };
+  }
+
+  if (!selection.ok) {
+    switch (selection.reason) {
+      case "offer":
+        return { success: false, message: booking.selectOffer };
+      case "services":
+        return { success: false, message: booking.selectAtLeastOneService };
+      case "photos":
+        return { success: false, message: booking.selectPhotoPackageError };
+      case "bundle-photos":
+        return { success: false, message: booking.selectBundlePhotoPackage };
+      default: {
+        const neverReason: never = selection.reason;
+        return { success: false, message: neverReason };
+      }
+    }
   }
 
   if (!isValidEmail(contactEmail)) {
@@ -126,9 +144,11 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
       notes: additionalDetails,
       locationAddress,
       propertyStatus,
-      services,
-      photoPackage: photoChoice.photoPackage,
-      individualPhotoCount: photoChoice.individualPhotoCount,
+      services: selection.selection.services,
+      photoPackage: selection.selection.photoPackage,
+      individualPhotoCount: selection.selection.individualPhotoCount,
+      bundle: selection.selection.bundle,
+      highlightRoom: selection.selection.highlightRoom,
     });
   } catch (error) {
     return { success: false, message: bookingFailureMessage(error, booking) };

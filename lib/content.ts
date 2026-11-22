@@ -176,6 +176,18 @@ Before the day we get to know each other, with an engagement shoot if you like. 
         beforeImage: "/real-estate/services/homestaging-vorher.webp",
         afterImage: "/real-estate/services/homestaging-nachher.webp",
       },
+      {
+        title: "Premium Home package",
+        description:
+          "A photo package of your choice, a Highlight Video of a room of your choice, plus drone photos and a drone video. Drone photos count toward your photo package.",
+        image: "/real-estate/services/drohnenfotografie-immobilie.webp",
+      },
+      {
+        title: "Luxury Makler package",
+        description:
+          "Everything in the Premium Home package, with a Walk Thru Video featuring the agent instead of the room highlight video. Drone photos count toward your photo package.",
+        image: "/real-estate/services/makler-branding.webp",
+      },
     ],
     aboutText: `I'm Aaron Bowser, a real estate photographer based in Hagen, photographing apartments, houses and commercial spaces in Hagen, Solingen and across North Rhine-Westphalia. I focus on space, light and perspective, so every property looks inviting and true to what buyers see at a viewing.
 

@@ -4,8 +4,15 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { createApprovalToken, hashApprovalToken, isApprovalToken } from "./approvalToken";
-import { getIndividualPhotoLabel, getPhotoPackageLabel, resolvePhotoChoice } from "./booking";
-import { photoPackageName, type RequestDetails } from "./bookingDetails";
+import {
+  getIndividualPhotoLabel,
+  getPhotoPackageLabel,
+  resolveImmobilienSelection,
+  resolvePhotoChoice,
+} from "./booking";
+import { bundleFromRow, photoPackageName, servicesFromRow, type RequestDetails } from "./bookingDetails";
+import { getDictionarySync } from "./i18n/getDictionary";
+import { getLocalizedCategory } from "./i18n/localizeContent";
 import { respondToDecisionPost } from "./bookingDecisionHttp";
 import { renderDecisionPage } from "./bookingDecisionPage";
 import {
@@ -31,6 +38,8 @@ const details: RequestDetails = {
   services: ["Interior", "Drohne"],
   photoPackage: "bis-5-zimmer",
   individualPhotoCount: null,
+  bundle: null,
+  highlightRoom: null,
   categorySlug: null,
   notes: "Bitte klingeln",
   requestedDate: "2026-11-22",
@@ -114,7 +123,7 @@ test("individual photos and the new video services are named in both emails", ()
     ...details,
     photoPackage: null,
     individualPhotoCount: 3,
-    services: ["Interior", "Walk Thru Video", "Agent branding Video"],
+    services: ["Interior", "Walk Thru Video", "Agent Branding Video"],
   };
   const studio = buildBusinessRequestEmail(individual, "d".repeat(43));
   const client = buildClientReceivedEmail(individual);
@@ -135,8 +144,144 @@ test("individual photos and the new video services are named in both emails", ()
   assert.match(clientEn.text, /Individual photos/);
   assert.match(clientEn.text, /3 photos/);
   assert.match(clientEn.text, /Walk Thru Video/);
-  assert.match(clientEn.text, /Agent branding Video/);
+  assert.match(clientEn.text, /Agent Branding Video/);
+  assert.doesNotMatch(clientEn.text, /Agent branding Video/);
   assert.equal(money(studio.text + client.text + clientEn.text), false);
+});
+
+test("a bundle stores the package size and room, and mail names both packages", () => {
+  const premium = resolveImmobilienSelection({
+    offer: "premium-home",
+    services: ["Interior"],
+    photoPackage: "30-fotos",
+    individualPhotoCount: 4,
+    highlightRoom: "  Wohnzimmer  ",
+  });
+  assert.equal(premium.ok, true);
+  if (!premium.ok) return;
+  assert.equal(premium.selection.bundle, "premium-home");
+  assert.equal(premium.selection.photoPackage, "30-fotos");
+  assert.equal(premium.selection.individualPhotoCount, null);
+  assert.equal(premium.selection.highlightRoom, "Wohnzimmer");
+  assert.deepEqual(premium.selection.services, ["Highlight Video", "Drohne"]);
+
+  const luxury = resolveImmobilienSelection({
+    offer: "luxury-makler",
+    services: [],
+    photoPackage: "bis-5-zimmer",
+    individualPhotoCount: null,
+    highlightRoom: "Wohnzimmer",
+  });
+  assert.equal(luxury.ok, true);
+  if (!luxury.ok) return;
+  assert.equal(luxury.selection.highlightRoom, null);
+  assert.deepEqual(luxury.selection.services, ["Walk Thru Video", "Drohne"]);
+
+  const missingPackage = resolveImmobilienSelection({
+    offer: "premium-home",
+    services: [],
+    photoPackage: null,
+    individualPhotoCount: null,
+    highlightRoom: "",
+  });
+  assert.deepEqual(missingPackage, { ok: false, reason: "bundle-photos" });
+
+  const custom = resolveImmobilienSelection({
+    offer: "custom",
+    services: ["Agent Branding Video"],
+    photoPackage: null,
+    individualPhotoCount: 2,
+    highlightRoom: "Küche",
+  });
+  assert.equal(custom.ok, true);
+  if (!custom.ok) return;
+  assert.equal(custom.selection.bundle, null);
+  assert.equal(custom.selection.highlightRoom, null);
+  assert.deepEqual(custom.selection.services, ["Agent Branding Video"]);
+
+  const premiumDetails: RequestDetails = {
+    ...details,
+    services: premium.selection.services,
+    photoPackage: "30-fotos",
+    bundle: "premium-home",
+    highlightRoom: "Wohnzimmer",
+  };
+  const studio = buildBusinessRequestEmail(premiumDetails, "e".repeat(43));
+  const received = buildClientReceivedEmail(premiumDetails);
+  const confirmed = buildClientConfirmedEmail(premiumDetails);
+  const receivedEn = buildClientReceivedEmail({
+    ...premiumDetails,
+    locale: "en",
+    highlightRoom: "Living room",
+  });
+  for (const message of [studio, received, confirmed]) {
+    assert.match(message.text, /Premium Home Paket/);
+    assert.match(message.text, /Wohnzimmer/);
+    assert.match(message.text, /Drohnenfotos werden auf das Fotopaket angerechnet/);
+    assert.match(message.text, /30-Foto-Paket/);
+  }
+  assert.match(receivedEn.text, /Premium Home package/);
+  assert.match(receivedEn.text, /Living room/);
+  assert.match(receivedEn.text, /Drone photos count toward your photo package/);
+  assert.match(receivedEn.text, /Highlight Video of a room of your choice/);
+
+  const luxuryDetails: RequestDetails = {
+    ...details,
+    locale: "en",
+    services: luxury.selection.services,
+    bundle: "luxury-makler",
+    highlightRoom: null,
+  };
+  const luxuryMail = buildClientConfirmedEmail(luxuryDetails);
+  const luxuryStudio = buildBusinessRequestEmail({ ...luxuryDetails, locale: "de" }, "f".repeat(43));
+  assert.match(luxuryMail.text, /Luxury Makler package/);
+  assert.match(luxuryMail.text, /Walk Thru Video featuring the agent/);
+  assert.match(luxuryMail.text, /Drone photos count toward your photo package/);
+  assert.doesNotMatch(luxuryMail.text, /Highlight room/);
+  assert.match(luxuryStudio.text, /Luxury Makler Paket/);
+  assert.match(luxuryStudio.text, /Walk-Through-Video mit dem Makler im Fokus/);
+  assert.match(luxuryStudio.text, /Drohnenfotos werden auf das Fotopaket angerechnet/);
+  assert.equal(
+    money(studio.text + received.text + receivedEn.text + luxuryMail.text + luxuryStudio.text),
+    false
+  );
+});
+
+test("stored Agent branding Video rows still read as Agent Branding Video", () => {
+  assert.deepEqual(servicesFromRow(["Agent branding Video", "Interior"]), [
+    "Interior",
+    "Agent Branding Video",
+  ]);
+  assert.equal(bundleFromRow("premium-home"), "premium-home");
+  assert.equal(bundleFromRow("other"), null);
+  const english = getDictionarySync("en").booking;
+  const german = getDictionarySync("de").booking;
+  assert.equal(english.serviceLabels["Agent Branding Video"], "Agent Branding Video");
+  assert.equal(german.serviceLabels["Agent Branding Video"], "Makler-Branding-Video");
+  assert.equal(english.dronePhotosNote, "Drone photos count toward your photo package");
+  assert.equal(german.dronePhotosNote, "Drohnenfotos werden auf das Fotopaket angerechnet");
+  assert.equal(english.bundles["luxury-makler"].name, "Luxury Makler package");
+  assert.equal(german.bundles["premium-home"].name, "Premium Home Paket");
+});
+
+test("the real-estate landing describes both bundles and does not publish a price", () => {
+  const english = getLocalizedCategory("real-estate", "en");
+  const german = getLocalizedCategory("real-estate", "de");
+  const premiumEn = english.services.find((service) => service.title === "Premium Home package");
+  const luxuryEn = english.services.find((service) => service.title === "Luxury Makler package");
+  const premiumDe = german.services.find((service) => service.title === "Premium Home Paket");
+  const luxuryDe = german.services.find((service) => service.title === "Luxury Makler Paket");
+  assert.match(premiumEn?.description ?? "", /Drone photos count toward your photo package/);
+  assert.match(luxuryEn?.description ?? "", /Walk Thru Video featuring the agent/);
+  assert.match(luxuryEn?.description ?? "", /Drone photos count toward your photo package/);
+  assert.match(premiumDe?.description ?? "", /Drohnenfotos werden auf das Fotopaket angerechnet/);
+  assert.match(luxuryDe?.description ?? "", /Walk-Through-Video mit dem Makler im Fokus/);
+  assert.equal(
+    money(
+      `${premiumEn?.description ?? ""} ${luxuryEn?.description ?? ""} ${premiumDe?.description ?? ""} ${luxuryDe?.description ?? ""}`
+    ),
+    false
+  );
 });
 
 test("the client first hears that the request was received, not that it is confirmed", () => {
@@ -208,6 +353,20 @@ test("posting the email link without the confirm form does not decide the reques
   assert.equal(response.status, 200);
   assert.match(body, /Dieser Link ist ungültig/);
   assert.doesNotMatch(body, /<form/i);
+});
+
+test("the bundle migration only adds nullable columns", () => {
+  const sql = fs.readFileSync(
+    path.join(ROOT, "supabase/migrations/20261122224500_booking_request_bundles.sql"),
+    "utf8"
+  );
+  const lowered = sql.toLowerCase();
+  assert.match(lowered, /add column bundle text/);
+  assert.match(lowered, /add column highlight_room text/);
+  assert.match(lowered, /bundle is null or bundle in \('premium-home', 'luxury-makler'\)/);
+  assert.equal(lowered.includes("drop table"), false);
+  assert.equal(lowered.includes("drop column"), false);
+  assert.equal(lowered.includes("€"), false);
 });
 
 test("the booking request migration only adds a staff-readable table", () => {

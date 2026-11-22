@@ -70,6 +70,16 @@ Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Neben Innen- und
         description:
           "Leere Räume werden mit realistischem digitalem Mobiliar zum einladenden Zuhause.",
       },
+      {
+        title: "Premium Home Paket",
+        description:
+          "Ein Fotopaket Ihrer Wahl, ein Highlight-Video eines Raums Ihrer Wahl sowie Drohnenfotos und ein Drohnenvideo. Drohnenfotos werden auf das Fotopaket angerechnet.",
+      },
+      {
+        title: "Luxury Makler Paket",
+        description:
+          "Alles aus dem Premium Home Paket, mit einem Walk-Through-Video mit dem Makler im Fokus statt des Highlight-Videos eines Raums. Drohnenfotos werden auf das Fotopaket angerechnet.",
+      },
     ],
   },
   commercial: {

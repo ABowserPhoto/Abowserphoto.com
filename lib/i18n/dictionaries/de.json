@@ -251,6 +251,15 @@
     "selectPropertyStatus": "Bitte wählen Sie einen Objektstatus.",
     "selectAtLeastOneService": "Bitte wählen Sie mindestens eine Leistung.",
     "selectPhotoPackageError": "Bitte wählen Sie ein Fotopaket oder Einzelfotos.",
+    "selectBundlePhotoPackage": "Bitte wählen Sie ein Fotopaket.",
+    "selectOffer": "Bitte wählen Sie ein Paket oder stellen Sie die Buchung selbst zusammen.",
+    "selection": "Auswahl",
+    "buildYourOwn": "Selbst zusammenstellen",
+    "buildYourOwnHint": "Wählen Sie ein Fotopaket oder 1–9 Einzelfotos und ergänzen Sie einzelne Leistungen.",
+    "included": "Enthalten",
+    "dronePhotosNote": "Drohnenfotos werden auf das Fotopaket angerechnet",
+    "highlightRoom": "Raum für das Highlight-Video",
+    "highlightRoomPlaceholder": "Wohnzimmer, Küche...",
     "addDetails": "Bitte ergänzen Sie Details zum Fotoshooting.",
     "completeFields": "Bitte füllen Sie alle Pflichtfelder aus.",
     "validEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
@@ -279,7 +288,29 @@
       "Digital Homestaging": "Digitales Homestaging",
       "Highlight Video": "Highlight-Video",
       "Walk Thru Video": "Walk-Through-Video",
-      "Agent branding Video": "Makler-Branding-Video"
+      "Agent Branding Video": "Makler-Branding-Video"
+    },
+    "bundles": {
+      "premium-home": {
+        "name": "Premium Home Paket",
+        "description": "Ein Fotopaket Ihrer Wahl, ein Highlight-Video eines Raums Ihrer Wahl sowie Drohnenfotos und ein Drohnenvideo.",
+        "includedSummary": "Fotopaket Ihrer Wahl, Highlight-Video eines Raums Ihrer Wahl, Drohnenfotos und Drohnenvideo.",
+        "inclusions": [
+          "Highlight-Video eines Raums Ihrer Wahl",
+          "Drohnenfotos",
+          "Drohnenvideo"
+        ]
+      },
+      "luxury-makler": {
+        "name": "Luxury Makler Paket",
+        "description": "Alles aus dem Premium Home Paket, mit einem Walk-Through-Video mit dem Makler im Fokus statt des Highlight-Videos eines Raums.",
+        "includedSummary": "Fotopaket Ihrer Wahl, Walk-Through-Video mit dem Makler im Fokus, Drohnenfotos und Drohnenvideo.",
+        "inclusions": [
+          "Walk-Through-Video mit dem Makler im Fokus",
+          "Drohnenfotos",
+          "Drohnenvideo"
+        ]
+      }
     }
   }
 }

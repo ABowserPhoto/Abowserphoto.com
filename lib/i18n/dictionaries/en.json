@@ -251,6 +251,15 @@
     "selectPropertyStatus": "Please select a property status.",
     "selectAtLeastOneService": "Please select at least one service.",
     "selectPhotoPackageError": "Please select a photo package or individual photos.",
+    "selectBundlePhotoPackage": "Please select a photo package.",
+    "selectOffer": "Please choose a package or build your own.",
+    "selection": "Selection",
+    "buildYourOwn": "Build your own",
+    "buildYourOwnHint": "Choose a photo package or 1–9 individual photos, then add single services.",
+    "included": "Included",
+    "dronePhotosNote": "Drone photos count toward your photo package",
+    "highlightRoom": "Highlight video room",
+    "highlightRoomPlaceholder": "Living room, kitchen...",
     "addDetails": "Please add details of the photoshoot.",
     "completeFields": "Please complete all required fields.",
     "validEmail": "Please enter a valid contact email address.",
@@ -279,7 +288,29 @@
       "Digital Homestaging": "Digital Homestaging",
       "Highlight Video": "Highlight Video",
       "Walk Thru Video": "Walk Thru Video",
-      "Agent branding Video": "Agent branding Video"
+      "Agent Branding Video": "Agent Branding Video"
+    },
+    "bundles": {
+      "premium-home": {
+        "name": "Premium Home package",
+        "description": "A photo package of your choice, a Highlight Video of a room of your choice, plus drone photos and a drone video.",
+        "includedSummary": "Photo package of your choice, Highlight Video of a room of your choice, drone photos and drone video.",
+        "inclusions": [
+          "Highlight Video of a room of your choice",
+          "Drone photos",
+          "Drone video"
+        ]
+      },
+      "luxury-makler": {
+        "name": "Luxury Makler package",
+        "description": "Everything in the Premium Home package, with a Walk Thru Video featuring the agent instead of the room highlight video.",
+        "includedSummary": "Photo package of your choice, Walk Thru Video featuring the agent, drone photos and drone video.",
+        "inclusions": [
+          "Walk Thru Video featuring the agent",
+          "Drone photos",
+          "Drone video"
+        ]
+      }
     }
   }
 }

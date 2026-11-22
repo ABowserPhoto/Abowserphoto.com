@@ -182,6 +182,8 @@ export type Database = {
           locale: string;
           location_address: string | null;
           individual_photo_count: number | null;
+          bundle: string | null;
+          highlight_room: string | null;
           notes: string | null;
           photo_package: string | null;
           property_status: string | null;
@@ -207,6 +209,8 @@ export type Database = {
           event_summary: string;
           id?: string;
           individual_photo_count?: number | null;
+          bundle?: string | null;
+          highlight_room?: string | null;
           kind: string;
           locale: string;
           location_address?: string | null;
@@ -235,6 +239,8 @@ export type Database = {
           event_summary?: string;
           id?: string;
           individual_photo_count?: number | null;
+          bundle?: string | null;
+          highlight_room?: string | null;
           kind?: string;
           locale?: string;
           location_address?: string | null;
