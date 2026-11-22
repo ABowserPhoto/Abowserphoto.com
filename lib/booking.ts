@@ -231,11 +231,29 @@ export type ImmobilienSelection = {
   photoPackage: PhotoPackage | null;
   individualPhotoCount: IndividualPhotoCount | null;
   highlightRoom: string | null;
+  homestagingPhotoCount: number | null;
 };
+
+export function selectedPhotoLimit(
+  photoPackage: PhotoPackage | null,
+  individualPhotoCount: IndividualPhotoCount | null
+): number | null {
+  if (photoPackage) {
+    return PHOTO_PACKAGES.find((item) => item.id === photoPackage)?.photos ?? null;
+  }
+  return individualPhotoCount;
+}
+
+/** Staged photos only. Null when the count is missing or above the chosen photo total. */
+export function cleanHomestagingPhotoCount(value: number | null, limit: number | null): number | null {
+  if (limit == null || value == null || !Number.isInteger(value)) return null;
+  if (value < 1 || value > limit) return null;
+  return value;
+}
 
 export type ImmobilienSelectionResult =
   | { ok: true; selection: ImmobilienSelection }
-  | { ok: false; reason: "offer" | "services" | "photos" | "bundle-photos" };
+  | { ok: false; reason: "offer" | "services" | "photos" | "bundle-photos" | "homestaging" };
 
 /** A bundle locks its included services and still needs a photo package. Custom keeps today's choice. */
 export function resolveImmobilienSelection(input: {
@@ -244,12 +262,21 @@ export function resolveImmobilienSelection(input: {
   photoPackage: string | null;
   individualPhotoCount: number | null;
   highlightRoom: string;
+  homestagingPhotoCount?: number | null;
 }): ImmobilienSelectionResult {
   if (input.offer === "custom") {
     const services = parseBookingServices([...input.services]);
     if (services.length === 0) return { ok: false, reason: "services" };
     const photos = resolvePhotoChoice(input.photoPackage, input.individualPhotoCount);
     if (!photos) return { ok: false, reason: "photos" };
+    const wantsHomestaging = services.includes("Digital Homestaging");
+    const homestagingPhotoCount = wantsHomestaging
+      ? cleanHomestagingPhotoCount(
+          input.homestagingPhotoCount ?? null,
+          selectedPhotoLimit(photos.photoPackage, photos.individualPhotoCount)
+        )
+      : null;
+    if (wantsHomestaging && homestagingPhotoCount == null) return { ok: false, reason: "homestaging" };
     return {
       ok: true,
       selection: {
@@ -258,6 +285,7 @@ export function resolveImmobilienSelection(input: {
         photoPackage: photos.photoPackage,
         individualPhotoCount: photos.individualPhotoCount,
         highlightRoom: null,
+        homestagingPhotoCount,
       },
     };
   }
@@ -275,6 +303,7 @@ export function resolveImmobilienSelection(input: {
       photoPackage: photos.photoPackage,
       individualPhotoCount: null,
       highlightRoom: input.offer === "premium-home" ? cleanHighlightRoom(input.highlightRoom) : null,
+      homestagingPhotoCount: null,
     },
   };
 }

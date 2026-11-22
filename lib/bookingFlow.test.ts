@@ -41,6 +41,7 @@ const details: RequestDetails = {
   individualPhotoCount: null,
   bundle: null,
   highlightRoom: null,
+  homestagingPhotoCount: null,
   categorySlug: null,
   notes: "Bitte klingeln",
   requestedDate: "2026-11-22",
@@ -447,6 +448,21 @@ test("a priced request tells Aaron and the client the tier and the net total", (
   assert.match(clientEn.text, /plus VAT and travel costs beyond 30 km where applicable/);
   assert.match(confirmed.text, /Estimated total \(net\)/);
   assert.equal(money(buildBusinessRequestEmail(details, "h".repeat(43)).text), false);
+});
+
+test("homestaging quantity is named in both emails when no prices are shown", () => {
+  const staged: RequestDetails = {
+    ...details,
+    services: ["Interior", "Digital Homestaging"],
+    homestagingPhotoCount: 2,
+  };
+  const studio = buildBusinessRequestEmail(staged, "i".repeat(43));
+  const client = buildClientReceivedEmail(staged);
+  const clientEn = buildClientReceivedEmail({ ...staged, locale: "en" });
+  assert.match(studio.text, /Anzahl Fotos für Homestaging: 2/);
+  assert.match(client.text, /Anzahl Fotos für Homestaging: 2/);
+  assert.match(clientEn.text, /Number of photos to stage: 2/);
+  assert.equal(money(studio.text + client.text + clientEn.text), false);
 });
 
 test("the bundle migration only adds nullable columns", () => {

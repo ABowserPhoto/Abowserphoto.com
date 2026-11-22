@@ -49,6 +49,7 @@ export type RequestDetails = {
   individualPhotoCount: IndividualPhotoCount | null;
   bundle: BookingBundle | null;
   highlightRoom: string | null;
+  homestagingPhotoCount: number | null;
   categorySlug: string | null;
   notes: string | null;
   requestedDate: string;
@@ -245,6 +246,7 @@ export function adminDetailRows(details: RequestDetails): DetailRow[] {
 
   rows.push(...bundleDetailRows(details, "de"));
   rows.push(...photoChoiceRows(details, "de"));
+  rows.push(...homestagingCountRows(details, "de"));
   rows.push(...priceDetailRows(details, "de"));
   if (details.notes) rows.push({ label: "Notizen", value: details.notes });
   if (details.calendarUrl) rows.push({ label: "Kalender", value: details.calendarUrl });
@@ -263,8 +265,22 @@ export function clientDetailRows(details: RequestDetails): DetailRow[] {
   rows.push({ label: locale === "de" ? "Leistung" : "Service", value: serviceLabel(details, locale) });
   rows.push(...bundleDetailRows(details, locale));
   rows.push(...photoChoiceRows(details, locale));
+  rows.push(...homestagingCountRows(details, locale));
   rows.push(...priceDetailRows(details, locale));
   return rows;
+}
+
+export function homestagingCountRows(
+  details: Pick<RequestDetails, "homestagingPhotoCount">,
+  locale: Locale
+): DetailRow[] {
+  if (details.homestagingPhotoCount == null) return [];
+  return [
+    {
+      label: getBookingCopy(locale).homestagingPhotos,
+      value: String(details.homestagingPhotoCount),
+    },
+  ];
 }
 
 export function priceDetailRows(details: Pick<RequestDetails, "priceSnapshot">, locale: Locale): DetailRow[] {
@@ -317,6 +333,11 @@ export function individualPhotoCountFromRow(value: number | null) {
 
 export function bundleFromRow(value: string | null) {
   return value && isBookingBundle(value) ? value : null;
+}
+
+export function homestagingPhotoCountFromRow(value: number | null) {
+  if (value == null || !Number.isInteger(value) || value < 1 || value > 50) return null;
+  return value;
 }
 
 export function highlightRoomFromRow(value: string | null) {

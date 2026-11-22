@@ -15,6 +15,7 @@ import {
   isPropertyStatus,
   resolveImmobilienSelection,
   resolvePhotoChoice,
+  selectedPhotoLimit,
   todayInputValue,
   type BookingBundle,
   type BookingService,
@@ -73,6 +74,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
   const [offer, setOffer] = useState<OfferChoice>("");
   const [highlightRoom, setHighlightRoom] = useState("");
   const [services, setServices] = useState<BookingService[]>([]);
+  const [homestagingCount, setHomestagingCount] = useState(1);
   const [catalog, setCatalog] = useState<PriceCatalog | null>(null);
   const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate, locale);
 
@@ -116,12 +118,29 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
     );
   }
 
+  const photoLimit = useMemo(() => {
+    if (offer !== "custom") return null;
+    const photos = resolvePhotoChoice(
+      photoPackage || null,
+      individualCount === "" ? null : Number(individualCount)
+    );
+    return selectedPhotoLimit(photos?.photoPackage ?? null, photos?.individualPhotoCount ?? null);
+  }, [offer, photoPackage, individualCount]);
+
+  useEffect(() => {
+    if (photoLimit != null && homestagingCount > photoLimit) {
+      setHomestagingCount(photoLimit);
+    }
+  }, [photoLimit, homestagingCount]);
+
   const priceSnapshot = useMemo(() => {
     if (!catalog) return null;
     const photos =
       offer === "custom"
         ? resolvePhotoChoice(photoPackage || null, individualCount === "" ? null : Number(individualCount))
         : resolvePhotoChoice(photoPackage || null, null);
+    const stagedCount =
+      offer === "custom" && services.includes("Digital Homestaging") ? homestagingCount : null;
     const selection: ImmobilienSelection = isBookingBundle(offer)
       ? {
           bundle: offer,
@@ -129,6 +148,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           photoPackage: photos?.photoPackage ?? null,
           individualPhotoCount: null,
           highlightRoom: null,
+          homestagingPhotoCount: null,
         }
       : {
           bundle: null,
@@ -136,9 +156,10 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           photoPackage: photos?.photoPackage ?? null,
           individualPhotoCount: photos?.individualPhotoCount ?? null,
           highlightRoom: null,
+          homestagingPhotoCount: stagedCount,
         };
     return buildPriceSnapshot(catalog, selection);
-  }, [catalog, offer, services, photoPackage, individualCount]);
+  }, [catalog, offer, services, photoPackage, individualCount, homestagingCount]);
 
   function optionLabel(label: string, price: string | null) {
     return price ? `${label} · ${price}` : label;
@@ -176,6 +197,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
       photoPackage: photoPackage || null,
       individualPhotoCount: individualCount === "" ? null : Number(individualCount),
       highlightRoom,
+      homestagingPhotoCount: services.includes("Digital Homestaging") ? homestagingCount : null,
     });
     if (!selection.ok) {
       switch (selection.reason) {
@@ -190,6 +212,9 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           return;
         case "bundle-photos":
           setErrorMessage(booking.selectBundlePhotoPackage);
+          return;
+        case "homestaging":
+          setErrorMessage(booking.selectHomestagingCount);
           return;
         default: {
           const neverReason: never = selection.reason;
@@ -212,6 +237,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
       individualPhotoCount: selection.selection.individualPhotoCount,
       offer,
       highlightRoom,
+      homestagingPhotoCount: selection.selection.homestagingPhotoCount,
       additionalDetails: String(formData.get("additionalDetails") ?? ""),
       locale,
     };
@@ -624,6 +650,36 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                 </div>
               </div>
             </fieldset>
+
+            {services.includes("Digital Homestaging") ? (
+              <div>
+                <label
+                  htmlFor="homestagingPhotos"
+                  className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+                >
+                  {booking.homestagingPhotos} *
+                </label>
+                <input
+                  id="homestagingPhotos"
+                  name="homestagingPhotos"
+                  type="number"
+                  inputMode="numeric"
+                  required
+                  min={1}
+                  max={photoLimit ?? 50}
+                  value={homestagingCount}
+                  onChange={(event) => {
+                    const raw = event.target.value;
+                    if (raw === "") return;
+                    const next = Number(raw);
+                    if (!Number.isInteger(next)) return;
+                    const limit = photoLimit ?? 50;
+                    setHomestagingCount(Math.min(limit, Math.max(1, next)));
+                  }}
+                  className={`${inputClassName} min-w-0 max-w-full [color-scheme:dark]`}
+                />
+              </div>
+            ) : null}
           </>
         ) : null}
 

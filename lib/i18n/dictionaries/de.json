@@ -252,6 +252,8 @@
     "selectAtLeastOneService": "Bitte wählen Sie mindestens eine Leistung.",
     "selectPhotoPackageError": "Bitte wählen Sie ein Fotopaket oder Einzelfotos.",
     "selectBundlePhotoPackage": "Bitte wählen Sie ein Fotopaket.",
+    "selectHomestagingCount": "Bitte geben Sie an, wie viele Fotos homegestagt werden sollen.",
+    "homestagingPhotos": "Anzahl Fotos für Homestaging",
     "selectOffer": "Bitte wählen Sie ein Paket oder stellen Sie die Buchung selbst zusammen.",
     "selection": "Auswahl",
     "buildYourOwn": "Selbst zusammenstellen",

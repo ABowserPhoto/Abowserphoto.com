@@ -1,6 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
-  PHOTO_PACKAGES,
   type BookingBundle,
   type BookingService,
   type ImmobilienSelection,
@@ -67,6 +66,7 @@ export type PriceSnapshot = {
   estimatedNetCents: number | null;
   partial: boolean;
   onRequest: boolean;
+  homestagingPhotoCount: number | null;
 };
 
 export type PriceLoadResult =
@@ -127,11 +127,6 @@ export function photoPackageItemKey(id: PhotoPackage): PriceItemKey {
       return neverId;
     }
   }
-}
-
-export function photoPackageCount(id: PhotoPackage): number {
-  const count = PHOTO_PACKAGES.find((item) => item.id === id)?.photos;
-  return count ?? 0;
 }
 
 /**
@@ -256,8 +251,7 @@ function perPhotoQuantity(itemKey: PriceItemKey, selection: ImmobilienSelection)
     case "individual_photo":
       return selection.individualPhotoCount;
     case "homestaging":
-      if (selection.photoPackage) return photoPackageCount(selection.photoPackage) || null;
-      return selection.individualPhotoCount;
+      return selection.homestagingPhotoCount;
     default:
       return null;
   }
@@ -270,6 +264,7 @@ function emptySelection(): ImmobilienSelection {
     photoPackage: null,
     individualPhotoCount: null,
     highlightRoom: null,
+    homestagingPhotoCount: null,
   };
 }
 
@@ -329,6 +324,9 @@ export function buildPriceSnapshot(
     estimatedNetCents: pricedCount > 0 ? sum : null,
     partial: partial || onRequest,
     onRequest,
+    homestagingPhotoCount: selection.services.includes("Digital Homestaging")
+      ? selection.homestagingPhotoCount
+      : null,
   };
 }
 
@@ -408,12 +406,6 @@ export function formatEstimatedTotal(snapshot: PriceSnapshot, locale: Locale): s
   return locale === "de" ? `${amount} (unvollständig)` : `${amount} (partial)`;
 }
 
-export function snapshotShowsHomestagingEstimate(snapshot: PriceSnapshot) {
-  return snapshot.lines.some(
-    (line) => line.itemKey === "homestaging" && line.lineNetCents != null && line.quantity > 0
-  );
-}
-
 export function priceCopy(locale: Locale) {
   switch (locale) {
     case "de":
@@ -422,7 +414,6 @@ export function priceCopy(locale: Locale) {
         totalPartial: "Die Summe ist unvollständig, weil mindestens eine gewählte Leistung Preis auf Anfrage ist.",
         totalIncomplete: "Die Summe ist unvollständig.",
         priceNote: "zzgl. MwSt. und ggf. Fahrtkosten ab 30 km",
-        homestagingEstimate: "Homestaging ist als Betrag pro Foto für jedes Foto der Auswahl geschätzt.",
         pricingTier: "Preisklasse",
         noteLabel: "Hinweis",
       };
@@ -432,7 +423,6 @@ export function priceCopy(locale: Locale) {
         totalPartial: "The total is partial because at least one selected item is price on request.",
         totalIncomplete: "This total is partial.",
         priceNote: "plus VAT and travel costs beyond 30 km where applicable",
-        homestagingEstimate: "Home staging is estimated per photo for every photo in the selection.",
         pricingTier: "Pricing tier",
         noteLabel: "Note",
       };
@@ -447,7 +437,6 @@ export function priceNoteLines(snapshot: PriceSnapshot, locale: Locale) {
   const copy = priceCopy(locale);
   return [
     snapshot.onRequest ? copy.totalPartial : snapshot.partial ? copy.totalIncomplete : null,
-    snapshotShowsHomestagingEstimate(snapshot) ? copy.homestagingEstimate : null,
     copy.priceNote,
   ].filter((line): line is string => Boolean(line));
 }
@@ -468,6 +457,7 @@ export function priceSnapshotToJson(snapshot: PriceSnapshot | null): Json | null
     estimatedNetCents: snapshot.estimatedNetCents,
     partial: snapshot.partial,
     onRequest: snapshot.onRequest,
+    homestagingPhotoCount: snapshot.homestagingPhotoCount,
   };
 }
 
@@ -511,13 +501,22 @@ export function priceSnapshotFromJson(value: Json | null | undefined): PriceSnap
   const estimatedNetCents = parseCents(record.estimatedNetCents);
   if (estimatedNetCents === undefined) return null;
   if (typeof record.partial !== "boolean" || typeof record.onRequest !== "boolean") return null;
+  const homestagingPhotoCount = parseHomestagingPhotoCount(record.homestagingPhotoCount);
+  if (homestagingPhotoCount === undefined) return null;
   return {
     tier,
     lines,
     estimatedNetCents,
     partial: record.partial,
     onRequest: record.onRequest,
+    homestagingPhotoCount,
   };
+}
+
+function parseHomestagingPhotoCount(value: Json | undefined): number | null | undefined {
+  if (value == null) return null;
+  if (typeof value === "number" && Number.isInteger(value) && value >= 1 && value <= 50) return value;
+  return undefined;
 }
 
 export async function loadOwnPriceCatalog(supabase: SessionClient): Promise<PriceLoadResult> {

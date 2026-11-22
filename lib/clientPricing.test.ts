@@ -16,7 +16,6 @@ import {
   priceSnapshotFromJson,
   priceSnapshotToJson,
   servicePriceItemKeys,
-  snapshotShowsHomestagingEstimate,
   type PriceCatalog,
   type PriceItemKey,
   type PriceRow,
@@ -135,15 +134,16 @@ test("a custom drone selection prices both drone items, and a bundle does not", 
   assert.equal(bundled.lines.some((line) => line.itemKey === "highlight_video"), false);
 });
 
-test("individual photos and homestaging multiply by the photo count", () => {
+test("homestaging is priced for the staged quantity, not the whole package", () => {
   const each = cents(3);
   const stagingEach = cents(2);
   const feeCents = cents(4);
+  const packageCents = cents(10);
   const prices = catalog([
     row("individual_photo", each, "per_photo", 70),
     row("homestaging", stagingEach, "per_photo", 170),
     row("booking_fee", feeCents, "flat", 80),
-    row("photo_package_10", cents(10), "flat", 10),
+    row("photo_package_10", packageCents, "flat", 10),
   ]);
   const count = 3;
   const individual = buildPriceSnapshot(
@@ -160,12 +160,13 @@ test("individual photos and homestaging multiply by the photo count", () => {
   assert.equal(photoLine?.quantity, count);
   assert.equal(photoLine?.lineNetCents, each * count);
   assert.equal(individual.estimatedNetCents, each * count + feeCents);
+  assert.equal(individual.homestagingPhotoCount, null);
   assert.equal(
     formatSnapshotLine(photoLine!, "en"),
     `${count} × ${formatNetPrice(each, "per_photo", "en")} (${formatNetPrice(each * count, "flat", "en")})`
   );
 
-  const packageCount = 10;
+  const stagedCount = 2;
   const staged = buildPriceSnapshot(
     prices,
     selection({
@@ -174,13 +175,34 @@ test("individual photos and homestaging multiply by the photo count", () => {
       photoPackage: "bis-5-zimmer",
       individualPhotoCount: null,
       highlightRoom: "",
+      homestagingPhotoCount: stagedCount,
     })
   );
   const stagingLine = staged.lines.find((line) => line.itemKey === "homestaging");
-  assert.equal(stagingLine?.quantity, packageCount);
-  assert.equal(stagingLine?.lineNetCents, stagingEach * packageCount);
-  assert.equal(snapshotShowsHomestagingEstimate(staged), true);
-  assert.equal(snapshotShowsHomestagingEstimate(individual), false);
+  assert.equal(stagingLine?.quantity, stagedCount);
+  assert.equal(stagingLine?.lineNetCents, stagingEach * stagedCount);
+  assert.equal(staged.homestagingPhotoCount, stagedCount);
+  assert.equal(staged.estimatedNetCents, packageCents + stagingEach * stagedCount + feeCents);
+  assert.equal(staged.partial, false);
+
+  const tooMany = resolveImmobilienSelection({
+    offer: "custom",
+    services: ["Digital Homestaging"],
+    photoPackage: "bis-5-zimmer",
+    individualPhotoCount: null,
+    highlightRoom: "",
+    homestagingPhotoCount: 11,
+  });
+  assert.deepEqual(tooMany, { ok: false, reason: "homestaging" });
+
+  const missing = resolveImmobilienSelection({
+    offer: "custom",
+    services: ["Digital Homestaging"],
+    photoPackage: "bis-5-zimmer",
+    individualPhotoCount: null,
+    highlightRoom: "",
+  });
+  assert.deepEqual(missing, { ok: false, reason: "homestaging" });
 });
 
 test("an on-request line keeps the known sum and marks the total partial", () => {
@@ -289,6 +311,21 @@ test("prices are read with the caller session and the service role only stores t
   assert.match(submit, /loadOwnPriceCatalog/);
   assert.equal(submit.includes("createServiceClient"), false);
   assert.equal(submit.includes("SUPABASE_SERVICE_ROLE_KEY"), false);
+});
+
+test("the homestaging count migration only adds a nullable column", () => {
+  const sql = fs.readFileSync(
+    path.join(ROOT, "supabase/migrations/20261122235000_booking_request_homestaging_count.sql"),
+    "utf8"
+  );
+  const lowered = sql.toLowerCase();
+  assert.match(lowered, /add column homestaging_photo_count smallint/);
+  assert.match(lowered, /homestaging_photo_count is null/);
+  assert.equal(lowered.includes("drop table"), false);
+  assert.equal(lowered.includes("drop column"), false);
+  assert.equal(lowered.includes("alter table public.clients"), false);
+  assert.equal(lowered.includes("alter table public.pricing_tier_prices"), false);
+  assert.equal(sql.includes("€"), false);
 });
 
 test("the price snapshot migration only adds a nullable column", () => {

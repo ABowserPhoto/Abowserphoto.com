@@ -226,6 +226,7 @@ export type Database = {
           individual_photo_count: number | null;
           bundle: string | null;
           highlight_room: string | null;
+          homestaging_photo_count: number | null;
           notes: string | null;
           photo_package: string | null;
           price_snapshot: Json | null;
@@ -254,6 +255,7 @@ export type Database = {
           individual_photo_count?: number | null;
           bundle?: string | null;
           highlight_room?: string | null;
+          homestaging_photo_count?: number | null;
           kind: string;
           locale: string;
           location_address?: string | null;
@@ -285,6 +287,7 @@ export type Database = {
           individual_photo_count?: number | null;
           bundle?: string | null;
           highlight_room?: string | null;
+          homestaging_photo_count?: number | null;
           kind?: string;
           locale?: string;
           location_address?: string | null;

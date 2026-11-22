@@ -14,6 +14,7 @@ import {
   bundleDetailRows,
   bundleFromRow,
   highlightRoomFromRow,
+  homestagingPhotoCountFromRow,
   isShootKind,
   isShootStatus,
   keepLines,
@@ -71,6 +72,7 @@ export type PlaceShootRequestInput =
       individualPhotoCount: IndividualPhotoCount | null;
       bundle: BookingBundle | null;
       highlightRoom: string | null;
+      homestagingPhotoCount: number | null;
       priceSnapshot: PriceSnapshot | null;
     })
   | (SharedPlace & {
@@ -177,6 +179,7 @@ function detailsFromInput(input: PlaceShootRequestInput, timeZone: string): Requ
         individualPhotoCount: input.individualPhotoCount,
         bundle: input.bundle,
         highlightRoom: input.highlightRoom,
+        homestagingPhotoCount: input.homestagingPhotoCount,
         categorySlug: null,
       };
     case "inquiry":
@@ -190,6 +193,7 @@ function detailsFromInput(input: PlaceShootRequestInput, timeZone: string): Requ
         individualPhotoCount: null,
         bundle: null,
         highlightRoom: null,
+        homestagingPhotoCount: null,
         categorySlug: input.categorySlug,
       };
     default: {
@@ -216,6 +220,7 @@ function detailsFromRow(row: BookingRequestRow): RequestDetails {
     individualPhotoCount: individualPhotoCountFromRow(row.individual_photo_count),
     bundle: bundleFromRow(row.bundle),
     highlightRoom: highlightRoomFromRow(row.highlight_room),
+    homestagingPhotoCount: homestagingPhotoCountFromRow(row.homestaging_photo_count),
     categorySlug: row.category_slug,
     notes: row.notes,
     requestedDate: row.requested_date,
@@ -267,6 +272,7 @@ async function insertPendingRequest(input: {
     individual_photo_count: input.details.individualPhotoCount,
     bundle: input.details.bundle,
     highlight_room: input.details.highlightRoom,
+    homestaging_photo_count: input.details.homestagingPhotoCount,
     category_slug: input.details.categorySlug,
     notes: input.details.notes,
     requested_date: input.details.requestedDate,
