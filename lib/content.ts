@@ -179,13 +179,13 @@ Before the day we get to know each other, with an engagement shoot if you like. 
       {
         title: "Premium Home package",
         description:
-          "A photo package of your choice, a Highlight Video of a room of your choice, plus drone photos and a drone video. Drone photos count toward your photo package.",
+          "Includes a photo package of your choice and a highlight video. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the video.",
         image: "/real-estate/services/drohnenfotografie-immobilie.webp",
       },
       {
         title: "Luxury Makler package",
         description:
-          "Everything in the Premium Home package, with a Walk Thru Video featuring the agent instead of the room highlight video. Drone photos count toward your photo package.",
+          "Includes a photo package of your choice and a Walk Thru Video featuring the agent. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the walkthrough video.",
         image: "/real-estate/services/makler-branding.webp",
       },
     ],

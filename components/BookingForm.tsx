@@ -362,8 +362,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                   />
                   <span className="min-w-0">
                     <span className="block font-medium">{bundle.name}</span>
-                    <span className="mt-1 block text-xs leading-relaxed text-[#F4F1ED]/70">{bundle.description}</span>
-                    <span className="mt-2 block text-xs leading-relaxed text-[#F4F1ED]">{booking.dronePhotosNote}</span>
+                    <span className="mt-1 block text-xs leading-relaxed text-[#F4F1ED]/75">{bundle.description}</span>
                   </span>
                 </label>
               );

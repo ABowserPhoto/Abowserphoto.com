@@ -214,16 +214,21 @@ test("a bundle stores the package size and room, and mail names both packages", 
     locale: "en",
     highlightRoom: "Living room",
   });
+  const premiumDe =
+    "Enthält ein Fotopaket Ihrer Wahl und ein Highlight-Video. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein.";
+  const premiumEn =
+    "Includes a photo package of your choice and a highlight video. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the video.";
   for (const message of [studio, received, confirmed]) {
     assert.match(message.text, /Premium Home Paket/);
     assert.match(message.text, /Wohnzimmer/);
-    assert.match(message.text, /Drohnenfotos werden auf das Fotopaket angerechnet/);
+    assert.match(message.text, new RegExp(premiumDe.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
     assert.match(message.text, /30-Foto-Paket/);
+    assert.doesNotMatch(message.text, /Drohnenvideo/);
   }
   assert.match(receivedEn.text, /Premium Home package/);
   assert.match(receivedEn.text, /Living room/);
-  assert.match(receivedEn.text, /Drone photos count toward your photo package/);
-  assert.match(receivedEn.text, /Highlight Video of a room of your choice/);
+  assert.match(receivedEn.text, new RegExp(premiumEn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  assert.doesNotMatch(receivedEn.text, /drone video/i);
 
   const luxuryDetails: RequestDetails = {
     ...details,
@@ -235,12 +240,18 @@ test("a bundle stores the package size and room, and mail names both packages", 
   const luxuryMail = buildClientConfirmedEmail(luxuryDetails);
   const luxuryStudio = buildBusinessRequestEmail({ ...luxuryDetails, locale: "de" }, "f".repeat(43));
   assert.match(luxuryMail.text, /Luxury Makler package/);
-  assert.match(luxuryMail.text, /Walk Thru Video featuring the agent/);
-  assert.match(luxuryMail.text, /Drone photos count toward your photo package/);
+  assert.match(
+    luxuryMail.text,
+    /Includes a photo package of your choice and a Walk Thru Video featuring the agent\. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the walkthrough video\./
+  );
+  assert.doesNotMatch(luxuryMail.text, /drone video/i);
   assert.doesNotMatch(luxuryMail.text, /Highlight room/);
   assert.match(luxuryStudio.text, /Luxury Makler Paket/);
-  assert.match(luxuryStudio.text, /Walk-Through-Video mit dem Makler im Fokus/);
-  assert.match(luxuryStudio.text, /Drohnenfotos werden auf das Fotopaket angerechnet/);
+  assert.match(
+    luxuryStudio.text,
+    /Enthält ein Fotopaket Ihrer Wahl und ein Walk-Through-Video mit dem Makler im Fokus\. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Walk-Through-Video ein\./
+  );
+  assert.doesNotMatch(luxuryStudio.text, /Drohnenvideo/);
   assert.equal(
     money(studio.text + received.text + receivedEn.text + luxuryMail.text + luxuryStudio.text),
     false
@@ -258,8 +269,17 @@ test("stored Agent branding Video rows still read as Agent Branding Video", () =
   const german = getDictionarySync("de").booking;
   assert.equal(english.serviceLabels["Agent Branding Video"], "Agent Branding Video");
   assert.equal(german.serviceLabels["Agent Branding Video"], "Makler-Branding-Video");
-  assert.equal(english.dronePhotosNote, "Drone photos count toward your photo package");
-  assert.equal(german.dronePhotosNote, "Drohnenfotos werden auf das Fotopaket angerechnet");
+  assert.equal(
+    english.bundles["premium-home"].description,
+    "Includes a photo package of your choice and a highlight video. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the video."
+  );
+  assert.equal(
+    german.bundles["premium-home"].description,
+    "Enthält ein Fotopaket Ihrer Wahl und ein Highlight-Video. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein."
+  );
+  assert.equal(english.bundles["premium-home"].inclusions.includes("Drone video"), false);
+  assert.equal(german.bundles["premium-home"].inclusions.includes("Drohnenvideo"), false);
+  assert.equal(english.bundles["luxury-makler"].inclusions.includes("Drone video"), false);
   assert.equal(english.bundles["luxury-makler"].name, "Luxury Makler package");
   assert.equal(german.bundles["premium-home"].name, "Premium Home Paket");
 });
@@ -271,11 +291,24 @@ test("the real-estate landing describes both bundles and does not publish a pric
   const luxuryEn = english.services.find((service) => service.title === "Luxury Makler package");
   const premiumDe = german.services.find((service) => service.title === "Premium Home Paket");
   const luxuryDe = german.services.find((service) => service.title === "Luxury Makler Paket");
-  assert.match(premiumEn?.description ?? "", /Drone photos count toward your photo package/);
-  assert.match(luxuryEn?.description ?? "", /Walk Thru Video featuring the agent/);
-  assert.match(luxuryEn?.description ?? "", /Drone photos count toward your photo package/);
-  assert.match(premiumDe?.description ?? "", /Drohnenfotos werden auf das Fotopaket angerechnet/);
-  assert.match(luxuryDe?.description ?? "", /Walk-Through-Video mit dem Makler im Fokus/);
+  assert.equal(
+    premiumEn?.description,
+    "Includes a photo package of your choice and a highlight video. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the video."
+  );
+  assert.equal(
+    luxuryEn?.description,
+    "Includes a photo package of your choice and a Walk Thru Video featuring the agent. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the walkthrough video."
+  );
+  assert.equal(
+    premiumDe?.description,
+    "Enthält ein Fotopaket Ihrer Wahl und ein Highlight-Video. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein."
+  );
+  assert.equal(
+    luxuryDe?.description,
+    "Enthält ein Fotopaket Ihrer Wahl und ein Walk-Through-Video mit dem Makler im Fokus. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Walk-Through-Video ein."
+  );
+  assert.equal(`${premiumEn?.description} ${luxuryEn?.description}`.toLowerCase().includes("drone video"), false);
+  assert.equal(`${premiumDe?.description} ${luxuryDe?.description}`.includes("Drohnenvideo"), false);
   assert.equal(
     money(
       `${premiumEn?.description ?? ""} ${luxuryEn?.description ?? ""} ${premiumDe?.description ?? ""} ${luxuryDe?.description ?? ""}`

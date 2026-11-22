@@ -257,7 +257,6 @@
     "buildYourOwn": "Build your own",
     "buildYourOwnHint": "Choose a photo package or 1–9 individual photos, then add single services.",
     "included": "Included",
-    "dronePhotosNote": "Drone photos count toward your photo package",
     "highlightRoom": "Highlight video room",
     "highlightRoomPlaceholder": "Living room, kitchen...",
     "addDetails": "Please add details of the photoshoot.",
@@ -293,22 +292,22 @@
     "bundles": {
       "premium-home": {
         "name": "Premium Home package",
-        "description": "A photo package of your choice, a Highlight Video of a room of your choice, plus drone photos and a drone video.",
-        "includedSummary": "Photo package of your choice, Highlight Video of a room of your choice, drone photos and drone video.",
+        "description": "Includes a photo package of your choice and a highlight video. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the video.",
+        "includedSummary": "Includes a photo package of your choice and a highlight video. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the video.",
         "inclusions": [
-          "Highlight Video of a room of your choice",
+          "Highlight video",
           "Drone photos",
-          "Drone video"
+          "Drone footage used in the video"
         ]
       },
       "luxury-makler": {
         "name": "Luxury Makler package",
-        "description": "Everything in the Premium Home package, with a Walk Thru Video featuring the agent instead of the room highlight video.",
-        "includedSummary": "Photo package of your choice, Walk Thru Video featuring the agent, drone photos and drone video.",
+        "description": "Includes a photo package of your choice and a Walk Thru Video featuring the agent. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the walkthrough video.",
+        "includedSummary": "Includes a photo package of your choice and a Walk Thru Video featuring the agent. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the walkthrough video.",
         "inclusions": [
           "Walk Thru Video featuring the agent",
           "Drone photos",
-          "Drone video"
+          "Drone footage used in the walkthrough video"
         ]
       }
     }

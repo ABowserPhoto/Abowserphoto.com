@@ -123,12 +123,10 @@ export function bundleDetailRows(
   locale: Locale
 ): DetailRow[] {
   if (!details.bundle) return [];
-  const copy = getBookingCopy(locale);
-  const bundle = copy.bundles[details.bundle];
+  const bundle = getBookingCopy(locale).bundles[details.bundle];
   const rows: DetailRow[] = [
     { label: locale === "de" ? "Paket" : "Package", value: bundle.name },
     { label: locale === "de" ? "Enthalten" : "Included", value: bundle.includedSummary },
-    { label: locale === "de" ? "Hinweis" : "Note", value: copy.dronePhotosNote },
   ];
   if (details.highlightRoom) {
     rows.push({

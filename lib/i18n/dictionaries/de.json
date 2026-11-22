@@ -257,7 +257,6 @@
     "buildYourOwn": "Selbst zusammenstellen",
     "buildYourOwnHint": "Wählen Sie ein Fotopaket oder 1–9 Einzelfotos und ergänzen Sie einzelne Leistungen.",
     "included": "Enthalten",
-    "dronePhotosNote": "Drohnenfotos werden auf das Fotopaket angerechnet",
     "highlightRoom": "Raum für das Highlight-Video",
     "highlightRoomPlaceholder": "Wohnzimmer, Küche...",
     "addDetails": "Bitte ergänzen Sie Details zum Fotoshooting.",
@@ -293,22 +292,22 @@
     "bundles": {
       "premium-home": {
         "name": "Premium Home Paket",
-        "description": "Ein Fotopaket Ihrer Wahl, ein Highlight-Video eines Raums Ihrer Wahl sowie Drohnenfotos und ein Drohnenvideo.",
-        "includedSummary": "Fotopaket Ihrer Wahl, Highlight-Video eines Raums Ihrer Wahl, Drohnenfotos und Drohnenvideo.",
+        "description": "Enthält ein Fotopaket Ihrer Wahl und ein Highlight-Video. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein.",
+        "includedSummary": "Enthält ein Fotopaket Ihrer Wahl und ein Highlight-Video. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein.",
         "inclusions": [
-          "Highlight-Video eines Raums Ihrer Wahl",
+          "Highlight-Video",
           "Drohnenfotos",
-          "Drohnenvideo"
+          "Drohnenaufnahmen im Video"
         ]
       },
       "luxury-makler": {
         "name": "Luxury Makler Paket",
-        "description": "Alles aus dem Premium Home Paket, mit einem Walk-Through-Video mit dem Makler im Fokus statt des Highlight-Videos eines Raums.",
-        "includedSummary": "Fotopaket Ihrer Wahl, Walk-Through-Video mit dem Makler im Fokus, Drohnenfotos und Drohnenvideo.",
+        "description": "Enthält ein Fotopaket Ihrer Wahl und ein Walk-Through-Video mit dem Makler im Fokus. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Walk-Through-Video ein.",
+        "includedSummary": "Enthält ein Fotopaket Ihrer Wahl und ein Walk-Through-Video mit dem Makler im Fokus. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Walk-Through-Video ein.",
         "inclusions": [
           "Walk-Through-Video mit dem Makler im Fokus",
           "Drohnenfotos",
-          "Drohnenvideo"
+          "Drohnenaufnahmen im Walk-Through-Video"
         ]
       }
     }
