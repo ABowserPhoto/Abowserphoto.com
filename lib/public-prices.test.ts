@@ -158,8 +158,8 @@ test("removed public prices stay out of metadata, packages, and structured data"
     const rentalText = Object.values(rental).join("\n");
     assert.deepEqual(amountsIn(rentalText).sort(), ["189", "329", "54"]);
     assert.match(rentalText, /19/);
-    assert.match(rental.inclusionsPlaceholder, /\[/);
-    assert.match(rental.termsPlaceholder, /\[/);
+    assert.equal(rentalText.includes("["), false);
+    assert.equal(rentalText.includes("]"), false);
 
     const offer = buildSolingenRentalOfferJsonLd(locale);
     assert.equal(offer["@type"], "OfferCatalog");

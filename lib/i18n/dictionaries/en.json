@@ -132,6 +132,16 @@
     "instagramMain": "Aaron Bowser Photography",
     "instagramRealEstate": "Real Estate Photography",
     "instagramFood": "Food Photography",
+    "cookieBanner": {
+      "title": "Your privacy matters",
+      "body": "We store what the site needs to run. We load analytics only if you choose “Alle akzeptieren”.",
+      "cookiePolicy": "Cookie policy",
+      "privacyPolicy": "Privacy policy",
+      "accept": "Alle akzeptieren",
+      "essential": "Nur essenzielle",
+      "dialogLabel": "Cookie consent",
+      "reopen": "Open cookie settings"
+    },
     "prints": "Wall art and metal prints",
     "events": "Dates and events"
   },

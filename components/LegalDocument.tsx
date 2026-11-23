@@ -14,6 +14,28 @@ type LegalDocumentProps = {
   logoUrl: string | null;
 };
 
+function LegalParagraph({ text }: { text: string }) {
+  const parts = text.split(/(https:\/\/[^\s]+)/);
+  return (
+    <p>
+      {parts.map((part, index) =>
+        part.startsWith("https://") ? (
+          <a
+            key={`${part}-${index}`}
+            href={part}
+            className="underline underline-offset-2"
+            rel="noopener noreferrer"
+          >
+            {part}
+          </a>
+        ) : (
+          <span key={`${index}-${part.slice(0, 12)}`}>{part}</span>
+        )
+      )}
+    </p>
+  );
+}
+
 export default function LegalDocument({ document, locale, dictionary, logoUrl }: LegalDocumentProps) {
   return (
     <div className="min-h-screen bg-[#F4F1ED] text-[#322B2B]">
@@ -45,7 +67,7 @@ export default function LegalDocument({ document, locale, dictionary, logoUrl }:
                 }`}
               >
                 {block.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+                  <LegalParagraph key={paragraph} text={paragraph} />
                 ))}
               </div>
             </section>

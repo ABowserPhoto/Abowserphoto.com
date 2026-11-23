@@ -38,8 +38,7 @@ export function offerPageCopy(kind: OfferPageKind, locale: Locale): OfferPageCop
               "Präsentation im Studio oder bei Ihnen",
               "Fertigung, Lieferung, auf Wunsch Montage",
             ],
-            footnote:
-              "Individuell angefertigte Drucke sind vom Widerrufsrecht ausgenommen (§ 312g Abs. 2 Nr. 1 BGB). Alle Preise inkl. 19 % MwSt. Dieser Satz steht zur Prüfung, bevor Drucke online verkauft werden.",
+            footnote: null,
             datesPlaceholder: null,
           }
         : {
@@ -61,8 +60,7 @@ export function offerPageCopy(kind: OfferPageKind, locale: Locale): OfferPageCop
               "A presentation in the studio or at your place",
               "Production, delivery, and installation if you want it",
             ],
-            footnote:
-              "Prints made to order are excluded from the right of withdrawal (section 312g (2) no. 1 of the German Civil Code). All prices include 19% VAT. This sentence is here for review before prints are sold online.",
+            footnote: null,
             datesPlaceholder: null,
           };
     case "events":

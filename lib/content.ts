@@ -144,11 +144,11 @@ Before the day we get to know each other, with an engagement shoot if you like. 
       {
         title: "Digital Room Staging",
         description:
-          "Virtually staged pictures are labelled in the image (“Virtually staged”). We do not change the building: walls, windows, views, and defects are neither added nor removed.",
+          "Virtually staged pictures are labelled in the image (“Virtuell eingerichtet”). We do not change the building: walls, windows, views, and defects are neither added nor removed.",
         image: "/real-estate/services/digitales-homestaging.webp",
         beforeImage: "/real-estate/services/homestaging-vorher.webp",
         afterImage: "/real-estate/services/homestaging-nachher.webp",
-        badge: "Virtually staged",
+        badge: "Virtuell eingerichtet",
       },
       {
         title: "360° Virtual Tour",

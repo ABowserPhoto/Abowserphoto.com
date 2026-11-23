@@ -88,6 +88,21 @@ test("legal pages no longer carry a public draft note", () => {
     }
   }
   const notice = getLegalDocument("/impressum", "de");
-  assert.match(notice.blocks.map((block) => block.paragraphs.join(" ")).join("\n"), /Aaron Bowser/);
-  assert.match(notice.blocks.map((block) => block.heading).join(" "), /Streitbeilegung/);
+  const noticeText = notice.blocks.map((block) => block.paragraphs.join(" ")).join("\n");
+  assert.match(noticeText, /Aaron Bowser/);
+  assert.equal(
+    noticeText.includes(
+      "Die Aaron Bowser Photography UG (haftungsbeschränkt) ist nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen."
+    ),
+    true
+  );
+  const privacy = getLegalDocument("/datenschutz", "de");
+  const privacyText = privacy.blocks.map((block) => block.paragraphs.join(" ")).join("\n");
+  assert.equal(privacyText.includes("nicht hinterlegt"), false);
+  assert.equal(privacyText.includes("nicht festgelegt"), false);
+  assert.match(privacyText, /e-passtransfer GmbH/);
+  assert.match(privacyText, /eu-west-1/);
+  assert.match(privacyText, /Virtuell eingerichtet|Cloudflare/);
+  assert.equal(offerPageCopy("prints", "de").footnote, null);
+  assert.equal(JSON.stringify(offerPageCopy("prints", "de")).includes("312g"), false);
 });

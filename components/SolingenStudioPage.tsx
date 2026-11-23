@@ -93,8 +93,6 @@ export default function SolingenStudioPage({
         </ul>
         <p>{rental.vat}</p>
         <p>{rental.invoice}</p>
-        <p className="rounded-xl border border-dashed border-[#322B2B]/30 px-4 py-3">{rental.inclusionsPlaceholder}</p>
-        <p className="rounded-xl border border-dashed border-[#322B2B]/30 px-4 py-3">{rental.termsPlaceholder}</p>
         <p>{rental.photographerExtra}</p>
         <h2 className="pt-4 text-2xl font-light tracking-tight">
           {de ? "Wofür der Raum da ist" : "What the room is for"}

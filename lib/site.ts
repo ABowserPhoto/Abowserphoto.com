@@ -242,8 +242,6 @@ export function solingenRentalCopy(locale: "de" | "en") {
       fullDay: `Ganzer Tag (${rates.fullDayHours} Std.): ${rates.fullDayEur} €`,
       vat: "Alle Preise inkl. 19 % MwSt.",
       invoice: "Für Geschäftskunden: Rechnung mit ausgewiesener MwSt.",
-      inclusionsPlaceholder: "Inklusive: [Licht, Hintergründe, Reinigung – vom Inhaber zu bestätigen]",
-      termsPlaceholder: "Mietbedingungen: [Stornierung, Schäden, Hausordnung – vom Inhaber zu bestätigen]",
       photographerExtra: "Extras: Studio + Fotograf auf Anfrage",
     };
   }
@@ -253,8 +251,6 @@ export function solingenRentalCopy(locale: "de" | "en") {
     fullDay: `Full day (${rates.fullDayHours} hours): €${rates.fullDayEur}`,
     vat: "All prices include 19% VAT.",
     invoice: "Business customers receive an invoice with VAT shown.",
-    inclusionsPlaceholder: "Included: [lighting, backdrops, cleaning — to be confirmed by the owner]",
-    termsPlaceholder: "Rental terms: [cancellation, damage, house rules — to be confirmed by the owner]",
     photographerExtra: "Extras: studio + photographer on request",
   };
 }
