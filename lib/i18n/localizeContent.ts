@@ -35,27 +35,30 @@ const germanCategoryCopy: Partial<
 
 Ich bin Aaron Bowser, Immobilienfotograf aus Hagen, und fotografiere Wohnungen, Häuser und Gewerbeflächen in Hagen, Solingen und ganz NRW. Mir geht es um Raum, Licht und Perspektive: Bilder, die eine Immobilie einladend und zugleich ehrlich zeigen, so wie Interessenten sie bei der Besichtigung erleben.
 
-Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Neben Innen- und Außenaufnahmen gehören Twilight-Aufnahmen, Drohnenfotos, Drohnenvideo, 360°-Rundgänge, kurze Filme und gekennzeichnetes virtuelles Homestaging dazu. Drohnenfotos und Drohnenvideo sind ein optionales Extra: Die Drohnenfotos werden auf das Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein. Pakete und Preise stehen im Kundenkonto.`,
+Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sind ein Fotopaket ohne Video, die optionalen Extras Walk Thru Video und Agent Branding Video sowie die Pakete Premium Home und Luxury Makler. Bei Premium Home und Luxury Makler werden Drohnenfotos auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in das Video ein. Preise stehen im Kundenkonto.`,
     services: [
       {
-        title: "Foto",
+        title: "Fotopaket",
         description:
-          "Exposé-Fotos im Umfang des Fotopakets, das Sie im Kundenkonto wählen, mit HDR-Bearbeitung und gekennzeichneten virtuellen Einrichtungen. Die Fotos sind innerhalb von 24 Stunden da.",
+          "Ein Fotopaket, das Sie im Kundenkonto wählen. Nur Fotos, ohne Video. Die Preise stehen im Kundenkonto.",
       },
       {
-        title: "Foto + Reel",
-        description:
-          "Alles aus „Foto“ plus ein Reel im Hochformat von 30–45 Sekunden (Raumtour, Musik, Untertitel). Fotos innerhalb von 24 Stunden, das Reel innerhalb von 48–72 Stunden.",
+        title: "Walk Thru Video",
+        description: "Ein optionales Extra. Ein Walkthrough durch die Immobilie.",
       },
       {
-        title: "Showcase",
-        description:
-          "Foto und Reel, dazu ein Objekt- oder Maklervideo von 60–90 Sekunden und eine eigene Objektseite mit Fotos, Video, Grundriss und Kontakt. Drohnenfotos und Drohnenvideo können dazugebucht werden.",
+        title: "Agent Branding Video",
+        description: "Ein optionales Extra. Ein Video mit dem Makler im Mittelpunkt.",
       },
       {
-        title: "Extras",
+        title: "Premium Home",
         description:
-          "Drohnenfotos und Drohnenvideo · 360°-Rundgang · Maklervideo · weitere virtuelle Einrichtung · Twilight-Aufnahmen. Drohnenfotos werden auf das Fotopaket angerechnet. Drohnenaufnahmen fließen in das Video ein.",
+          "Das Fotopaket Ihrer Wahl plus ein Highlight-Video. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Preise stehen im Kundenkonto.",
+      },
+      {
+        title: "Luxury Makler",
+        description:
+          "Wie Premium Home, nur ist das Video ein Walkthrough mit dem Makler im Fokus. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Preise stehen im Kundenkonto.",
       },
       {
         title: "Digitales Homestaging",
@@ -65,7 +68,7 @@ Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Neben Innen- und
       },
       {
         title: "360°-Rundgang",
-        description: "Ein Extra, nicht Teil von Foto. Ein Rundgang, wenn das Objekt ihn braucht.",
+        description: "Ein optionales Extra zum Fotopaket. Ein Rundgang, wenn das Objekt ihn braucht.",
       },
     ],
   },

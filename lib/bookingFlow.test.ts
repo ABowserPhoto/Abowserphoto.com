@@ -290,29 +290,50 @@ test("stored Agent branding Video rows still read as Agent Branding Video", () =
   assert.equal(german.bundles["premium-home"].name, "Premium Home Paket");
 });
 
-test("the real-estate landing describes three tiers and does not publish a price or a drone default", () => {
+test("the real-estate landing uses the booking offer names and publishes no price or photo count", () => {
   const english = getLocalizedCategory("real-estate", "en");
   const german = getLocalizedCategory("real-estate", "de");
-  const titles = [...english.services, ...german.services].map((service) => service.title);
-  assert.equal(titles.includes("Premium Home package"), false);
-  assert.equal(titles.includes("Premium Home Paket"), false);
-  assert.equal(titles.includes("Luxury Makler package"), false);
-  assert.equal(titles.includes("Luxury Makler Paket"), false);
   assert.deepEqual(
     german.services.map((service) => service.title),
-    ["Foto", "Foto + Reel", "Showcase", "Extras", "Digitales Homestaging", "360°-Rundgang"]
+    [
+      "Fotopaket",
+      "Walk Thru Video",
+      "Agent Branding Video",
+      "Premium Home",
+      "Luxury Makler",
+      "Digitales Homestaging",
+      "360°-Rundgang",
+    ]
   );
-  const showcase = german.services.find((service) => service.title === "Showcase");
-  const extras = german.services.find((service) => service.title === "Extras");
-  assert.match(showcase?.description ?? "", /Drohnenfoto/);
-  assert.equal((showcase?.description ?? "").includes("auf Anfrage"), false);
-  assert.match(extras?.description ?? "", /Fotopaket/);
-  assert.equal((extras?.description ?? "").includes("auf Anfrage"), false);
-  const blob = [...english.services, ...german.services, german.aboutText, english.aboutText]
-    .map((service) => `${service.title} ${service.description}`)
-    .join("\n");
+  assert.deepEqual(
+    english.services.map((service) => service.title),
+    [
+      "Photo package",
+      "Walk Thru Video",
+      "Agent Branding Video",
+      "Premium Home",
+      "Luxury Makler",
+      "Digital Room Staging",
+      "360° Virtual Tour",
+    ]
+  );
+  const premium = german.services.find((service) => service.title === "Premium Home");
+  const luxury = german.services.find((service) => service.title === "Luxury Makler");
+  assert.match(premium?.description ?? "", /Highlight-Video/);
+  assert.match(premium?.description ?? "", /Drohnenfotos werden auf das Fotopaket angerechnet/);
+  assert.match(luxury?.description ?? "", /Makler im Fokus/);
+  const blob = [
+    ...english.services.map((service) => `${service.title} ${service.description}`),
+    ...german.services.map((service) => `${service.title} ${service.description}`),
+    german.aboutText,
+    english.aboutText,
+  ].join("\n");
   assert.equal(blob.includes("15–25"), false);
   assert.equal(blob.includes("15-25"), false);
+  assert.equal(blob.includes("Foto + Reel"), false);
+  assert.equal(blob.includes("Showcase"), false);
+  assert.equal(blob.includes("Photo + Reel"), false);
+  assert.equal(/\b(10|15|25|30|40|50)[-\s]?(Foto|photo)/i.test(blob), false);
   assert.equal(money(blob), false);
   assert.equal(blob.includes("MLS"), false);
 });

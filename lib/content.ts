@@ -118,27 +118,31 @@ Before the day we get to know each other, with an engagement shoot if you like. 
     portfolioImages: buildPortfolio("real-estate"),
     services: [
       {
-        title: "Photo",
+        title: "Photo package",
         description:
-          "Exposé photographs in the size of the photo package you choose in the client account, with HDR editing and labelled virtual staging. Photographs are delivered within 24 hours.",
+          "A photo package you choose in the client account. Photographs only, with no video. Prices are in the client account.",
         image: "/real-estate/services/innenaufnahmen-immobilie.webp",
       },
       {
-        title: "Photo + Reel",
-        description:
-          "Everything in Photo, plus a vertical reel of 30–45 seconds (a walk through the rooms, music, subtitles). Photographs within 24 hours, the reel within 48–72 hours.",
+        title: "Walk Thru Video",
+        description: "An optional extra. A walkthrough of the property.",
         image: "/real-estate/services/highlight-video-immobilie.webp",
       },
       {
-        title: "Showcase",
+        title: "Agent Branding Video",
+        description: "An optional extra. A video centred on the agent.",
+        image: "/real-estate/services/makler-branding.webp",
+      },
+      {
+        title: "Premium Home",
         description:
-          "Photo and reel, plus a 60–90 second property or agent film and a page for the property with photographs, video, floor plan, and contact. Drone photos and drone video can be added.",
+          "The photo package of your choice plus a highlight video. Drone photos count toward the photo package, and drone footage is used in that video. Prices are in the client account.",
         image: "/real-estate/services/aussenaufnahmen-immobilie.webp",
       },
       {
-        title: "Extras",
+        title: "Luxury Makler",
         description:
-          "Drone photos and drone video · 360° tour · agent film · further virtual staging · twilight. Drone photos count toward the photo package. Drone footage is used in the video.",
+          "The same as Premium Home, except the video is a walkthrough with the agent as the focus. Drone photos count toward the photo package, and drone footage is used in that video. Prices are in the client account.",
         image: "/real-estate/services/twilight-immobilie.webp",
       },
       {
@@ -152,7 +156,7 @@ Before the day we get to know each other, with an engagement shoot if you like. 
       },
       {
         title: "360° Virtual Tour",
-        description: "An extra, not part of Photo. An immersive tour when the property needs one.",
+        description: "An optional extra alongside the photo package. An immersive tour when the property needs one.",
         image: "/real-estate/services/360-grad-rundgang.webp",
         mediaType: "embed",
         tours: [
@@ -165,7 +169,7 @@ Before the day we get to know each other, with an engagement shoot if you like. 
 
 I'm Aaron Bowser, a real estate photographer based in Hagen, photographing apartments, houses and commercial spaces in Hagen, Solingen and across North Rhine-Westphalia. I focus on space, light and perspective, so every property looks inviting and true to what buyers see at a viewing.
 
-I work with agents, developers, property managers and owners. Alongside interior and exterior photography I offer twilight shots, drone photos, drone video, 360° virtual tours, short films and labelled virtual staging. Drone photos and drone video are an optional extra: the drone photos count toward the photo package, and the drone footage is used in the video. Packages and prices are in the client account.`,
+I work with agents, developers, property managers and owners. The offers are a photo package with no video, the optional extras Walk Thru Video and Agent Branding Video, and the bundles Premium Home and Luxury Makler. In Premium Home and Luxury Makler, drone photos count toward the photo package and drone footage is used in the video. Prices are in the client account.`,
     aboutImage:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1000&q=80",
     faq: [
