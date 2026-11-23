@@ -252,6 +252,8 @@
     "selectAtLeastOneService": "Please select at least one service.",
     "selectPhotoPackageError": "Please select a photo package or individual photos.",
     "selectBundlePhotoPackage": "Please select a photo package.",
+    "selectHomestagingCount": "Please enter how many photos to stage.",
+    "homestagingPhotos": "Number of photos to stage",
     "selectOffer": "Please choose a package or build your own.",
     "selection": "Selection",
     "buildYourOwn": "Build your own",

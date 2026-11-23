@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import { loadBookingPrices } from "../actions/loadBookingPrices";
 import { submitBooking, type BookingFormData } from "../actions/submitBooking";
 import { immobilienBookingLead, trackGenerateLead } from "../lib/analytics";
 import {
@@ -14,11 +15,27 @@ import {
   isBookingBundle,
   isPropertyStatus,
   resolveImmobilienSelection,
+  resolvePhotoChoice,
+  selectedPhotoLimit,
   todayInputValue,
   type BookingBundle,
   type BookingService,
+  type ImmobilienSelection,
   type PropertyStatus,
 } from "../lib/booking";
+import {
+  buildDisplayedQuote,
+  bundlePriceItemKey,
+  formatEstimatedTotal,
+  formatSnapshotLine,
+  individualPhotoItemKey,
+  optionPriceTexts,
+  photoPackageItemKey,
+  priceCopy,
+  priceNoteLines,
+  servicePriceItemKeys,
+  type ClientPriceItem,
+} from "../lib/clientPricing";
 import { useDictionary, useLocale } from "../lib/i18n/LocaleProvider";
 import { createClient } from "../lib/supabase/client";
 import { useAvailableTimes } from "../lib/useAvailableTimes";
@@ -56,7 +73,21 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
   const [individualCount, setIndividualCount] = useState("");
   const [offer, setOffer] = useState<OfferChoice>("");
   const [highlightRoom, setHighlightRoom] = useState("");
+  const [services, setServices] = useState<BookingService[]>([]);
+  const [homestagingCount, setHomestagingCount] = useState(1);
+  const [priceItems, setPriceItems] = useState<ClientPriceItem[] | null>(null);
   const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate, locale);
+
+  useEffect(() => {
+    let active = true;
+    void loadBookingPrices().then((result) => {
+      if (!active) return;
+      setPriceItems(result.status === "ready" ? result.items : null);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   async function handleSignOut() {
     setIsSigningOut(true);
@@ -78,6 +109,63 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
     setOffer(next);
     if (next !== "custom") setIndividualCount("");
     if (next !== "premium-home") setHighlightRoom("");
+  }
+
+  function toggleService(service: BookingService) {
+    setServices((current) =>
+      current.includes(service) ? current.filter((item) => item !== service) : [...current, service]
+    );
+  }
+
+  const photoLimit = useMemo(() => {
+    if (offer !== "custom") return null;
+    const photos = resolvePhotoChoice(
+      photoPackage || null,
+      individualCount === "" ? null : Number(individualCount)
+    );
+    return selectedPhotoLimit(photos?.photoPackage ?? null, photos?.individualPhotoCount ?? null);
+  }, [offer, photoPackage, individualCount]);
+
+  useEffect(() => {
+    if (photoLimit != null && homestagingCount > photoLimit) {
+      setHomestagingCount(photoLimit);
+    }
+  }, [photoLimit, homestagingCount]);
+
+  const priceQuote = useMemo(() => {
+    if (!priceItems) return null;
+    const photos =
+      offer === "custom"
+        ? resolvePhotoChoice(photoPackage || null, individualCount === "" ? null : Number(individualCount))
+        : resolvePhotoChoice(photoPackage || null, null);
+    const stagedCount =
+      offer === "custom" && services.includes("Digital Homestaging") ? homestagingCount : null;
+    const selection: ImmobilienSelection = isBookingBundle(offer)
+      ? {
+          bundle: offer,
+          services: [],
+          photoPackage: photos?.photoPackage ?? null,
+          individualPhotoCount: null,
+          highlightRoom: null,
+          homestagingPhotoCount: null,
+        }
+      : {
+          bundle: null,
+          services: offer === "custom" ? services : [],
+          photoPackage: photos?.photoPackage ?? null,
+          individualPhotoCount: photos?.individualPhotoCount ?? null,
+          highlightRoom: null,
+          homestagingPhotoCount: stagedCount,
+        };
+    return buildDisplayedQuote(priceItems, selection);
+  }, [priceItems, offer, services, photoPackage, individualCount, homestagingCount]);
+
+  function optionLabel(label: string, price: string | null) {
+    return price ? `${label} · ${price}` : label;
+  }
+
+  function singlePrice(keys: Parameters<typeof optionPriceTexts>[1]) {
+    return optionPriceTexts(priceItems, keys, locale)[0] ?? null;
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -104,10 +192,11 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
 
     const selection = resolveImmobilienSelection({
       offer,
-      services: formData.getAll("services").map(String),
+      services,
       photoPackage: photoPackage || null,
       individualPhotoCount: individualCount === "" ? null : Number(individualCount),
       highlightRoom,
+      homestagingPhotoCount: services.includes("Digital Homestaging") ? homestagingCount : null,
     });
     if (!selection.ok) {
       switch (selection.reason) {
@@ -122,6 +211,9 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           return;
         case "bundle-photos":
           setErrorMessage(booking.selectBundlePhotoPackage);
+          return;
+        case "homestaging":
+          setErrorMessage(booking.selectHomestagingCount);
           return;
         default: {
           const neverReason: never = selection.reason;
@@ -144,6 +236,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
       individualPhotoCount: selection.selection.individualPhotoCount,
       offer,
       highlightRoom,
+      homestagingPhotoCount: selection.selection.homestagingPhotoCount,
       additionalDetails: String(formData.get("additionalDetails") ?? ""),
       locale,
     };
@@ -350,6 +443,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           <div className="grid grid-cols-1 gap-2">
             {BOOKING_BUNDLES.map((bundleId) => {
               const bundle = booking.bundles[bundleId];
+              const bundlePrice = singlePrice([bundlePriceItemKey(bundleId)]);
               return (
                 <label key={bundleId} className={bundleChoiceClassName}>
                   <input
@@ -361,7 +455,14 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                     className="mt-1 accent-[#F4F1ED]"
                   />
                   <span className="min-w-0">
-                    <span className="block font-medium">{bundle.name}</span>
+                    <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <span className="font-medium">{bundle.name}</span>
+                      {bundlePrice ? (
+                        <span className="ml-auto text-right text-xs font-normal leading-snug text-[#F4F1ED]/70">
+                          {bundlePrice}
+                        </span>
+                      ) : null}
+                    </span>
                     <span className="mt-1 block text-xs leading-relaxed text-[#F4F1ED]/75">{bundle.description}</span>
                   </span>
                 </label>
@@ -401,7 +502,10 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                 onChange={setPhotoPackage}
                 options={PHOTO_PACKAGES.map((item) => ({
                   value: item.id,
-                  label: getPhotoPackageLabel(item.id, locale),
+                  label: optionLabel(
+                    getPhotoPackageLabel(item.id, locale),
+                    singlePrice([photoPackageItemKey(item.id)])
+                  ),
                 }))}
               />
             </div>
@@ -456,12 +560,35 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                 {booking.selectService} *
               </legend>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {BOOKING_SERVICES.map((service) => (
-                  <label key={service} className={choiceClassName}>
-                    <input type="checkbox" name="services" value={service} className="accent-[#F4F1ED]" />
-                    {serviceLabel(service)}
-                  </label>
-                ))}
+                {BOOKING_SERVICES.map((service) => {
+                  const priceTexts = optionPriceTexts(priceItems, servicePriceItemKeys(service), locale);
+                  return (
+                    <label key={service} className={choiceClassName}>
+                      <input
+                        type="checkbox"
+                        name="services"
+                        value={service}
+                        checked={services.includes(service)}
+                        onChange={() => toggleService(service)}
+                        className="accent-[#F4F1ED]"
+                      />
+                      {priceTexts.length > 0 ? (
+                        <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-3 gap-y-1">
+                          <span className="leading-snug">{serviceLabel(service)}</span>
+                          <span className="ml-auto text-right text-xs leading-snug text-[#F4F1ED]/70">
+                            {priceTexts.map((text) => (
+                              <span key={text} className="block">
+                                {text}
+                              </span>
+                            ))}
+                          </span>
+                        </span>
+                      ) : (
+                        serviceLabel(service)
+                      )}
+                    </label>
+                  );
+                })}
               </div>
             </fieldset>
 
@@ -488,7 +615,10 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                     }}
                     options={PHOTO_PACKAGES.map((item) => ({
                       value: item.id,
-                      label: getPhotoPackageLabel(item.id, locale),
+                      label: optionLabel(
+                        getPhotoPackageLabel(item.id, locale),
+                        singlePrice([photoPackageItemKey(item.id)])
+                      ),
                     }))}
                   />
                 </div>
@@ -510,13 +640,74 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
                     }}
                     options={INDIVIDUAL_PHOTO_COUNTS.map((count) => ({
                       value: String(count),
-                      label: getIndividualPhotoLabel(count, locale),
+                      label: optionLabel(
+                        getIndividualPhotoLabel(count, locale),
+                        singlePrice([individualPhotoItemKey()])
+                      ),
                     }))}
                   />
                 </div>
               </div>
             </fieldset>
+
+            {services.includes("Digital Homestaging") ? (
+              <div>
+                <label
+                  htmlFor="homestagingPhotos"
+                  className="mb-2 block text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65"
+                >
+                  {booking.homestagingPhotos} *
+                </label>
+                <input
+                  id="homestagingPhotos"
+                  name="homestagingPhotos"
+                  type="number"
+                  inputMode="numeric"
+                  required
+                  min={1}
+                  max={photoLimit ?? 50}
+                  value={homestagingCount}
+                  onChange={(event) => {
+                    const raw = event.target.value;
+                    if (raw === "") return;
+                    const next = Number(raw);
+                    if (!Number.isInteger(next)) return;
+                    const limit = photoLimit ?? 50;
+                    setHomestagingCount(Math.min(limit, Math.max(1, next)));
+                  }}
+                  className={`${inputClassName} min-w-0 max-w-full [color-scheme:dark]`}
+                />
+              </div>
+            ) : null}
           </>
+        ) : null}
+
+        {priceQuote ? (
+          <div className="border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED]" aria-live="polite">
+            <ul className="space-y-2">
+              {priceQuote.lines.map((line) => (
+                <li key={line.itemKey} className="flex items-start justify-between gap-3">
+                  <span className="min-w-0 leading-snug">
+                    {(locale === "de" ? line.labelDe : line.labelEn) || line.itemKey}
+                  </span>
+                  <span className="shrink-0 text-right text-xs leading-snug text-[#F4F1ED]/70">
+                    {formatSnapshotLine(line, locale)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 flex items-start justify-between gap-3 border-t border-gray-800 pt-3">
+              <span className="text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
+                {priceCopy(locale).estimatedTotal}
+              </span>
+              <span className="text-right leading-snug">{formatEstimatedTotal(priceQuote, locale)}</span>
+            </div>
+            {priceNoteLines(priceQuote, locale).map((line) => (
+              <p key={line} className="mt-2 text-xs leading-relaxed text-[#F4F1ED]/60">
+                {line}
+              </p>
+            ))}
+          </div>
         ) : null}
 
         <div>

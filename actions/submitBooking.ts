@@ -10,6 +10,8 @@ import {
   type PropertyStatus,
 } from "../lib/booking";
 import { bookingFailureMessage, placeShootRequest } from "../lib/bookingRequests";
+import { buildPriceSnapshot, type PriceSnapshot } from "../lib/clientPricing";
+import { loadSnapshotCatalog } from "../lib/loadSnapshotPrices";
 import { getAuthCopy, getBookingCopy, resolveLocale } from "../lib/i18n/messages";
 import { createClient } from "../lib/supabase/server";
 
@@ -26,6 +28,7 @@ export type BookingFormData = {
   individualPhotoCount: IndividualPhotoCount | null;
   offer: string;
   highlightRoom?: string;
+  homestagingPhotoCount?: number | null;
   additionalDetails?: string;
   locale?: string;
 };
@@ -78,6 +81,7 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
     photoPackage: data.photoPackage,
     individualPhotoCount: data.individualPhotoCount,
     highlightRoom: data.highlightRoom ?? "",
+    homestagingPhotoCount: data.homestagingPhotoCount ?? null,
   });
   const additionalDetails = (data.additionalDetails ?? "").replace(/\r\n/g, "\n").trim().slice(0, 2000);
 
@@ -104,6 +108,8 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
         return { success: false, message: booking.selectPhotoPackageError };
       case "bundle-photos":
         return { success: false, message: booking.selectBundlePhotoPackage };
+      case "homestaging":
+        return { success: false, message: booking.selectHomestagingCount };
       default: {
         const neverReason: never = selection.reason;
         return { success: false, message: neverReason };
@@ -129,6 +135,15 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
     };
   }
 
+  let priceSnapshot: PriceSnapshot | null = null;
+  try {
+    const catalog = await loadSnapshotCatalog(userData.user.id);
+    if (catalog) priceSnapshot = buildPriceSnapshot(catalog, selection.selection);
+  } catch {
+    console.error("Client price catalog could not be loaded.");
+    return { success: false, message: booking.saveFailed };
+  }
+
   try {
     await placeShootRequest({
       kind: "immobilien",
@@ -149,6 +164,8 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
       individualPhotoCount: selection.selection.individualPhotoCount,
       bundle: selection.selection.bundle,
       highlightRoom: selection.selection.highlightRoom,
+      homestagingPhotoCount: selection.selection.homestagingPhotoCount,
+      priceSnapshot,
     });
   } catch (error) {
     return { success: false, message: bookingFailureMessage(error, booking) };

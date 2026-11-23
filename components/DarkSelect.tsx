@@ -96,7 +96,7 @@ export default function DarkSelect({
         className="flex w-full items-center justify-between rounded-none border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-left text-sm text-[#F4F1ED] outline-none transition-colors duration-300 focus:border-[#F4F1ED]/60 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <span
-          className={`min-w-0 flex-1 ${
+          className={`min-w-0 flex-1 whitespace-normal break-words leading-snug ${
             selected && !loading ? "text-[#F4F1ED]" : "text-[#F4F1ED]/40"
           }`}
         >
@@ -118,7 +118,7 @@ export default function DarkSelect({
               <li key={option.value} role="option" aria-selected={isSelected}>
                 <button
                   type="button"
-                  className={`w-full px-4 py-2.5 text-left text-sm text-[#F4F1ED] hover:bg-[#2A2A2A] ${
+                  className={`w-full whitespace-normal break-words px-4 py-2.5 text-left text-sm leading-snug text-[#F4F1ED] hover:bg-[#2A2A2A] ${
                     isSelected ? "bg-[#2A2A2A]" : "bg-[#1A1A1A]"
                   }`}
                   onClick={() => {

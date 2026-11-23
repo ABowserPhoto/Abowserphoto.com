@@ -65,13 +65,20 @@ export async function updateProfile(data: ProfileFormData): Promise<UpdateProfil
   };
 
   if (existing) {
-    const { error: updateError } = await supabase.from("clients").update(payload).eq("id", existing.id);
+    const { error: updateError } = await supabase
+      .from("clients")
+      .update(payload)
+      .eq("id", existing.id)
+      .select("id");
     if (updateError) {
       console.error("Client profile update failed:", updateError);
       throw new Error(updateError.message);
     }
   } else {
-    const { error: insertError } = await supabase.from("clients").insert({ ...payload, is_approved: false });
+    const { error: insertError } = await supabase
+      .from("clients")
+      .insert({ ...payload, is_approved: false })
+      .select("id");
     if (insertError) {
       console.error("Client profile insert failed:", insertError);
       throw new Error(insertError.message);

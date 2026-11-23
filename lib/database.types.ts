@@ -17,6 +17,7 @@ export type Database = {
           is_approved: boolean;
           last_name: string | null;
           phone_number: string | null;
+          pricing_tier: string | null;
           user_id: string | null;
         };
         Insert: {
@@ -32,6 +33,7 @@ export type Database = {
           is_approved?: boolean;
           last_name?: string | null;
           phone_number?: string | null;
+          pricing_tier?: string | null;
           user_id?: string | null;
         };
         Update: {
@@ -47,7 +49,65 @@ export type Database = {
           is_approved?: boolean;
           last_name?: string | null;
           phone_number?: string | null;
+          pricing_tier?: string | null;
           user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      client_pricing_tiers: {
+        Row: {
+          client_id: string;
+          tier: string;
+          updated_at: string;
+        };
+        Insert: {
+          client_id: string;
+          tier: string;
+          updated_at?: string;
+        };
+        Update: {
+          client_id?: string;
+          tier?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      pricing_tier_prices: {
+        Row: {
+          active: boolean;
+          id: string;
+          item_key: string;
+          label_de: string | null;
+          label_en: string | null;
+          price_net_cents: number | null;
+          sort_order: number | null;
+          tier: string;
+          unit: string;
+          updated_at: string;
+        };
+        Insert: {
+          active?: boolean;
+          id?: string;
+          item_key: string;
+          label_de?: string | null;
+          label_en?: string | null;
+          price_net_cents?: number | null;
+          sort_order?: number | null;
+          tier: string;
+          unit?: string;
+          updated_at?: string;
+        };
+        Update: {
+          active?: boolean;
+          id?: string;
+          item_key?: string;
+          label_de?: string | null;
+          label_en?: string | null;
+          price_net_cents?: number | null;
+          sort_order?: number | null;
+          tier?: string;
+          unit?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -184,8 +244,10 @@ export type Database = {
           individual_photo_count: number | null;
           bundle: string | null;
           highlight_room: string | null;
+          homestaging_photo_count: number | null;
           notes: string | null;
           photo_package: string | null;
+          price_snapshot: Json | null;
           property_status: string | null;
           requested_date: string;
           requested_time: string;
@@ -211,11 +273,13 @@ export type Database = {
           individual_photo_count?: number | null;
           bundle?: string | null;
           highlight_room?: string | null;
+          homestaging_photo_count?: number | null;
           kind: string;
           locale: string;
           location_address?: string | null;
           notes?: string | null;
           photo_package?: string | null;
+          price_snapshot?: Json | null;
           property_status?: string | null;
           requested_date: string;
           requested_time: string;
@@ -241,11 +305,13 @@ export type Database = {
           individual_photo_count?: number | null;
           bundle?: string | null;
           highlight_room?: string | null;
+          homestaging_photo_count?: number | null;
           kind?: string;
           locale?: string;
           location_address?: string | null;
           notes?: string | null;
           photo_package?: string | null;
+          price_snapshot?: Json | null;
           property_status?: string | null;
           requested_date?: string;
           requested_time?: string;
@@ -261,7 +327,17 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_my_booking_prices: {
+        Args: Record<string, never>;
+        Returns: {
+          item_key: string;
+          label_de: string | null;
+          label_en: string | null;
+          unit: string;
+          price_net_cents: number | null;
+          sort_order: number | null;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

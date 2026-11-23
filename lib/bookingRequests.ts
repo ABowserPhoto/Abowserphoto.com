@@ -14,6 +14,7 @@ import {
   bundleDetailRows,
   bundleFromRow,
   highlightRoomFromRow,
+  homestagingPhotoCountFromRow,
   isShootKind,
   isShootStatus,
   keepLines,
@@ -21,6 +22,7 @@ import {
   photoChoiceRows,
   photoPackageFromRow,
   propertyStatusFromRow,
+  requestPriceSnapshot,
   safeHttpUrl,
   serviceLabel,
   servicesFromRow,
@@ -37,6 +39,8 @@ import {
   isMissingCalendarEvent,
   queryAvailableTimesForDate,
 } from "./googleCalendar";
+import type { PriceSnapshot } from "./clientPricing";
+import { priceSnapshotToJson } from "./pricingTier";
 import type { Locale } from "./i18n/config";
 import { getBookingCopy, resolveLocale } from "./i18n/messages";
 import { sendShootDecisionEmail, sendShootRequestEmails } from "./mail";
@@ -69,6 +73,8 @@ export type PlaceShootRequestInput =
       individualPhotoCount: IndividualPhotoCount | null;
       bundle: BookingBundle | null;
       highlightRoom: string | null;
+      homestagingPhotoCount: number | null;
+      priceSnapshot: PriceSnapshot | null;
     })
   | (SharedPlace & {
       kind: "inquiry";
@@ -159,6 +165,7 @@ function detailsFromInput(input: PlaceShootRequestInput, timeZone: string): Requ
     requestedTime: input.requestedTime,
     timeZone,
     calendarUrl: null,
+    priceSnapshot: input.kind === "immobilien" ? input.priceSnapshot : null,
   };
 
   switch (input.kind) {
@@ -173,6 +180,7 @@ function detailsFromInput(input: PlaceShootRequestInput, timeZone: string): Requ
         individualPhotoCount: input.individualPhotoCount,
         bundle: input.bundle,
         highlightRoom: input.highlightRoom,
+        homestagingPhotoCount: input.homestagingPhotoCount,
         categorySlug: null,
       };
     case "inquiry":
@@ -186,6 +194,7 @@ function detailsFromInput(input: PlaceShootRequestInput, timeZone: string): Requ
         individualPhotoCount: null,
         bundle: null,
         highlightRoom: null,
+        homestagingPhotoCount: null,
         categorySlug: input.categorySlug,
       };
     default: {
@@ -212,12 +221,14 @@ function detailsFromRow(row: BookingRequestRow): RequestDetails {
     individualPhotoCount: individualPhotoCountFromRow(row.individual_photo_count),
     bundle: bundleFromRow(row.bundle),
     highlightRoom: highlightRoomFromRow(row.highlight_room),
+    homestagingPhotoCount: homestagingPhotoCountFromRow(row.homestaging_photo_count),
     categorySlug: row.category_slug,
     notes: row.notes,
     requestedDate: row.requested_date,
     requestedTime: row.requested_time,
     timeZone: row.time_zone,
     calendarUrl: safeHttpUrl(row.calendar_html_link),
+    priceSnapshot: requestPriceSnapshot(row.price_snapshot),
   };
 }
 
@@ -262,6 +273,7 @@ async function insertPendingRequest(input: {
     individual_photo_count: input.details.individualPhotoCount,
     bundle: input.details.bundle,
     highlight_room: input.details.highlightRoom,
+    homestaging_photo_count: input.details.homestagingPhotoCount,
     category_slug: input.details.categorySlug,
     notes: input.details.notes,
     requested_date: input.details.requestedDate,
@@ -270,6 +282,7 @@ async function insertPendingRequest(input: {
     event_summary: input.summary,
     calendar_event_id: input.calendarEventId,
     calendar_html_link: input.calendarHtmlLink,
+    price_snapshot: priceSnapshotToJson(input.details.priceSnapshot),
   });
 
   if (error) {

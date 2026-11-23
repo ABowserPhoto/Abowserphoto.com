@@ -10,6 +10,8 @@ import {
   resolveImmobilienSelection,
   resolvePhotoChoice,
 } from "./booking";
+import { buildPriceSnapshot, formatEstimatedTotal, type PriceCatalog, type PriceRow } from "./clientPricing";
+import { tierLabel } from "./pricingTier";
 import { bundleFromRow, photoPackageName, servicesFromRow, type RequestDetails } from "./bookingDetails";
 import { getDictionarySync } from "./i18n/getDictionary";
 import { getLocalizedCategory } from "./i18n/localizeContent";
@@ -40,12 +42,14 @@ const details: RequestDetails = {
   individualPhotoCount: null,
   bundle: null,
   highlightRoom: null,
+  homestagingPhotoCount: null,
   categorySlug: null,
   notes: "Bitte klingeln",
   requestedDate: "2026-11-22",
   requestedTime: "10:00",
   timeZone: "Europe/Berlin",
   calendarUrl: "https://calendar.google.com/calendar/event?eid=abc",
+  priceSnapshot: null,
 };
 
 function money(value: string) {
@@ -115,6 +119,8 @@ test("the studio email asks Aaron to approve and does not publish a price", () =
   assert.match(message.text, /Ablehnen:/);
   assert.match(message.text, /10-Foto-Paket/);
   assert.match(message.text, /Innenaufnahmen/);
+  assert.doesNotMatch(message.text, /Preisklasse/);
+  assert.doesNotMatch(message.text, /Geschätzte Summe/);
   assert.equal(money(message.html + message.text), false);
 });
 
@@ -386,6 +392,81 @@ test("posting the email link without the confirm form does not decide the reques
   assert.equal(response.status, 200);
   assert.match(body, /Dieser Link ist ungültig/);
   assert.doesNotMatch(body, /<form/i);
+});
+
+test("a priced request tells Aaron and the client the tier and the net total", () => {
+  const fee = 4 * 100;
+  const pack = 10 * 100;
+  const items: PriceRow[] = [
+    {
+      tier: "legacy",
+      itemKey: "photo_package_10",
+      labelDe: "10 Fotos",
+      labelEn: "10 photos",
+      unit: "flat",
+      priceNetCents: pack,
+      sortOrder: 10,
+      active: true,
+    },
+    {
+      tier: "legacy",
+      itemKey: "booking_fee",
+      labelDe: "Buchungsgebühr",
+      labelEn: "Booking fee",
+      unit: "flat",
+      priceNetCents: fee,
+      sortOrder: 80,
+      active: true,
+    },
+  ];
+  const prices: PriceCatalog = { tier: "legacy", items };
+  const chosen = resolveImmobilienSelection({
+    offer: "custom",
+    services: ["Interior"],
+    photoPackage: "bis-5-zimmer",
+    individualPhotoCount: null,
+    highlightRoom: "",
+  });
+  assert.equal(chosen.ok, true);
+  if (!chosen.ok) return;
+  const snapshot = buildPriceSnapshot(prices, chosen.selection);
+  const priced = { ...details, priceSnapshot: snapshot };
+  const studio = buildBusinessRequestEmail(priced, "g".repeat(43));
+  const client = buildClientReceivedEmail(priced);
+  const clientEn = buildClientReceivedEmail({ ...priced, locale: "en" });
+  const confirmed = buildClientConfirmedEmail({ ...priced, locale: "en" });
+  assert.match(studio.text, new RegExp(tierLabel(snapshot.tier)));
+  assert.match(studio.text, /Preisklasse/);
+  assert.match(studio.text, /Buchungsgebühr/);
+  assert.match(studio.text, /10 Fotos/);
+  assert.match(studio.text, new RegExp(formatEstimatedTotal(snapshot, "de").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  assert.match(studio.text, /zzgl\. MwSt\. und ggf\. Fahrtkosten ab 30 km/);
+  assert.doesNotMatch(client.text, /Preisklasse|Legacy|Standard|Corporate/);
+  assert.match(client.text, new RegExp(formatEstimatedTotal(snapshot, "de").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  assert.doesNotMatch(clientEn.text, /Pricing tier|Legacy|Standard|Corporate/);
+  assert.match(clientEn.text, /Booking fee/);
+  assert.match(clientEn.text, new RegExp(formatEstimatedTotal(snapshot, "en").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  assert.match(clientEn.text, /plus VAT and travel costs beyond 30 km where applicable/);
+  assert.match(confirmed.text, /Estimated total \(net\)/);
+  assert.doesNotMatch(confirmed.text, /Pricing tier|Legacy|Standard|Corporate/);
+  const declined = buildClientDeclinedEmail(priced);
+  assert.doesNotMatch(declined.text, /Preisklasse|Legacy|Standard|Corporate/);
+  assert.equal(money(buildBusinessRequestEmail(details, "h".repeat(43)).text), false);
+});
+
+test("homestaging quantity is named in both emails when no prices are shown", () => {
+  const staged: RequestDetails = {
+    ...details,
+    services: ["Interior", "Digital Homestaging"],
+    homestagingPhotoCount: 2,
+  };
+  const studio = buildBusinessRequestEmail(staged, "i".repeat(43));
+  const client = buildClientReceivedEmail(staged);
+  const clientEn = buildClientReceivedEmail({ ...staged, locale: "en" });
+  assert.match(studio.text, /Anzahl Fotos für Homestaging: 2/);
+  assert.match(client.text, /Anzahl Fotos für Homestaging: 2/);
+  assert.match(clientEn.text, /Number of photos to stage: 2/);
+  assert.equal(money(studio.text + client.text + clientEn.text), false);
 });
 
 test("the bundle migration only adds nullable columns", () => {

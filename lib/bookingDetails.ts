@@ -16,7 +16,16 @@ import {
   type PhotoPackage,
   type PropertyStatus,
 } from "./booking";
+import {
+  formatEstimatedTotal,
+  formatSnapshotLine,
+  priceCopy,
+  priceNoteLines,
+  type PriceSnapshot,
+} from "./clientPricing";
+import { priceSnapshotFromJson, tierLabel } from "./pricingTier";
 import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY } from "./contact";
+import type { Json } from "./database.types";
 import type { Locale } from "./i18n/config";
 import { getBookingCopy } from "./i18n/messages";
 import { BRAND_NAME } from "./site";
@@ -39,12 +48,14 @@ export type RequestDetails = {
   individualPhotoCount: IndividualPhotoCount | null;
   bundle: BookingBundle | null;
   highlightRoom: string | null;
+  homestagingPhotoCount: number | null;
   categorySlug: string | null;
   notes: string | null;
   requestedDate: string;
   requestedTime: string;
   timeZone: string;
   calendarUrl: string | null;
+  priceSnapshot: PriceSnapshot | null;
 };
 
 export type DetailRow = {
@@ -234,6 +245,8 @@ export function adminDetailRows(details: RequestDetails): DetailRow[] {
 
   rows.push(...bundleDetailRows(details, "de"));
   rows.push(...photoChoiceRows(details, "de"));
+  rows.push(...homestagingCountRows(details, "de"));
+  rows.push(...priceDetailRows(details, "de", true));
   if (details.notes) rows.push({ label: "Notizen", value: details.notes });
   if (details.calendarUrl) rows.push({ label: "Kalender", value: details.calendarUrl });
   return rows;
@@ -251,7 +264,50 @@ export function clientDetailRows(details: RequestDetails): DetailRow[] {
   rows.push({ label: locale === "de" ? "Leistung" : "Service", value: serviceLabel(details, locale) });
   rows.push(...bundleDetailRows(details, locale));
   rows.push(...photoChoiceRows(details, locale));
+  rows.push(...homestagingCountRows(details, locale));
+  rows.push(...priceDetailRows(details, locale, false));
   return rows;
+}
+
+export function homestagingCountRows(
+  details: Pick<RequestDetails, "homestagingPhotoCount">,
+  locale: Locale
+): DetailRow[] {
+  if (details.homestagingPhotoCount == null) return [];
+  return [
+    {
+      label: getBookingCopy(locale).homestagingPhotos,
+      value: String(details.homestagingPhotoCount),
+    },
+  ];
+}
+
+export function priceDetailRows(
+  details: Pick<RequestDetails, "priceSnapshot">,
+  locale: Locale,
+  includeTier: boolean
+): DetailRow[] {
+  const snapshot = details.priceSnapshot;
+  if (!snapshot) return [];
+  const copy = priceCopy(locale);
+  const rows: DetailRow[] = [];
+  if (includeTier) rows.push({ label: "Preisklasse", value: tierLabel(snapshot.tier) });
+  for (const line of snapshot.lines) {
+    const label = (locale === "de" ? line.labelDe : line.labelEn).trim() || line.itemKey;
+    rows.push({ label, value: formatSnapshotLine(line, locale) });
+  }
+  rows.push({ label: copy.estimatedTotal, value: formatEstimatedTotal(snapshot, locale) });
+  const note = priceNoteText(snapshot, locale);
+  if (note) rows.push({ label: copy.noteLabel, value: note });
+  return rows;
+}
+
+export function priceNoteText(snapshot: PriceSnapshot, locale: Locale) {
+  return priceNoteLines(snapshot, locale).join("\n");
+}
+
+export function requestPriceSnapshot(value: Json | null | undefined) {
+  return priceSnapshotFromJson(value);
 }
 
 const LEGACY_BOOKING_SERVICES: Record<string, BookingService> = {
@@ -281,6 +337,11 @@ export function individualPhotoCountFromRow(value: number | null) {
 
 export function bundleFromRow(value: string | null) {
   return value && isBookingBundle(value) ? value : null;
+}
+
+export function homestagingPhotoCountFromRow(value: number | null) {
+  if (value == null || !Number.isInteger(value) || value < 1 || value > 50) return null;
+  return value;
 }
 
 export function highlightRoomFromRow(value: string | null) {
