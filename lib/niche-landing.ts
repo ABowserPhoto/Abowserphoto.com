@@ -47,13 +47,13 @@ export const NICHE_LANDING_COPY: Record<NicheLandingSlug, Record<Locale, NicheLa
   "real-estate": {
     de: {
       title: "Immobilienfotograf Hagen | Exposé-Fotos NRW",
-      description: `Immobilienfotos für Makler in Hagen und NRW: Innen, Außen, Dämmerung. Drohne auf Anfrage. Studios ${HAGEN_ADDRESS.street} und ${SOLINGEN_ADDRESS.street}.`,
+      description: `Immobilienfotos für Makler in Hagen und NRW: Innen, Außen, Dämmerung, Drohne. Studios ${HAGEN_ADDRESS.street} und ${SOLINGEN_ADDRESS.street}.`,
       h1: "Immobilienfotograf für Makler in NRW",
       lead: "Immobilienfotos, die Besichtigungen bringen",
     },
     en: {
       title: "Property Photographer Hagen | Listing Photos",
-      description: `Property photography for agents in Hagen and NRW: interiors, exteriors, twilight. Drone on request. Studios at ${HAGEN_ADDRESS.street} and ${SOLINGEN_ADDRESS.street}.`,
+      description: `Property photography for agents in Hagen and NRW: interiors, exteriors, twilight, and drone. Studios at ${HAGEN_ADDRESS.street} and ${SOLINGEN_ADDRESS.street}.`,
       h1: "Property Photographer for Agents in NRW",
       lead: "Property photos that bring viewings",
     },

@@ -28,8 +28,8 @@ test("immo keeps its title and H1, and www real-estate copy stays on its own hea
   assert.equal(immo.title, "Immobilienfotograf Hagen | Exposé-Fotos NRW");
   assert.equal(immo.h1, "Immobilienfotograf für Makler in NRW");
   assert.equal(immo.lead, "Immobilienfotos, die Besichtigungen bringen");
-  assert.match(immo.description, /auf Anfrage/);
-  assert.equal(immo.description.includes("Drohne."), false);
+  assert.match(immo.description, /Drohne/);
+  assert.equal(immo.description.includes("auf Anfrage"), false);
   assert.ok(immo.description.length <= 155, immo.description);
   assert.ok(NICHE_LANDING_COPY["real-estate"].en.description.length <= 155);
 

@@ -35,7 +35,7 @@ const germanCategoryCopy: Partial<
 
 Ich bin Aaron Bowser, Immobilienfotograf aus Hagen, und fotografiere Wohnungen, Häuser und Gewerbeflächen in Hagen, Solingen und ganz NRW. Mir geht es um Raum, Licht und Perspektive: Bilder, die eine Immobilie einladend und zugleich ehrlich zeigen, so wie Interessenten sie bei der Besichtigung erleben.
 
-Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Neben Innen- und Außenaufnahmen gehören Twilight-Aufnahmen, 360°-Rundgänge, kurze Filme und gekennzeichnetes virtuelles Homestaging dazu. Drohnenaufnahmen sind ein Extra und nur auf Anfrage. Pakete und Preise stehen im Kundenkonto.`,
+Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Neben Innen- und Außenaufnahmen gehören Twilight-Aufnahmen, Drohnenfotos, Drohnenvideo, 360°-Rundgänge, kurze Filme und gekennzeichnetes virtuelles Homestaging dazu. Drohnenfotos und Drohnenvideo sind ein optionales Extra: Die Drohnenfotos werden auf das Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein. Pakete und Preise stehen im Kundenkonto.`,
     services: [
       {
         title: "Foto",
@@ -50,12 +50,12 @@ Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Neben Innen- und
       {
         title: "Showcase",
         description:
-          "Foto und Reel, dazu ein Objekt- oder Maklervideo von 60–90 Sekunden und eine eigene Objektseite mit Fotos, Video, Grundriss und Kontakt. Ein Drohnenclip ist nicht enthalten. Drohne ist ein Extra, auf Anfrage.",
+          "Foto und Reel, dazu ein Objekt- oder Maklervideo von 60–90 Sekunden und eine eigene Objektseite mit Fotos, Video, Grundriss und Kontakt. Drohnenfotos und Drohnenvideo können dazugebucht werden.",
       },
       {
         title: "Extras",
         description:
-          "Drohnenfotos auf Anfrage · 360°-Rundgang · Maklervideo · weitere virtuelle Einrichtung · Twilight-Aufnahmen. Drohnenaufnahmen sind kein Bestandteil von Showcase.",
+          "Drohnenfotos und Drohnenvideo · 360°-Rundgang · Maklervideo · weitere virtuelle Einrichtung · Twilight-Aufnahmen. Drohnenfotos werden auf das Fotopaket angerechnet. Drohnenaufnahmen fließen in das Video ein.",
       },
       {
         title: "Digitales Homestaging",

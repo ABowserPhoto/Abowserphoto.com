@@ -132,13 +132,13 @@ Before the day we get to know each other, with an engagement shoot if you like. 
       {
         title: "Showcase",
         description:
-          "Photo and reel, plus a 60–90 second property or agent film and a page for the property with photographs, video, floor plan, and contact. A drone clip is not included. Drone is an extra, on request.",
+          "Photo and reel, plus a 60–90 second property or agent film and a page for the property with photographs, video, floor plan, and contact. Drone photos and drone video can be added.",
         image: "/real-estate/services/aussenaufnahmen-immobilie.webp",
       },
       {
         title: "Extras",
         description:
-          "Drone photographs on request · 360° tour · agent film · further virtual staging · twilight. Drone work is offered on request. It is not part of Showcase.",
+          "Drone photos and drone video · 360° tour · agent film · further virtual staging · twilight. Drone photos count toward the photo package. Drone footage is used in the video.",
         image: "/real-estate/services/twilight-immobilie.webp",
       },
       {
@@ -165,7 +165,7 @@ Before the day we get to know each other, with an engagement shoot if you like. 
 
 I'm Aaron Bowser, a real estate photographer based in Hagen, photographing apartments, houses and commercial spaces in Hagen, Solingen and across North Rhine-Westphalia. I focus on space, light and perspective, so every property looks inviting and true to what buyers see at a viewing.
 
-I work with agents, developers, property managers and owners. Alongside interior and exterior photography I offer twilight shots, 360° virtual tours, short films and labelled virtual staging. Drone photographs are an extra, on request. Packages and prices are in the client account.`,
+I work with agents, developers, property managers and owners. Alongside interior and exterior photography I offer twilight shots, drone photos, drone video, 360° virtual tours, short films and labelled virtual staging. Drone photos and drone video are an optional extra: the drone photos count toward the photo package, and the drone footage is used in the video. Packages and prices are in the client account.`,
     aboutImage:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1000&q=80",
     faq: [

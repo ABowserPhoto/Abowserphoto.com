@@ -303,9 +303,12 @@ test("the real-estate landing describes three tiers and does not publish a price
     ["Foto", "Foto + Reel", "Showcase", "Extras", "Digitales Homestaging", "360°-Rundgang"]
   );
   const showcase = german.services.find((service) => service.title === "Showcase");
-  assert.match(showcase?.description ?? "", /nicht enthalten/);
-  assert.match(showcase?.description ?? "", /auf Anfrage/);
-  const blob = [...english.services, ...german.services]
+  const extras = german.services.find((service) => service.title === "Extras");
+  assert.match(showcase?.description ?? "", /Drohnenfoto/);
+  assert.equal((showcase?.description ?? "").includes("auf Anfrage"), false);
+  assert.match(extras?.description ?? "", /Fotopaket/);
+  assert.equal((extras?.description ?? "").includes("auf Anfrage"), false);
+  const blob = [...english.services, ...german.services, german.aboutText, english.aboutText]
     .map((service) => `${service.title} ${service.description}`)
     .join("\n");
   assert.equal(blob.includes("15–25"), false);
