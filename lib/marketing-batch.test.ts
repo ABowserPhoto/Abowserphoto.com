@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { explicitImageAlt } from "./gallery";
 import { getLegalDocument } from "./legalContent";
 import { homeHeroCopy } from "./homeHero";
 import { NICHE_LANDING_COPY } from "./niche-landing";
@@ -8,6 +9,28 @@ import { getLocalizedCategory } from "./i18n/localizeContent";
 import { getPageFaqs, getPageSections } from "./i18n/pageSections";
 import { offerPageCopy } from "./offerPages";
 import { buildFaqPageJsonLd } from "./structuredData";
+
+test("the German homepage uses Buscando's alts and the logo alt is already the brand name", () => {
+  const expected = {
+    "/home/images/julia_00220 3.jpg":
+      "Modeporträt einer Frau im Profil mit großen Goldringen und Armreifen, im Studio unter türkisem Licht",
+    "/home/images/Marsela_16_04_2024_5 2.jpg":
+      "Editoriales Studiofoto einer Frau im schwarzen Latexanzug und einer Ledermaske, seitlich vor dunklem Hintergrund",
+    "/home/images/Naya_29_01_202206722 1.jpg":
+      "Beauty- und Modeporträt einer Frau mit goldenem Schlangenohrring und transparenten Handschuhen",
+    "/home/light-theme/01-monja.jpg":
+      "Schwarz-weißes Business-Porträt einer Frau mit lockigem Haar, großer Brille und Blazer, sitzend im Fotostudio",
+    "/home/light-theme/02-nadine.jpg":
+      "Business-Porträt einer lächelnden Frau im rosa Hosenanzug und mit Brille, sitzend auf einem Bürostuhl im Fotostudio",
+    "/home/light-theme/03-olga.jpg":
+      "Schwarz-weißes Porträt einer Frau mit blonden Haaren, weißer Bluse und großen Creolen",
+  };
+  for (const [src, alt] of Object.entries(expected)) {
+    assert.equal(explicitImageAlt(src, "de"), alt);
+    assert.equal(explicitImageAlt(src, "en"), "");
+  }
+  assert.equal(getDictionarySync("de").home.logoLabel, "Aaron Bowser Photography");
+});
 
 test("the homepage keeps its title and H1 and adds the claim without an award strip", () => {
   const german = getDictionarySync("de");

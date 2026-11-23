@@ -23,6 +23,12 @@ export function getImageAlt(src: string, locale: Locale) {
     : "Photograph by Aaron Bowser Photography.";
 }
 
+/** Alt only when this locale has an explicit string. No fallback text. */
+export function explicitImageAlt(src: string, locale: Locale) {
+  const value = altMap[src]?.[locale];
+  return typeof value === "string" ? value : "";
+}
+
 function readImageFiles(
   directoryPath: string,
   publicPrefix: string,
