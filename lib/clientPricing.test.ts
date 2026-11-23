@@ -324,6 +324,21 @@ test("the booking form never receives a pricing tier name", () => {
   assert.equal(encoded.includes("tier"), false);
 });
 
+test("table select is restored and tiers live in the staff-only table", () => {
+  const sql = fs.readFileSync(
+    path.join(ROOT, "supabase/migrations/20261123003000_restore_client_select_and_staff_tiers.sql"),
+    "utf8"
+  );
+  const lowered = sql.toLowerCase();
+  assert.match(lowered, /grant select, insert, update, delete on table public\.pricing_tier_prices to authenticated/);
+  assert.match(lowered, /grant select, insert, update, delete on table public\.clients to authenticated/);
+  assert.match(lowered, /create table public\.client_pricing_tiers/);
+  assert.match(lowered, /using \(private\.is_staff\(\)\)/);
+  assert.match(lowered, /revoke all on table public\.clients from public, anon/);
+  assert.match(lowered, /create view public\.clients/);
+  assert.equal(lowered.includes("grant select, insert, update, delete on table public.clients to anon"), false);
+});
+
 test("clients cannot select their pricing tier and the price rpc omits it", () => {
   const sql = fs.readFileSync(
     path.join(ROOT, "supabase/migrations/20261123001000_hide_client_pricing_tier.sql"),

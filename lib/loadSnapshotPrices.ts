@@ -7,13 +7,21 @@ export async function loadSnapshotCatalog(userId: string): Promise<PriceCatalog 
   const supabase = createServiceClient();
   const { data: client, error: clientError } = await supabase
     .from("clients")
-    .select("is_approved, pricing_tier")
+    .select("id, is_approved")
     .eq("user_id", userId)
     .maybeSingle();
 
   if (clientError) throw new Error("price catalog unavailable");
   if (!client?.is_approved) return null;
-  const tier = parsePricingTier(client.pricing_tier);
+
+  const { data: assigned, error: tierError } = await supabase
+    .from("client_pricing_tiers")
+    .select("tier")
+    .eq("client_id", client.id)
+    .maybeSingle();
+
+  if (tierError) throw new Error("price catalog unavailable");
+  const tier = parsePricingTier(assigned?.tier);
   if (!tier) return null;
 
   const { data, error } = await supabase

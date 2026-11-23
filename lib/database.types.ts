@@ -54,6 +54,24 @@ export type Database = {
         };
         Relationships: [];
       };
+      client_pricing_tiers: {
+        Row: {
+          client_id: string;
+          tier: string;
+          updated_at: string;
+        };
+        Insert: {
+          client_id: string;
+          tier: string;
+          updated_at?: string;
+        };
+        Update: {
+          client_id?: string;
+          tier?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       pricing_tier_prices: {
         Row: {
           active: boolean;
