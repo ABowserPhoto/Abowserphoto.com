@@ -17,6 +17,7 @@ import CustomCursor from "./ui/CustomCursor";
 import PageSections from "./PageSections";
 import PortfolioGrid from "./PortfolioGrid";
 import ServicesScroll from "./ServicesScroll";
+import GuestEnquiry from "./GuestEnquiry";
 import SiteFooter from "./SiteFooter";
 
 type ServiceWithMedia = {
@@ -89,6 +90,8 @@ export default function CategoryTemplate({
   const aboutRef = useRef<HTMLElement>(null);
 
   const isCommercial = category.slug === "commercial";
+  const isSocial = category.slug === "social-media-management";
+  const inquireLabel = isSocial ? dictionary.nav.consult : dictionary.nav.inquire;
   const showFullPortfolioCta = isCommercial && portfolio.length > COMMERCIAL_PORTFOLIO_PREVIEW_COUNT;
   const gridImages = useMemo(
     () =>
@@ -166,7 +169,7 @@ export default function CategoryTemplate({
         lightSectionRef={aboutRef}
         homeHref="/"
         labels={{
-          book: dictionary.nav.book,
+          book: isSocial ? dictionary.nav.consult : dictionary.nav.book,
           home: dictionary.nav.home,
           menu: dictionary.nav.menu,
         }}
@@ -212,7 +215,7 @@ export default function CategoryTemplate({
           ref={servicesRef}
           services={services}
           themeColor={category.themeColor}
-          inquireLabel={dictionary.nav.inquire}
+          inquireLabel={inquireLabel}
           watchVideoLabel={dictionary.category.watchVideo}
           viewTourLabel={dictionary.category.viewTour}
         />
@@ -341,6 +344,12 @@ export default function CategoryTemplate({
             </div>
           </motion.section>
         ) : null}
+
+        <section className="relative z-30 bg-[#F4F1ED] px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl pb-24">
+            <GuestEnquiry topic={category.title} />
+          </div>
+        </section>
 
         <SiteFooter locale={locale} dictionary={dictionary} />
       </main>

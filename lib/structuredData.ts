@@ -18,6 +18,7 @@ import {
   OG_IMAGE_PATH,
   PASSPORT_PHOTO_PRICE_EUR,
   SITE_URL,
+  SOLINGEN_RENTAL_RATES,
   SOCIAL_PROFILE_URLS,
   SOLINGEN_STUDIO,
   STUDIOS,
@@ -193,6 +194,66 @@ export function buildSolingenPlaceJsonLd(locale: Locale) {
       unitText: "m²",
     },
     parentOrganization: { "@id": `${SITE_URL}/#organization` },
+  };
+}
+
+/**
+ * Public Solingen rental rates. Gross, VAT included.
+ * Inclusions are not listed here: they are not confirmed.
+ */
+export function buildSolingenRentalOfferJsonLd(locale: Locale) {
+  const de = locale === "de";
+  const pageUrl = absoluteUrl(withLocale(solingenStudioPath(locale), locale));
+  const rates = SOLINGEN_RENTAL_RATES;
+
+  function offer(name: string, price: string, description: string) {
+    return {
+      "@type": "Offer",
+      name,
+      price,
+      priceCurrency: "EUR",
+      valueAddedTaxIncluded: true,
+      availability: "https://schema.org/InStock",
+      url: pageUrl,
+      description,
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price,
+        priceCurrency: "EUR",
+        valueAddedTaxIncluded: true,
+      },
+    };
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    "@id": `${pageUrl}#rental-offers`,
+    name: de ? "Fotostudio mieten in Solingen" : "Rent the Solingen photo studio",
+    url: pageUrl,
+    itemListElement: [
+      offer(
+        de ? "Stundenweise" : "Hourly",
+        rates.hourlyEur,
+        de
+          ? `${rates.hourlyEur} € pro Stunde, mindestens ${rates.minimumHours} Stunden, inkl. 19 % MwSt.`
+          : `€${rates.hourlyEur} per hour, ${rates.minimumHours} hour minimum, including 19% VAT.`
+      ),
+      offer(
+        de ? "Halber Tag" : "Half day",
+        rates.halfDayEur,
+        de
+          ? `${rates.halfDayEur} € für ${rates.halfDayHours} Stunden, inkl. 19 % MwSt.`
+          : `€${rates.halfDayEur} for ${rates.halfDayHours} hours, including 19% VAT.`
+      ),
+      offer(
+        de ? "Ganzer Tag" : "Full day",
+        rates.fullDayEur,
+        de
+          ? `${rates.fullDayEur} € für ${rates.fullDayHours} Stunden, inkl. 19 % MwSt.`
+          : `€${rates.fullDayEur} for ${rates.fullDayHours} hours, including 19% VAT.`
+      ),
+    ],
   };
 }
 

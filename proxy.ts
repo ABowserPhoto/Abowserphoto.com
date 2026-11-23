@@ -93,6 +93,42 @@ function normalizePathname(pathname: string) {
   return pathname;
 }
 
+function isDevHostname(hostname: string) {
+  return (
+    hostname === "localhost" ||
+    hostname.endsWith(".localhost") ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1"
+  );
+}
+
+/**
+ * Same-host http → https. The apex of the main site goes to www in the same hop.
+ * Niche hosts stay on their own hostname. Dev hosts are left alone.
+ *
+ * Vercel’s edge often answers external http with its own 308 before this runs.
+ * This is the fallback for a request that still arrives as http.
+ */
+function httpsUpgradeRedirect(req: NextRequest): NextResponse | null {
+  const hostHeader = req.headers.get("host") || req.nextUrl.host;
+  const hostname = hostHeader.split(":")[0]?.toLowerCase() ?? "";
+  if (!hostname || isDevHostname(hostname)) return null;
+
+  const forwarded = req.headers.get("x-forwarded-proto");
+  const requestIsHttp = forwarded === "http" || (forwarded !== "https" && req.nextUrl.protocol === "http:");
+  if (!requestIsHttp) return null;
+
+  const redirectUrl = req.nextUrl.clone();
+  redirectUrl.protocol = "https:";
+  redirectUrl.port = "";
+  if (hostname === "aaronbowser-photography.com") {
+    redirectUrl.hostname = "www.aaronbowser-photography.com";
+  } else {
+    redirectUrl.hostname = hostname;
+  }
+  return NextResponse.redirect(redirectUrl, 301);
+}
+
 /**
  * Old site URLs under `/deutsch`. No locale means the German homepage.
  * An `en` or `de` prefix is kept. Other paths return null.
@@ -106,6 +142,9 @@ function legacyDeutschLocale(pathname: string): Locale | null {
 }
 
 export async function proxy(req: NextRequest) {
+  const httpsRedirect = httpsUpgradeRedirect(req);
+  if (httpsRedirect) return httpsRedirect;
+
   const url = req.nextUrl;
   const requestHost = req.headers.get("host") || "";
   const hostname = requestHost.split(":")[0];

@@ -1,6 +1,6 @@
 import type { FAQItem, CategorySlug } from "../content";
 import { appointmentOnlyLabel } from "../contact";
-import { solingenStudioPath } from "../routes";
+import { printsPath, solingenStudioPath } from "../routes";
 import { formatStudioLine, HAGEN_STUDIO, SOLINGEN_STUDIO, studioSittingPriceAnswer } from "../site";
 import { portalCategoryUrl } from "../subdomains";
 import { withLocale, type Locale } from "./config";
@@ -221,8 +221,36 @@ const weddingFaqs: Record<Locale, FAQItem[]> = {
   ],
 };
 
+const commercialSections: Record<Locale, PageSection[]> = {
+  de: [
+    {
+      id: "ki-bildwelten",
+      eyebrow: "KI-Bildwelten",
+      title: "KI-Bildwelten, klar gekennzeichnet",
+      paragraphs: [
+        "Für Marken, Hotels und Restaurants entstehen neben den fotografierten Bildern auch KI-Bildwelten. Jedes KI-erzeugte Bild ist als KI-Bildwelt gekennzeichnet.",
+        "Beispiele stehen hier, sobald freigegebene Motive vorliegen. Bis dahin ist dieser Abschnitt ein Platzhalter ohne Beispielbilder.",
+      ],
+      links: [{ href: withLocale(printsPath("de"), "de"), label: "Wandbilder & Metalldrucke" }],
+    },
+  ],
+  en: [
+    {
+      id: "ai-image-worlds",
+      eyebrow: "AI image worlds",
+      title: "AI image worlds, clearly labelled",
+      paragraphs: [
+        "For brands, hotels, and restaurants, photographed work can sit beside AI image worlds. Every AI-generated picture is labelled as an AI image world.",
+        "Examples will be shown here once approved pictures exist. Until then this section is a placeholder without sample images.",
+      ],
+      links: [{ href: withLocale(printsPath("en"), "en"), label: "Wall art and metal prints" }],
+    },
+  ],
+};
+
 export function getPageSections(slug: CategorySlug, locale: Locale): PageSection[] {
   if (slug === "wedding") return weddingSections[locale];
+  if (slug === "commercial") return commercialSections[locale];
   return [];
 }
 
@@ -269,9 +297,105 @@ const studioFaqs: Record<Locale, FAQItem[]> = {
   ],
 };
 
+const realEstateFaqs: Record<Locale, FAQItem[]> = {
+  de: [
+    {
+      question: "Wie schnell bekomme ich die Bilder?",
+      answer: "Fotos innerhalb von 24 Stunden, Reels innerhalb von 48–72 Stunden.",
+    },
+    {
+      question: "Passen die Dateien für die Portale?",
+      answer: "Ja, Exporte für ImmoScout24, Immowelt, Ihre Website und Social Media.",
+    },
+  ],
+  en: [
+    {
+      question: "How quickly do I get the pictures?",
+      answer: "Photographs within 24 hours, reels within 48–72 hours.",
+    },
+    {
+      question: "Will the files work on the portals?",
+      answer: "Yes. Exports for ImmoScout24, Immowelt, your website, and social media.",
+    },
+  ],
+};
+
+const foodFaqs: Record<Locale, FAQItem[]> = {
+  de: [
+    {
+      question: "Können Sie in unserer Küche fotografieren?",
+      answer: "Ja. Termine sind vor Ort oder im Studio möglich.",
+    },
+    {
+      question: "Gibt es Unterstützung beim Styling?",
+      answer: "Ja. Styling und die Planung der Requisiten können dazugehören.",
+    },
+  ],
+  en: [
+    {
+      question: "Can you shoot in our kitchen?",
+      answer: "Yes, sessions can be run on location or in a controlled studio setup.",
+    },
+    {
+      question: "Do you provide styling support?",
+      answer: "Yes, styling direction and prop planning can be included.",
+    },
+  ],
+};
+
+const filmFaqs: Record<Locale, FAQItem[]> = {
+  de: [
+    {
+      question: "Liefern Sie auch Hochformat?",
+      answer: "Ja. Hochformat, Quadrat und Querformat sind möglich.",
+    },
+    {
+      question: "Ist der Schnitt dabei?",
+      answer: "Ja. Schnitt und Color Grading gehören zur Produktion.",
+    },
+  ],
+  en: [
+    {
+      question: "Do you deliver vertical edits?",
+      answer: "Yes, vertical, square, and widescreen edits are all supported.",
+    },
+    {
+      question: "Is editing included?",
+      answer: "Yes. The edit and the grade are part of the production.",
+    },
+  ],
+};
+
+const socialFaqs: Record<Locale, FAQItem[]> = {
+  de: [
+    {
+      question: "Welche Kanäle betreuen Sie?",
+      answer: "Instagram, TikTok, LinkedIn und Facebook.",
+    },
+    {
+      question: "Schreiben Sie Texte und Hashtags?",
+      answer: "Ja. Zu betreuten Beiträgen gehören Text und Hashtags.",
+    },
+  ],
+  en: [
+    {
+      question: "Which platforms do you manage?",
+      answer: "Instagram, TikTok, LinkedIn, and Facebook management are available.",
+    },
+    {
+      question: "Do you provide captions and hashtags?",
+      answer: "Yes, every managed post includes tailored copy and hashtag support.",
+    },
+  ],
+};
+
 export function getPageFaqs(slug: CategorySlug, locale: Locale): FAQItem[] {
   if (slug === "business-portraits") return businessFaqs[locale];
   if (slug === "wedding") return weddingFaqs[locale];
   if (slug === "studio") return studioFaqs[locale];
+  if (slug === "real-estate") return realEstateFaqs[locale];
+  if (slug === "food") return foodFaqs[locale];
+  if (slug === "cinematography") return filmFaqs[locale];
+  if (slug === "social-media-management") return socialFaqs[locale];
   return [];
 }

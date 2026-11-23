@@ -4,6 +4,7 @@ import {
   buildBusinessJsonLd,
   buildFaqPageJsonLd,
   buildSolingenPlaceJsonLd,
+  buildSolingenRentalOfferJsonLd,
   buildStudioServiceJsonLd,
 } from "../lib/structuredData";
 
@@ -30,6 +31,15 @@ export function SolingenPlaceJsonLd({ locale }: { locale: Locale }) {
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(buildSolingenPlaceJsonLd(locale)) }}
+    />
+  );
+}
+
+export function SolingenRentalJsonLd({ locale }: { locale: Locale }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(buildSolingenRentalOfferJsonLd(locale)) }}
     />
   );
 }

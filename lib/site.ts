@@ -217,10 +217,47 @@ export const HOSTING_PROVIDER = "Vercel";
  * The only amounts published on the site.
  * An application photo (Bewerbungsfoto) is €29 for 1 digital photo.
  * A biometric passport photo (Passbild / biometrisches Passfoto) is €15.
+ * Solingen studio rental publishes the gross rates below.
  * Every other service is an individual quote and must not publish an amount.
  */
 export const APPLICATION_PHOTO_PRICE_EUR = "29";
 export const PASSPORT_PHOTO_PRICE_EUR = "15";
+
+/** Gross Solingen rental rates. Inclusive of 19% VAT. No separate net line. */
+export const SOLINGEN_RENTAL_RATES = {
+  hourlyEur: "54",
+  minimumHours: 2,
+  halfDayEur: "189",
+  halfDayHours: 4,
+  fullDayEur: "329",
+  fullDayHours: 8,
+} as const;
+
+export function solingenRentalCopy(locale: "de" | "en") {
+  const rates = SOLINGEN_RENTAL_RATES;
+  if (locale === "de") {
+    return {
+      hourly: `Stundenweise: ${rates.hourlyEur} € pro Stunde (mind. ${rates.minimumHours} Stunden)`,
+      halfDay: `Halber Tag (${rates.halfDayHours} Std.): ${rates.halfDayEur} €`,
+      fullDay: `Ganzer Tag (${rates.fullDayHours} Std.): ${rates.fullDayEur} €`,
+      vat: "Alle Preise inkl. 19 % MwSt.",
+      invoice: "Für Geschäftskunden: Rechnung mit ausgewiesener MwSt.",
+      inclusionsPlaceholder: "Inklusive: [Licht, Hintergründe, Reinigung – vom Inhaber zu bestätigen]",
+      termsPlaceholder: "Mietbedingungen: [Stornierung, Schäden, Hausordnung – vom Inhaber zu bestätigen]",
+      photographerExtra: "Extras: Studio + Fotograf auf Anfrage",
+    };
+  }
+  return {
+    hourly: `Hourly: €${rates.hourlyEur} per hour (${rates.minimumHours} hour minimum)`,
+    halfDay: `Half day (${rates.halfDayHours} hours): €${rates.halfDayEur}`,
+    fullDay: `Full day (${rates.fullDayHours} hours): €${rates.fullDayEur}`,
+    vat: "All prices include 19% VAT.",
+    invoice: "Business customers receive an invoice with VAT shown.",
+    inclusionsPlaceholder: "Included: [lighting, backdrops, cleaning — to be confirmed by the owner]",
+    termsPlaceholder: "Rental terms: [cancellation, damage, house rules — to be confirmed by the owner]",
+    photographerExtra: "Extras: studio + photographer on request",
+  };
+}
 
 export function applicationPhotoPriceLine(locale: "de" | "en") {
   return locale === "de" ? "€29 für 1 digitales Foto" : "€29 for 1 digital photo";

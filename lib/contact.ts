@@ -29,6 +29,11 @@ export function contactEmailHref() {
   return `mailto:${CONTACT_EMAIL}`;
 }
 
+/** WhatsApp chat for the public studio number. */
+export function contactWhatsAppHref() {
+  return `https://wa.me/${CONTACT_PHONE_TEL.replace("+", "")}`;
+}
+
 export type StudioAddress = {
   street: string;
   postalCode: string;

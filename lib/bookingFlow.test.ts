@@ -290,37 +290,28 @@ test("stored Agent branding Video rows still read as Agent Branding Video", () =
   assert.equal(german.bundles["premium-home"].name, "Premium Home Paket");
 });
 
-test("the real-estate landing describes both bundles and does not publish a price", () => {
+test("the real-estate landing describes three tiers and does not publish a price or a drone default", () => {
   const english = getLocalizedCategory("real-estate", "en");
   const german = getLocalizedCategory("real-estate", "de");
-  const premiumEn = english.services.find((service) => service.title === "Premium Home package");
-  const luxuryEn = english.services.find((service) => service.title === "Luxury Makler package");
-  const premiumDe = german.services.find((service) => service.title === "Premium Home Paket");
-  const luxuryDe = german.services.find((service) => service.title === "Luxury Makler Paket");
-  assert.equal(
-    premiumEn?.description,
-    "Includes a photo package of your choice and a highlight video. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the video."
+  const titles = [...english.services, ...german.services].map((service) => service.title);
+  assert.equal(titles.includes("Premium Home package"), false);
+  assert.equal(titles.includes("Premium Home Paket"), false);
+  assert.equal(titles.includes("Luxury Makler package"), false);
+  assert.equal(titles.includes("Luxury Makler Paket"), false);
+  assert.deepEqual(
+    german.services.map((service) => service.title),
+    ["Foto", "Foto + Reel", "Showcase", "Extras", "Digitales Homestaging", "360°-Rundgang"]
   );
-  assert.equal(
-    luxuryEn?.description,
-    "Includes a photo package of your choice and a Walk Thru Video featuring the agent. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the walkthrough video."
-  );
-  assert.equal(
-    premiumDe?.description,
-    "Enthält ein Fotopaket Ihrer Wahl und ein Highlight-Video. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein."
-  );
-  assert.equal(
-    luxuryDe?.description,
-    "Enthält ein Fotopaket Ihrer Wahl und ein Walk-Through-Video mit dem Makler im Fokus. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Walk-Through-Video ein."
-  );
-  assert.equal(`${premiumEn?.description} ${luxuryEn?.description}`.toLowerCase().includes("drone video"), false);
-  assert.equal(`${premiumDe?.description} ${luxuryDe?.description}`.includes("Drohnenvideo"), false);
-  assert.equal(
-    money(
-      `${premiumEn?.description ?? ""} ${luxuryEn?.description ?? ""} ${premiumDe?.description ?? ""} ${luxuryDe?.description ?? ""}`
-    ),
-    false
-  );
+  const showcase = german.services.find((service) => service.title === "Showcase");
+  assert.match(showcase?.description ?? "", /nicht enthalten/);
+  assert.match(showcase?.description ?? "", /auf Anfrage/);
+  const blob = [...english.services, ...german.services]
+    .map((service) => `${service.title} ${service.description}`)
+    .join("\n");
+  assert.equal(blob.includes("15–25"), false);
+  assert.equal(blob.includes("15-25"), false);
+  assert.equal(money(blob), false);
+  assert.equal(blob.includes("MLS"), false);
 });
 
 test("the client first hears that the request was received, not that it is confirmed", () => {

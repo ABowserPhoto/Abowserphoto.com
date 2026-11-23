@@ -11,6 +11,7 @@ import {
   hagenHoursLine,
 } from "../lib/contact";
 import { absoluteUrl } from "../lib/i18n/seo";
+import { eventsPath, printsPath } from "../lib/routes";
 import {
   BRAND_NAME,
   COMPANY_REGISTER,
@@ -48,6 +49,12 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
             >
               {CONTACT_EMAIL}
             </a>
+            <Link href={withLocale(printsPath(locale), locale)} className="block underline underline-offset-2">
+              {dictionary.footer.prints}
+            </Link>
+            <Link href={withLocale(eventsPath(locale), locale)} className="block underline underline-offset-2">
+              {dictionary.footer.events}
+            </Link>
           </div>
 
           <div className="space-y-3">

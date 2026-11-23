@@ -15,6 +15,7 @@
     "signOut": "Sign Out",
     "contact": "Contact",
     "inquire": "Book a shoot",
+    "consult": "Request a consultation",
     "viewFullPortfolio": "View Full Portfolio",
     "selectedWork": "Selected Work",
     "fullPortfolio": "Full Portfolio",
@@ -24,7 +25,7 @@
   "home": {
     "headline": "Photographer & photo studio in Hagen and Solingen",
     "subhead": "Explore editorial, commercial, and niche-focused workspaces crafted for premium visual storytelling.",
-    "logoLabel": "A. Bowser Photography",
+    "logoLabel": "Aaron Bowser Photography",
     "studiosLabel": "Studios",
     "studioHagen": "Hagen",
     "studioSolingen": "Solingen",
@@ -130,7 +131,9 @@
     "directions": "Directions / Google Maps",
     "instagramMain": "Aaron Bowser Photography",
     "instagramRealEstate": "Real Estate Photography",
-    "instagramFood": "Food Photography"
+    "instagramFood": "Food Photography",
+    "prints": "Wall art and metal prints",
+    "events": "Dates and events"
   },
   "auth": {
     "clientAccess": "Client Access",
@@ -212,6 +215,13 @@
     "successTitle": "Thank you",
     "error": "Booking submission failed.",
     "inquirySuccess": "Your inquiry has been received. We will review your details and be in touch shortly.",
+    "accountNote": "Prices and booking are in the client account. Register free, or enquire without an account.",
+    "enquireWithoutAccount": "Enquire without an account",
+    "whatsapp": "WhatsApp",
+    "sendEnquiry": "Send enquiry",
+    "enquirySent": "Your enquiry has been received. We will be in touch.",
+    "enquiryFailed": "The enquiry could not be sent. Please call or message us on WhatsApp.",
+    "yourMessage": "Message",
     "inquiryError": "Inquiry submission failed.",
     "requestAShoot": "Book a Shoot",
     "realEstateTitle": "Real Estate Booking",

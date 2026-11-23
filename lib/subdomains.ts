@@ -69,6 +69,10 @@ const NICHE_SHARED_ROOTS = new Set([
   "booking",
   "forgot-password",
   "reset-password",
+  "wandbilder",
+  "wall-art",
+  "termine-aktionen",
+  "dates-and-events",
 ]);
 
 export function nicheHostForHostname(hostname: string): NicheHost | null {

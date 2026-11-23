@@ -14,11 +14,21 @@ export default function CookieConsent() {
   const { localizePath } = useLocale();
   const [isReady, setIsReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
     setIsOpen(!saved);
     setIsReady(true);
+  }, []);
+
+  useEffect(() => {
+    function syncBooking() {
+      setBookingOpen(document.documentElement.dataset.bookingOpen === "1");
+    }
+    syncBooking();
+    window.addEventListener("abowser:booking-open", syncBooking);
+    return () => window.removeEventListener("abowser:booking-open", syncBooking);
   }, []);
 
   function handleConsent(choice: CookieConsentChoice) {
@@ -37,7 +47,7 @@ export default function CookieConsent() {
   return (
     <>
       <AnimatePresence>
-        {isOpen ? (
+        {isOpen && !bookingOpen ? (
           <motion.aside
             key="cookie-consent-banner"
             className="fixed inset-x-3 bottom-3 z-[100] mx-auto w-auto max-w-3xl rounded-2xl border border-white/50 bg-white/80 p-4 shadow-xl backdrop-blur-md sm:inset-x-6 sm:p-5"

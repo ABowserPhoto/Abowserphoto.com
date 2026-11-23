@@ -32,6 +32,7 @@ export type ServiceScrollItem = {
   videos?: VirtualTourItem[];
   beforeImage?: string;
   afterImage?: string;
+  badge?: string;
 };
 
 type ActiveMedia = {
@@ -145,6 +146,7 @@ function ServiceImageLayer({
           afterImage={service.afterImage}
           alt={service.title}
           priority={priority}
+          badge={service.badge}
         />
       ) : service.imageUrl ? (
         <Image

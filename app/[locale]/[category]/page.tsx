@@ -75,9 +75,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   // Same component and the same heading styles. Only the words change, and
   // only on this category's own niche host.
   const landing = nicheDocumentCopy(slug, locale, host);
-  const selectedCategory = landing
-    ? { ...localizedCategory, title: landing.h1 }
+  const pageFaqs = getPageFaqs(slug, locale);
+  const fileFaqs = readFaqFile(slug, locale);
+  const faqs = pageFaqs.length > 0 ? pageFaqs : fileFaqs.length > 0 ? fileFaqs : localizedCategory.faq;
+  const withHeading = landing
+    ? { ...localizedCategory, title: landing.h1, subtitle: landing.lead ?? localizedCategory.subtitle }
     : localizedCategory;
+  const selectedCategory = { ...withHeading, faq: faqs };
   const dictionary = await getDictionary(locale);
   const sharedAbout = getLocalizedSharedAbout(locale);
 
@@ -123,20 +127,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       videos: baseService?.videos,
       beforeImage: baseService?.beforeImage,
       afterImage: baseService?.afterImage,
+      badge: service.badge,
     };
   });
 
   const logoUrl = getLogoUrl();
   const aboutImageUrl = getAboutImageUrl();
-  const pageFaqs = getPageFaqs(slug, locale);
-  const fileFaqs = readFaqFile(slug, locale);
-  const faqs = pageFaqs.length > 0 ? pageFaqs : fileFaqs.length > 0 ? fileFaqs : selectedCategory.faq;
   const aboutDescription = selectedCategory.aboutText;
 
   return (
     <>
       {slug === "studio" ? <StudioServiceJsonLd locale={locale} /> : null}
-      {slug === "wedding" ? <FaqPageJsonLd items={faqs} /> : null}
+      {faqs.length > 0 ? <FaqPageJsonLd items={faqs} /> : null}
       <CategoryTemplate
         category={selectedCategory}
         portfolio={portfolio}

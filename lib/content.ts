@@ -17,6 +17,8 @@ export type ServiceItem = {
   videos?: VirtualTourItem[];
   beforeImage?: string;
   afterImage?: string;
+  /** Visible label on a virtually staged picture. */
+  badge?: string;
 };
 
 export type FAQItem = {
@@ -116,37 +118,41 @@ Before the day we get to know each other, with an engagement shoot if you like. 
     portfolioImages: buildPortfolio("real-estate"),
     services: [
       {
-        title: "Interior Photography",
+        title: "Photo",
         description:
-          "Showcase the flow, natural light, and architectural details of every room. We create bright, inviting spaces that allow buyers to truly visualize themselves living in the home.",
+          "Exposé photographs in the size of the photo package you choose in the client account, with HDR editing and labelled virtual staging. Photographs are delivered within 24 hours.",
         image: "/real-estate/services/innenaufnahmen-immobilie.webp",
       },
       {
-        title: "Exterior Photography",
+        title: "Photo + Reel",
         description:
-          "Maximize curb appeal by highlighting the property’s architecture, landscaping, and surrounding environment with perfect angles and optimal natural lighting.",
+          "Everything in Photo, plus a vertical reel of 30–45 seconds (a walk through the rooms, music, subtitles). Photographs within 24 hours, the reel within 48–72 hours.",
+        image: "/real-estate/services/highlight-video-immobilie.webp",
+      },
+      {
+        title: "Showcase",
+        description:
+          "Photo and reel, plus a 60–90 second property or agent film and a page for the property with photographs, video, floor plan, and contact. A drone clip is not included. Drone is an extra, on request.",
         image: "/real-estate/services/aussenaufnahmen-immobilie.webp",
       },
       {
-        title: "Twilight Sessions",
-        description: "Golden-hour and evening looks for high-impact listing hero shots.",
+        title: "Extras",
+        description:
+          "Drone photographs on request · 360° tour · agent film · further virtual staging · twilight. Drone work is offered on request. It is not part of Showcase.",
         image: "/real-estate/services/twilight-immobilie.webp",
       },
       {
-        title: "Agent Branding",
-        description: "Portrait and lifestyle content for real estate professionals.",
-        image: "/real-estate/services/makler-branding.webp",
+        title: "Digital Room Staging",
+        description:
+          "Virtually staged pictures are labelled in the image (“Virtually staged”). We do not change the building: walls, windows, views, and defects are neither added nor removed.",
+        image: "/real-estate/services/digitales-homestaging.webp",
+        beforeImage: "/real-estate/services/homestaging-vorher.webp",
+        afterImage: "/real-estate/services/homestaging-nachher.webp",
+        badge: "Virtually staged",
       },
       {
-        title: "Drone Photography",
-        description:
-          "Capture sweeping aerial perspectives to showcase property boundaries, surrounding landscapes, and unique architectural angles from above.",
-        image: "/real-estate/services/drohnenfotografie-immobilie.webp",
-      },
-      {
-        title: "360° Virtual Tours",
-        description:
-          "Provide immersive, interactive walkthroughs that allow prospective buyers to explore every room in detail from anywhere in the world.",
+        title: "360° Virtual Tour",
+        description: "An extra, not part of Photo. An immersive tour when the property needs one.",
         image: "/real-estate/services/360-grad-rundgang.webp",
         mediaType: "embed",
         tours: [
@@ -154,49 +160,23 @@ Before the day we get to know each other, with an engagement shoot if you like. 
           { title: "Secondary Property", url: "https://www.3dvista.com/samples/living_room.html" },
         ],
       },
-      {
-        title: "Cinematic Highlight Videos",
-        description:
-          "Deliver premium, emotionally engaging video tours that highlight the flow, atmosphere, and finest details of the property.",
-        image: "/real-estate/services/highlight-video-immobilie.webp",
-        mediaType: "video",
-        videos: [
-          {
-            title: "Exterior & Drone",
-            url: "https://youtu.be/8nPB8MCfO30",
-          },
-          { title: "Exterior & Drone", url: "https://youtu.be/pWVGs4TKYRk" },
-        ],
-      },
-      {
-        title: "Digital Room Staging",
-        description:
-          "Transform empty spaces into warm, inviting homes with hyper-realistic digital furniture and decor staging, helping buyers visualize the property's full potential.",
-        image: "/real-estate/services/digitales-homestaging.webp",
-        beforeImage: "/real-estate/services/homestaging-vorher.webp",
-        afterImage: "/real-estate/services/homestaging-nachher.webp",
-      },
-      {
-        title: "Premium Home package",
-        description:
-          "Includes a photo package of your choice and a highlight video. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the video.",
-        image: "/real-estate/services/drohnenfotografie-immobilie.webp",
-      },
-      {
-        title: "Luxury Makler package",
-        description:
-          "Includes a photo package of your choice and a Walk Thru Video featuring the agent. Drone photos and video footage are also included: the drone photos count toward your photo package, and the drone footage is used in the walkthrough video.",
-        image: "/real-estate/services/makler-branding.webp",
-      },
     ],
-    aboutText: `I'm Aaron Bowser, a real estate photographer based in Hagen, photographing apartments, houses and commercial spaces in Hagen, Solingen and across North Rhine-Westphalia. I focus on space, light and perspective, so every property looks inviting and true to what buyers see at a viewing.
+    aboutText: `For agents in Hagen, Solingen, and across North Rhine-Westphalia. One appointment, clear packages, photographs within 24 hours.
 
-I work with agents, developers, property managers and owners. Alongside interior and exterior photography I offer twilight shots, drone photography, 360° virtual tours, short highlight videos and virtual staging, delivering listing-ready images for exposés and property portals, quickly and reliably.`,
+I'm Aaron Bowser, a real estate photographer based in Hagen, photographing apartments, houses and commercial spaces in Hagen, Solingen and across North Rhine-Westphalia. I focus on space, light and perspective, so every property looks inviting and true to what buyers see at a viewing.
+
+I work with agents, developers, property managers and owners. Alongside interior and exterior photography I offer twilight shots, 360° virtual tours, short films and labelled virtual staging. Drone photographs are an extra, on request. Packages and prices are in the client account.`,
     aboutImage:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1000&q=80",
     faq: [
-      { question: "What is your delivery turnaround?", answer: "Typical delivery is within 24 to 48 hours." },
-      { question: "Can files be MLS-ready?", answer: "Yes, exports can be tailored for MLS, web, and social formats." },
+      {
+        question: "How quickly do I get the pictures?",
+        answer: "Photographs within 24 hours, reels within 48–72 hours.",
+      },
+      {
+        question: "Will the files work on the portals?",
+        answer: "Yes. Exports for ImmoScout24, Immowelt, your website, and social media.",
+      },
     ],
   },
   "business-portraits": {

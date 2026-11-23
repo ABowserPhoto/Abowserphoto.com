@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import type { CategorySlug } from "../content";
-import { categoryPath, solingenStudioPath } from "../routes";
+import type { OfferPageKind } from "../offerPages";
+import { offerPageCopy } from "../offerPages";
+import { categoryPath, eventsPath, printsPath, solingenStudioPath } from "../routes";
 import { nicheDocumentCopy } from "../niche-landing";
 import { nicheHostForHostname, nicheOrigin, PORTAL_CATEGORY_SUBDOMAIN } from "../subdomains";
 import {
@@ -229,6 +231,30 @@ export function buildSolingenStudioMetadata(locale: Locale): Metadata {
       languages: languageAlternates((entry) => withLocale(solingenStudioPath(entry), entry)),
     },
     openGraph: openGraphFor(locale, path, openGraphTitle, seo.description),
+  };
+}
+
+export function buildOfferMetadata(locale: Locale, kind: OfferPageKind): Metadata {
+  const copy = offerPageCopy(kind, locale);
+  const pathFor = (entry: Locale) =>
+    withLocale(kind === "prints" ? printsPath(entry) : eventsPath(entry), entry);
+  const path = pathFor(locale);
+  const description =
+    locale === "de"
+      ? kind === "prints"
+        ? "Wandbilder und Metalldrucke aus Ihren Fotos oder gekennzeichneten KI-Bildwelten. Preise im Kundenkonto."
+        : "Termine und Aktionen von Aaron Bowser Photography. Keine Preise auf dieser Seite."
+      : kind === "prints"
+        ? "Wall art and metal prints from your photographs or labelled AI image worlds. Prices in the client account."
+        : "Dates and events from Aaron Bowser Photography. No prices on this page.";
+  return {
+    title: { absolute: copy.title },
+    description,
+    alternates: {
+      canonical: absoluteUrl(path),
+      languages: languageAlternates(pathFor),
+    },
+    openGraph: openGraphFor(locale, path, copy.title, description),
   };
 }
 

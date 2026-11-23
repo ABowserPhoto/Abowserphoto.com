@@ -15,6 +15,7 @@
     "signOut": "Abmelden",
     "contact": "Kontakt",
     "inquire": "Shooting buchen",
+    "consult": "Beratung anfragen",
     "viewFullPortfolio": "Vollständiges Portfolio",
     "selectedWork": "Ausgewählte Arbeiten",
     "fullPortfolio": "Vollständiges Portfolio",
@@ -24,7 +25,7 @@
   "home": {
     "headline": "Fotograf & Fotostudio in Hagen und Solingen",
     "subhead": "Entdecken Sie redaktionelle, kommerzielle und spezialisierte Fotografie für hochwertiges Storytelling.",
-    "logoLabel": "A. Bowser Photography",
+    "logoLabel": "Aaron Bowser Photography",
     "studiosLabel": "Studios",
     "studioHagen": "Hagen",
     "studioSolingen": "Solingen",
@@ -130,7 +131,9 @@
     "directions": "Route / Google Maps",
     "instagramMain": "Aaron Bowser Photography",
     "instagramRealEstate": "Immobilienfotografie",
-    "instagramFood": "Food-Fotografie"
+    "instagramFood": "Food-Fotografie",
+    "prints": "Wandbilder & Metalldrucke",
+    "events": "Termine & Aktionen"
   },
   "auth": {
     "clientAccess": "Kundenzugang",
@@ -212,6 +215,13 @@
     "successTitle": "Vielen Dank",
     "error": "Buchung konnte nicht gesendet werden.",
     "inquirySuccess": "Ihre Anfrage ist eingegangen. Wir prüfen die Details und melden uns in Kürze.",
+    "accountNote": "Preise & Buchung im Kundenkonto. Kostenlos registrieren, oder ohne Konto anfragen.",
+    "enquireWithoutAccount": "Ohne Konto anfragen",
+    "whatsapp": "WhatsApp",
+    "sendEnquiry": "Anfrage senden",
+    "enquirySent": "Ihre Anfrage ist eingegangen. Wir melden uns.",
+    "enquiryFailed": "Die Anfrage konnte nicht gesendet werden. Bitte rufen Sie an oder schreiben Sie per WhatsApp.",
+    "yourMessage": "Nachricht",
     "inquiryError": "Anfrage konnte nicht gesendet werden.",
     "requestAShoot": "Shooting buchen",
     "realEstateTitle": "Immobilien-Buchung",
