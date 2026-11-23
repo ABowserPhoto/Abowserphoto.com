@@ -1,15 +1,11 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   type BookingBundle,
   type BookingService,
   type ImmobilienSelection,
   type PhotoPackage,
 } from "./booking";
-import type { Database, Json } from "./database.types";
 import type { Locale } from "./i18n/config";
-
-export const PRICING_TIERS = ["standard", "legacy", "corporate"] as const;
-export type PricingTier = (typeof PRICING_TIERS)[number];
+import type { PricingTier } from "./pricingTier";
 
 export const PRICE_ITEM_KEYS = [
   "photo_package_10",
@@ -69,43 +65,32 @@ export type PriceSnapshot = {
   homestagingPhotoCount: number | null;
 };
 
-export type PriceLoadResult =
-  | { status: "hidden" }
-  | { status: "ready"; catalog: PriceCatalog }
-  | { status: "error" };
-
-type SessionClient = SupabaseClient<Database>;
-
 const ITEM_KEY_SET = new Set<string>(PRICE_ITEM_KEYS);
 
-export function parsePricingTier(value: string | null | undefined): PricingTier | null {
-  switch (value) {
-    case "standard":
-    case "legacy":
-    case "corporate":
-      return value;
-    default:
-      return null;
-  }
-}
+export type ClientPriceItem = {
+  itemKey: PriceItemKey;
+  labelDe: string;
+  labelEn: string;
+  unit: PriceUnit;
+  priceNetCents: number | null;
+  sortOrder: number;
+};
+
+export type DisplayedQuote = {
+  lines: PriceSnapshotLine[];
+  estimatedNetCents: number | null;
+  partial: boolean;
+  onRequest: boolean;
+  homestagingPhotoCount: number | null;
+};
+
+export type DisplayedPriceLoad =
+  | { status: "hidden" }
+  | { status: "ready"; items: ClientPriceItem[] }
+  | { status: "error" };
 
 export function isPriceItemKey(value: string): value is PriceItemKey {
   return ITEM_KEY_SET.has(value);
-}
-
-export function tierLabel(tier: PricingTier): string {
-  switch (tier) {
-    case "standard":
-      return "Standard";
-    case "legacy":
-      return "Legacy";
-    case "corporate":
-      return "Corporate";
-    default: {
-      const neverTier: never = tier;
-      return neverTier;
-    }
-  }
 }
 
 export function photoPackageItemKey(id: PhotoPackage): PriceItemKey {
@@ -194,6 +179,37 @@ function cleanLabel(value: string | null | undefined) {
   return (value ?? "").replace(/\s+/g, " ").trim().slice(0, 200);
 }
 
+export function clientPriceItemsFromRows(
+  rows: ReadonlyArray<{
+    item_key: string;
+    label_de: string | null;
+    label_en: string | null;
+    unit: string;
+    price_net_cents: number | null;
+    sort_order: number | null;
+    active?: boolean;
+  }>
+): ClientPriceItem[] {
+  const items: ClientPriceItem[] = [];
+  const seen = new Set<PriceItemKey>();
+  const sorted = [...rows].sort((left, right) => (left.sort_order ?? 0) - (right.sort_order ?? 0));
+  for (const row of sorted) {
+    if (row.active === false || !isPriceItemKey(row.item_key) || !isPriceUnit(row.unit)) continue;
+    if (seen.has(row.item_key)) continue;
+    if (row.price_net_cents != null && !Number.isInteger(row.price_net_cents)) continue;
+    seen.add(row.item_key);
+    items.push({
+      itemKey: row.item_key,
+      labelDe: cleanLabel(row.label_de),
+      labelEn: cleanLabel(row.label_en),
+      unit: row.unit,
+      priceNetCents: row.price_net_cents,
+      sortOrder: row.sort_order ?? 0,
+    });
+  }
+  return items;
+}
+
 export function catalogFromRows(
   tier: PricingTier,
   rows: ReadonlyArray<{
@@ -268,11 +284,11 @@ function emptySelection(): ImmobilienSelection {
   };
 }
 
-export function buildPriceSnapshot(
-  catalog: PriceCatalog,
+export function buildDisplayedQuote(
+  items: readonly ClientPriceItem[],
   selection: ImmobilienSelection = emptySelection()
-): PriceSnapshot {
-  const byKey = new Map(catalog.items.map((item) => [item.itemKey, item]));
+): DisplayedQuote {
+  const byKey = new Map(items.map((item) => [item.itemKey, item]));
   const keys = [...new Set(pricedItemKeys(selection))];
   keys.sort((left, right) => {
     if (left === "booking_fee") return 1;
@@ -319,7 +335,6 @@ export function buildPriceSnapshot(
   }
 
   return {
-    tier: catalog.tier,
     lines,
     estimatedNetCents: pricedCount > 0 ? sum : null,
     partial: partial || onRequest,
@@ -330,15 +345,22 @@ export function buildPriceSnapshot(
   };
 }
 
+export function buildPriceSnapshot(
+  catalog: PriceCatalog,
+  selection: ImmobilienSelection = emptySelection()
+): PriceSnapshot {
+  return { tier: catalog.tier, ...buildDisplayedQuote(catalog.items, selection) };
+}
+
 export function optionPriceTexts(
-  catalog: PriceCatalog | null,
+  items: readonly ClientPriceItem[] | null,
   keys: readonly PriceItemKey[],
   locale: Locale
 ): string[] {
-  if (!catalog || keys.length === 0) return [];
+  if (!items || keys.length === 0) return [];
   const texts: string[] = [];
   for (const key of keys) {
-    const row = catalog.items.find((item) => item.itemKey === key);
+    const row = items.find((item) => item.itemKey === key);
     if (!row) continue;
     const price = formatNetPrice(row.priceNetCents, row.unit, locale);
     if (keys.length > 1) {
@@ -399,10 +421,13 @@ export function formatSnapshotLine(line: PriceSnapshotLine, locale: Locale): str
   return formatNetPrice(line.lineNetCents, line.unit, locale);
 }
 
-export function formatEstimatedTotal(snapshot: PriceSnapshot, locale: Locale): string {
-  if (snapshot.estimatedNetCents == null) return onRequestLabel(locale);
-  const amount = formatNetPrice(snapshot.estimatedNetCents, "flat", locale);
-  if (!snapshot.partial) return amount;
+export function formatEstimatedTotal(
+  quote: Pick<DisplayedQuote, "estimatedNetCents" | "partial">,
+  locale: Locale
+): string {
+  if (quote.estimatedNetCents == null) return onRequestLabel(locale);
+  const amount = formatNetPrice(quote.estimatedNetCents, "flat", locale);
+  if (!quote.partial) return amount;
   return locale === "de" ? `${amount} (unvollständig)` : `${amount} (partial)`;
 }
 
@@ -414,7 +439,6 @@ export function priceCopy(locale: Locale) {
         totalPartial: "Die Summe ist unvollständig, weil mindestens eine gewählte Leistung Preis auf Anfrage ist.",
         totalIncomplete: "Die Summe ist unvollständig.",
         priceNote: "zzgl. MwSt. und ggf. Fahrtkosten ab 30 km",
-        pricingTier: "Preisklasse",
         noteLabel: "Hinweis",
       };
     case "en":
@@ -423,7 +447,6 @@ export function priceCopy(locale: Locale) {
         totalPartial: "The total is partial because at least one selected item is price on request.",
         totalIncomplete: "This total is partial.",
         priceNote: "plus VAT and travel costs beyond 30 km where applicable",
-        pricingTier: "Pricing tier",
         noteLabel: "Note",
       };
     default: {
@@ -433,114 +456,12 @@ export function priceCopy(locale: Locale) {
   }
 }
 
-export function priceNoteLines(snapshot: PriceSnapshot, locale: Locale) {
+export function priceNoteLines(quote: Pick<DisplayedQuote, "onRequest" | "partial">, locale: Locale) {
   const copy = priceCopy(locale);
   return [
-    snapshot.onRequest ? copy.totalPartial : snapshot.partial ? copy.totalIncomplete : null,
+    quote.onRequest ? copy.totalPartial : quote.partial ? copy.totalIncomplete : null,
     copy.priceNote,
   ].filter((line): line is string => Boolean(line));
-}
-
-export function priceSnapshotToJson(snapshot: PriceSnapshot | null): Json | null {
-  if (!snapshot) return null;
-  return {
-    tier: snapshot.tier,
-    lines: snapshot.lines.map((line) => ({
-      itemKey: line.itemKey,
-      labelDe: line.labelDe,
-      labelEn: line.labelEn,
-      unit: line.unit,
-      quantity: line.quantity,
-      unitNetCents: line.unitNetCents,
-      lineNetCents: line.lineNetCents,
-    })),
-    estimatedNetCents: snapshot.estimatedNetCents,
-    partial: snapshot.partial,
-    onRequest: snapshot.onRequest,
-    homestagingPhotoCount: snapshot.homestagingPhotoCount,
-  };
-}
-
-function parseCents(value: unknown): number | null | undefined {
-  if (value === null) return null;
-  if (typeof value === "number" && Number.isInteger(value)) return value;
-  return undefined;
-}
-
-function parseLine(value: unknown): PriceSnapshotLine | null {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
-  const record = value as Record<string, unknown>;
-  if (typeof record.itemKey !== "string" || !isPriceItemKey(record.itemKey)) return null;
-  if (typeof record.unit !== "string" || !isPriceUnit(record.unit)) return null;
-  if (typeof record.quantity !== "number" || !Number.isInteger(record.quantity) || record.quantity < 0) return null;
-  const unitNetCents = parseCents(record.unitNetCents);
-  const lineNetCents = parseCents(record.lineNetCents);
-  if (unitNetCents === undefined || lineNetCents === undefined) return null;
-  return {
-    itemKey: record.itemKey,
-    labelDe: cleanLabel(typeof record.labelDe === "string" ? record.labelDe : ""),
-    labelEn: cleanLabel(typeof record.labelEn === "string" ? record.labelEn : ""),
-    unit: record.unit,
-    quantity: record.quantity,
-    unitNetCents,
-    lineNetCents,
-  };
-}
-
-export function priceSnapshotFromJson(value: Json | null | undefined): PriceSnapshot | null {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
-  const record = value as Record<string, Json | undefined>;
-  const tier = parsePricingTier(typeof record.tier === "string" ? record.tier : null);
-  if (!tier || !Array.isArray(record.lines)) return null;
-  const lines: PriceSnapshotLine[] = [];
-  for (const entry of record.lines) {
-    const line = parseLine(entry);
-    if (!line) return null;
-    lines.push(line);
-  }
-  const estimatedNetCents = parseCents(record.estimatedNetCents);
-  if (estimatedNetCents === undefined) return null;
-  if (typeof record.partial !== "boolean" || typeof record.onRequest !== "boolean") return null;
-  const homestagingPhotoCount = parseHomestagingPhotoCount(record.homestagingPhotoCount);
-  if (homestagingPhotoCount === undefined) return null;
-  return {
-    tier,
-    lines,
-    estimatedNetCents,
-    partial: record.partial,
-    onRequest: record.onRequest,
-    homestagingPhotoCount,
-  };
-}
-
-function parseHomestagingPhotoCount(value: Json | undefined): number | null | undefined {
-  if (value == null) return null;
-  if (typeof value === "number" && Number.isInteger(value) && value >= 1 && value <= 50) return value;
-  return undefined;
-}
-
-export async function loadOwnPriceCatalog(supabase: SessionClient): Promise<PriceLoadResult> {
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData.user) return { status: "error" };
-
-  const { data: client, error: clientError } = await supabase
-    .from("clients")
-    .select("is_approved, pricing_tier")
-    .eq("user_id", userData.user.id)
-    .maybeSingle();
-
-  if (clientError) return { status: "error" };
-  if (!client?.is_approved) return { status: "hidden" };
-  const tier = parsePricingTier(client.pricing_tier);
-  if (!tier) return { status: "hidden" };
-
-  const { data, error } = await supabase
-    .from("pricing_tier_prices")
-    .select("tier, item_key, label_de, label_en, unit, price_net_cents, sort_order, active")
-    .eq("active", true);
-
-  if (error || !data) return { status: "error" };
-  return { status: "ready", catalog: catalogFromRows(tier, data) };
 }
 
 export function individualPhotoItemKey(): PriceItemKey {

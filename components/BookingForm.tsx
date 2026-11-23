@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, useTransition } from "react";
+import { loadBookingPrices } from "../actions/loadBookingPrices";
 import { submitBooking, type BookingFormData } from "../actions/submitBooking";
 import { immobilienBookingLead, trackGenerateLead } from "../lib/analytics";
 import {
@@ -23,18 +24,17 @@ import {
   type PropertyStatus,
 } from "../lib/booking";
 import {
-  buildPriceSnapshot,
+  buildDisplayedQuote,
   bundlePriceItemKey,
   formatEstimatedTotal,
   formatSnapshotLine,
   individualPhotoItemKey,
-  loadOwnPriceCatalog,
   optionPriceTexts,
   photoPackageItemKey,
   priceCopy,
   priceNoteLines,
   servicePriceItemKeys,
-  type PriceCatalog,
+  type ClientPriceItem,
 } from "../lib/clientPricing";
 import { useDictionary, useLocale } from "../lib/i18n/LocaleProvider";
 import { createClient } from "../lib/supabase/client";
@@ -75,15 +75,14 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
   const [highlightRoom, setHighlightRoom] = useState("");
   const [services, setServices] = useState<BookingService[]>([]);
   const [homestagingCount, setHomestagingCount] = useState(1);
-  const [catalog, setCatalog] = useState<PriceCatalog | null>(null);
+  const [priceItems, setPriceItems] = useState<ClientPriceItem[] | null>(null);
   const { availableTimes, isCheckingTimes, availabilityMessage } = useAvailableTimes(selectedDate, locale);
 
   useEffect(() => {
     let active = true;
-    const supabase = createClient();
-    void loadOwnPriceCatalog(supabase).then((result) => {
+    void loadBookingPrices().then((result) => {
       if (!active) return;
-      setCatalog(result.status === "ready" && result.catalog.items.length > 0 ? result.catalog : null);
+      setPriceItems(result.status === "ready" ? result.items : null);
     });
     return () => {
       active = false;
@@ -133,8 +132,8 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
     }
   }, [photoLimit, homestagingCount]);
 
-  const priceSnapshot = useMemo(() => {
-    if (!catalog) return null;
+  const priceQuote = useMemo(() => {
+    if (!priceItems) return null;
     const photos =
       offer === "custom"
         ? resolvePhotoChoice(photoPackage || null, individualCount === "" ? null : Number(individualCount))
@@ -158,15 +157,15 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           highlightRoom: null,
           homestagingPhotoCount: stagedCount,
         };
-    return buildPriceSnapshot(catalog, selection);
-  }, [catalog, offer, services, photoPackage, individualCount, homestagingCount]);
+    return buildDisplayedQuote(priceItems, selection);
+  }, [priceItems, offer, services, photoPackage, individualCount, homestagingCount]);
 
   function optionLabel(label: string, price: string | null) {
     return price ? `${label} · ${price}` : label;
   }
 
   function singlePrice(keys: Parameters<typeof optionPriceTexts>[1]) {
-    return optionPriceTexts(catalog, keys, locale)[0] ?? null;
+    return optionPriceTexts(priceItems, keys, locale)[0] ?? null;
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -562,7 +561,7 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
               </legend>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {BOOKING_SERVICES.map((service) => {
-                  const priceTexts = optionPriceTexts(catalog, servicePriceItemKeys(service), locale);
+                  const priceTexts = optionPriceTexts(priceItems, servicePriceItemKeys(service), locale);
                   return (
                     <label key={service} className={choiceClassName}>
                       <input
@@ -683,10 +682,10 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
           </>
         ) : null}
 
-        {priceSnapshot ? (
+        {priceQuote ? (
           <div className="border border-gray-800 bg-[#1A1A1A] px-4 py-3 text-sm text-[#F4F1ED]" aria-live="polite">
             <ul className="space-y-2">
-              {priceSnapshot.lines.map((line) => (
+              {priceQuote.lines.map((line) => (
                 <li key={line.itemKey} className="flex items-start justify-between gap-3">
                   <span className="min-w-0 leading-snug">
                     {(locale === "de" ? line.labelDe : line.labelEn) || line.itemKey}
@@ -701,9 +700,9 @@ export default function BookingForm({ userEmail, onClose, onSignedOut }: Booking
               <span className="text-xs uppercase tracking-[0.14em] text-[#F4F1ED]/65">
                 {priceCopy(locale).estimatedTotal}
               </span>
-              <span className="text-right leading-snug">{formatEstimatedTotal(priceSnapshot, locale)}</span>
+              <span className="text-right leading-snug">{formatEstimatedTotal(priceQuote, locale)}</span>
             </div>
-            {priceNoteLines(priceSnapshot, locale).map((line) => (
+            {priceNoteLines(priceQuote, locale).map((line) => (
               <p key={line} className="mt-2 text-xs leading-relaxed text-[#F4F1ED]/60">
                 {line}
               </p>

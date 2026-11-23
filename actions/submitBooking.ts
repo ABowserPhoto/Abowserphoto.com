@@ -10,7 +10,8 @@ import {
   type PropertyStatus,
 } from "../lib/booking";
 import { bookingFailureMessage, placeShootRequest } from "../lib/bookingRequests";
-import { buildPriceSnapshot, loadOwnPriceCatalog, type PriceSnapshot } from "../lib/clientPricing";
+import { buildPriceSnapshot, type PriceSnapshot } from "../lib/clientPricing";
+import { loadSnapshotCatalog } from "../lib/loadSnapshotPrices";
 import { getAuthCopy, getBookingCopy, resolveLocale } from "../lib/i18n/messages";
 import { createClient } from "../lib/supabase/server";
 
@@ -134,23 +135,13 @@ export async function submitBooking(data: BookingFormData): Promise<SubmitBookin
     };
   }
 
-  const prices = await loadOwnPriceCatalog(supabase);
-  let priceSnapshot: PriceSnapshot | null;
-  switch (prices.status) {
-    case "hidden":
-      priceSnapshot = null;
-      break;
-    case "ready":
-      priceSnapshot = buildPriceSnapshot(prices.catalog, selection.selection);
-      break;
-    case "error":
-      console.error("Client price catalog could not be loaded.");
-      return { success: false, message: booking.saveFailed };
-    default: {
-      const neverPrices: never = prices;
-      console.error("Unhandled price catalog status:", neverPrices);
-      return { success: false, message: booking.saveFailed };
-    }
+  let priceSnapshot: PriceSnapshot | null = null;
+  try {
+    const catalog = await loadSnapshotCatalog(userData.user.id);
+    if (catalog) priceSnapshot = buildPriceSnapshot(catalog, selection.selection);
+  } catch {
+    console.error("Client price catalog could not be loaded.");
+    return { success: false, message: booking.saveFailed };
   }
 
   try {

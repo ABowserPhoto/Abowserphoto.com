@@ -309,7 +309,17 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_my_booking_prices: {
+        Args: Record<string, never>;
+        Returns: {
+          item_key: string;
+          label_de: string | null;
+          label_en: string | null;
+          unit: string;
+          price_net_cents: number | null;
+          sort_order: number | null;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

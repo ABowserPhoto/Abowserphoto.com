@@ -4,6 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { resolveImmobilienSelection } from "./booking";
+import { priceSnapshotFromJson, priceSnapshotToJson } from "./pricingTier";
 import {
   buildPriceSnapshot,
   catalogFromRows,
@@ -11,10 +12,9 @@ import {
   formatNetPrice,
   formatSnapshotLine,
   onRequestLabel,
+  clientPriceItemsFromRows,
   optionPriceTexts,
   photoPackageItemKey,
-  priceSnapshotFromJson,
-  priceSnapshotToJson,
   servicePriceItemKeys,
   type PriceCatalog,
   type PriceItemKey,
@@ -293,24 +293,68 @@ test("catalog rows stay on the client tier and unknown keys are dropped", () => 
   assert.equal(parsed.items[0]?.priceNetCents, feeCents);
   assert.equal(parsed.items[0]?.labelDe, "Buchungsgebühr");
   assert.equal(optionPriceTexts(null, ["booking_fee"], "de").length, 0);
-  assert.equal(optionPriceTexts(parsed, ["tour_360"], "en").length, 0);
+  assert.equal(optionPriceTexts(parsed.items, ["tour_360"], "en").length, 0);
   assert.deepEqual(servicePriceItemKeys("Interior"), []);
   assert.deepEqual(servicePriceItemKeys("Drohne"), ["drone_photos", "drone_video"]);
   assert.equal(photoPackageItemKey("bis-10-zimmer"), "photo_package_25");
 });
 
-test("prices are read with the caller session and the service role only stores the snapshot", () => {
+test("the booking form never receives a pricing tier name", () => {
   const pricing = fs.readFileSync(path.join(ROOT, "lib/clientPricing.ts"), "utf8");
-  const requests = fs.readFileSync(path.join(ROOT, "lib/bookingRequests.ts"), "utf8");
-  const submit = fs.readFileSync(path.join(ROOT, "actions/submitBooking.ts"), "utf8");
-  assert.equal(pricing.includes("SUPABASE_SERVICE_ROLE_KEY"), false);
-  assert.equal(pricing.includes("createServiceClient"), false);
-  assert.match(pricing, /from\("pricing_tier_prices"\)/);
-  assert.equal(requests.includes("pricing_tier_prices"), false);
-  assert.match(requests, /price_snapshot: priceSnapshotToJson/);
-  assert.match(submit, /loadOwnPriceCatalog/);
-  assert.equal(submit.includes("createServiceClient"), false);
-  assert.equal(submit.includes("SUPABASE_SERVICE_ROLE_KEY"), false);
+  const form = fs.readFileSync(path.join(ROOT, "components/BookingForm.tsx"), "utf8");
+  const action = fs.readFileSync(path.join(ROOT, "actions/loadBookingPrices.ts"), "utf8");
+  for (const source of [pricing, form, action]) {
+    assert.equal(/\b(standard|legacy|corporate)\b/.test(source), false);
+    assert.equal(source.includes("pricing_tier"), false);
+  }
+  assert.match(action, /get_my_booking_prices/);
+  assert.equal(action.includes("tier"), false);
+  const payload = clientPriceItemsFromRows([
+    {
+      item_key: "booking_fee",
+      label_de: "Buchungsgebühr",
+      label_en: "Booking fee",
+      unit: "flat",
+      price_net_cents: 4 * 100,
+      sort_order: 1,
+    },
+  ]);
+  const encoded = JSON.stringify({ status: "ready", items: payload });
+  assert.equal(/\b(standard|legacy|corporate)\b/.test(encoded), false);
+  assert.equal(encoded.includes("tier"), false);
+});
+
+test("clients cannot select their pricing tier and the price rpc omits it", () => {
+  const sql = fs.readFileSync(
+    path.join(ROOT, "supabase/migrations/20261123001000_hide_client_pricing_tier.sql"),
+    "utf8"
+  );
+  const lowered = sql.toLowerCase();
+  assert.match(lowered, /revoke select \(pricing_tier\) on table public\.clients from anon, authenticated/);
+  assert.match(lowered, /revoke select \(tier\) on table public\.pricing_tier_prices from anon, authenticated/);
+  const columnGrant = fs.readFileSync(
+    path.join(ROOT, "supabase/migrations/20261123002000_clients_cannot_select_tier_column.sql"),
+    "utf8"
+  );
+  const grant = columnGrant.toLowerCase();
+  assert.match(grant, /revoke select on table public\.clients from anon, authenticated/);
+  const clientGrant = grant.match(/grant select \(([\s\S]*?)\) on table public\.clients/);
+  assert.ok(clientGrant);
+  assert.match(clientGrant[1] ?? "", /company_name/);
+  assert.match(clientGrant[1] ?? "", /is_approved/);
+  assert.equal(/\bpricing_tier\b/.test(clientGrant[1] ?? ""), false);
+  assert.match(grant, /revoke select on table public\.pricing_tier_prices from authenticated/);
+  const priceGrant = grant.match(/grant select \(([\s\S]*?)\) on table public\.pricing_tier_prices/);
+  assert.ok(priceGrant);
+  assert.equal(/\btier\b/.test(priceGrant[1] ?? ""), false);
+  assert.match(lowered, /drop policy if exists pricing_tier_prices_select_own_tier/);
+  assert.match(lowered, /function public\.get_my_booking_prices\(\)/);
+  assert.match(lowered, /grant execute on function public\.get_my_booking_prices\(\) to authenticated/);
+  assert.equal(lowered.includes("returns table"), true);
+  const returns = lowered.slice(lowered.indexOf("returns table"), lowered.indexOf("language sql"));
+  assert.equal(returns.includes("tier"), false);
+  assert.equal(lowered.includes("drop table"), false);
+  assert.equal(lowered.includes("service_role"), false);
 });
 
 test("the homestaging count migration only adds a nullable column", () => {

@@ -39,7 +39,8 @@ import {
   isMissingCalendarEvent,
   queryAvailableTimesForDate,
 } from "./googleCalendar";
-import { priceSnapshotToJson, type PriceSnapshot } from "./clientPricing";
+import type { PriceSnapshot } from "./clientPricing";
+import { priceSnapshotToJson } from "./pricingTier";
 import type { Locale } from "./i18n/config";
 import { getBookingCopy, resolveLocale } from "./i18n/messages";
 import { sendShootDecisionEmail, sendShootRequestEmails } from "./mail";

@@ -21,10 +21,9 @@ import {
   formatSnapshotLine,
   priceCopy,
   priceNoteLines,
-  priceSnapshotFromJson,
-  tierLabel,
   type PriceSnapshot,
 } from "./clientPricing";
+import { priceSnapshotFromJson, tierLabel } from "./pricingTier";
 import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY } from "./contact";
 import type { Json } from "./database.types";
 import type { Locale } from "./i18n/config";
@@ -247,7 +246,7 @@ export function adminDetailRows(details: RequestDetails): DetailRow[] {
   rows.push(...bundleDetailRows(details, "de"));
   rows.push(...photoChoiceRows(details, "de"));
   rows.push(...homestagingCountRows(details, "de"));
-  rows.push(...priceDetailRows(details, "de"));
+  rows.push(...priceDetailRows(details, "de", true));
   if (details.notes) rows.push({ label: "Notizen", value: details.notes });
   if (details.calendarUrl) rows.push({ label: "Kalender", value: details.calendarUrl });
   return rows;
@@ -266,7 +265,7 @@ export function clientDetailRows(details: RequestDetails): DetailRow[] {
   rows.push(...bundleDetailRows(details, locale));
   rows.push(...photoChoiceRows(details, locale));
   rows.push(...homestagingCountRows(details, locale));
-  rows.push(...priceDetailRows(details, locale));
+  rows.push(...priceDetailRows(details, locale, false));
   return rows;
 }
 
@@ -283,11 +282,16 @@ export function homestagingCountRows(
   ];
 }
 
-export function priceDetailRows(details: Pick<RequestDetails, "priceSnapshot">, locale: Locale): DetailRow[] {
+export function priceDetailRows(
+  details: Pick<RequestDetails, "priceSnapshot">,
+  locale: Locale,
+  includeTier: boolean
+): DetailRow[] {
   const snapshot = details.priceSnapshot;
   if (!snapshot) return [];
   const copy = priceCopy(locale);
-  const rows: DetailRow[] = [{ label: copy.pricingTier, value: tierLabel(snapshot.tier) }];
+  const rows: DetailRow[] = [];
+  if (includeTier) rows.push({ label: "Preisklasse", value: tierLabel(snapshot.tier) });
   for (const line of snapshot.lines) {
     const label = (locale === "de" ? line.labelDe : line.labelEn).trim() || line.itemKey;
     rows.push({ label, value: formatSnapshotLine(line, locale) });

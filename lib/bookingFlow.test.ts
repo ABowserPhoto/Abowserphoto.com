@@ -10,7 +10,8 @@ import {
   resolveImmobilienSelection,
   resolvePhotoChoice,
 } from "./booking";
-import { buildPriceSnapshot, formatEstimatedTotal, tierLabel, type PriceCatalog, type PriceRow } from "./clientPricing";
+import { buildPriceSnapshot, formatEstimatedTotal, type PriceCatalog, type PriceRow } from "./clientPricing";
+import { tierLabel } from "./pricingTier";
 import { bundleFromRow, photoPackageName, servicesFromRow, type RequestDetails } from "./bookingDetails";
 import { getDictionarySync } from "./i18n/getDictionary";
 import { getLocalizedCategory } from "./i18n/localizeContent";
@@ -440,13 +441,16 @@ test("a priced request tells Aaron and the client the tier and the net total", (
   assert.match(studio.text, /10 Fotos/);
   assert.match(studio.text, new RegExp(formatEstimatedTotal(snapshot, "de").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.match(studio.text, /zzgl\. MwSt\. und ggf\. Fahrtkosten ab 30 km/);
-  assert.match(client.text, /Preisklasse/);
+  assert.doesNotMatch(client.text, /Preisklasse|Legacy|Standard|Corporate/);
   assert.match(client.text, new RegExp(formatEstimatedTotal(snapshot, "de").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
-  assert.match(clientEn.text, /Pricing tier/);
+  assert.doesNotMatch(clientEn.text, /Pricing tier|Legacy|Standard|Corporate/);
   assert.match(clientEn.text, /Booking fee/);
   assert.match(clientEn.text, new RegExp(formatEstimatedTotal(snapshot, "en").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.match(clientEn.text, /plus VAT and travel costs beyond 30 km where applicable/);
   assert.match(confirmed.text, /Estimated total \(net\)/);
+  assert.doesNotMatch(confirmed.text, /Pricing tier|Legacy|Standard|Corporate/);
+  const declined = buildClientDeclinedEmail(priced);
+  assert.doesNotMatch(declined.text, /Preisklasse|Legacy|Standard|Corporate/);
   assert.equal(money(buildBusinessRequestEmail(details, "h".repeat(43)).text), false);
 });
 
