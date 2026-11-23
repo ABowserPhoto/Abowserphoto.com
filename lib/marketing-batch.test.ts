@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { explicitImageAlt } from "./gallery";
+import { explicitImageAlt } from "./homeImageAlts";
 import { getLegalDocument } from "./legalContent";
 import { homeHeroCopy } from "./homeHero";
 import { NICHE_LANDING_COPY } from "./niche-landing";
