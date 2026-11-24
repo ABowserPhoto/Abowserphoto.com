@@ -107,44 +107,12 @@ export function homeHubGroups(locale: Locale) {
 export function homeStudioLine(locale: Locale) {
   if (locale === "de") {
     return {
-      hagen: "Hagen: Bewerbungsfotos 29 €, Passbilder 15 €.",
-      solingen: "Solingen: Studiomiete 54 €/Std.",
+      hagen: "Im Studio Hagen: Bewerbungsfotos (29 €) und biometrische Passbilder (15 €), Mo–Sa 10–20 Uhr, So 09–12 Uhr.",
+      solingen: "Solingen: Studiomiete 54 €/Std. (mind. 2 Std.), Halbtag 189 €, Tag 329 €, inkl. 19 % MwSt.",
     };
   }
   return {
-    hagen: "Hagen: application photos €29, passport photos €15.",
-    solingen: "Solingen: studio rental €54/h.",
-  };
-}
-
-export function homeAboutCopy(locale: Locale) {
-  if (locale === "de") {
-    return {
-      title: "Über Aaron",
-      body: "Aaron Bowser fotografiert und filmt in Hagen und Solingen. Marken, Makler und Menschen bekommen einen Ansprechpartner, vom ersten Bild bis zum fertigen Film.",
-      awardsLabel: "Auszeichnungen",
-      portraitAlt: "Porträt von Aaron Bowser",
-    };
-  }
-  return {
-    title: "About Aaron",
-    body: "Aaron Bowser photographs and films in Hagen and Solingen. Brands, agents, and people work with one contact, from the first picture to the finished film.",
-    awardsLabel: "Awards",
-    portraitAlt: "Portrait of Aaron Bowser",
-  };
-}
-
-export function homePackageCopy(locale: Locale) {
-  if (locale === "de") {
-    return {
-      title: "Ein Ansprechpartner für den ganzen Auftritt",
-      body: "Wer ein Produkt oder eine Leistung verkauft, hat bei Aaron einen Ansprechpartner: Produktfotos, Social-Media-Inhalte, Commercial-Bilder, Business-Porträts, Unternehmensstandorte, Werbefilm und Lifestyle-Bilder. Ein komplettes Paket für Marketing und Branding.",
-      videoAlt: "Standbild für den kommenden Film von Aaron Bowser Photography",
-    };
-  }
-  return {
-    title: "One contact for the whole presence",
-    body: "Anyone selling a product or a service has one contact in Aaron: product shots, social content, commercial images, business portraits, company locations, commercial video, and lifestyle images. A complete marketing and branding package.",
-    videoAlt: "Poster for the forthcoming film from Aaron Bowser Photography",
+    hagen: "Hagen studio: application photos (€29) and biometric passport photos (€15), Mon–Sat 10–20, Sun 09–12.",
+    solingen: "Solingen: studio rental €54/h (2 hour minimum), half day €189, full day €329, including 19% VAT.",
   };
 }

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "./contact";
 import { countWords, homeIntroPlainText } from "./homeIntro";
+import { homeLongPlainText } from "./homeLongCopy";
 import { AWARD_LOGOS } from "./awards";
 import { MARKETING_VIDEO } from "./marketingVideo";
 import { homeHubGroups } from "./homeHub";
@@ -76,7 +77,7 @@ test("scan titles and meta descriptions stay within length and match the German 
     home: "Fotograf & Fotostudio Hagen | Aaron Bowser Photography",
     wedding: "Hochzeitsfotograf NRW | Düsseldorf, Köln & Ruhrgebiet",
     business: "Business-Fotograf NRW | Executive- & Corporate-Porträts",
-    solingen: "Fotostudio mieten Solingen | 100 m² ab 54 €/Std.",
+    solingen: "Fotostudio mieten Solingen | 100 m² | Aaron Bowser",
     film: "Imagefilm-Produktion NRW | Aaron Bowser Photography",
     food: "Food-Fotografie NRW | Kampagne, Verpackung & Getränke",
     commercial: "Commercial-Fotograf NRW | Fashion, Beauty & Editorial",
@@ -165,6 +166,13 @@ test("scan titles and meta descriptions stay within length and match the German 
   assert.ok(social.title.length <= 60, social.title);
   assert.ok(social.description.length <= 155, social.description);
   assert.ok(getDictionarySync("en").seo["social-media-management"].description.length <= 155);
+});
+
+test("homepage long copy stays between 300 and 500 words in both languages", () => {
+  for (const locale of ["de", "en"] as const) {
+    const words = countWords(homeLongPlainText(locale));
+    assert.ok(words >= 300 && words <= 500, `${locale} long copy is ${words} words`);
+  }
 });
 
 test("portfolio archive copy is no longer a single sentence", () => {

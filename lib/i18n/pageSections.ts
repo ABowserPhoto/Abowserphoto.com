@@ -230,7 +230,7 @@ const commercialSections: Record<Locale, PageSection[]> = {
       title: "KI-Bildwelten, klar gekennzeichnet",
       paragraphs: [
         "Für Marken, Hotels und Restaurants entstehen neben den fotografierten Bildern auch KI-Bildwelten. Jedes KI-erzeugte Bild ist als KI-Bildwelt gekennzeichnet.",
-        "Beispiele stehen hier, sobald freigegebene Motive vorliegen. Bis dahin ist dieser Abschnitt ein Platzhalter ohne Beispielbilder.",
+        "Ob Kampagnenmotiv, Hotelwand oder Social-Media-Serie: KI-Bildwelten ergänzen Ihre Fotos dort, wo eine Fotografie an Grenzen stößt. Jedes KI-Bild ist klar gekennzeichnet.",
       ],
       links: [{ href: withLocale(printsPath("de"), "de"), label: "Wandbilder & Metalldrucke" }],
     },
@@ -242,7 +242,7 @@ const commercialSections: Record<Locale, PageSection[]> = {
       title: "AI image worlds, clearly labelled",
       paragraphs: [
         "For brands, hotels, and restaurants, photographed work can sit beside AI image worlds. Every AI-generated picture is labelled as an AI image world.",
-        "Examples will be shown here once approved pictures exist. Until then this section is a placeholder without sample images.",
+        "For a campaign picture, a hotel wall or a social series: AI image worlds extend your photographs where a camera reaches its limit. Every AI picture is clearly labelled.",
       ],
       links: [{ href: withLocale(printsPath("en"), "en"), label: "Wall art and metal prints" }],
     },
@@ -306,7 +306,7 @@ const realEstateFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wie schnell bekomme ich die Bilder?",
-      answer: "Fotos innerhalb von 24 Stunden, Reels innerhalb von 48–72 Stunden.",
+      answer: "Den Lieferzeitpunkt legen wir im Angebot fest.",
     },
     {
       question: "Passen die Dateien für die Portale?",
@@ -316,7 +316,7 @@ const realEstateFaqs: Record<Locale, FAQItem[]> = {
   en: [
     {
       question: "How quickly do I get the pictures?",
-      answer: "Photographs within 24 hours, reels within 48–72 hours.",
+      answer: "The delivery date is set in the quote.",
     },
     {
       question: "Will the files work on the portals?",

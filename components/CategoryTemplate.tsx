@@ -19,6 +19,7 @@ import PageSections from "./PageSections";
 import PortfolioGrid from "./PortfolioGrid";
 import ServicesScroll from "./ServicesScroll";
 import GuestEnquiry from "./GuestEnquiry";
+import QuoteClose from "./QuoteClose";
 import SiteFooter from "./SiteFooter";
 
 type ServiceWithMedia = {
@@ -382,6 +383,12 @@ export default function CategoryTemplate({
             </div>
           </motion.section>
         ) : null}
+
+        {category.slug === "studio" ? null : (
+          <div className="relative z-30 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <QuoteClose locale={locale} mode={isSocial ? "consult" : "shoot"} />
+          </div>
+        )}
 
         <section className="relative z-30 bg-[#F4F1ED] px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl pb-24">

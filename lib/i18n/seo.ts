@@ -244,11 +244,11 @@ export function buildOfferMetadata(locale: Locale, kind: OfferPageKind): Metadat
   const description =
     locale === "de"
       ? kind === "prints"
-        ? "Wandbilder und Metalldrucke aus Ihren Fotos oder gekennzeichneten KI-Bildwelten. Preise im Kundenkonto."
-        : "Termine und Aktionen von Aaron Bowser Photography. Keine Preise auf dieser Seite."
+        ? "Wandbilder und Metalldrucke aus Ihren Fotos oder gekennzeichneten KI-Bildwelten, für Zuhause, Hotel, Restaurant und Büro. Jetzt Angebot anfragen."
+        : "Mini-Sessions und Aktionen von Aaron Bowser Photography in Hagen und Solingen. Jetzt auf die Warteliste setzen."
       : kind === "prints"
-        ? "Wall art and metal prints from your photographs or labelled AI image worlds. Prices in the client account."
-        : "Dates and events from Aaron Bowser Photography. No prices on this page.";
+        ? "Wall art and metal prints from your photographs or labelled AI image worlds, for home, hotel, restaurant and office. Request a quote."
+        : "Mini sessions and events from Aaron Bowser Photography in Hagen and Solingen. Join the waiting list.";
   return {
     title: { absolute: copy.title },
     description,

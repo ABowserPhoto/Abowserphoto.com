@@ -81,12 +81,12 @@
       "description": "Brand and company films for businesses in Düsseldorf, Cologne, Wuppertal and the Ruhr. Cinematic storytelling, shoot and edit. Book a shoot."
     },
     "solingen": {
-      "title": "Rent a Photo Studio Solingen | 100 m² from €54/h",
-      "description": "Rent a photo studio in Solingen: approx. 100 m² for shoots, teams and video. €54/h (2 h min.), half day €189, full day €329 incl. VAT."
+      "title": "Rent a Photo Studio Solingen | 100 m² | Aaron Bowser",
+      "description": "Rent the Solingen studio, about 100 m²: €54/h (2 hour minimum), half day €189, full day €329, including 19% VAT."
     },
     "social-media-management": {
       "title": "Social Media Content NRW | Photos, Reels & Strategy",
-      "description": "Content production and strategy for brands in Düsseldorf, Cologne and NRW: photos, reels, content plan and reporting in one place. Book a shoot."
+      "description": "Content production and strategy for brands in Düsseldorf, Cologne and NRW: photos, reels, content plan and reporting in one place. Request a consultation."
     },
     "commercial-portfolio": {
       "title": "Commercial Portfolio | Fashion, Beauty & Product",
@@ -226,7 +226,7 @@
     "successTitle": "Thank you",
     "error": "Booking submission failed.",
     "inquirySuccess": "Your inquiry has been received. We will review your details and be in touch shortly.",
-    "accountNote": "Prices and booking are in the client account. Register free, or enquire without an account.",
+    "accountNote": "Request a quote by form, email or WhatsApp, or book online with a free client account.",
     "enquireWithoutAccount": "Enquire without an account",
     "whatsapp": "WhatsApp",
     "sendEnquiry": "Send enquiry",
@@ -293,7 +293,7 @@
     "calendarEventFailed": "We could not create the calendar event.",
     "saveFailed": "We could not save your request. Please try again.",
     "invalidDate": "Please select a valid date.",
-    "notConfigured": "Booking is not configured yet. Add the Supabase project URL and publishable key to enable sign-in and requests.",
+    "notConfigured": "Online booking is unavailable just now. Please enquire by form, phone or WhatsApp.",
     "checkingAccount": "Checking your account...",
     "closeModal": "Close booking modal",
     "propertyStatuses": {

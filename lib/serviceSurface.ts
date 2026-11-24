@@ -97,6 +97,10 @@ const weddingNiche: Pair = {
         "Ja. Der Hochzeitsfilm entsteht am selben Tag wie die Fotos. Foto und Film planen wir in einem Gespräch."
       ),
       faq(
+        "Lernen wir uns vor der Hochzeit kennen?",
+        "Ja, in einem Vorgespräch und auf Wunsch bei einem Paarshooting."
+      ),
+      faq(
         "Kommen Sie auch außerhalb von Hagen und Solingen?",
         "Ja, in ganz NRW regelmäßig, weiter entfernt nach Absprache. Fahrtkosten stehen im Angebot."
       ),
@@ -126,6 +130,10 @@ const weddingNiche: Pair = {
       faq(
         "Is there also a wedding film?",
         "Yes. The wedding film is made on the same day as the photographs. We plan photographs and film in one conversation."
+      ),
+      faq(
+        "Do we meet before the wedding?",
+        "Yes, in a conversation beforehand and, if you want, at a couple session."
       ),
       faq(
         "Do you travel beyond Hagen and Solingen?",
@@ -191,15 +199,19 @@ const immoNiche: Pair = {
   de: {
     title: "Immobilienfotograf Hagen | Exposé-Fotos NRW",
     description:
-      "Immobilienfotos und -videos für Makler in NRW: Fotopaket, Walk Thru Video, Drohne. Registriert und versichert. Shooting buchen.",
+      "Immobilienfotos und -videos für Makler in NRW: Fotopaket, Walk-Thru-Video, Agent-Branding-Video und Drohne. Registriert & versichert. Shooting buchen.",
     h1: "Immobilienfotograf für Makler in NRW",
     subline: "Immobilienfotos, die Besichtigungen bringen",
     intro:
-      "Als Immobilienfotograf für Makler in NRW liefere ich Exposé-Fotos und Videos, die Interessenten zur Besichtigung bringen. Sie wählen ein Fotopaket, oder Einzelfotos, wenn nur ein Raum oder die Außenansicht fehlt. Als Extras gibt es Walk Thru Video und Agent Branding Video. Mit Premium Home bekommen Sie Fotopaket, Highlight-Video und Drohne aus einem Termin. Luxury Makler setzt Sie selbst im Video in Szene. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Im Einsatz in Hagen, Wuppertal, Solingen, Düsseldorf, Köln und im Ruhrgebiet.",
+      "Mehr Anfragen, schnellere Besichtigungen: Exposé-Fotos und Videos für Makler in NRW. Sie wählen das Fotopaket, das zum Objekt passt, von der kompakten Wohnung bis zum großen Haus. Fehlt nur ein Raum oder die Außenansicht, ergänzen Sie einzelne Fotos. Als Extras gibt es Walk Thru Video und Agent Branding Video. Mit Premium Home bekommen Sie Fotopaket, Highlight-Video und Drohne aus einem Termin. Luxury Makler setzt Sie selbst im Video in Szene. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Im Einsatz in Hagen, Wuppertal, Solingen, Düsseldorf, Köln und im Ruhrgebiet.",
     faqs: [
       faq(
+        "Wie viele Fotos braucht ein Exposé?",
+        "Das hängt von Größe und Art des Objekts ab. Eine Wohnung braucht weniger Motive als ein Einfamilienhaus mit Garten. Sie wählen das Fotopaket passend zum Objekt und können einzelne Fotos ergänzen. Wir beraten Sie gern vorab."
+      ),
+      faq(
         "Was kostet ein Immobilienfotograf?",
-        "Das hängt vom Fotopaket und den Extras ab. Alle Preise sehen Sie in Ihrem Kundenkonto, dort können Sie auch direkt buchen."
+        "Das hängt vom Fotopaket und den Extras ab. Fordern Sie ein Angebot per Kontaktformular, E-Mail oder WhatsApp an. Mit einem kostenlosen Kundenkonto sehen Sie Ihre Pakete auf einen Blick und buchen Termine direkt online."
       ),
       faq(
         "Sind Drohnenaufnahmen möglich?",
@@ -210,6 +222,14 @@ const immoNiche: Pair = {
         "Beide enthalten ein Fotopaket Ihrer Wahl und Drohnenaufnahmen. Premium Home ergänzt ein Highlight-Video der Immobilie. Luxury Makler ergänzt ein Walk Thru Video, in dem Sie als Makler durch das Objekt führen."
       ),
       faq(
+        "Sind die Bilder für ImmoScout24 und Immowelt geeignet?",
+        "Ja, Sie erhalten Exporte für ImmoScout24, Immowelt, Ihre Website und Social Media."
+      ),
+      faq(
+        "Ist virtuelles Homestaging erlaubt?",
+        "Ja, wenn es gekennzeichnet ist. Virtuell eingerichtete Bilder markieren wir sichtbar mit „Virtuell eingerichtet“ und verändern keine Bausubstanz."
+      ),
+      faq(
         "Wie bereite ich die Immobilie vor?",
         "Räume aufräumen, Licht an, persönliche Dinge und Autos vor dem Haus wegräumen."
       ),
@@ -218,15 +238,19 @@ const immoNiche: Pair = {
   en: {
     title: "Real Estate Photographer Hagen | Listing Photos NRW",
     description:
-      "Real estate photos and video for agents in NRW: photo package, Walk Thru Video, drone. Registered and insured. Book a shoot.",
+      "Real estate photos and video for agents in NRW: photo package, walk-thru video, agent branding video and drone. Registered and insured. Book a shoot.",
     h1: "Real Estate Photographer for Agents in NRW",
     subline: "Property photos that bring viewings",
     intro:
-      "As a property photographer for agents in NRW I deliver listing photos and videos that bring people to a viewing. You choose a photo package, or individual photos when only one room or the exterior is missing. Walk Thru Video and Agent Branding Video are extras. Premium Home is the photo package, a highlight video and drone from one appointment. Luxury Makler puts you in the video. The drone is registered with the aviation authority and insured. In use in Hagen, Wuppertal, Solingen, Düsseldorf, Cologne and the Ruhr.",
+      "More enquiries, and viewings that happen sooner: listing photos and videos for agents in NRW. You choose the photo package that fits the property, from a compact flat to a large house. If only one room or the exterior is missing, you add individual photos. Walk Thru Video and Agent Branding Video are extras. Premium Home is the photo package, a highlight video and drone from one appointment. Luxury Makler puts you in the video. The drone is registered with the aviation authority and insured. In use in Hagen, Wuppertal, Solingen, Düsseldorf, Cologne and the Ruhr.",
     faqs: [
       faq(
+        "How many photos does a listing need?",
+        "It depends on the size and the kind of property. A flat needs fewer pictures than a house with a garden. You choose the photo package that fits the property, and individual photos can be added. We are glad to advise you beforehand."
+      ),
+      faq(
         "What does a property photographer cost?",
-        "It depends on the photo package and the extras. The prices are in your client account, where you can also book."
+        "It depends on the photo package and the extras. Request a quote by contact form, email or WhatsApp. With a free client account you see your packages in one place and book appointments online."
       ),
       faq(
         "Is drone photography possible?",
@@ -240,6 +264,14 @@ const immoNiche: Pair = {
         "How should I prepare the property?",
         "Tidy the rooms, turn the lights on, and move personal items and cars away from the front of the house."
       ),
+      faq(
+        "Will the files work on ImmoScout24 and Immowelt?",
+        "Yes. You receive exports for ImmoScout24, Immowelt, your website and social media."
+      ),
+      faq(
+        "Is virtual staging allowed?",
+        "Yes, when it is labelled. Virtually staged pictures are marked in the image as “Virtuell eingerichtet”, and the building itself is not changed."
+      ),
     ],
   },
 };
@@ -251,7 +283,7 @@ const immoWww: Pair = {
       "Walk Thru Video, Agent Branding Video und Drohnenaufnahmen für Makler in NRW, als Premium Home oder Luxury Makler. Shooting buchen.",
     h1: "Immobilienvideos & Drohnenaufnahmen für Makler in NRW",
     intro:
-      "Ein Exposé mit Video bleibt länger im Kopf. Für Makler in NRW produziere ich Walk Thru Videos, die Interessenten durch die Immobilie führen, und Agent Branding Videos, die Sie als Ansprechpartner zeigen. Drohnenaufnahmen zeigen Lage, Grundstück und Umfeld. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Am einfachsten buchen Sie alles in einem Termin: Premium Home kombiniert Fotopaket, Highlight-Video und Drohne, Luxury Makler setzt Sie im Video in Szene. Alle Fotopakete und Preise finden Sie auf meiner Seite für Immobilienfotografie.",
+      "Ein Exposé mit Video bleibt länger im Kopf. Für Makler in NRW produziere ich Walk Thru Videos, die Interessenten durch die Immobilie führen, und Agent Branding Videos, die Sie als Ansprechpartner zeigen. Drohnenaufnahmen zeigen Lage, Grundstück und Umfeld. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Am einfachsten buchen Sie alles in einem Termin: Premium Home kombiniert Fotopaket, Highlight-Video und Drohne, Luxury Makler setzt Sie im Video in Szene. Alle Fotopakete im Überblick finden Sie auf meiner Seite für Immobilienfotografie in Hagen. Ein Angebot erhalten Sie per Formular, E-Mail oder WhatsApp.",
     faqs: [
       faq(
         "Was ist ein Walk Thru Video?",
@@ -273,7 +305,7 @@ const immoWww: Pair = {
       "Walk Thru Video, Agent Branding Video and drone footage for agents in NRW, as Premium Home or Luxury Makler. Book a shoot.",
     h1: "Real Estate Video & Drone for Agents in NRW",
     intro:
-      "A listing with video stays in mind longer. For agents in NRW I produce Walk Thru Videos that lead viewers through the property, and Agent Branding Videos that show you as the contact. Drone footage shows the setting, the plot and the surroundings. The drone is registered and insured. The simplest booking is one appointment: Premium Home combines the photo package, a highlight video and drone, and Luxury Makler puts you in the video. The photo packages are on the property photography page.",
+      "A listing with video stays in mind longer. For agents in NRW I produce Walk Thru Videos that lead viewers through the property, and Agent Branding Videos that show you as the contact. Drone footage shows the setting, the plot and the surroundings. The drone is registered and insured. The simplest booking is one appointment: Premium Home combines the photo package, a highlight video and drone, and Luxury Makler puts you in the video. The photo packages are set out on the Hagen property page. A quote comes by form, email or WhatsApp.",
     faqs: [
       faq(
         "What is a Walk Thru Video?",
@@ -317,6 +349,10 @@ const filmNiche: Pair = {
         "Kann ich Hochzeitsfilm und Hochzeitsfotos zusammen buchen?",
         "Ja. Beides entsteht am selben Tag mit derselben Bildsprache."
       ),
+      faq(
+        "Sind Drohnenaufnahmen möglich?",
+        "Ja, mit registrierter und versicherter Drohne, für Luftbilder von Gebäude, Gelände und Umgebung."
+      ),
     ],
   },
   en: {
@@ -340,6 +376,10 @@ const filmNiche: Pair = {
       faq(
         "Can I book a wedding film and the photographs together?",
         "Yes. Both are made on the same day in the same visual language."
+      ),
+      faq(
+        "Is drone footage possible?",
+        "Yes, with a registered and insured drone, for aerial views of a building, the grounds and the surroundings."
       ),
     ],
   },
@@ -367,6 +407,10 @@ const filmWww: Pair = {
         "Bei Ihnen im Unternehmen in ganz NRW oder im Studio Solingen (ca. 100 m²)."
       ),
       faq(
+        "Sind Drohnenaufnahmen möglich?",
+        "Ja, mit registrierter und versicherter Drohne, für Luftbilder von Gebäude, Gelände und Umgebung."
+      ),
+      faq(
         "Wie bereiten wir uns vor?",
         "Ein kurzes Briefing zu Ziel, Zielgruppe und Einsatzort genügt. Den Rest erarbeiten wir im Konzept."
       ),
@@ -391,6 +435,10 @@ const filmWww: Pair = {
       faq(
         "Where do you film?",
         "At your company anywhere in NRW, or at the Solingen studio (about 100 m²)."
+      ),
+      faq(
+        "Is drone footage possible?",
+        "Yes, with a registered and insured drone, for aerial views of a building, the grounds and the surroundings."
       ),
       faq(
         "How do we prepare?",
@@ -425,6 +473,10 @@ const commercialNiche: Pair = {
         "Wo findet das Shooting statt?",
         "Im Studio Hagen, im Studio Solingen (ca. 100 m²) oder vor Ort in NRW, etwa in Wuppertal, Düsseldorf und Köln."
       ),
+      faq(
+        "Bekommen wir auch Video und Social-Media-Content?",
+        "Ja. Aus derselben Produktion entstehen auf Wunsch Kurzvideos, Reels und Content für Ihre Kanäle, alles aus einer Hand."
+      ),
     ],
   },
   en: {
@@ -450,6 +502,10 @@ const commercialNiche: Pair = {
       faq(
         "Where does the shoot take place?",
         "At the Hagen studio, at the Solingen studio (about 100 m²), or on location in NRW, including Wuppertal, Düsseldorf and Cologne."
+      ),
+      faq(
+        "Can we also have video and social content?",
+        "Yes. From the same production we can make short videos, reels and content for your channels, all from one contact."
       ),
     ],
   },
@@ -480,6 +536,10 @@ const commercialWww: Pair = {
         "Wo wird produziert?",
         "Vor Ort in NRW oder im Studio Solingen mit rund 100 m²."
       ),
+      faq(
+        "Bekommen wir auch Video und Social-Media-Content?",
+        "Ja. Aus derselben Produktion entstehen auf Wunsch Kurzvideos, Reels und Content für Ihre Kanäle, alles aus einer Hand."
+      ),
     ],
   },
   en: {
@@ -503,6 +563,10 @@ const commercialWww: Pair = {
         "Yes, with individual portraits and editorial series that show your range."
       ),
       faq("Where is the work produced?", "On location in NRW, or at the Solingen studio of about 100 m²."),
+      faq(
+        "Can we also have video and social content?",
+        "Yes. From the same production we can make short videos, reels and content for your channels, all from one contact."
+      ),
     ],
   },
 };
@@ -683,7 +747,7 @@ const socialNiche: Pair = {
   de: {
     title: "Social-Media-Betreuung Hagen | Content & Management",
     description:
-      "Social-Media-Management für Unternehmen in Hagen und NRW: Redaktionsplan, eigene Fotos und Videos, Posting und Auswertung. Shooting buchen.",
+      "Social-Media-Management für Unternehmen in Hagen und NRW: Redaktionsplan, eigene Fotos und Videos, Posting und Auswertung. Jetzt Beratung anfragen.",
     h1: "Social-Media-Betreuung für Unternehmen in Hagen & NRW",
     intro:
       "Ihr Auftritt auf Instagram, TikTok, LinkedIn und Facebook soll regelmäßig, stimmig und messbar sein, ohne dass Sie sich jede Woche selbst darum kümmern? Ich betreue Social-Media-Kanäle für Unternehmen und Marken in Hagen und NRW. Der Unterschied: Fotos und Videos produziere ich selbst. Dazu kommen ein monatlicher Redaktionsplan, Texte und Hashtags, Veröffentlichung, Community-Pflege und eine Auswertung, die zeigt, was funktioniert und was als Nächstes angepasst wird.",
@@ -707,7 +771,7 @@ const socialNiche: Pair = {
   en: {
     title: "Social Media Management Hagen | Content & Posting",
     description:
-      "Social media management for businesses in Hagen and NRW: content plan, our own photos and videos, posting and reporting. Book a shoot.",
+      "Social media management for businesses in Hagen and NRW: content plan, our own photos and videos, posting and reporting. Request a consultation.",
     h1: "Social Media Management for Businesses in Hagen & NRW",
     intro:
       "Should your presence on Instagram, TikTok, LinkedIn and Facebook stay regular, coherent and measurable, without you handling it every week? I look after social channels for companies and brands in Hagen and NRW. The difference: I produce the photographs and videos myself. Added to that are a monthly content plan, captions and hashtags, publishing, community care, and a report that shows what worked and what to adjust next.",
@@ -734,7 +798,7 @@ const socialWww: Pair = {
   de: {
     title: "Social-Media-Content NRW | Fotos, Reels & Strategie",
     description:
-      "Content-Produktion und Strategie für Marken in Düsseldorf, Köln und NRW: Fotos, Reels, Redaktionsplan und Reporting aus einer Hand. Shooting buchen.",
+      "Content-Produktion und Strategie für Marken in Düsseldorf, Köln und NRW: Fotos, Reels, Redaktionsplan und Reporting aus einer Hand. Beratung anfragen.",
     h1: "Social-Media-Content & Strategie für Marken in NRW",
     intro:
       "Marken mit einem starken visuellen Auftritt brauchen Content, der zu ihnen passt, und einen Plan dahinter. Ich verbinde professionelle Foto- und Videoproduktion mit Strategie: vom Content-Shooting über Reels im Hochformat bis zum Redaktionsplan und Reporting, für Marken in Düsseldorf, Köln und ganz NRW. So entsteht ein Auftritt, der auf Instagram, TikTok und LinkedIn wiedererkennbar bleibt. Laufende Betreuung Ihrer Kanäle finden Sie auf meiner Seite für Social-Media-Betreuung.",
@@ -746,7 +810,7 @@ const socialWww: Pair = {
   en: {
     title: "Social Media Content NRW | Photos, Reels & Strategy",
     description:
-      "Content production and strategy for brands in Düsseldorf, Cologne and NRW: photos, reels, content plan and reporting in one place. Book a shoot.",
+      "Content production and strategy for brands in Düsseldorf, Cologne and NRW: photos, reels, content plan and reporting in one place. Request a consultation.",
     h1: "Social Media Content & Strategy for Brands in NRW",
     intro:
       "Brands with a strong visual presence need content that belongs to them, and a plan behind it. I combine professional photography and film with strategy: from the content shoot through vertical reels to the content plan and the reporting, for brands in Düsseldorf, Cologne and across NRW. The result is a presence that stays recognisable on Instagram, TikTok and LinkedIn. Ongoing channel care is on the social media management page.",

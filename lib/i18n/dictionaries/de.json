@@ -81,16 +81,16 @@
       "description": "Imagefilme und Markenfilme für Unternehmen in Düsseldorf, Köln, Wuppertal und im Ruhrgebiet. Filmische Erzählung, Dreh und Schnitt. Shooting buchen."
     },
     "solingen": {
-      "title": "Fotostudio mieten Solingen | 100 m² ab 54 €/Std.",
-      "description": "Fotostudio in Solingen mieten: ca. 100 m² für Shootings, Teams und Videodrehs. 54 €/Std. (mind. 2 Std.), Halbtag 189 €, Tag 329 € inkl. MwSt."
+      "title": "Fotostudio mieten Solingen | 100 m² | Aaron Bowser",
+      "description": "Fotostudio Solingen mieten, ca. 100 m²: 54 €/Std. (mind. 2 Std.), Halbtag 189 €, Tag 329 €, inkl. 19 % MwSt."
     },
     "social-media-management": {
       "title": "Social-Media-Content NRW | Fotos, Reels & Strategie",
-      "description": "Content-Produktion und Strategie für Marken in Düsseldorf, Köln und NRW: Fotos, Reels, Redaktionsplan und Reporting aus einer Hand. Shooting buchen."
+      "description": "Content-Produktion und Strategie für Marken in Düsseldorf, Köln und NRW: Fotos, Reels, Redaktionsplan und Reporting aus einer Hand. Beratung anfragen."
     },
     "commercial-portfolio": {
       "title": "Commercial-Portfolio | Fashion, Beauty & Produkt",
-      "description": "Ausgewählte Fashion-, Beauty-, Produkt- und Editorial-Arbeiten von Aaron Bowser Photography für Marken in NRW. Projekt anfragen und Shooting buchen.",
+      "description": "Ausgewählte Fashion-, Beauty-, Produkt- und Editorial-Arbeiten von Aaron Bowser Photography für Marken in NRW. Jetzt Shooting buchen.",
       "h1": "Commercial-Portfolio",
       "intro": [
         "Dieses Archiv versammelt die Commercial- und Editorial-Arbeiten von Aaron Bowser Photography. Es sind Aufträge für Marken: Mode, Beauty, Produkt und redaktionelle Serien. Keine einzelne Kampagne und kein loses Moodboard, sondern die Haltung, in der die Bilder über mehrere Aufträge hinweg entstehen.",
@@ -226,7 +226,7 @@
     "successTitle": "Vielen Dank",
     "error": "Buchung konnte nicht gesendet werden.",
     "inquirySuccess": "Ihre Anfrage ist eingegangen. Wir prüfen die Details und melden uns in Kürze.",
-    "accountNote": "Preise & Buchung im Kundenkonto. Kostenlos registrieren, oder ohne Konto anfragen.",
+    "accountNote": "Angebot per Formular, E-Mail oder WhatsApp anfragen, oder mit kostenlosem Kundenkonto direkt online buchen.",
     "enquireWithoutAccount": "Ohne Konto anfragen",
     "whatsapp": "WhatsApp",
     "sendEnquiry": "Anfrage senden",
@@ -293,7 +293,7 @@
     "calendarEventFailed": "Kalendereintrag konnte nicht erstellt werden.",
     "saveFailed": "Die Anfrage konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
     "invalidDate": "Bitte wählen Sie ein gültiges Datum.",
-    "notConfigured": "Buchung ist noch nicht konfiguriert. Bitte Supabase-URL und Publishable Key hinterlegen.",
+    "notConfigured": "Die Online-Buchung ist gerade nicht erreichbar. Bitte fragen Sie per Formular, Telefon oder WhatsApp an.",
     "checkingAccount": "Konto wird geprüft...",
     "closeModal": "Buchungsmodal schließen",
     "propertyStatuses": {

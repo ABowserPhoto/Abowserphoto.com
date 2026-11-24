@@ -42,7 +42,7 @@ test("the homepage keeps its title and H1 and adds the claim with an empty award
   assert.equal(hero.claim, "It's not just a photo, it's A. Bowser Photo.");
   assert.match(hero.line, /Fotografie, Film und KI-Bildwelten/);
   assert.equal(hero.book, "Shooting buchen");
-  assert.match(hero.note, /Preise & Buchung im Kundenkonto/);
+  assert.match(hero.note, /Angebot per Formular, E-Mail oder WhatsApp/);
   assert.equal(german.home.logoLabel, "Aaron Bowser Photography");
   assert.equal(getDictionarySync("en").nav.inquire, "Book a shoot");
   assert.equal(german.nav.consult, "Beratung anfragen");
@@ -99,10 +99,11 @@ test("new offer pages publish no prices, and commercial labels AI image worlds",
   assert.equal(prints.claim, "Wandbilder, die bleiben.");
   assert.match(prints.paragraphs.join(" "), /KI-Bildwelten/);
   const events = offerPageCopy("events", "de");
-  assert.match(events.datesPlaceholder ?? "", /noch nicht fest/);
+  assert.match(events.datesPlaceholder ?? "", /Warteliste/);
   const commercial = getPageSections("commercial", "de");
   assert.match(commercial[0]?.title ?? "", /KI-Bildwelten/);
-  assert.match(commercial.map((section) => section.paragraphs.join(" ")).join(" "), /Platzhalter/);
+  assert.match(commercial.map((section) => section.paragraphs.join(" ")).join(" "), /klar gekennzeichnet/);
+  assert.equal(/Platzhalter/.test(commercial.map((section) => section.paragraphs.join(" ")).join(" ")), false);
 });
 
 test("legal pages no longer carry a public draft note", () => {

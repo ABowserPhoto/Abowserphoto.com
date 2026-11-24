@@ -4,15 +4,16 @@ import { bookingHref } from "../lib/booking";
 import { contactPhoneHref, contactWhatsAppHref } from "../lib/contact";
 import { getImageAlt } from "../lib/gallery";
 import { homeHeroCopy } from "../lib/homeHero";
-import { homeAboutCopy, homeHubGroups, homePackageCopy, homeStudioLine, type HubTile } from "../lib/homeHub";
+import { homeHubGroups, homeStudioLine, type HubTile } from "../lib/homeHub";
 import { homeIntroParagraphs, type IntroSegment } from "../lib/homeIntro";
+import { homeLongCopy } from "../lib/homeLongCopy";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import { getDictionarySync } from "../lib/i18n/getDictionary";
 import { servicePageHref } from "../lib/serviceLinks";
 import { solingenStudioPath } from "../lib/routes";
-import AwardsStrip from "./AwardsStrip";
 import MarketingVideoSlot from "./MarketingVideoSlot";
+import QuoteClose from "./QuoteClose";
 
 type HomeIntroProps = {
   locale: Locale;
@@ -44,8 +45,7 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
   const paragraphs = homeIntroParagraphs(locale, publicHost);
   const groups = homeHubGroups(locale);
   const studios = homeStudioLine(locale);
-  const about = homeAboutCopy(locale);
-  const marketing = homePackageCopy(locale);
+  const longCopy = homeLongCopy(locale);
   const portrait = "/about/portraet-aaron-bowser.webp";
 
   return (
@@ -123,28 +123,42 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
         ))}
       </p>
 
-      <section className="mt-10 border-t border-[#322B2B]/10 pt-8">
-        <h2 className="text-lg font-light tracking-tight">{about.title}</h2>
-        <div className="mt-4 flex items-start gap-4">
-          <span className="relative block h-16 w-16 shrink-0 overflow-hidden">
-            <Image
-              src={portrait}
-              alt={getImageAlt(portrait, locale) || about.portraitAlt}
-              fill
-              sizes="4rem"
-              className="object-cover"
+      <details className="mt-10 border-t border-[#322B2B]/10 pt-8">
+        <summary className="cursor-pointer text-lg font-light tracking-tight">{longCopy.summary}</summary>
+        <div className="mt-6 space-y-8 text-sm leading-relaxed text-[#322B2B]/90">
+          <section>
+            <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#322B2B]/55">{longCopy.eyebrow}</p>
+            <h2 className="mt-3 text-lg font-light tracking-tight">{longCopy.packageTitle}</h2>
+            {longCopy.paragraphs.slice(1, 4).map((paragraph) => (
+              <p key={paragraph.slice(0, 24)} className="mt-3">
+                {paragraph}
+              </p>
+            ))}
+            <MarketingVideoSlot
+              alt={locale === "de" ? "Film von Aaron Bowser Photography" : "Film from Aaron Bowser Photography"}
             />
-          </span>
-          <p className="text-sm leading-relaxed text-[#322B2B]/90">{about.body}</p>
+          </section>
+          <section>
+            <h2 className="text-lg font-light tracking-tight">{longCopy.aboutTitle}</h2>
+            <div className="mt-4 flex items-start gap-4">
+              <span className="relative block h-16 w-16 shrink-0 overflow-hidden">
+                <Image
+                  src={portrait}
+                  alt={getImageAlt(portrait, locale) || (locale === "de" ? "Porträt von Aaron Bowser" : "Portrait of Aaron Bowser")}
+                  fill
+                  sizes="4rem"
+                  className="object-cover"
+                />
+              </span>
+              <p>{longCopy.paragraphs[0]}</p>
+            </div>
+          </section>
+          {longCopy.paragraphs.slice(4).map((paragraph) => (
+            <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+          ))}
         </div>
-        <AwardsStrip label={about.awardsLabel} />
-      </section>
-
-      <section className="mt-10 border-t border-[#322B2B]/10 pt-8">
-        <h2 className="text-lg font-light tracking-tight">{marketing.title}</h2>
-        <p className="mt-3 text-sm leading-relaxed text-[#322B2B]/90">{marketing.body}</p>
-        <MarketingVideoSlot alt={marketing.videoAlt} />
-      </section>
+      </details>
+      <QuoteClose locale={locale} mode="shoot" />
     </article>
   );
 }

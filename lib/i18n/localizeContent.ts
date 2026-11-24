@@ -31,16 +31,16 @@ const germanCategoryCopy: Partial<
     title: "Immobilienfotografie NRW",
     subtitle:
       "Immobilienbilder für Exposés in Nordrhein-Westfalen, mit Studios in Hagen und Solingen.",
-    aboutText: `Für Makler in Hagen, Solingen und ganz NRW. Ein Termin, klare Pakete, Fotos innerhalb von 24 Stunden.
+    aboutText: `Für Makler in Hagen, Solingen und ganz NRW. Ein Termin, klare Pakete.
 
 Ich bin Aaron Bowser, Immobilienfotograf aus Hagen, und fotografiere Wohnungen, Häuser und Gewerbeflächen in Hagen, Solingen und ganz NRW. Mir geht es um Raum, Licht und Perspektive: Bilder, die eine Immobilie einladend und zugleich ehrlich zeigen, so wie Interessenten sie bei der Besichtigung erleben.
 
-Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sind ein Fotopaket ohne Video, die optionalen Extras Walk Thru Video und Agent Branding Video sowie die Pakete Premium Home und Luxury Makler. Bei Premium Home und Luxury Makler werden Drohnenfotos auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in das Video ein. Preise stehen im Kundenkonto.`,
+Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sind ein Fotopaket ohne Video, die optionalen Extras Walk Thru Video und Agent Branding Video sowie die Pakete Premium Home und Luxury Makler. Bei Premium Home und Luxury Makler werden Drohnenfotos auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in das Video ein. Fordern Sie ein Angebot per Kontaktformular, E-Mail oder WhatsApp an.`,
     services: [
       {
         title: "Fotopaket",
         description:
-          "Ein Fotopaket, das Sie im Kundenkonto wählen. Nur Fotos, ohne Video. Die Preise stehen im Kundenkonto.",
+          "Innen, außen und Details, abgestimmt auf die Größe des Objekts. Einzelfotos zum Ergänzen möglich.",
       },
       {
         title: "Walk Thru Video",
@@ -53,12 +53,12 @@ Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sin
       {
         title: "Premium Home",
         description:
-          "Das Fotopaket Ihrer Wahl plus ein Highlight-Video. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Preise stehen im Kundenkonto.",
+          "Das Fotopaket Ihrer Wahl plus ein Highlight-Video. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Fordern Sie ein Angebot per Kontaktformular, E-Mail oder WhatsApp an.",
       },
       {
         title: "Luxury Makler",
         description:
-          "Wie Premium Home, nur ist das Video ein Walkthrough mit dem Makler im Fokus. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Preise stehen im Kundenkonto.",
+          "Wie Premium Home, nur ist das Video ein Walkthrough mit dem Makler im Fokus. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Fordern Sie ein Angebot per Kontaktformular, E-Mail oder WhatsApp an.",
       },
       {
         title: "Digitales Homestaging",

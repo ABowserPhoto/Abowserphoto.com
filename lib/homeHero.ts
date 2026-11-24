@@ -13,7 +13,7 @@ export function homeHeroCopy(locale: Locale) {
       book: "Shooting buchen",
       call: `Anrufen ${CONTACT_PHONE_DISPLAY}`,
       whatsapp: "WhatsApp",
-      note: "Preise & Buchung im Kundenkonto. Kostenlos registrieren, oder ohne Konto anfragen.",
+      note: "Angebot per Formular, E-Mail oder WhatsApp anfragen, oder mit kostenlosem Kundenkonto direkt online buchen.",
     };
   }
   return {
@@ -22,6 +22,6 @@ export function homeHeroCopy(locale: Locale) {
     book: "Book a shoot",
     call: `Call ${CONTACT_PHONE_DISPLAY}`,
     whatsapp: "WhatsApp",
-    note: "Prices and booking are in the client account. Register free, or enquire without an account.",
+    note: "Request a quote by form, email or WhatsApp, or book online with a free client account.",
   };
 }

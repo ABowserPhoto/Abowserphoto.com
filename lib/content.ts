@@ -120,7 +120,7 @@ Before the day we get to know each other, with an engagement shoot if you like. 
       {
         title: "Photo package",
         description:
-          "A photo package you choose in the client account. Photographs only, with no video. Prices are in the client account.",
+          "Interiors, exteriors and details, matched to the size of the property. Individual photos can be added.",
         image: "/real-estate/services/innenaufnahmen-immobilie.webp",
       },
       {
@@ -136,13 +136,13 @@ Before the day we get to know each other, with an engagement shoot if you like. 
       {
         title: "Premium Home",
         description:
-          "The photo package of your choice plus a highlight video. Drone photos count toward the photo package, and drone footage is used in that video. Prices are in the client account.",
+          "The photo package of your choice plus a highlight video. Drone photos count toward the photo package, and drone footage is used in that video. Request a quote by contact form, email or WhatsApp.",
         image: "/real-estate/services/aussenaufnahmen-immobilie.webp",
       },
       {
         title: "Luxury Makler",
         description:
-          "The same as Premium Home, except the video is a walkthrough with the agent as the focus. Drone photos count toward the photo package, and drone footage is used in that video. Prices are in the client account.",
+          "The same as Premium Home, except the video is a walkthrough with the agent as the focus. Drone photos count toward the photo package, and drone footage is used in that video. Request a quote by contact form, email or WhatsApp.",
         image: "/real-estate/services/twilight-immobilie.webp",
       },
       {
@@ -165,17 +165,17 @@ Before the day we get to know each other, with an engagement shoot if you like. 
         ],
       },
     ],
-    aboutText: `For agents in Hagen, Solingen, and across North Rhine-Westphalia. One appointment, clear packages, photographs within 24 hours.
+    aboutText: `For agents in Hagen, Solingen, and across North Rhine-Westphalia. One appointment, clear packages.
 
 I'm Aaron Bowser, a real estate photographer based in Hagen, photographing apartments, houses and commercial spaces in Hagen, Solingen and across North Rhine-Westphalia. I focus on space, light and perspective, so every property looks inviting and true to what buyers see at a viewing.
 
-I work with agents, developers, property managers and owners. The offers are a photo package with no video, the optional extras Walk Thru Video and Agent Branding Video, and the bundles Premium Home and Luxury Makler. In Premium Home and Luxury Makler, drone photos count toward the photo package and drone footage is used in the video. Prices are in the client account.`,
+I work with agents, developers, property managers and owners. The offers are a photo package with no video, the optional extras Walk Thru Video and Agent Branding Video, and the bundles Premium Home and Luxury Makler. In Premium Home and Luxury Makler, drone photos count toward the photo package and drone footage is used in the video. Request a quote by contact form, email or WhatsApp.`,
     aboutImage:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1000&q=80",
     faq: [
       {
         question: "How quickly do I get the pictures?",
-        answer: "Photographs within 24 hours, reels within 48–72 hours.",
+        answer: "The delivery date is set in the quote.",
       },
       {
         question: "Will the files work on the portals?",

@@ -228,9 +228,7 @@ export const SOLINGEN_RENTAL_RATES = {
   hourlyEur: "54",
   minimumHours: 2,
   halfDayEur: "189",
-  halfDayHours: 4,
   fullDayEur: "329",
-  fullDayHours: 8,
 } as const;
 
 export function solingenRentalCopy(locale: "de" | "en") {
@@ -238,8 +236,8 @@ export function solingenRentalCopy(locale: "de" | "en") {
   if (locale === "de") {
     return {
       hourly: `Stundenweise: ${rates.hourlyEur} € pro Stunde (mind. ${rates.minimumHours} Stunden)`,
-      halfDay: `Halber Tag (${rates.halfDayHours} Std.): ${rates.halfDayEur} €`,
-      fullDay: `Ganzer Tag (${rates.fullDayHours} Std.): ${rates.fullDayEur} €`,
+      halfDay: `Halber Tag: ${rates.halfDayEur} €`,
+      fullDay: `Ganzer Tag: ${rates.fullDayEur} €`,
       vat: "Alle Preise inkl. 19 % MwSt.",
       invoice: "Für Geschäftskunden: Rechnung mit ausgewiesener MwSt.",
       photographerExtra: "Extras: Studio + Fotograf auf Anfrage",
@@ -247,8 +245,8 @@ export function solingenRentalCopy(locale: "de" | "en") {
   }
   return {
     hourly: `Hourly: €${rates.hourlyEur} per hour (${rates.minimumHours} hour minimum)`,
-    halfDay: `Half day (${rates.halfDayHours} hours): €${rates.halfDayEur}`,
-    fullDay: `Full day (${rates.fullDayHours} hours): €${rates.fullDayEur}`,
+    halfDay: `Half day: €${rates.halfDayEur}`,
+    fullDay: `Full day: €${rates.fullDayEur}`,
     vat: "All prices include 19% VAT.",
     invoice: "Business customers receive an invoice with VAT shown.",
     photographerExtra: "Extras: studio + photographer on request",
