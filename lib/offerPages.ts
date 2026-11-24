@@ -27,9 +27,8 @@ export function offerPageCopy(kind: OfferPageKind, locale: Locale): OfferPageCop
             paragraphs: [
               "Ihre Fotos oder eigens geschaffene KI-Kunst als Alu-Dibond, Acryl oder HD-Metall. Für Ihr Zuhause, Hotels, Restaurants und Büros.",
               "KI-Bildwelten sind als KI-Kunst klar gekennzeichnet. Es werden keine Bildelemente als Fotografie ausgegeben, die erzeugt wurden.",
-              "Beispiele für KI-Bildwelten folgen, sobald freigegebene Motive vorliegen.",
               "Für Hotels und Gastronomie: Bildwelten passend zu Ihrem Haus, als KI-Kunst klar gekennzeichnet, mit Nutzungslizenz.",
-              "Preise stehen im Kundenkonto nach der Registrierung oder werden im Beratungstermin besprochen. Eine Anfrage ohne Konto ist jederzeit möglich.",
+              "Jedes Wandbild wird für Ihren Raum geplant. Fordern Sie Ihr Angebot per Kontaktformular, E-Mail oder WhatsApp an. Gern zeigen wir Ihnen vorab eine Wandvorschau mit einem Foto Ihrer echten Wand.",
             ],
             lines: ["Signature Alu", "Signature Acryl", "HD Metal (feuchtraumgeeignet)", "Galeriewand"],
             steps: [
@@ -49,9 +48,8 @@ export function offerPageCopy(kind: OfferPageKind, locale: Locale): OfferPageCop
             paragraphs: [
               "Your photographs, or AI art made for the place, as aluminium dibond, acrylic, or HD metal. For a home, a hotel, a restaurant, or an office.",
               "AI image worlds are clearly labelled as AI art. Nothing generated is presented as a photograph.",
-              "Examples of AI image worlds will follow once approved pictures exist.",
               "For hotels and restaurants: image worlds that fit the house, labelled as AI art, with a licence for use.",
-              "Prices are in the client account after registration, or they are discussed in a consultation. An enquiry without an account is always possible.",
+              "Every wall piece is planned for your room. Request your quote by contact form, email or WhatsApp. We are happy to show you a preview on a photo of your actual wall first.",
             ],
             lines: ["Signature Alu", "Signature Acrylic", "HD Metal (suitable for wet rooms)", "Gallery wall"],
             steps: [
@@ -69,31 +67,31 @@ export function offerPageCopy(kind: OfferPageKind, locale: Locale): OfferPageCop
             eyebrow: "Termine",
             title: "Termine & Aktionen | Aaron Bowser Photography",
             h1: "Termine & Aktionen",
-            claim: "Mini-Sessions und Aktionen, sobald der Termin steht.",
+            claim: "Saisonale Mini-Sessions und Aktionen im Studio.",
             paragraphs: [
-              "Hier erscheinen datierte Mini-Sessions und Aktionen. Business-Porträts bleiben ein eigenes Angebot und werden hier nicht vermischt.",
-              "Preise stehen nicht auf dieser Seite. Sie liegen im Kundenkonto oder werden in der Anfrage besprochen.",
+              "Saisonale Mini-Sessions und Aktionen im Studio: kurze, thematische Shootings zu besonderen Anlässen, ideal als Geschenk oder für neue Familien- und Paarfotos.",
+              "Plätze sind begrenzt. Tragen Sie sich in die Warteliste ein, dann melden wir uns, sobald der nächste Termin feststeht.",
             ],
             lines: [],
             steps: [],
             footnote: null,
             datesPlaceholder:
-              "Die nächsten Termine stehen noch nicht fest. Sobald ein Termin bestätigt ist, steht er hier. Eine Warteliste ist über das Formular möglich.",
+              "Neue Termine werden hier veröffentlicht. Sichern Sie sich über das Formular einen Platz auf der Warteliste.",
           }
         : {
             eyebrow: "Dates",
             title: "Dates and events | Aaron Bowser Photography",
             h1: "Dates and events",
-            claim: "Mini sessions and events, once the date is set.",
+            claim: "Seasonal mini sessions and offers in the studio.",
             paragraphs: [
-              "Dated mini sessions and events will be listed here. Business portraits stay a separate offer and are not mixed in.",
-              "This page does not publish prices. They sit in the client account or are discussed in the enquiry.",
+              "Seasonal mini sessions and offers in the studio: short themed shoots for special occasions, ideal as a gift or for new family and couple photos.",
+              "Places are limited. Join the waiting list and we will get in touch as soon as the next date is set.",
             ],
             lines: [],
             steps: [],
             footnote: null,
             datesPlaceholder:
-              "The next dates are not set yet. Once a date is confirmed, it will be listed here. The form is a waiting list.",
+              "New dates will be published here. Save your place on the waiting list with the form.",
           };
     default: {
       const neverKind: never = kind;

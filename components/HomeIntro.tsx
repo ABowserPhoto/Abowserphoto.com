@@ -4,11 +4,17 @@ import { bookingHref } from "../lib/booking";
 import { contactPhoneHref, contactWhatsAppHref } from "../lib/contact";
 import { getImageAlt } from "../lib/gallery";
 import { homeHeroCopy } from "../lib/homeHero";
+import { homeHubGroups, homeStudioLine, type HubTile } from "../lib/homeHub";
 import { homeIntroParagraphs, type IntroSegment } from "../lib/homeIntro";
+import { homeLongBlocks, homeLongSummary, type HomeLongPart } from "../lib/homeLongCopy";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import { getDictionarySync } from "../lib/i18n/getDictionary";
-import { categoryPath } from "../lib/routes";
+import { servicePageHref } from "../lib/serviceLinks";
+import { solingenStudioPath } from "../lib/routes";
+import MarketingVideoSlot from "./MarketingVideoSlot";
+import QuoteClose from "./QuoteClose";
+import AwardsStrip from "./AwardsStrip";
 
 type HomeIntroProps = {
   locale: Locale;
@@ -17,11 +23,12 @@ type HomeIntroProps = {
 
 function IntroLink({ segment }: { segment: IntroSegment }) {
   const className =
-    "underline decoration-[#322B2B]/40 underline-offset-[3px] transition-opacity hover:opacity-70";
+    "underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]";
   if (!segment.href) return <span>{segment.text}</span>;
-  if (segment.href.startsWith("http")) {
+  if (segment.href.startsWith("http") || segment.href.startsWith("mailto:") || segment.href.startsWith("tel:")) {
+    const external = segment.href.startsWith("http");
     return (
-      <a href={segment.href} className={className}>
+      <a href={segment.href} className={className} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}>
         {segment.text}
       </a>
     );
@@ -33,52 +40,30 @@ function IntroLink({ segment }: { segment: IntroSegment }) {
   );
 }
 
-const FEATURED = [
-  {
-    slug: "business-portraits" as const,
-    image: "/business-portraits/hero/businessportrait-hero-frau-flieder-blazer.webp",
-  },
-  {
-    slug: "food" as const,
-    image: "/food/hero/food-hero-1-desktop.jpg",
-  },
-];
-
 export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
   const headline = getDictionarySync(locale).home.headline;
   const hero = homeHeroCopy(locale);
   const paragraphs = homeIntroParagraphs(locale, publicHost);
-  const featured = [
-    {
-      ...FEATURED[0],
-      title: hero.featuredBusinessTitle,
-      text: hero.featuredBusinessText,
-    },
-    {
-      ...FEATURED[1],
-      title: hero.featuredFoodTitle,
-      text: hero.featuredFoodText,
-    },
-  ];
+  const groups = homeHubGroups(locale);
+  const studios = homeStudioLine(locale);
+  const longBlocks = homeLongBlocks(locale);
 
   return (
-    <article className="pb-28 text-[#322B2B]">
-      <h1 className="text-2xl font-light leading-tight tracking-tight text-[#322B2B] sm:text-3xl">
-        {headline}
-      </h1>
+    <article className="pb-6 text-[#322B2B]">
+      <h1 className="text-2xl font-light leading-tight tracking-tight text-[#322B2B] sm:text-3xl">{headline}</h1>
       <p className="mt-4 text-base font-light leading-snug tracking-tight sm:text-lg">{hero.claim}</p>
       <p className="mt-3 text-sm leading-relaxed text-[#322B2B]/85 sm:text-base">{hero.line}</p>
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <Link
           href={bookingHref(withLocale("/", locale))}
           scroll={false}
-          className="inline-flex items-center justify-center bg-[#322B2B] px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-opacity hover:opacity-90"
+          className="inline-flex items-center justify-center bg-[#322B2B] px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:bg-[#FFB70F] hover:text-[#322B2B]"
         >
           {hero.book}
         </Link>
         <a
           href={contactPhoneHref()}
-          className="text-sm underline decoration-[#322B2B]/40 underline-offset-[3px] hover:opacity-70"
+          className="text-sm underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]"
         >
           {hero.call}
         </a>
@@ -86,36 +71,14 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
           href={contactWhatsAppHref()}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm underline decoration-[#322B2B]/40 underline-offset-[3px] hover:opacity-70"
+          className="text-sm underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]"
         >
           {hero.whatsapp}
         </a>
       </div>
       <p className="mt-4 text-sm leading-relaxed text-[#322B2B]/75">{hero.note}</p>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {featured.map((item) => (
-          <Link
-            key={item.slug}
-            href={withLocale(categoryPath(item.slug, locale), locale)}
-            className="group block overflow-hidden border border-[#322B2B]/10 bg-white/40"
-          >
-            <span className="relative block aspect-[4/3] w-full">
-              <Image
-                src={item.image}
-                alt={getImageAlt(item.image, locale)}
-                fill
-                sizes="(max-width: 640px) 100vw, 20rem"
-                className="object-cover transition-opacity duration-300 group-hover:opacity-90"
-              />
-            </span>
-            <span className="block px-3 py-3">
-              <span className="block text-sm font-medium tracking-tight">{item.title}</span>
-              <span className="mt-1 block text-xs leading-relaxed text-[#322B2B]/75">{item.text}</span>
-            </span>
-          </Link>
-        ))}
-      </div>
-      <div className="mt-5 space-y-4 text-sm leading-relaxed text-[#322B2B]/90">
+
+      <div className="mt-6 space-y-4 text-sm leading-relaxed text-[#322B2B]/90">
         {paragraphs.map((paragraph, index) => (
           <p key={index}>
             {paragraph.map((segment, segmentIndex) => (
@@ -124,6 +87,121 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
           </p>
         ))}
       </div>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        {groups.featured.map((item) => (
+          <Tile key={item.slug} locale={locale} publicHost={publicHost} item={item} />
+        ))}
+      </div>
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        {groups.middle.map((item) => (
+          <Tile key={item.slug} locale={locale} publicHost={publicHost} item={item} />
+        ))}
+      </div>
+      <div className="mt-4 grid gap-3 text-sm leading-relaxed sm:grid-cols-2">
+        <a href={servicePageHref("studio", locale, publicHost)} className="underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]">
+          {studios.hagen}
+        </a>
+        <Link href={withLocale(solingenStudioPath(locale), locale)} className="underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]">
+          {studios.solingen}
+        </Link>
+      </div>
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        {groups.afterStudios.map((item) => (
+          <Tile key={item.slug} locale={locale} publicHost={publicHost} item={item} />
+        ))}
+      </div>
+      <p className="mt-4 text-sm text-[#322B2B]/80">
+        {locale === "de" ? "Außerdem: " : "Also: "}
+        {groups.text.map((item, index) => (
+          <span key={item.slug}>
+            {index > 0 ? " · " : null}
+            <Link href={servicePageHref(item.slug, locale, publicHost)} className="underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]">
+              {item.title}
+            </Link>
+          </span>
+        ))}
+      </p>
+
+      <details className="mt-10 border-t border-[#322B2B]/10 pt-8">
+        <summary className="cursor-pointer text-lg font-light tracking-tight">{homeLongSummary(locale)}</summary>
+        <div className="mt-6 space-y-4 text-sm leading-relaxed text-[#322B2B]/90">
+          {longBlocks.map((block, index) => {
+            if (block.kind === "h3") {
+              return (
+                <h3 key={block.text} className="pt-2 text-lg font-light tracking-tight">
+                  {block.text}
+                </h3>
+              );
+            }
+            if (block.kind === "ul") {
+              return (
+                <ul key={index} className="list-disc space-y-1 pl-5">
+                  {block.items.map((item) => (
+                    <li key={item.map((part) => part.text).join("")}>
+                      <LongParts parts={item} />
+                    </li>
+                  ))}
+                </ul>
+              );
+            }
+            return (
+              <div key={index}>
+                <p>
+                  <LongParts parts={block.parts} />
+                </p>
+                {index === 0 ? (
+                  <div className="mt-4">
+                    <AwardsStrip locale={locale} />
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      </details>
+      <MarketingVideoSlot alt={locale === "de" ? "Film von Aaron Bowser Photography" : "Film from Aaron Bowser Photography"} />
+      <QuoteClose locale={locale} mode="shoot" />
     </article>
+  );
+}
+
+function LongParts({ parts }: { parts: HomeLongPart[] }) {
+  return parts.map((part, index) => {
+    if (!part.href) return <span key={index}>{part.text}</span>;
+    return <IntroLink key={index} segment={{ text: part.text, href: part.href }} />;
+  });
+}
+
+function Tile({
+  locale,
+  publicHost,
+  item,
+}: {
+  locale: Locale;
+  publicHost?: string;
+  item: HubTile;
+}) {
+  return (
+    <Link
+      href={servicePageHref(item.slug, locale, publicHost)}
+      className="group block overflow-hidden border border-[#322B2B]/10 bg-white/40"
+    >
+      <span className="relative block aspect-[4/3] w-full">
+        <Image
+          src={item.image}
+          alt={getImageAlt(item.image, locale)}
+          fill
+          sizes="(max-width: 640px) 100vw, 20rem"
+          className="object-cover transition-opacity duration-300 group-hover:opacity-90"
+        />
+      </span>
+      <span className="block px-3 py-3">
+        <span className="block text-sm font-medium tracking-tight transition-colors duration-300 group-hover:text-[#E18400]">
+          {item.title}
+        </span>
+        <span className="mt-1 block text-xs leading-relaxed text-[#322B2B]/75">{item.text}</span>
+      </span>
+    </Link>
   );
 }

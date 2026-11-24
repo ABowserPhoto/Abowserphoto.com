@@ -1,6 +1,7 @@
 import LightPageFrame from "./LightPageFrame";
 import type { Locale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
+import { HAGEN_ADDRESS } from "../lib/contact";
 import { portalCategoryUrl } from "../lib/subdomains";
 
 type StudioOffHostNoticeProps = {
@@ -27,12 +28,12 @@ export default function StudioOffHostNotice({
       <div className="mt-8 space-y-5 text-sm leading-relaxed text-[#322B2B]/85 sm:text-base">
         <p>
           {de
-            ? "Bewerbungsfotos und biometrische Passbilder entstehen im Fotostudio Hagen. Sie gehören nicht zu den Arbeiten auf dieser Website."
-            : "Application photos and biometric passport photos are made at the Hagen studio. They are not part of the work on this website."}
+            ? `Bewerbungsfotos und biometrische Passbilder bekommen Sie im Fotostudio Hagen, ${HAGEN_ADDRESS.street}. Mehr Infos und Termin:`
+            : `Application photos and biometric passport photos are available at the Hagen studio, ${HAGEN_ADDRESS.street}. More info and a time:`}
         </p>
         <p>
-          <a href={href} className="underline decoration-[#322B2B]/40 underline-offset-[3px] hover:opacity-70">
-            {de ? "Zum Fotostudio Hagen" : "Go to the Hagen studio page"}
+          <a href={href} className="underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]">
+            {de ? "Bewerbungsfotos & Passbilder" : "Application & passport photos"}
           </a>
         </p>
       </div>

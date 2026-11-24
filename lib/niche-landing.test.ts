@@ -85,15 +85,11 @@ test("niche hosts use their own German and English title, description, and H1", 
   assert.match(german.commercial.de.h1, /Werbe- und Produktfotografie/);
 
   for (const copy of Object.values(german)) {
-    assert.equal(copy.de.description.includes(HAGEN_ADDRESS.street), true);
-    assert.equal(copy.en.description.includes(HAGEN_ADDRESS.street), true);
+    assert.ok(copy.de.description.length > 40);
+    assert.ok(copy.en.description.length > 40);
   }
-  assert.equal(german.commercial.de.description.includes(SOLINGEN_ADDRESS.street), true);
-  assert.equal(german["real-estate"].de.description.includes(SOLINGEN_ADDRESS.street), true);
-  assert.equal(german.food.de.description.includes(SOLINGEN_ADDRESS.street), true);
-  assert.equal(german["business-portraits"].de.description.includes(SOLINGEN_ADDRESS.street), true);
-  assert.equal(german.wedding.de.description.includes(HAGEN_ADDRESS.postalCode), true);
-  assert.equal(german.wedding.de.description.includes("Solingen"), true);
+  assert.match(german.wedding.de.description, /Hagen/);
+  assert.match(german.wedding.de.description, /Solingen/);
 });
 
 test("a niche host does not pick up another niche's document copy", () => {
@@ -104,7 +100,11 @@ test("a niche host does not pick up another niche's document copy", () => {
   );
   assert.equal(
     absoluteTitle(buildCategoryMetadata("de", "cinematography", "film.abowserphoto.com").title),
-    getDictionarySync("de").seo.cinematography.title
+    "Videograf Hagen | Imagefilm, Hochzeitsfilm & Reels"
+  );
+  assert.notEqual(
+    absoluteTitle(buildCategoryMetadata("de", "cinematography", "www.aaronbowser-photography.com").title),
+    absoluteTitle(buildCategoryMetadata("de", "cinematography", "film.abowserphoto.com").title)
   );
 });
 

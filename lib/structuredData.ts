@@ -1,5 +1,4 @@
 import {
-  appointmentOnlyLabel,
   CONTACT_EMAIL,
   CONTACT_PHONE_TEL,
   hagenOpeningHoursSpecification,
@@ -90,7 +89,8 @@ export function buildBusinessJsonLd() {
     email: CONTACT_EMAIL,
     telephone: CONTACT_PHONE_TEL,
     image: absoluteUrl(OG_IMAGE_PATH),
-    description: `Fotograf mit Hauptstudio in Hagen, etwa 40 m², für Porträt und Business im Alltag. Das Studio Solingen, etwa 100 m², ist für größere Produktionen, ${appointmentOnlyLabel("de", { sentence: false })}, und kann gemietet werden.`,
+    description:
+      "Fotograf und Videograf in Hagen und Solingen für Hochzeiten, Immobilien, Film und Commercial in NRW. Fotostudio Hagen mit Bewerbungsfotos und Passbildern; Studio Solingen mit ca. 100 m² für größere Produktionen, auch zur Miete.",
     address: postalAddress(HAGEN_STUDIO),
     // The practice address is the Hagen studio, so the same public hours apply here.
     // Solingen is a separate node and does not receive them.
@@ -185,8 +185,8 @@ export function buildSolingenPlaceJsonLd(locale: Locale) {
     },
     hasMap: SOLINGEN_STUDIO.mapsUrl,
     description: de
-      ? `Fotostudio in Solingen, etwa ${SOLINGEN_STUDIO.areaSqm} m², für größere Produktionen. ${appointmentOnlyLabel("de")}. Das Studio kann gemietet werden. Keine Bewerbungsfotos und keine Passbilder.`
-      : `Photo studio in Solingen, about ${SOLINGEN_STUDIO.areaSqm} m², for larger productions. ${appointmentOnlyLabel("en")}. The studio can be rented. No application photos and no passport photos.`,
+      ? `Fotostudio in Solingen, etwa ${SOLINGEN_STUDIO.areaSqm} m², für größere Produktionen, Projekte und Teams, die im Studio Hagen zu groß wären. Ein Shooting wird vor dem Besuch terminiert. Das Studio kann gemietet werden.`
+      : `Photo studio in Solingen, about ${SOLINGEN_STUDIO.areaSqm} m², for larger productions, projects and teams that would be too big for the Hagen studio. To book a shoot, contact the studio and schedule an appointment before coming. The studio can also be rented.`,
     floorSize: {
       "@type": "QuantitativeValue",
       value: SOLINGEN_STUDIO.areaSqm,
@@ -240,18 +240,18 @@ export function buildSolingenRentalOfferJsonLd(locale: Locale) {
           : `€${rates.hourlyEur} per hour, ${rates.minimumHours} hour minimum, including 19% VAT.`
       ),
       offer(
-        de ? "Halber Tag" : "Half day",
+        de ? "Halbtag (4 Std.)" : "Half day (4 h)",
         rates.halfDayEur,
         de
-          ? `${rates.halfDayEur} € für ${rates.halfDayHours} Stunden, inkl. 19 % MwSt.`
-          : `€${rates.halfDayEur} for ${rates.halfDayHours} hours, including 19% VAT.`
+          ? `Halbtag (4 Std.) ${rates.halfDayEur} €, inkl. 19 % MwSt.`
+          : `Half day (4 h): €${rates.halfDayEur}, including 19% VAT.`
       ),
       offer(
-        de ? "Ganzer Tag" : "Full day",
+        de ? "Ganztag (8 Std.)" : "Full day (8 h)",
         rates.fullDayEur,
         de
-          ? `${rates.fullDayEur} € für ${rates.fullDayHours} Stunden, inkl. 19 % MwSt.`
-          : `€${rates.fullDayEur} for ${rates.fullDayHours} hours, including 19% VAT.`
+          ? `Ganztag (8 Std.) ${rates.fullDayEur} €, inkl. 19 % MwSt.`
+          : `Full day (8 h): €${rates.fullDayEur}, including 19% VAT.`
       ),
     ],
   };

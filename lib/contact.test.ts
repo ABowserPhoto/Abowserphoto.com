@@ -17,6 +17,7 @@ import {
   SOLINGEN_ADDRESS,
 } from "./contact";
 import { readFaqFile } from "./faqs";
+import { homeIntroPlainText } from "./homeIntro";
 import { getDictionarySync } from "./i18n/getDictionary";
 import { getLocalizedCategory } from "./i18n/localizeContent";
 import { getLegalDocument } from "./legalContent";
@@ -202,14 +203,14 @@ test("structured data lists both studios and opening hours only for Hagen", () =
 test("rendered copy reads addresses, phone, and hours from the contact config", () => {
   const german = getDictionarySync("de");
   const english = getDictionarySync("en");
-  assert.equal(german.seo.home.description.includes(HAGEN_ADDRESS.street), true);
+  assert.match(homeIntroPlainText("de"), new RegExp(HAGEN_ADDRESS.street.replace(".", "\\.")));
   assert.equal(german.seo.home.description.includes("{hagenStreet}"), false);
   assert.equal(english.seo.studio.description.includes(HAGEN_ADDRESS.street), true);
   assert.equal(english.seo.home.description.includes("{hagenStreet}"), false);
   assert.equal(german.seo.studio.description.includes(HAGEN_ADDRESS.street), true);
-  assert.equal(german.seo.solingen.description.includes(SOLINGEN_ADDRESS.street), true);
+  assert.match(german.seo.solingen.description, /Solingen/);
   assert.equal(german.seo.solingen.description.includes("{"), false);
-  assert.equal(english.seo.solingen.description.includes(SOLINGEN_ADDRESS.street), true);
+  assert.match(english.seo.solingen.description, /Solingen/);
   assert.equal(english.seo.studio.description.includes("{"), false);
   assert.equal(
     getLocalizedCategory("business-portraits", "de").aboutText.includes(HAGEN_ADDRESS.street),

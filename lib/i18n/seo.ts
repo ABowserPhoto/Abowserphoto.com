@@ -4,6 +4,7 @@ import type { OfferPageKind } from "../offerPages";
 import { offerPageCopy } from "../offerPages";
 import { categoryPath, eventsPath, printsPath, solingenStudioPath } from "../routes";
 import { nicheDocumentCopy } from "../niche-landing";
+import { serviceSurfaceCopy } from "../serviceSurface";
 import { nicheHostForHostname, nicheOrigin, PORTAL_CATEGORY_SUBDOMAIN } from "../subdomains";
 import {
   BRAND_NAME,
@@ -39,12 +40,11 @@ function urlOnOrigin(pathname: string, origin: string | null) {
 }
 
 function languageAlternatesOn(pathnameFor: (locale: Locale) => string, origin: string | null) {
-  // Niche hosts (origin set) are German by default. The main site stays English.
-  const xDefault: Locale = origin ? "de" : "en";
+  // German is the default market on every host.
   return {
     en: urlOnOrigin(pathnameFor("en"), origin),
     de: urlOnOrigin(pathnameFor("de"), origin),
-    "x-default": urlOnOrigin(pathnameFor(xDefault), origin),
+    "x-default": urlOnOrigin(pathnameFor("de"), origin),
   };
 }
 
@@ -81,7 +81,7 @@ function languageAlternates(pathnameFor: (locale: Locale) => string) {
   return {
     en: absoluteUrl(pathnameFor("en")),
     de: absoluteUrl(pathnameFor("de")),
-    "x-default": absoluteUrl(pathnameFor("en")),
+    "x-default": absoluteUrl(pathnameFor("de")),
   };
 }
 
@@ -161,6 +161,7 @@ const COMPLETE_DOCUMENT_TITLES = new Set<CategorySlug>([
   "food",
   "cinematography",
   "commercial",
+  "social-media-management",
 ]);
 
 export function buildCategoryMetadata(
@@ -189,12 +190,13 @@ export function buildCategoryMetadata(
   // The five public niches use their own title and description on their host.
   // www, and every other host, keep the dictionary copy.
   const landing = nicheDocumentCopy(slug, locale, requestHost);
-  const documentTitle = landing?.title ?? seo.title;
-  const description = landing?.description ?? seo.description;
+  const surface = serviceSurfaceCopy(slug, locale, requestHost);
+  const documentTitle = surface?.title ?? landing?.title ?? seo.title;
+  const description = surface?.description ?? landing?.description ?? seo.description;
   const { title, openGraphTitle } = resolveDocumentTitle(
     documentTitle,
     dict.brand,
-    Boolean(landing) || COMPLETE_DOCUMENT_TITLES.has(slug)
+    Boolean(surface) || Boolean(landing) || COMPLETE_DOCUMENT_TITLES.has(slug)
   );
   const metadata: Metadata = {
     title,
@@ -242,11 +244,11 @@ export function buildOfferMetadata(locale: Locale, kind: OfferPageKind): Metadat
   const description =
     locale === "de"
       ? kind === "prints"
-        ? "Wandbilder und Metalldrucke aus Ihren Fotos oder gekennzeichneten KI-Bildwelten. Preise im Kundenkonto."
-        : "Termine und Aktionen von Aaron Bowser Photography. Keine Preise auf dieser Seite."
+        ? "Wandbilder und Metalldrucke aus Ihren Fotos oder gekennzeichneten KI-Bildwelten, für Zuhause, Hotel, Restaurant und Büro. Jetzt Angebot anfragen."
+        : "Mini-Sessions und Aktionen von Aaron Bowser Photography in Hagen und Solingen. Jetzt auf die Warteliste setzen."
       : kind === "prints"
-        ? "Wall art and metal prints from your photographs or labelled AI image worlds. Prices in the client account."
-        : "Dates and events from Aaron Bowser Photography. No prices on this page.";
+        ? "Wall art and metal prints from your photos or labelled AI image worlds, for home, hotel, restaurant and office. Request a quote."
+        : "Mini sessions and offers from Aaron Bowser Photography in Hagen and Solingen. Join the waiting list.";
   return {
     title: { absolute: copy.title },
     description,

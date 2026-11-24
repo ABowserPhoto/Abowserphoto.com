@@ -2,10 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { explicitImageAlt } from "./homeImageAlts";
 import { getLegalDocument } from "./legalContent";
+import { AWARD_LOGOS } from "./awards";
 import { homeHeroCopy } from "./homeHero";
 import { NICHE_LANDING_COPY } from "./niche-landing";
 import { getDictionarySync } from "./i18n/getDictionary";
 import { getLocalizedCategory } from "./i18n/localizeContent";
+import { serviceSurfaceCopy } from "./serviceSurface";
 import { getPageFaqs, getPageSections } from "./i18n/pageSections";
 import { offerPageCopy } from "./offerPages";
 import { buildFaqPageJsonLd } from "./structuredData";
@@ -32,7 +34,7 @@ test("the German homepage uses Buscando's alts and the logo alt is already the b
   assert.equal(getDictionarySync("de").home.logoLabel, "Aaron Bowser Photography");
 });
 
-test("the homepage keeps its title and H1 and adds the claim without an award strip", () => {
+test("the homepage keeps its title and H1 and adds the claim with an empty award slot", () => {
   const german = getDictionarySync("de");
   const hero = homeHeroCopy("de");
   assert.equal(german.seo.home.title, "Fotograf & Fotostudio Hagen | Aaron Bowser Photography");
@@ -40,10 +42,11 @@ test("the homepage keeps its title and H1 and adds the claim without an award st
   assert.equal(hero.claim, "It's not just a photo, it's A. Bowser Photo.");
   assert.match(hero.line, /Fotografie, Film und KI-Bildwelten/);
   assert.equal(hero.book, "Shooting buchen");
-  assert.match(hero.note, /Preise & Buchung im Kundenkonto/);
+  assert.match(hero.note, /Angebot per Formular, E-Mail oder WhatsApp/);
   assert.equal(german.home.logoLabel, "Aaron Bowser Photography");
   assert.equal(getDictionarySync("en").nav.inquire, "Book a shoot");
   assert.equal(german.nav.consult, "Beratung anfragen");
+  assert.equal(AWARD_LOGOS.length, 0);
 });
 
 test("immo keeps its title and H1, and www real-estate copy stays on its own heading", () => {
@@ -54,22 +57,24 @@ test("immo keeps its title and H1, and www real-estate copy stays on its own hea
   assert.match(immo.description, /Drohne/);
   assert.equal(immo.description.includes("auf Anfrage"), false);
   assert.ok(immo.description.length <= 155, immo.description);
-  assert.ok(NICHE_LANDING_COPY["real-estate"].en.description.length <= 155);
 
-  const www = getLocalizedCategory("real-estate", "de");
-  assert.equal(www.title, "Immobilienfotografie NRW");
-  assert.equal(getDictionarySync("de").seo["real-estate"].title, "Immobilienfotografie Hagen & NRW | Aaron Bowser");
-  assert.match(www.aboutText, /Fotos innerhalb von 24 Stunden/);
+  const www = serviceSurfaceCopy("real-estate", "de", "www.aaronbowser-photography.com");
+  assert.equal(www?.title, "Immobilienvideo & Drohne für Makler NRW | Aaron Bowser");
+  assert.equal(www?.h1, "Immobilienvideos & Drohnenaufnahmen für Makler in NRW");
+  assert.equal(www?.surface, "www");
+  assert.notEqual(www?.intro, serviceSurfaceCopy("real-estate", "de", "immo.abowserphoto.com")?.intro);
 });
 
 test("German offer FAQs are in German and can be marked up where they are visible", () => {
-  const realEstate = getPageFaqs("real-estate", "de");
-  assert.match(realEstate[0]?.question ?? "", /Wie schnell/);
-  assert.match(realEstate[1]?.answer ?? "", /ImmoScout24/);
+  const realEstate = getPageFaqs("real-estate", "de", "immo.abowserphoto.com");
+  assert.match(realEstate.map((item) => item.question).join(" "), /Drohne|Premium Home/);
   assert.equal(realEstate.map((item) => item.answer).join(" ").includes("MLS"), false);
   const schema = buildFaqPageJsonLd(realEstate);
   assert.equal(schema["@type"], "FAQPage");
-  assert.equal(schema.mainEntity.length, 2);
+  assert.ok(schema.mainEntity.length >= 3);
+
+  const wwwRealEstate = getPageFaqs("real-estate", "de");
+  assert.notEqual(wwwRealEstate[0]?.question, realEstate[0]?.question);
 
   for (const slug of ["food", "cinematography", "social-media-management"] as const) {
     const faqs = getPageFaqs(slug, "de");
@@ -94,10 +99,11 @@ test("new offer pages publish no prices, and commercial labels AI image worlds",
   assert.equal(prints.claim, "Wandbilder, die bleiben.");
   assert.match(prints.paragraphs.join(" "), /KI-Bildwelten/);
   const events = offerPageCopy("events", "de");
-  assert.match(events.datesPlaceholder ?? "", /noch nicht fest/);
+  assert.match(events.datesPlaceholder ?? "", /Warteliste/);
   const commercial = getPageSections("commercial", "de");
   assert.match(commercial[0]?.title ?? "", /KI-Bildwelten/);
-  assert.match(commercial.map((section) => section.paragraphs.join(" ")).join(" "), /Platzhalter/);
+  assert.match(commercial.map((section) => section.paragraphs.join(" ")).join(" "), /klar gekennzeichnet/);
+  assert.equal(/Platzhalter/.test(commercial.map((section) => section.paragraphs.join(" ")).join(" ")), false);
 });
 
 test("legal pages no longer carry a public draft note", () => {

@@ -169,9 +169,9 @@ export const STUDIOS: readonly Studio[] = [
       "https://www.google.com/maps/place/Aaron+Bowser+Photography/@51.3771835,7.454225,17z/data=!4m6!3m5!1s0x47b93cbdc8d7c7b3:0x6fde83c86b76ba38!8m2!3d51.3771835!4d7.454225!16s%2Fg%2F11btwpyctw",
     areaSqm: 40,
     summaryDe:
-      "Hauptstudio, etwa 40 m². Aaron arbeitet hier täglich. Porträt- und Business-Sitzungen finden in der Regel hier statt.",
+      "Fotostudio Hagen, ca. 40 m²: Porträts, Bewerbungsfotos und Passbilder. Mo–Sa 10–20 Uhr, So 09–12 Uhr.",
     summaryEn:
-      "The main studio, about 40 m². Aaron works here every day. Portrait and business sessions are booked here by default.",
+      "Hagen photo studio, approx. 40 m²: portraits, application and passport photos. Mon–Sat 10–20, Sun 09–12.",
     pagePath: null,
   },
   {
@@ -228,9 +228,7 @@ export const SOLINGEN_RENTAL_RATES = {
   hourlyEur: "54",
   minimumHours: 2,
   halfDayEur: "189",
-  halfDayHours: 4,
   fullDayEur: "329",
-  fullDayHours: 8,
 } as const;
 
 export function solingenRentalCopy(locale: "de" | "en") {
@@ -238,8 +236,8 @@ export function solingenRentalCopy(locale: "de" | "en") {
   if (locale === "de") {
     return {
       hourly: `Stundenweise: ${rates.hourlyEur} € pro Stunde (mind. ${rates.minimumHours} Stunden)`,
-      halfDay: `Halber Tag (${rates.halfDayHours} Std.): ${rates.halfDayEur} €`,
-      fullDay: `Ganzer Tag (${rates.fullDayHours} Std.): ${rates.fullDayEur} €`,
+      halfDay: `Halbtag (4 Std.) ${rates.halfDayEur} €`,
+      fullDay: `Ganztag (8 Std.) ${rates.fullDayEur} €`,
       vat: "Alle Preise inkl. 19 % MwSt.",
       invoice: "Für Geschäftskunden: Rechnung mit ausgewiesener MwSt.",
       photographerExtra: "Extras: Studio + Fotograf auf Anfrage",
@@ -247,8 +245,8 @@ export function solingenRentalCopy(locale: "de" | "en") {
   }
   return {
     hourly: `Hourly: €${rates.hourlyEur} per hour (${rates.minimumHours} hour minimum)`,
-    halfDay: `Half day (${rates.halfDayHours} hours): €${rates.halfDayEur}`,
-    fullDay: `Full day (${rates.fullDayHours} hours): €${rates.fullDayEur}`,
+    halfDay: `Half day (4 h): €${rates.halfDayEur}`,
+    fullDay: `Full day (8 h): €${rates.fullDayEur}`,
     vat: "All prices include 19% VAT.",
     invoice: "Business customers receive an invoice with VAT shown.",
     photographerExtra: "Extras: studio + photographer on request",
@@ -265,9 +263,9 @@ export function passportPhotoPriceLine() {
 
 export function studioSittingPriceAnswer(locale: "de" | "en") {
   if (locale === "de") {
-    return `Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}. LinkedIn- und Xing-Porträts aus demselben Termin sind auf Anfrage.`;
+    return `Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}. Alle Preise inkl. 19 % MwSt. LinkedIn- und Xing-Porträts können Sie im selben Termin dazubuchen.`;
   }
-  return `An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}. LinkedIn and Xing portraits from the same visit are on request.`;
+  return `An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}. All prices include 19% VAT. LinkedIn and Xing portraits can be added in the same visit.`;
 }
 
 export const SOCIAL_LINKS = [

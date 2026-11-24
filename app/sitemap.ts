@@ -21,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           de: localizedUrl("de", index),
           en: localizedUrl("en", index),
-          "x-default": localizedUrl("en", index),
+          "x-default": localizedUrl("de", index),
         },
       },
     }))

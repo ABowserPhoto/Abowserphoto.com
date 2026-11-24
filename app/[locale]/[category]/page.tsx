@@ -15,8 +15,9 @@ import { getDictionary } from "../../../lib/i18n/getDictionary";
 import { getLocalizedCategory, getLocalizedSharedAbout } from "../../../lib/i18n/localizeContent";
 import { getPageFaqs, getPageSections } from "../../../lib/i18n/pageSections";
 import { buildCategoryMetadata } from "../../../lib/i18n/seo";
-import { nicheDocumentCopy } from "../../../lib/niche-landing";
+import { serviceSurfaceCopy } from "../../../lib/serviceSurface";
 import { categorySegment, resolveCategorySegment } from "../../../lib/routes";
+import { serviceIntroBeats, serviceIntroFrames, serviceIntroKicker } from "../../../lib/serviceIntro";
 import { nicheHostForHostname } from "../../../lib/subdomains";
 
 type CategoryPageProps = {
@@ -72,14 +73,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   const baseCategory = categoryContentMap[slug];
   const localizedCategory = getLocalizedCategory(slug, locale);
-  // Same component and the same heading styles. Only the words change, and
-  // only on this category's own niche host.
-  const landing = nicheDocumentCopy(slug, locale, host);
-  const pageFaqs = getPageFaqs(slug, locale);
+  const pageFaqs = getPageFaqs(slug, locale, host);
   const fileFaqs = readFaqFile(slug, locale);
+  const surface = serviceSurfaceCopy(slug, locale, host);
   const faqs = pageFaqs.length > 0 ? pageFaqs : fileFaqs.length > 0 ? fileFaqs : localizedCategory.faq;
-  const withHeading = landing
-    ? { ...localizedCategory, title: landing.h1, subtitle: landing.lead ?? localizedCategory.subtitle }
+  const withHeading = surface
+    ? {
+        ...localizedCategory,
+        title: surface.h1,
+        subtitle: surface.subline ?? localizedCategory.subtitle,
+        aboutText: surface.intro,
+      }
     : localizedCategory;
   const selectedCategory = { ...withHeading, faq: faqs };
   const dictionary = await getDictionary(locale);
@@ -131,6 +135,24 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     };
   });
 
+  const introFrames = serviceIntroFrames(
+    slug,
+    heroMedia.map((item) => ({ url: item.url, type: item.type })),
+    portfolio
+  );
+  const intro = serviceIntroBeats(slug, locale).map((beat, index) => {
+    const frame = introFrames[index] ?? introFrames[0];
+    return {
+      title: beat.title,
+      description: beat.description,
+      imageUrl: frame?.imageUrl ?? null,
+      imageAlt: frame?.imageUrl ? getImageAlt(frame.imageUrl, locale) : beat.title,
+      imageWidth: null,
+      imageHeight: null,
+      backgroundVideoUrl: frame?.backgroundVideoUrl,
+    };
+  });
+
   const logoUrl = getLogoUrl();
   const aboutImageUrl = getAboutImageUrl();
   const aboutDescription = selectedCategory.aboutText;
@@ -152,9 +174,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           imageAlt: aboutImageUrl ? getImageAlt(aboutImageUrl, locale) : sharedAbout.title,
         }}
         faqs={faqs}
-        pageSections={getPageSections(slug, locale)}
+        pageSections={getPageSections(slug, locale, host)}
+        relatedLinks={surface?.links ?? []}
         dictionary={dictionary}
         locale={locale}
+        publicHost={host ?? ""}
+        intro={intro}
+        introKicker={serviceIntroKicker(locale)}
       />
     </>
   );

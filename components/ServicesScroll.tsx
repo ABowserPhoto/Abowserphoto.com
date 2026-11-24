@@ -33,6 +33,8 @@ export type ServiceScrollItem = {
   beforeImage?: string;
   afterImage?: string;
   badge?: string;
+  /** Plays in the pinned frame when there is no still. */
+  backgroundVideoUrl?: string;
 };
 
 type ActiveMedia = {
@@ -60,6 +62,10 @@ type ServicesScrollProps = {
   inquireLabel?: string;
   watchVideoLabel?: string;
   viewTourLabel?: string;
+  /** Defaults to the services anchor used by the page menu. */
+  sectionId?: string;
+  /** Small label above the sliding title. */
+  kicker?: string;
 };
 
 function getYouTubeEmbedUrl(url: string) {
@@ -148,6 +154,16 @@ function ServiceImageLayer({
           priority={priority}
           badge={service.badge}
         />
+      ) : service.backgroundVideoUrl && !service.imageUrl ? (
+        <video
+          src={service.backgroundVideoUrl}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover"
+        />
       ) : service.imageUrl ? (
         <Image
           src={service.imageUrl}
@@ -171,10 +187,12 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
     inquireLabel = "Book a shoot",
     watchVideoLabel = "Watch Video",
     viewTourLabel = "View 360° Tour",
+    sectionId = "services",
+    kicker = "Services",
   },
   forwardedRef
 ) {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeMedia, setActiveMedia] = useState<ActiveMedia | null>(null);
@@ -229,8 +247,19 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
   const isYouTubeVideo =
     currentVideoUrl.includes("youtube.com") || currentVideoUrl.includes("youtu.be");
 
+  const paintCta = (event: { currentTarget: HTMLElement }, active: boolean) => {
+    event.currentTarget.style.backgroundColor = active ? "#F4F1ED" : themeColor;
+    event.currentTarget.style.color = active ? themeColor : "#ffffff";
+  };
   const ctaClassName =
-    "shrink-0 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white transition-opacity duration-300 hover:opacity-90";
+    "shrink-0 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-300";
+  const ctaStyle = { backgroundColor: themeColor, color: "#ffffff" };
+  const ctaHover = {
+    onMouseEnter: (event: React.MouseEvent<HTMLElement>) => paintCta(event, true),
+    onMouseLeave: (event: React.MouseEvent<HTMLElement>) => paintCta(event, false),
+    onFocus: (event: React.FocusEvent<HTMLElement>) => paintCta(event, true),
+    onBlur: (event: React.FocusEvent<HTMLElement>) => paintCta(event, false),
+  };
 
   const openVideoMedia = (service: ServiceScrollItem) => {
     const videos = service.videos?.filter((video) => video.url.trim());
@@ -264,7 +293,8 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
         <button
           type="button"
           className={ctaClassName}
-          style={{ backgroundColor: themeColor }}
+          style={ctaStyle}
+          {...ctaHover}
           onClick={() => openEmbedMedia(service)}
         >
           {viewTourLabel}
@@ -281,7 +311,8 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
         <button
           type="button"
           className={ctaClassName}
-          style={{ backgroundColor: themeColor }}
+          style={ctaStyle}
+          {...ctaHover}
           onClick={() => openVideoMedia(service)}
         >
           {watchVideoLabel}
@@ -295,7 +326,8 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
         scroll={false}
         onClick={() => requestOpenBooking()}
         className={ctaClassName}
-        style={{ backgroundColor: themeColor }}
+        style={ctaStyle}
+        {...ctaHover}
       >
         {inquireLabel}
       </Link>
@@ -353,10 +385,9 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
 
   return (
     <>
+      <div id={sectionId} ref={containerRef} className="relative z-30 w-full">
       <section
-      ref={containerRef}
-      id="services"
-      className="relative z-30 w-full bg-black"
+      className="service-pin-animated relative w-full bg-black"
       style={{ height: `${Math.max(count, 1) * 100}dvh` }}
     >
       <div className="sticky top-0 flex h-screen w-full flex-col overflow-hidden">
@@ -389,7 +420,7 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
                 className="font-medium uppercase tracking-[0.35em] text-white/70"
                 style={{ fontSize: "clamp(0.625rem, 1.6vw, 0.6875rem)" }}
               >
-                Services
+                {kicker}
                 <span className="ml-2 text-white/45">
                   {String(activeIndex + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
                 </span>
@@ -457,6 +488,77 @@ const ServicesScroll = forwardRef<HTMLElement, ServicesScrollProps>(function Ser
         </div>
       </div>
       </section>
+      <section className="service-pin-static bg-black">
+        {services.map((service, index) => (
+          <div key={`${service.title}-still-${index}`} className="relative h-[100dvh] w-full">
+            {service.beforeImage && service.afterImage ? (
+              <BeforeAfterSlider
+                beforeImage={service.beforeImage}
+                afterImage={service.afterImage}
+                alt={service.title}
+                badge={service.badge}
+              />
+            ) : service.backgroundVideoUrl && !service.imageUrl ? (
+              <video
+                src={service.backgroundVideoUrl}
+                controls
+                playsInline
+                preload="metadata"
+                className="h-full w-full object-cover"
+              />
+            ) : service.imageUrl ? (
+              <Image
+                src={service.imageUrl}
+                alt={service.imageAlt || service.title}
+                fill
+                sizes="100vw"
+                className="object-cover md:object-contain"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]" />
+            )}
+            <div className="pointer-events-none absolute bottom-8 left-4 right-4 z-10 md:bottom-[10%] md:left-[max(1.25rem,calc(50%-30rem))] md:right-auto md:w-[min(24rem,42vw)]">
+              <div
+                className="pointer-events-auto w-full max-w-md rounded-2xl border border-white/25 px-5 pb-7 pt-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:max-w-lg sm:px-6 sm:pb-8 sm:pt-6"
+                style={{
+                  background: "rgba(255, 255, 255, 0.15)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                }}
+              >
+                <p
+                  className="font-medium uppercase tracking-[0.35em] text-white/70"
+                  style={{ fontSize: "clamp(0.625rem, 1.6vw, 0.6875rem)" }}
+                >
+                  {kicker}
+                  <span className="ml-2 text-white/45">
+                    {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+                  </span>
+                </p>
+                <span
+                  className="mb-3 mt-3 inline-block h-1 w-12 rounded-full"
+                  style={{ backgroundColor: themeColor }}
+                  aria-hidden="true"
+                />
+                <h2
+                  className="font-semibold leading-snug tracking-tight text-white"
+                  style={{ fontSize: "clamp(1.05rem, 2.8vw, 1.5rem)" }}
+                >
+                  {service.title}
+                </h2>
+                <p
+                  className="mt-2 leading-relaxed text-white/80"
+                  style={{ fontSize: "clamp(0.8125rem, 2.1vw, 0.9375rem)" }}
+                >
+                  {service.description}
+                </p>
+                <div className="mt-6 flex justify-end">{renderServiceCta(service)}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </section>
+      </div>
 
       <AnimatePresence>
         {activeMedia ? (

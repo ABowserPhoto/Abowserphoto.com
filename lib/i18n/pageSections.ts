@@ -1,5 +1,6 @@
 import type { FAQItem, CategorySlug } from "../content";
 import { appointmentOnlyLabel } from "../contact";
+import { serviceSurfaceCopy, surfaceFor } from "../serviceSurface";
 import { printsPath, solingenStudioPath } from "../routes";
 import { formatStudioLine, HAGEN_STUDIO, SOLINGEN_STUDIO, studioSittingPriceAnswer } from "../site";
 import { portalCategoryUrl } from "../subdomains";
@@ -33,7 +34,7 @@ const weddingSections: Record<Locale, PageSection[]> = {
       title: "Standesamt-Fotograf in Solingen und Hagen",
       paragraphs: [
         "Viele Paare heiraten zuerst standesamtlich, oft in Solingen oder Hagen, und feiern später. Für diese Stunde fotografiere ich als Standesamt-Fotograf ruhig und nah am Ablauf: Ankunft, der Raum, die Trauung, die Menschen danach. Nichts wird für die Kamera nachgestellt.",
-        `Wenn das Standesamt in Solingen oder das Standesamt in Hagen der ganze Termin ist, bleibt der Umfang überschaubar. Wenn danach ein Essen oder ein Spaziergang folgt, erweitern wir die Reportage. Die Trauung fotografiere ich dort, wo Sie heiraten, nicht im Studio. Porträts danach können im Studio Hagen entstehen (${hagen}, etwa 40 m²). Das größere Studio Solingen (${solingen}) ist ${appointmentOnlyLabel("de", { sentence: false })} da.`,
+        `Wenn das Standesamt in Solingen oder das Standesamt in Hagen der ganze Termin ist, bleibt der Umfang überschaubar. Wenn danach ein Essen oder ein Spaziergang folgt, erweitern wir die Reportage. Die Trauung fotografiere ich dort, wo Sie heiraten, nicht im Studio. Porträts nach der Trauung können auch im Studio entstehen.`,
         "Die standesamtliche Trauung ist ein eigener Teil der Hochzeitsfotografie, mit derselben ruhigen Bildsprache wie die freie Trauung und der ganze Tag.",
       ],
     },
@@ -42,8 +43,8 @@ const weddingSections: Record<Locale, PageSection[]> = {
       eyebrow: "Film",
       title: "Hochzeitsvideo aus derselben Reportage",
       paragraphs: [
-        "Fotos und Film gehören für viele Paare zusammen. Das Hochzeitsvideo entsteht am selben Tag wie die Reportage: Standesamt in Hagen oder Solingen, freie Trauung, der ganze Tag. Schnitt und Ton folgen der ruhigen Bildsprache der Fotos.",
-        "Konzept, Dreh und Schnitt liegen bei der Filmproduktion. Wer beides buchen möchte, spricht das im selben Gespräch ab. Das Honorar wird dafür einzeln angeboten, ohne Paketpreis auf dieser Seite.",
+        "Fotos und Film gehören für viele Paare zusammen. Auf Wunsch entsteht am selben Tag ein Hochzeitsfilm, mit derselben ruhigen Bildsprache wie die Fotos.",
+        "Foto und Film planen wir in einem Gespräch, und Sie erhalten ein gemeinsames Angebot.",
       ],
       links: [
         {
@@ -60,7 +61,7 @@ const weddingSections: Record<Locale, PageSection[]> = {
       title: "Civil ceremony photographer in Solingen and Hagen",
       paragraphs: [
         "Many couples marry first at the registry office, often in Solingen or Hagen, and celebrate later. For that hour I work quietly and close to the order of the day: the arrival, the room, the ceremony, the people afterwards. Nothing is restaged for the camera.",
-        `When the ceremony in Solingen or Hagen is the whole booking, the coverage stays compact. When a meal or a walk follows, we extend the reportage. The ceremony is photographed where you marry, not in the studio. Portraits afterwards can be made at the Hagen studio (${hagen}, about 40 m²). The larger Solingen studio (${solingen}) is ${appointmentOnlyLabel("en", { sentence: false })}.`,
+        `When the ceremony in Solingen or Hagen is the whole booking, the coverage stays compact. When a meal or a walk follows, we extend the reportage. The ceremony is photographed where you marry, not in the studio. Portraits after the ceremony can also be made in the studio.`,
         "A civil ceremony is its own part of the wedding coverage, not a footnote. A symbolic ceremony and a full day stay in the same visual language.",
       ],
     },
@@ -69,8 +70,8 @@ const weddingSections: Record<Locale, PageSection[]> = {
       eyebrow: "Film",
       title: "A wedding film from the same reportage",
       paragraphs: [
-        "Photographs and film belong together for many couples. The wedding film is made on the same day as the reportage: the registry office in Hagen or Solingen, a symbolic ceremony, the full day. The cut follows the calm pace of the photographs.",
-        "Concept, shoot, and edit sit with the film production. Couples who want both discuss it in the same conversation. The film is quoted on its own. This page does not publish a package price.",
+        "Photographs and film belong together for many couples. A wedding film from the same day can be added, in the same calm visual language as the photographs.",
+        "We plan the photographs and the film in one conversation, and you receive one quote.",
       ],
       links: [
         {
@@ -86,7 +87,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wo entstehen die Business-Porträts?",
-      answer: `In der Regel im Studio Hagen, ${hagen}, etwa 40 m², wo Aaron täglich arbeitet. Das Studio Solingen, ${solingen}, etwa 100 m², ist für größere Produktionen und ${appointmentOnlyLabel("de", { sentence: false })}; es kann auch gemietet werden. Die Seite zum Fotostudio Solingen beschreibt Fläche und Miete. Sitzungen im Büro in Nordrhein-Westfalen bleiben möglich.`,
+      answer: `In der Regel im Studio Hagen, ${hagen}, etwa 40 m². Das Studio Solingen, ${solingen}, hat etwa 100 m² und nimmt größere Produktionen, Projekte und Teams auf, die im Studio Hagen zu groß wären. Für ein Shooting schreiben Sie bitte vorher, damit ein Termin liegt. Das Studio kann auch gemietet werden. Sitzungen im Büro in Nordrhein-Westfalen bleiben möglich.`,
       linkHref: solingenHref("de"),
       linkLabel: "Fotostudio Solingen",
     },
@@ -98,7 +99,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "Was kostet ein Business-Porträt?",
       answer:
-        "Das Honorar richtet sich nach Personenzahl, Ort und Umfang. Sie erhalten ein individuelles Angebot.",
+        "Das Honorar richtet sich nach Personenzahl, Ort und Umfang. Für die Preise fordern Sie ein Angebot über das Kontaktformular, per E-Mail oder per WhatsApp an.",
     },
     {
       question: "Wie läuft das Shooting ab?",
@@ -114,7 +115,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
   en: [
     {
       question: "Where do you photograph business portraits?",
-      answer: `Usually at the Hagen studio, ${hagen}, about 40 m², where Aaron works every day. The Solingen studio, ${solingen}, about 100 m², is for larger productions and ${appointmentOnlyLabel("en", { sentence: false })}; it can also be rented. The Solingen studio page describes the space and how to rent it. Sessions at your office in North Rhine-Westphalia are still possible.`,
+      answer: `Usually at the Hagen studio, ${hagen}, about 40 m². The Solingen studio, ${solingen}, is about 100 m² and can handle larger productions, projects and teams that would be too big for the Hagen studio. To book a shoot, please contact us to schedule an appointment before coming. The studio can also be rented. Sessions at your office in North Rhine-Westphalia are still possible.`,
       linkHref: solingenHref("en"),
       linkLabel: "Solingen studio",
     },
@@ -126,7 +127,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "What does a business portrait cost?",
       answer:
-        "The fee depends on the number of people, the location, and the scope. You receive an individual quote.",
+        "The fee depends on the number of people, the location, and the scope. For pricing, request a quote by contact form, email or WhatsApp.",
     },
     {
       question: "How does a session run?",
@@ -161,7 +162,7 @@ const weddingFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "Was kostet die Hochzeitsfotografie?",
       answer:
-        "Das Honorar richtet sich nach Dauer, Ort und Umfang: nur das Standesamt, die freie Trauung, der ganze Tag, und ob ein Hochzeitsvideo dazukommt. Sie erhalten ein Angebot. Auf dieser Seite stehen keine Paketpreise.",
+        "Das Honorar richtet sich nach Dauer, Ort und Umfang: nur das Standesamt, die freie Trauung, der ganze Tag, und ob ein Hochzeitsvideo dazukommt. Für die Preise fordern Sie ein Angebot über das Kontaktformular, per E-Mail oder per WhatsApp an.",
     },
     {
       question: "Wie läuft der Tag ab?",
@@ -199,7 +200,7 @@ const weddingFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "What does wedding photography cost?",
       answer:
-        "The fee follows the length, the place, and the scope: the registry office only, a symbolic ceremony, the full day, and whether a wedding film is included. You receive a quote. This page does not publish package prices.",
+        "The fee follows the length, the place, and the scope: the registry office only, a symbolic ceremony, the full day, and whether a wedding film is included. For pricing, request a quote by contact form, email or WhatsApp.",
     },
     {
       question: "How does the day run?",
@@ -229,7 +230,7 @@ const commercialSections: Record<Locale, PageSection[]> = {
       title: "KI-Bildwelten, klar gekennzeichnet",
       paragraphs: [
         "Für Marken, Hotels und Restaurants entstehen neben den fotografierten Bildern auch KI-Bildwelten. Jedes KI-erzeugte Bild ist als KI-Bildwelt gekennzeichnet.",
-        "Beispiele stehen hier, sobald freigegebene Motive vorliegen. Bis dahin ist dieser Abschnitt ein Platzhalter ohne Beispielbilder.",
+        "Ob Kampagnenmotiv, Hotelwand oder Social-Media-Serie: KI-Bildwelten ergänzen Ihre Fotos dort, wo eine Fotografie an Grenzen stößt. Jedes KI-Bild ist klar gekennzeichnet.",
       ],
       links: [{ href: withLocale(printsPath("de"), "de"), label: "Wandbilder & Metalldrucke" }],
     },
@@ -241,15 +242,19 @@ const commercialSections: Record<Locale, PageSection[]> = {
       title: "AI image worlds, clearly labelled",
       paragraphs: [
         "For brands, hotels, and restaurants, photographed work can sit beside AI image worlds. Every AI-generated picture is labelled as an AI image world.",
-        "Examples will be shown here once approved pictures exist. Until then this section is a placeholder without sample images.",
+        "Whether a campaign visual, a hotel wall or a social media series: AI image worlds add to your photographs where a photo reaches its limits. Every AI image is clearly labelled.",
       ],
       links: [{ href: withLocale(printsPath("en"), "en"), label: "Wall art and metal prints" }],
     },
   ],
 };
 
-export function getPageSections(slug: CategorySlug, locale: Locale): PageSection[] {
-  if (slug === "wedding") return weddingSections[locale];
+export function getPageFaqs(slug: CategorySlug, locale: Locale, host?: string | null): FAQItem[] {
+  return serviceSurfaceCopy(slug, locale, host)?.faqs ?? [];
+}
+
+export function getPageSections(slug: CategorySlug, locale: Locale, host?: string | null): PageSection[] {
+  if (slug === "wedding" && surfaceFor(slug, host) === "niche") return weddingSections[locale];
   if (slug === "commercial") return commercialSections[locale];
   return [];
 }
@@ -258,7 +263,7 @@ const studioFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wo entstehen Bewerbungsfotos und Passbilder?",
-      answer: `Im Studio Hagen, ${hagen}, etwa 40 m². Dort arbeitet Aaron täglich, und diese Termine werden hier gebucht.`,
+      answer: `Im Studio Hagen, ${hagen}, etwa 40 m². Studio Hagen bietet Bewerbungsfotos und Passbilder.`,
     },
     {
       question: "Was unterscheidet ein Bewerbungsfoto von einem Passbild?",
@@ -278,7 +283,7 @@ const studioFaqs: Record<Locale, FAQItem[]> = {
   en: [
     {
       question: "Where are application and passport photos taken?",
-      answer: `At the Hagen studio, ${hagen}, about 40 m². Aaron works there every day, and these sittings are booked there.`,
+      answer: `At the Hagen studio, ${hagen}, about 40 m². Studio Hagen offers application and passport photos.`,
     },
     {
       question: "How is an application photo different from a passport photo?",
@@ -301,7 +306,7 @@ const realEstateFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wie schnell bekomme ich die Bilder?",
-      answer: "Fotos innerhalb von 24 Stunden, Reels innerhalb von 48–72 Stunden.",
+      answer: "Lieferung innerhalb von 24–48 Stunden nach Ihrer finalen Bildauswahl (je nach Auslastung).",
     },
     {
       question: "Passen die Dateien für die Portale?",
@@ -311,7 +316,7 @@ const realEstateFaqs: Record<Locale, FAQItem[]> = {
   en: [
     {
       question: "How quickly do I get the pictures?",
-      answer: "Photographs within 24 hours, reels within 48–72 hours.",
+      answer: "Delivered within 24–48 hours of your final image selection (times may vary with demand).",
     },
     {
       question: "Will the files work on the portals?",
@@ -388,14 +393,3 @@ const socialFaqs: Record<Locale, FAQItem[]> = {
     },
   ],
 };
-
-export function getPageFaqs(slug: CategorySlug, locale: Locale): FAQItem[] {
-  if (slug === "business-portraits") return businessFaqs[locale];
-  if (slug === "wedding") return weddingFaqs[locale];
-  if (slug === "studio") return studioFaqs[locale];
-  if (slug === "real-estate") return realEstateFaqs[locale];
-  if (slug === "food") return foodFaqs[locale];
-  if (slug === "cinematography") return filmFaqs[locale];
-  if (slug === "social-media-management") return socialFaqs[locale];
-  return [];
-}

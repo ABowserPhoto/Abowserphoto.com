@@ -3,7 +3,7 @@ import type { Locale } from "./i18n/config";
 
 /**
  * Lines under the kept homepage H1.
- * The proof strip stays out until award wording and logo rights are confirmed.
+ * Award logos stay out until the files are added in lib/awards.ts.
  */
 export function homeHeroCopy(locale: Locale) {
   if (locale === "de") {
@@ -13,11 +13,7 @@ export function homeHeroCopy(locale: Locale) {
       book: "Shooting buchen",
       call: `Anrufen ${CONTACT_PHONE_DISPLAY}`,
       whatsapp: "WhatsApp",
-      note: "Preise & Buchung im Kundenkonto. Kostenlos registrieren, oder ohne Konto anfragen.",
-      featuredBusinessTitle: "Business-Porträts",
-      featuredBusinessText: "Teams, Profile und Businessfotos im Studio Hagen oder bei Ihnen.",
-      featuredFoodTitle: "Food-Fotografie",
-      featuredFoodText: "Für Restaurants, Speisekarten und Produkte, im Studio oder vor Ort.",
+      note: "Angebot per Formular, E-Mail oder WhatsApp anfragen, oder mit kostenlosem Kundenkonto direkt online buchen.",
     };
   }
   return {
@@ -26,10 +22,6 @@ export function homeHeroCopy(locale: Locale) {
     book: "Book a shoot",
     call: `Call ${CONTACT_PHONE_DISPLAY}`,
     whatsapp: "WhatsApp",
-    note: "Prices and booking are in the client account. Register free, or enquire without an account.",
-    featuredBusinessTitle: "Business portraits",
-    featuredBusinessText: "Teams, profiles, and business photographs at the Hagen studio or at your office.",
-    featuredFoodTitle: "Food photography",
-    featuredFoodText: "For restaurants, menus, and products, in the studio or on location.",
+    note: "Request a quote by form, email or WhatsApp, or book online with a free client account.",
   };
 }

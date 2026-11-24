@@ -50,50 +50,51 @@
   "seo": {
     "home": {
       "title": "Photographer & Photo Studio Hagen | Aaron Bowser Photography",
-      "description": "Photo studio in Hagen ({hagenStreet}) for business, wedding & commercial. Also Solingen studio. Book a session."
+      "description": "Photographer & videographer in Hagen and Solingen: weddings, real estate, film and commercial across NRW. Hagen photo studio. Book a shoot."
     },
     "real-estate": {
-      "title": "Real Estate Photography Hagen & NRW | Aaron Bowser",
-      "description": "Listing photos for agents in Hagen, Solingen & NRW. Hagen studio. Fast delivery — book a shoot."
+      "title": "Real Estate Video & Drone for Agents NRW | Aaron Bowser",
+      "description": "Walk-thru videos, agent branding videos and drone footage for agents in NRW, as Premium Home or Luxury Makler bundles. Book a shoot."
     },
     "commercial": {
-      "title": "Commercial Photographer Hagen & Solingen | Aaron Bowser",
-      "description": "Fashion, beauty, product and editorial photography for brands. Studios in Hagen (40 m²) and Solingen (100 m²), with work across NRW. Book a shoot."
+      "title": "Commercial Photographer NRW | Fashion, Beauty & Editorial",
+      "description": "Fashion, beauty and editorial photography for brands, designers and agencies in Düsseldorf, Cologne and NRW. Cinematic and publication-ready. Book a shoot."
     },
     "wedding": {
-      "title": "Wedding Photographer Hagen & Solingen | Photo & Video",
-      "description": "Wedding photos and wedding film in Hagen, Solingen and NRW: registry office, symbolic ceremony, full day. Calm, cinematic reportage. Book a shoot."
+      "title": "Wedding Photographer NRW | Düsseldorf, Cologne & Ruhr",
+      "description": "Wedding photography across NRW: Düsseldorf, Cologne, Wuppertal and the Ruhr. Cinematic reportage, with an optional wedding film. Book a shoot."
     },
     "food": {
-      "title": "Food Photography Hagen & NRW | Aaron Bowser Photography",
-      "description": "Food and drink photography for restaurants, menus and products — at the Hagen studio, in Solingen, or on location in NRW. Book a shoot."
+      "title": "Food Photography NRW | Campaigns, Packaging & Drinks",
+      "description": "Food and drink photography for brands and producers in NRW: packaging, campaigns, advertising. Styled sets at the Solingen studio. Book a shoot."
     },
     "business-portraits": {
-      "title": "Business Photos Hagen & Solingen | Portraits",
-      "description": "Business portraits and team photos at the Hagen studio or in your office. Larger teams at the Solingen studio. A tight edit — book a shoot."
+      "title": "Business Photographer NRW | Executive & Corporate Portraits",
+      "description": "Executive and corporate portraits for leadership teams in Düsseldorf, Cologne and NRW. In the studio or on location. Book a shoot."
     },
     "studio": {
-      "title": "Application Photos & Passports Hagen | Studio",
-      "description": "Application photos and biometric passport photos at the Hagen studio, {hagenStreet}. Mon–Sat 10–20, Sun 9–12. No long wait."
+      "title": "Application & Passport Photos Hagen | Photo Studio",
+      "description": "Application photo €29, biometric passport photo €15 at the Hagen photo studio, {hagenStreet}. Mon–Sat 10–20, Sun 09–12. Book now."
     },
     "cinematography": {
-      "title": "Videographer & Film Production Hagen | Aaron Bowser",
-      "description": "Brand films, wedding films and social reels from Hagen for NRW. Concept, shoot and edit from one team. Book a shoot."
+      "title": "Brand Film Production NRW | Aaron Bowser Photography",
+      "description": "Brand and company films for businesses in Düsseldorf, Cologne, Wuppertal and the Ruhr. Cinematic storytelling, shoot and edit. Book a shoot."
     },
     "solingen": {
       "title": "Rent a Photo Studio Solingen | 100 m² | Aaron Bowser",
-      "description": "Rent the Solingen studio: about 100 m² at {solingenStreet}, for productions, teams and commercial work. By appointment only — ask about availability."
+      "description": "Rent a photo studio in Solingen: approx. 100 m² for shoots, teams and video. €54/h (2 h min.), half day €189, full day €329 incl. VAT."
     },
     "social-media-management": {
-      "title": "Social Media Management",
-      "description": "Strategy-led content planning, publishing, and performance reporting for brands that want consistent visual presence."
+      "title": "Social Media Content NRW | Photos, Reels & Strategy",
+      "description": "Content production and strategy for brands in Düsseldorf, Cologne and NRW: photos, reels, content plan and reporting in one place. Request a consultation."
     },
     "commercial-portfolio": {
-      "title": "Commercial Portfolio Archive",
-      "description": "Browse the complete commercial and editorial photography archive from Aaron Bowser Photography.",
+      "title": "Commercial Portfolio | Fashion, Beauty & Product",
+      "description": "Selected fashion, beauty, product and editorial work by Aaron Bowser Photography for brands in NRW. Plan your project and book a shoot.",
+      "h1": "Commercial Portfolio",
       "intro": [
         "This archive gathers the commercial and editorial work of Aaron Bowser Photography. These are commissions for brands: fashion, beauty, product, and editorial series. Not a single campaign and not a loose moodboard, but the line the pictures keep across different jobs.",
-        "Some of the photographs are made at the Hagen studio, the everyday room of about 40 square metres. Aaron works there every day. Smaller sets, portraits, and product pictures belong there. Larger productions, teams, and builds that need floor and quiet move to the Solingen studio. It is about 100 square metres, available by appointment only, and it can be rented for a production. When a collection or a product should not come into the studio, the work is photographed on location in North Rhine-Westphalia.",
+        "Many of these pictures are made at the Hagen studio, where smaller sets, portraits and product photographs have room. For larger productions, teams and elaborate builds, the studio in Solingen offers about 100 m², by appointment and also for rent. When a collection or a product is better on location, I photograph at your place in NRW.",
         "The edit places lookbooks next to beauty details, clear product photographs, and editorial portraits. Light, crop, and tone should stay recognizable across the series, so a brand reads the same way on the website, in the lookbook, and in the campaign. Someone planning a production can see how the work looks before the conversation turns to place, use, and scope."
       ]
     },
@@ -225,7 +226,7 @@
     "successTitle": "Thank you",
     "error": "Booking submission failed.",
     "inquirySuccess": "Your inquiry has been received. We will review your details and be in touch shortly.",
-    "accountNote": "Prices and booking are in the client account. Register free, or enquire without an account.",
+    "accountNote": "Request a quote by form, email or WhatsApp, or book online with a free client account.",
     "enquireWithoutAccount": "Enquire without an account",
     "whatsapp": "WhatsApp",
     "sendEnquiry": "Send enquiry",
@@ -292,7 +293,7 @@
     "calendarEventFailed": "We could not create the calendar event.",
     "saveFailed": "We could not save your request. Please try again.",
     "invalidDate": "Please select a valid date.",
-    "notConfigured": "Booking is not configured yet. Add the Supabase project URL and publishable key to enable sign-in and requests.",
+    "notConfigured": "Online booking is not available right now. Please enquire by form, phone or WhatsApp.",
     "checkingAccount": "Checking your account...",
     "closeModal": "Close booking modal",
     "propertyStatuses": {

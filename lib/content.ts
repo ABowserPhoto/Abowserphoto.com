@@ -120,7 +120,7 @@ Before the day we get to know each other, with an engagement shoot if you like. 
       {
         title: "Photo package",
         description:
-          "A photo package you choose in the client account. Photographs only, with no video. Prices are in the client account.",
+          "Interiors, exteriors and details, matched to the size of the property. Individual photos can be added.",
         image: "/real-estate/services/innenaufnahmen-immobilie.webp",
       },
       {
@@ -136,13 +136,13 @@ Before the day we get to know each other, with an engagement shoot if you like. 
       {
         title: "Premium Home",
         description:
-          "The photo package of your choice plus a highlight video. Drone photos count toward the photo package, and drone footage is used in that video. Prices are in the client account.",
+          "The photo package of your choice plus a highlight video. Drone photos count toward the photo package, and drone footage is used in that video. Request a quote by contact form, email or WhatsApp.",
         image: "/real-estate/services/aussenaufnahmen-immobilie.webp",
       },
       {
         title: "Luxury Makler",
         description:
-          "The same as Premium Home, except the video is a walkthrough with the agent as the focus. Drone photos count toward the photo package, and drone footage is used in that video. Prices are in the client account.",
+          "The same as Premium Home, except the video is a walkthrough with the agent as the focus. Drone photos count toward the photo package, and drone footage is used in that video. Request a quote by contact form, email or WhatsApp.",
         image: "/real-estate/services/twilight-immobilie.webp",
       },
       {
@@ -165,17 +165,17 @@ Before the day we get to know each other, with an engagement shoot if you like. 
         ],
       },
     ],
-    aboutText: `For agents in Hagen, Solingen, and across North Rhine-Westphalia. One appointment, clear packages, photographs within 24 hours.
+    aboutText: `For agents in Hagen, Solingen, and across North Rhine-Westphalia. One appointment, clear packages.
 
 I'm Aaron Bowser, a real estate photographer based in Hagen, photographing apartments, houses and commercial spaces in Hagen, Solingen and across North Rhine-Westphalia. I focus on space, light and perspective, so every property looks inviting and true to what buyers see at a viewing.
 
-I work with agents, developers, property managers and owners. The offers are a photo package with no video, the optional extras Walk Thru Video and Agent Branding Video, and the bundles Premium Home and Luxury Makler. In Premium Home and Luxury Makler, drone photos count toward the photo package and drone footage is used in the video. Prices are in the client account.`,
+I work with agents, developers, property managers and owners. The offers are a photo package with no video, the optional extras Walk Thru Video and Agent Branding Video, and the bundles Premium Home and Luxury Makler. In Premium Home and Luxury Makler, drone photos count toward the photo package and drone footage is used in the video. Request a quote by contact form, email or WhatsApp.`,
     aboutImage:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1000&q=80",
     faq: [
       {
         question: "How quickly do I get the pictures?",
-        answer: "Photographs within 24 hours, reels within 48–72 hours.",
+        answer: "Delivered within 24–48 hours of your final image selection (times may vary with demand).",
       },
       {
         question: "Will the files work on the portals?",
@@ -224,7 +224,7 @@ I work with agents, developers, property managers and owners. The offers are a p
         image: "/business-portraits/portfolio/business-fotografie-frau-hellblauer-anzug.webp",
       },
     ],
-    aboutText: `I'm Aaron Bowser, photographing business portraits, staff and team photos and LinkedIn headshots for companies and professionals in Hagen, Solingen and across NRW. My Hagen studio (${HAGEN_ADDRESS.street}, about 40 m²) is where I work every day and where most portrait sessions take place. Larger teams and bigger set-ups use the Solingen studio, about 100 m², by appointment – or I bring the lighting to your office.
+    aboutText: `I'm Aaron Bowser, photographing business portraits, staff and team photos and LinkedIn headshots for companies and professionals in Hagen, Solingen and across NRW. The Hagen studio (${HAGEN_ADDRESS.street}, about 40 m²) is where portrait sessions are made. Larger teams and bigger set-ups use the Solingen studio, about 100 m², or I bring the lighting to your office. To book a shoot, please contact us to schedule an appointment before coming.
 
 Before the session we agree where the portraits will be used and who should be in them. During the sitting I guide posture and expression, so your website, LinkedIn and press share one calm, consistent look.`,
     aboutImage:
@@ -260,7 +260,7 @@ Before the session we agree where the portraits will be used and who should be i
         image: "/business-portraits/portfolio/mitarbeiterfoto-frau-sitzend-grau.webp",
       },
     ],
-    aboutText: `I'm Aaron Bowser. I take application photos and biometric passport photos at my Hagen studio, ${HAGEN_ADDRESS.street}, about 40 m², where I work every day and where these sessions are booked.
+    aboutText: `I'm Aaron Bowser. I take application photos and biometric passport photos at the Hagen studio, ${HAGEN_ADDRESS.street}, about 40 m². Studio Hagen offers application and passport photos.
 
 For your application photo we first agree where it will be used – CV, LinkedIn or Xing – and then I guide posture and expression so you look natural and approachable. Passport photos follow the current biometric rules for passports, ID cards and visas. Both can be done in one visit.
 
@@ -411,7 +411,7 @@ Your presence on Instagram, LinkedIn and beyond stays consistent, visually coher
     slug: "commercial",
     navLabel: "Commercial",
     title: "Commercial & Editorial",
-    subtitle: `Commercial and editorial photography for brands in North Rhine-Westphalia. The main studio is in Hagen. Larger productions use the Solingen studio, ${appointmentOnlyLabel("en", { sentence: false })}.`,
+    subtitle: `Commercial and editorial photography for brands in North Rhine-Westphalia. Smaller sets at the Hagen studio. The Solingen studio, about 100 m², handles larger productions, projects and teams, ${appointmentOnlyLabel("en", { sentence: false })}.`,
     themeColor: "#FFB70F",
     heroImage:
       "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?auto=format&fit=crop&w=1920&q=80",
@@ -446,7 +446,7 @@ Your presence on Instagram, LinkedIn and beyond stays consistent, visually coher
     ],
     aboutText: `I'm Aaron Bowser, photographing fashion, beauty, product, editorial and model portfolios for brands, designers and agencies in North Rhine-Westphalia. My commercial work blends editorial storytelling with a clean fashion aesthetic – cinematic, precise and publication-ready.
 
-Smaller productions happen at my Hagen studio, about 40 m², where I work every day. For larger sets and campaigns, the Solingen studio (about 100 m²) is available by appointment and can also be rented for your own productions. On-location shoots are possible too.`,
+Smaller productions happen at the Hagen studio, about 40 m². The Solingen studio is about 100 m² and can handle larger productions, projects and teams that would be too big for the Hagen studio. To book a shoot, please contact us to schedule an appointment before coming. The studio can also be rented. On-location shoots are possible too.`,
     aboutImage:
       "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
     faq: [

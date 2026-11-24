@@ -31,16 +31,16 @@ const germanCategoryCopy: Partial<
     title: "Immobilienfotografie NRW",
     subtitle:
       "Immobilienbilder für Exposés in Nordrhein-Westfalen, mit Studios in Hagen und Solingen.",
-    aboutText: `Für Makler in Hagen, Solingen und ganz NRW. Ein Termin, klare Pakete, Fotos innerhalb von 24 Stunden.
+    aboutText: `Für Makler in Hagen, Solingen und ganz NRW. Ein Termin, klare Pakete.
 
 Ich bin Aaron Bowser, Immobilienfotograf aus Hagen, und fotografiere Wohnungen, Häuser und Gewerbeflächen in Hagen, Solingen und ganz NRW. Mir geht es um Raum, Licht und Perspektive: Bilder, die eine Immobilie einladend und zugleich ehrlich zeigen, so wie Interessenten sie bei der Besichtigung erleben.
 
-Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sind ein Fotopaket ohne Video, die optionalen Extras Walk Thru Video und Agent Branding Video sowie die Pakete Premium Home und Luxury Makler. Bei Premium Home und Luxury Makler werden Drohnenfotos auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in das Video ein. Preise stehen im Kundenkonto.`,
+Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sind ein Fotopaket ohne Video, die optionalen Extras Walk Thru Video und Agent Branding Video sowie die Pakete Premium Home und Luxury Makler. Bei Premium Home und Luxury Makler werden Drohnenfotos auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in das Video ein. Fordern Sie ein Angebot per Kontaktformular, E-Mail oder WhatsApp an.`,
     services: [
       {
         title: "Fotopaket",
         description:
-          "Ein Fotopaket, das Sie im Kundenkonto wählen. Nur Fotos, ohne Video. Die Preise stehen im Kundenkonto.",
+          "Innen, außen und Details, abgestimmt auf die Größe des Objekts. Einzelfotos zum Ergänzen möglich.",
       },
       {
         title: "Walk Thru Video",
@@ -53,12 +53,12 @@ Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sin
       {
         title: "Premium Home",
         description:
-          "Das Fotopaket Ihrer Wahl plus ein Highlight-Video. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Preise stehen im Kundenkonto.",
+          "Das Fotopaket Ihrer Wahl plus ein Highlight-Video. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Fordern Sie ein Angebot per Kontaktformular, E-Mail oder WhatsApp an.",
       },
       {
         title: "Luxury Makler",
         description:
-          "Wie Premium Home, nur ist das Video ein Walkthrough mit dem Makler im Fokus. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Preise stehen im Kundenkonto.",
+          "Wie Premium Home, nur ist das Video ein Walkthrough mit dem Makler im Fokus. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Fordern Sie ein Angebot per Kontaktformular, E-Mail oder WhatsApp an.",
       },
       {
         title: "Digitales Homestaging",
@@ -79,7 +79,7 @@ Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sin
       `Fashion, Beauty, Produkt und Editorial für Marken. Größere Produktionen im Studio Solingen, ${appointmentOnlyLabel("de", { sentence: false })}, sonst im Studio Hagen oder vor Ort in Nordrhein-Westfalen.`,
     aboutText: `Ich bin Aaron Bowser und fotografiere Fashion, Beauty, Produkte, Editorials und Model-Portfolios für Marken, Designer und Agenturen in NRW. Meine Commercial-Fotografie verbindet Editorial-Storytelling mit einer klaren Modeästhetik: filmisch, präzise und publikationsreif.
 
-Kleinere Produktionen entstehen in meinem Studio in Hagen, etwa 40 m², wo ich täglich arbeite. Für größere Sets und Kampagnen steht das Studio Solingen mit etwa 100 m² nach Vereinbarung bereit; es kann auch für eigene Produktionen gemietet werden. Auf Wunsch fotografiere ich auch vor Ort.`,
+Kleinere Produktionen entstehen im Studio Hagen, etwa 40 m². Für größere Sets, Projekte und Teams steht das Studio Solingen mit etwa 100 m² bereit; es kann auch gemietet werden. Für ein Shooting schreiben Sie bitte vorher, damit wir einen Termin legen. Auf Wunsch fotografiere ich auch vor Ort.`,
     services: [
       {
         title: "Porträts und Model-Portfolios",
@@ -168,7 +168,7 @@ Vom Styling bis zur finalen Farbbearbeitung entstehen Food-Fotos für Speisekart
     title: "Business-Porträts in Hagen & Solingen",
     subtitle:
       "Executive-Headshots, Mitarbeiterfotos und LinkedIn-Profilbilder für Unternehmen in Hagen, Solingen und Nordrhein-Westfalen.",
-    aboutText: `Ich bin Aaron Bowser und fotografiere Business-Porträts, Mitarbeiterfotos, Teamfotos und LinkedIn-Profilbilder für Unternehmen und Selbstständige in Hagen, Solingen und NRW. Mein Studio in Hagen (${HAGEN_ADDRESS.street}, etwa 40 m²) ist mein täglicher Arbeitsort; dort finden Porträtsitzungen in der Regel statt. Für größere Teams und aufwendigere Sets nutze ich das Studio Solingen, etwa 100 m², nach Vereinbarung – oder ich baue das Licht direkt in Ihrem Büro auf.
+    aboutText: `Ich bin Aaron Bowser und fotografiere Business-Porträts, Mitarbeiterfotos, Teamfotos und LinkedIn-Profilbilder für Unternehmen und Selbstständige in Hagen, Solingen und NRW. Das Studio Hagen (${HAGEN_ADDRESS.street}, etwa 40 m²) ist der Raum für Porträtsitzungen. Größere Teams und aufwendigere Sets fotografiere ich im Studio Solingen, etwa 100 m², oder ich baue das Licht direkt in Ihrem Büro auf. Für ein Shooting schreiben Sie bitte vorher, damit ein Termin liegt.
 
 Vor dem Shooting klären wir, wo die Porträts erscheinen und wen sie zeigen sollen. Während der Sitzung leite ich Haltung und Ausdruck an, damit Website, LinkedIn und Presse dieselbe ruhige, stimmige Bildsprache tragen.`,
     services: [
@@ -203,7 +203,7 @@ Vor dem Shooting klären wir, wo die Porträts erscheinen und wen sie zeigen sol
     navLabel: "Studio Hagen",
     title: "Bewerbungsfotos und Passbilder in Hagen",
     subtitle: `Bewerbungsfotos und biometrische Passbilder im Studio Hagen, ${HAGEN_ADDRESS.street}. Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}.`,
-    aboutText: `Ich bin Aaron Bowser. Bewerbungsfotos und biometrische Passbilder mache ich in meinem Studio in Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Hier arbeite ich jeden Tag, und hier werden diese Termine gebucht.
+    aboutText: `Ich bin Aaron Bowser. Bewerbungsfotos und biometrische Passbilder mache ich im Studio Hagen, ${HAGEN_ADDRESS.street}, auf etwa 40 m². Studio Hagen bietet Bewerbungsfotos und Passbilder.
 
 Für Ihr Bewerbungsfoto klären wir zuerst, wo es erscheinen soll – Lebenslauf, LinkedIn oder Xing –, dann leite ich Haltung und Ausdruck an, damit Sie natürlich und sympathisch wirken. Das Passbild folgt den aktuellen biometrischen Vorgaben für Reisepass, Personalausweis und Visum. Beides geht in einem Termin.
 

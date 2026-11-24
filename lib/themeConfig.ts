@@ -57,7 +57,7 @@ export const themeConfig: Record<string, CategoryTheme> = {
       },
       {
         question: "How quickly do you deliver?",
-        answer: "Standard delivery is within 24 to 48 hours depending on project size.",
+        answer: "Delivered within 24–48 hours of your final image selection (times may vary with demand).",
       },
     ],
     headshot: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",

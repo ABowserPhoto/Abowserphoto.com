@@ -1,16 +1,12 @@
 /**
- * Document title, meta description, and H1 for the five niche hosts that
- * would otherwise repeat the matching www category page.
- * Applied only when the request host is that niche. The www pages keep the
- * dictionary title and the localized category heading.
+ * Document title, meta description, and H1 for niche hosts.
+ * The words come from `serviceSurfaceCopy` so the niche page and its
+ * metadata stay on the same text. www uses the other surface.
  */
-import { HAGEN_ADDRESS, SOLINGEN_ADDRESS, formatAddressLine } from "./contact";
 import type { CategorySlug } from "./content";
 import type { Locale } from "./i18n/config";
-import { nicheHostForHostname } from "./subdomains";
-
-const hagen = formatAddressLine(HAGEN_ADDRESS);
-const solingen = formatAddressLine(SOLINGEN_ADDRESS);
+import { serviceSurfaceCopy } from "./serviceSurface";
+import { nicheHostForHostname, PORTAL_CATEGORY_SUBDOMAIN } from "./subdomains";
 
 export const NICHE_LANDING_SLUGS = [
   "commercial",
@@ -31,68 +27,25 @@ export type NicheLandingCopy = {
   lead?: string;
 };
 
+function landingFrom(slug: NicheLandingSlug, locale: Locale): NicheLandingCopy {
+  const host = `${PORTAL_CATEGORY_SUBDOMAIN[slug]}.abowserphoto.com`;
+  const copy = serviceSurfaceCopy(slug, locale, host);
+  return {
+    title: copy?.title ?? "",
+    description: copy?.description ?? "",
+    h1: copy?.h1 ?? "",
+    lead: copy?.subline,
+  };
+}
+
 export const NICHE_LANDING_COPY: Record<NicheLandingSlug, Record<Locale, NicheLandingCopy>> = {
-  commercial: {
-    de: {
-      title: "Werbefotograf Hagen | Produktfotografie NRW",
-      description: `Werbe- und Produktfotografie für Marken: Lookbook, Beauty und Packshot. Studios ${hagen} und ${solingen}.`,
-      h1: "Werbe- und Produktfotografie in Hagen",
-    },
-    en: {
-      title: "Advertising Photographer Hagen | Product NRW",
-      description: `Advertising and product photography for brands: lookbook, beauty, packshot. Studios at ${HAGEN_ADDRESS.street}, Hagen and ${SOLINGEN_ADDRESS.street}, Solingen.`,
-      h1: "Advertising and Product Photography in Hagen",
-    },
-  },
-  "real-estate": {
-    de: {
-      title: "Immobilienfotograf Hagen | Exposé-Fotos NRW",
-      description: `Immobilienfotos für Makler in Hagen und NRW: Innen, Außen, Dämmerung, Drohne. Studios ${HAGEN_ADDRESS.street} und ${SOLINGEN_ADDRESS.street}.`,
-      h1: "Immobilienfotograf für Makler in NRW",
-      lead: "Immobilienfotos, die Besichtigungen bringen",
-    },
-    en: {
-      title: "Property Photographer Hagen | Listing Photos",
-      description: `Property photography for agents in Hagen and NRW: interiors, exteriors, twilight, and drone. Studios at ${HAGEN_ADDRESS.street} and ${SOLINGEN_ADDRESS.street}.`,
-      h1: "Property Photographer for Agents in NRW",
-      lead: "Property photos that bring viewings",
-    },
-  },
-  wedding: {
-    de: {
-      title: "Hochzeitsfotograf Hagen | Reportage in NRW",
-      description: `Hochzeitsfotograf für Hagen, Solingen und NRW: Standesamt, freie Trauung, ganzer Tag. Ruhige Reportage aus dem Studio ${hagen}.`,
-      h1: "Hochzeitsfotograf für Hagen und NRW",
-    },
-    en: {
-      title: "Wedding Photographer Hagen | NRW Reportage",
-      description: `Wedding photographer for Hagen, Solingen and NRW: registry, symbolic ceremony, full day. Calm reportage from ${hagen}.`,
-      h1: "Wedding Photographer for Hagen and NRW",
-    },
-  },
-  food: {
-    de: {
-      title: "Food-Fotograf Hagen | Speisen und Produkte",
-      description: `Food-Fotografie für Restaurants und Marken: Speisekarte, Verpackung, Kampagne. Studios ${HAGEN_ADDRESS.street}, Hagen, und ${SOLINGEN_ADDRESS.street}, Solingen.`,
-      h1: "Food-Fotografie für Restaurants und Marken",
-    },
-    en: {
-      title: "Food Photographer Hagen | Menus and Products",
-      description: `Food photography for restaurants and brands: menus, packaging, campaigns. Studios at ${HAGEN_ADDRESS.street}, Hagen and ${SOLINGEN_ADDRESS.street}, Solingen.`,
-      h1: "Food Photography for Restaurants and Brands",
-    },
-  },
+  commercial: { de: landingFrom("commercial", "de"), en: landingFrom("commercial", "en") },
+  "real-estate": { de: landingFrom("real-estate", "de"), en: landingFrom("real-estate", "en") },
+  wedding: { de: landingFrom("wedding", "de"), en: landingFrom("wedding", "en") },
+  food: { de: landingFrom("food", "de"), en: landingFrom("food", "en") },
   "business-portraits": {
-    de: {
-      title: "Mitarbeiterfotos Hagen | Business-Porträts",
-      description: `Business-Porträts und Mitarbeiterfotos für Teams und Profile. Hagen, ${HAGEN_ADDRESS.street}, ${HAGEN_ADDRESS.postalCode}; größere Teams in Solingen, ${SOLINGEN_ADDRESS.street}, ${SOLINGEN_ADDRESS.postalCode}.`,
-      h1: "Mitarbeiterfotos und Business-Porträts",
-    },
-    en: {
-      title: "Staff Photos Hagen | Business Headshots",
-      description: `Business portraits and staff photos for teams and profiles. Hagen studio, ${HAGEN_ADDRESS.street}, ${HAGEN_ADDRESS.postalCode}; larger teams in Solingen, ${SOLINGEN_ADDRESS.street}, ${SOLINGEN_ADDRESS.postalCode}.`,
-      h1: "Staff Photos and Business Portraits",
-    },
+    de: landingFrom("business-portraits", "de"),
+    en: landingFrom("business-portraits", "en"),
   },
 };
 
