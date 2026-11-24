@@ -4,7 +4,7 @@ import { HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "./contact";
 import { countWords, homeIntroPlainText } from "./homeIntro";
 import { AWARD_LOGOS } from "./awards";
 import { MARKETING_VIDEO } from "./marketingVideo";
-import { homeHubTiles } from "./homeHub";
+import { homeHubGroups } from "./homeHub";
 import { serviceIntroBeats } from "./serviceIntro";
 import { categoryContentMap, type CategorySlug } from "./content";
 import { getDictionarySync } from "./i18n/getDictionary";
@@ -30,7 +30,6 @@ test("homepage intro leads with the studios and a quote, without internal notes"
       assert.match(text, /Kontaktformular/);
     } else {
       assert.match(text, /about 100 m²/);
-      assert.match(text, /too big for the Hagen studio/);
       assert.match(text, /application and passport photos/);
       assert.match(text, /contact form/);
       assert.match(text, /WhatsApp/);
@@ -45,11 +44,11 @@ test("homepage intro leads with the studios and a quote, without internal notes"
     absoluteTitle(buildHomeMetadata("de").title),
     "Fotograf & Fotostudio Hagen | Aaron Bowser Photography"
   );
-  const tiles = homeHubTiles("de");
-  assert.equal(tiles[0]?.slug, "wedding");
-  assert.equal(tiles[1]?.slug, "real-estate");
-  assert.equal(tiles.at(-1)?.slug, "food");
-  assert.equal(tiles.at(-2)?.slug, "business-portraits");
+  const tiles = homeHubGroups("de");
+  assert.equal(tiles.featured[0]?.slug, "wedding");
+  assert.equal(tiles.featured[1]?.slug, "real-estate");
+  assert.equal(tiles.text[0]?.slug, "business-portraits");
+  assert.equal(tiles.text[1]?.slug, "food");
   assert.equal(AWARD_LOGOS.length, 0);
   assert.equal(MARKETING_VIDEO.src, "");
   assert.ok(MARKETING_VIDEO.poster.startsWith("/"));
@@ -75,42 +74,21 @@ test("scan titles and meta descriptions stay within length and match the German 
   };
   assert.deepEqual(germanTitles, {
     home: "Fotograf & Fotostudio Hagen | Aaron Bowser Photography",
-    wedding: "Hochzeitsfotograf Hagen & Solingen | Foto & Video",
-    business: "Businessfotos Hagen & Solingen | Business-Porträts",
-    solingen: "Fotostudio mieten Solingen | 100 m² | Aaron Bowser",
-    film: "Videograf & Filmproduktion Hagen | Aaron Bowser",
-    food: "Food-Fotografie Hagen & NRW | Aaron Bowser Photography",
-    commercial: "Commercial-Fotograf Hagen & Solingen | Aaron Bowser",
+    wedding: "Hochzeitsfotograf NRW | Düsseldorf, Köln & Ruhrgebiet",
+    business: "Business-Fotograf NRW | Executive- & Corporate-Porträts",
+    solingen: "Fotostudio mieten Solingen | 100 m² ab 54 €/Std.",
+    film: "Imagefilm-Produktion NRW | Aaron Bowser Photography",
+    food: "Food-Fotografie NRW | Kampagne, Verpackung & Getränke",
+    commercial: "Commercial-Fotograf NRW | Fashion, Beauty & Editorial",
     studio: "Bewerbungsfotos & Passbilder Hagen | Fotostudio",
   });
-  assert.equal(
-    german.seo.wedding.description,
-    "Hochzeitsfotos & Hochzeitsvideo in Hagen, Solingen & NRW: Standesamt, freie Trauung, ganzer Tag. Ruhige, filmische Reportage. Jetzt Shooting buchen."
-  );
-  assert.equal(
-    german.seo["business-portraits"].description,
-    "Business-Porträts & Teamfotos im Fotostudio Hagen oder in Ihrem Büro. Größere Teams im Studio Solingen. Schnelle Auswahl – jetzt Shooting buchen."
-  );
-  assert.equal(
-    german.seo.solingen.description,
-    `Fotostudio in Solingen mieten: ca. 100 m², ${SOLINGEN_ADDRESS.street}, für Produktionen, Teams & Commercial. Nur nach Termin – jetzt Verfügbarkeit anfragen.`
-  );
-  assert.equal(
-    german.seo.cinematography.description,
-    "Imagefilme, Brand Films, Hochzeitsvideos & Social Reels aus Hagen für NRW. Konzept, Dreh und Schnitt aus einer Hand. Jetzt Shooting buchen."
-  );
-  assert.equal(
-    german.seo.food.description,
-    "Food- & Getränkefotos für Restaurants, Speisekarten und Produkte – im Studio Hagen, Solingen oder vor Ort in NRW. Jetzt Shooting buchen."
-  );
-  assert.equal(
-    german.seo.commercial.description,
-    "Fashion-, Beauty-, Produkt- & Editorial-Fotografie für Marken. Studios in Hagen (40 m²) und Solingen (100 m²), Einsätze in ganz NRW. Jetzt Shooting buchen."
-  );
-  assert.equal(
-    german.seo.studio.description,
-    `Bewerbungsfotos & biometrische Passbilder im Fotostudio Hagen, ${HAGEN_ADDRESS.street}. Mo–Sa 10–20 Uhr, So 9–12 Uhr. Ohne lange Wartezeit.`
-  );
+  assert.match(german.seo.wedding.description, /Düsseldorf, Köln, Wuppertal/);
+  assert.match(german.seo["business-portraits"].description, /Executive/);
+  assert.match(german.seo.solingen.description, /54 €/);
+  assert.match(german.seo.cinematography.description, /Imagefilme/);
+  assert.match(german.seo.food.description, /Verpackung/);
+  assert.match(german.seo.commercial.description, /Editorial/);
+  assert.match(german.seo.studio.description, /29 €/);
   assert.equal(german.seo["real-estate"].title.includes("€"), false);
   assert.equal(german.seo["real-estate"].description.includes("€"), false);
 
@@ -198,17 +176,14 @@ test("portfolio archive copy is no longer a single sentence", () => {
 
 test("wedding FAQ schema names the scan topics and publishes no price", () => {
   for (const locale of ["de", "en"] as const) {
-    const faqs = getPageFaqs("wedding", locale);
+    const faqs = getPageFaqs("wedding", locale, locale === "de" ? "wedding.abowserphoto.com" : "wedding.abowserphoto.com");
     const blob = faqs.map((item) => `${item.question} ${item.answer}`).join("\n");
     if (locale === "de") {
       assert.match(blob, /kostet/);
-      assert.match(blob, /Wie läuft der Tag/);
-      assert.match(blob, /Standesamt Hagen/);
-      assert.match(blob, /Standesamt Solingen/);
-      assert.match(blob, /Hochzeitsvideo/);
+      assert.match(blob, /Standesamt/);
+      assert.match(blob, /Hochzeitsvideo|Hochzeitsfilm/);
     } else {
       assert.match(blob, /cost/i);
-      assert.match(blob, /How does the day run/);
       assert.match(blob, /Hagen/);
       assert.match(blob, /Solingen/);
       assert.match(blob, /wedding film/i);

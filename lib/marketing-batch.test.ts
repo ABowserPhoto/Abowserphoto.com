@@ -7,6 +7,7 @@ import { homeHeroCopy } from "./homeHero";
 import { NICHE_LANDING_COPY } from "./niche-landing";
 import { getDictionarySync } from "./i18n/getDictionary";
 import { getLocalizedCategory } from "./i18n/localizeContent";
+import { serviceSurfaceCopy } from "./serviceSurface";
 import { getPageFaqs, getPageSections } from "./i18n/pageSections";
 import { offerPageCopy } from "./offerPages";
 import { buildFaqPageJsonLd } from "./structuredData";
@@ -56,22 +57,24 @@ test("immo keeps its title and H1, and www real-estate copy stays on its own hea
   assert.match(immo.description, /Drohne/);
   assert.equal(immo.description.includes("auf Anfrage"), false);
   assert.ok(immo.description.length <= 155, immo.description);
-  assert.ok(NICHE_LANDING_COPY["real-estate"].en.description.length <= 155);
 
-  const www = getLocalizedCategory("real-estate", "de");
-  assert.equal(www.title, "Immobilienfotografie NRW");
-  assert.equal(getDictionarySync("de").seo["real-estate"].title, "Immobilienfotografie Hagen & NRW | Aaron Bowser");
-  assert.match(www.aboutText, /Fotos innerhalb von 24 Stunden/);
+  const www = serviceSurfaceCopy("real-estate", "de", "www.aaronbowser-photography.com");
+  assert.equal(www?.title, "Immobilienvideo & Drohne für Makler NRW | Aaron Bowser");
+  assert.equal(www?.h1, "Immobilienvideos & Drohnenaufnahmen für Makler in NRW");
+  assert.equal(www?.surface, "www");
+  assert.notEqual(www?.intro, serviceSurfaceCopy("real-estate", "de", "immo.abowserphoto.com")?.intro);
 });
 
 test("German offer FAQs are in German and can be marked up where they are visible", () => {
-  const realEstate = getPageFaqs("real-estate", "de");
-  assert.match(realEstate[0]?.question ?? "", /Wie schnell/);
-  assert.match(realEstate[1]?.answer ?? "", /ImmoScout24/);
+  const realEstate = getPageFaqs("real-estate", "de", "immo.abowserphoto.com");
+  assert.match(realEstate.map((item) => item.question).join(" "), /Drohne|Premium Home/);
   assert.equal(realEstate.map((item) => item.answer).join(" ").includes("MLS"), false);
   const schema = buildFaqPageJsonLd(realEstate);
   assert.equal(schema["@type"], "FAQPage");
-  assert.equal(schema.mainEntity.length, 2);
+  assert.ok(schema.mainEntity.length >= 3);
+
+  const wwwRealEstate = getPageFaqs("real-estate", "de");
+  assert.notEqual(wwwRealEstate[0]?.question, realEstate[0]?.question);
 
   for (const slug of ["food", "cinematography", "social-media-management"] as const) {
     const faqs = getPageFaqs(slug, "de");

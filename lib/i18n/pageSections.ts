@@ -1,5 +1,6 @@
 import type { FAQItem, CategorySlug } from "../content";
 import { appointmentOnlyLabel } from "../contact";
+import { serviceSurfaceCopy, surfaceFor } from "../serviceSurface";
 import { printsPath, solingenStudioPath } from "../routes";
 import { formatStudioLine, HAGEN_STUDIO, SOLINGEN_STUDIO, studioSittingPriceAnswer } from "../site";
 import { portalCategoryUrl } from "../subdomains";
@@ -33,7 +34,7 @@ const weddingSections: Record<Locale, PageSection[]> = {
       title: "Standesamt-Fotograf in Solingen und Hagen",
       paragraphs: [
         "Viele Paare heiraten zuerst standesamtlich, oft in Solingen oder Hagen, und feiern später. Für diese Stunde fotografiere ich als Standesamt-Fotograf ruhig und nah am Ablauf: Ankunft, der Raum, die Trauung, die Menschen danach. Nichts wird für die Kamera nachgestellt.",
-        `Wenn das Standesamt in Solingen oder das Standesamt in Hagen der ganze Termin ist, bleibt der Umfang überschaubar. Wenn danach ein Essen oder ein Spaziergang folgt, erweitern wir die Reportage. Die Trauung fotografiere ich dort, wo Sie heiraten, nicht im Studio. Porträts danach können im Studio Hagen entstehen (${hagen}, etwa 40 m²). Das größere Studio Solingen (${solingen}) ist ${appointmentOnlyLabel("de", { sentence: false })} da.`,
+        `Wenn das Standesamt in Solingen oder das Standesamt in Hagen der ganze Termin ist, bleibt der Umfang überschaubar. Wenn danach ein Essen oder ein Spaziergang folgt, erweitern wir die Reportage. Die Trauung fotografiere ich dort, wo Sie heiraten, nicht im Studio. Porträts nach der Trauung können auch im Studio entstehen.`,
         "Die standesamtliche Trauung ist ein eigener Teil der Hochzeitsfotografie, mit derselben ruhigen Bildsprache wie die freie Trauung und der ganze Tag.",
       ],
     },
@@ -42,8 +43,8 @@ const weddingSections: Record<Locale, PageSection[]> = {
       eyebrow: "Film",
       title: "Hochzeitsvideo aus derselben Reportage",
       paragraphs: [
-        "Fotos und Film gehören für viele Paare zusammen. Das Hochzeitsvideo entsteht am selben Tag wie die Reportage: Standesamt in Hagen oder Solingen, freie Trauung, der ganze Tag. Schnitt und Ton folgen der ruhigen Bildsprache der Fotos.",
-        "Konzept, Dreh und Schnitt liegen bei der Filmproduktion. Wer beides buchen möchte, spricht das im selben Gespräch ab. Für die Preise fordern Sie ein Angebot über das Kontaktformular, per E-Mail oder per WhatsApp an.",
+        "Fotos und Film gehören für viele Paare zusammen. Auf Wunsch entsteht am selben Tag ein Hochzeitsfilm, mit derselben ruhigen Bildsprache wie die Fotos.",
+        "Foto und Film planen wir in einem Gespräch, und Sie erhalten ein gemeinsames Angebot.",
       ],
       links: [
         {
@@ -60,7 +61,7 @@ const weddingSections: Record<Locale, PageSection[]> = {
       title: "Civil ceremony photographer in Solingen and Hagen",
       paragraphs: [
         "Many couples marry first at the registry office, often in Solingen or Hagen, and celebrate later. For that hour I work quietly and close to the order of the day: the arrival, the room, the ceremony, the people afterwards. Nothing is restaged for the camera.",
-        `When the ceremony in Solingen or Hagen is the whole booking, the coverage stays compact. When a meal or a walk follows, we extend the reportage. The ceremony is photographed where you marry, not in the studio. Portraits afterwards can be made at the Hagen studio (${hagen}, about 40 m²). The larger Solingen studio (${solingen}) is ${appointmentOnlyLabel("en", { sentence: false })}.`,
+        `When the ceremony in Solingen or Hagen is the whole booking, the coverage stays compact. When a meal or a walk follows, we extend the reportage. The ceremony is photographed where you marry, not in the studio. Portraits after the ceremony can also be made in the studio.`,
         "A civil ceremony is its own part of the wedding coverage, not a footnote. A symbolic ceremony and a full day stay in the same visual language.",
       ],
     },
@@ -69,8 +70,8 @@ const weddingSections: Record<Locale, PageSection[]> = {
       eyebrow: "Film",
       title: "A wedding film from the same reportage",
       paragraphs: [
-        "Photographs and film belong together for many couples. The wedding film is made on the same day as the reportage: the registry office in Hagen or Solingen, a symbolic ceremony, the full day. The cut follows the calm pace of the photographs.",
-        "Concept, shoot, and edit sit with the film production. Couples who want both discuss it in the same conversation. For pricing, request a quote by contact form, email or WhatsApp.",
+        "Photographs and film belong together for many couples. A wedding film from the same day can be added, in the same calm visual language as the photographs.",
+        "We plan the photographs and the film in one conversation, and you receive one quote.",
       ],
       links: [
         {
@@ -248,8 +249,12 @@ const commercialSections: Record<Locale, PageSection[]> = {
   ],
 };
 
-export function getPageSections(slug: CategorySlug, locale: Locale): PageSection[] {
-  if (slug === "wedding") return weddingSections[locale];
+export function getPageFaqs(slug: CategorySlug, locale: Locale, host?: string | null): FAQItem[] {
+  return serviceSurfaceCopy(slug, locale, host)?.faqs ?? [];
+}
+
+export function getPageSections(slug: CategorySlug, locale: Locale, host?: string | null): PageSection[] {
+  if (slug === "wedding" && surfaceFor(slug, host) === "niche") return weddingSections[locale];
   if (slug === "commercial") return commercialSections[locale];
   return [];
 }
@@ -388,14 +393,3 @@ const socialFaqs: Record<Locale, FAQItem[]> = {
     },
   ],
 };
-
-export function getPageFaqs(slug: CategorySlug, locale: Locale): FAQItem[] {
-  if (slug === "business-portraits") return businessFaqs[locale];
-  if (slug === "wedding") return weddingFaqs[locale];
-  if (slug === "studio") return studioFaqs[locale];
-  if (slug === "real-estate") return realEstateFaqs[locale];
-  if (slug === "food") return foodFaqs[locale];
-  if (slug === "cinematography") return filmFaqs[locale];
-  if (slug === "social-media-management") return socialFaqs[locale];
-  return [];
-}

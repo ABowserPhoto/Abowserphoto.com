@@ -4,12 +4,13 @@ import { bookingHref } from "../lib/booking";
 import { contactPhoneHref, contactWhatsAppHref } from "../lib/contact";
 import { getImageAlt } from "../lib/gallery";
 import { homeHeroCopy } from "../lib/homeHero";
-import { homeAboutCopy, homeHubTiles, homePackageCopy } from "../lib/homeHub";
+import { homeAboutCopy, homeHubGroups, homePackageCopy, homeStudioLine, type HubTile } from "../lib/homeHub";
 import { homeIntroParagraphs, type IntroSegment } from "../lib/homeIntro";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import { getDictionarySync } from "../lib/i18n/getDictionary";
 import { servicePageHref } from "../lib/serviceLinks";
+import { solingenStudioPath } from "../lib/routes";
 import AwardsStrip from "./AwardsStrip";
 import MarketingVideoSlot from "./MarketingVideoSlot";
 
@@ -41,9 +42,8 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
   const headline = getDictionarySync(locale).home.headline;
   const hero = homeHeroCopy(locale);
   const paragraphs = homeIntroParagraphs(locale, publicHost);
-  const tiles = homeHubTiles(locale);
-  const featured = tiles.filter((tile) => tile.featured);
-  const rest = tiles.filter((tile) => !tile.featured);
+  const groups = homeHubGroups(locale);
+  const studios = homeStudioLine(locale);
   const about = homeAboutCopy(locale);
   const marketing = homePackageCopy(locale);
   const portrait = "/about/portraet-aaron-bowser.webp";
@@ -78,16 +78,50 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
       </div>
       <p className="mt-4 text-sm leading-relaxed text-[#322B2B]/75">{hero.note}</p>
 
+      <div className="mt-6 space-y-4 text-sm leading-relaxed text-[#322B2B]/90">
+        {paragraphs.map((paragraph, index) => (
+          <p key={index}>
+            {paragraph.map((segment, segmentIndex) => (
+              <IntroLink key={segmentIndex} segment={segment} />
+            ))}
+          </p>
+        ))}
+      </div>
+
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {featured.map((item) => (
+        {groups.featured.map((item) => (
           <Tile key={item.slug} locale={locale} publicHost={publicHost} item={item} />
         ))}
       </div>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        {rest.map((item) => (
+        {groups.middle.map((item) => (
           <Tile key={item.slug} locale={locale} publicHost={publicHost} item={item} />
         ))}
       </div>
+      <div className="mt-4 grid gap-3 text-sm leading-relaxed sm:grid-cols-2">
+        <a href={servicePageHref("studio", locale, publicHost)} className="underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]">
+          {studios.hagen}
+        </a>
+        <Link href={withLocale(solingenStudioPath(locale), locale)} className="underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]">
+          {studios.solingen}
+        </Link>
+      </div>
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        {groups.afterStudios.map((item) => (
+          <Tile key={item.slug} locale={locale} publicHost={publicHost} item={item} />
+        ))}
+      </div>
+      <p className="mt-4 text-sm text-[#322B2B]/80">
+        {locale === "de" ? "Außerdem: " : "Also: "}
+        {groups.text.map((item, index) => (
+          <span key={item.slug}>
+            {index > 0 ? " · " : null}
+            <Link href={servicePageHref(item.slug, locale, publicHost)} className="underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:text-[#E18400]">
+              {item.title}
+            </Link>
+          </span>
+        ))}
+      </p>
 
       <section className="mt-10 border-t border-[#322B2B]/10 pt-8">
         <h2 className="text-lg font-light tracking-tight">{about.title}</h2>
@@ -111,16 +145,6 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
         <p className="mt-3 text-sm leading-relaxed text-[#322B2B]/90">{marketing.body}</p>
         <MarketingVideoSlot alt={marketing.videoAlt} />
       </section>
-
-      <div className="mt-8 space-y-4 text-sm leading-relaxed text-[#322B2B]/90">
-        {paragraphs.map((paragraph, index) => (
-          <p key={index}>
-            {paragraph.map((segment, segmentIndex) => (
-              <IntroLink key={segmentIndex} segment={segment} />
-            ))}
-          </p>
-        ))}
-      </div>
     </article>
   );
 }
@@ -132,7 +156,7 @@ function Tile({
 }: {
   locale: Locale;
   publicHost?: string;
-  item: ReturnType<typeof homeHubTiles>[number];
+  item: HubTile;
 }) {
   return (
     <Link

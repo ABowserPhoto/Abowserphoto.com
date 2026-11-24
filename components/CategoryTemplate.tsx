@@ -54,6 +54,7 @@ type CategoryTemplateProps = {
   aboutData: AboutData;
   faqs: FAQItem[];
   pageSections?: PageSection[];
+  relatedLinks?: { href: string; label: string }[];
   dictionary: Dictionary;
   locale: Locale;
   publicHost?: string;
@@ -85,6 +86,7 @@ export default function CategoryTemplate({
   aboutData,
   faqs,
   pageSections = [],
+  relatedLinks = [],
   dictionary,
   locale,
   publicHost,
@@ -304,6 +306,20 @@ export default function CategoryTemplate({
                     <p key={paragraph.slice(0, 48)}>{paragraph}</p>
                   ))}
               </div>
+              {relatedLinks.length > 0 ? (
+                <ul className="mt-6 space-y-2 text-sm">
+                  {relatedLinks.map((item) => (
+                    <li key={item.href}>
+                      <a
+                        href={item.href}
+                        className="underline decoration-[#322B2B]/40 underline-offset-[3px] transition-colors duration-300 hover:opacity-70"
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               <a
                 href={contactEmailHref()}
                 className="mt-8 inline-flex rounded-full border border-transparent px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:border-[var(--brand)] hover:!bg-[#F4F1ED] hover:!text-[var(--brand)]"

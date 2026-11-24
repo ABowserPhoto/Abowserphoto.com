@@ -1,11 +1,4 @@
-import {
-  CONTACT_EMAIL,
-  contactEmailHref,
-  contactWhatsAppHref,
-  formatAddressLine,
-  HAGEN_ADDRESS,
-  SOLINGEN_ADDRESS,
-} from "./contact";
+import { CONTACT_EMAIL, contactEmailHref, contactWhatsAppHref, HAGEN_ADDRESS } from "./contact";
 import type { Locale } from "./i18n/config";
 import { withLocale } from "./i18n/config";
 import { solingenStudioPath } from "./routes";
@@ -28,8 +21,6 @@ function link(value: string, href: string): IntroSegment {
 }
 
 export function homeIntroParagraphs(locale: Locale, host?: string | null): IntroParagraph[] {
-  const hagen = formatAddressLine(HAGEN_ADDRESS);
-  const solingen = formatAddressLine(SOLINGEN_ADDRESS);
   const studioHref = portalCategoryUrl("studio", { host, locale });
   const solingenHref = withLocale(solingenStudioPath(locale), locale);
   const formHref = bookingHref(withLocale("/", locale));
@@ -38,27 +29,22 @@ export function homeIntroParagraphs(locale: Locale, host?: string | null): Intro
     return [
       [
         text(
-          `Das Studio Hagen, ${hagen}, hat etwa 40 Quadratmeter für Porträts, Business-Bilder und kleinere Commercial-Sets. `
+          `Ich bin Aaron Bowser, Fotograf und Videograf aus Hagen. Ich fotografiere und filme Hochzeiten, Immobilien, Marken und Unternehmen in ganz NRW, von Hagen und Wuppertal über Solingen bis Düsseldorf, Köln und ins Ruhrgebiet. Im Fotostudio Hagen, ${HAGEN_ADDRESS.street}, entstehen Porträts, `
         ),
-        text("Studio Hagen bietet Bewerbungsfotos und Passbilder, mehr dazu "),
-        link("hier", studioHref),
-        text("."),
-      ],
-      [
+        link("Bewerbungsfotos und Passbilder", studioHref),
         text(
-          `Das Studio Solingen, ${solingen}, hat etwa 100 m² und nimmt größere Produktionen, Projekte und Teams auf, die für das Studio Hagen zu groß wären. Für ein Shooting schreiben Sie uns bitte, damit wir vor Ihrem Besuch einen Termin legen. Das Studio kann auch gemietet werden, Details `
+          ", Mo–Sa 10–20 Uhr und So 09–12 Uhr. Das Studio in Solingen bietet rund 100 m² für größere Produktionen und Teams, nach Terminvereinbarung und auch zur Miete. Details "
         ),
         link("hier", solingenHref),
-        text("."),
-      ],
-      [
-        text("Für die Preise fordern Sie ein Angebot an: "),
+        text(
+          ". Jedes Projekt bekommt ein Angebot, das zu Umfang, Ort und Termin passt. Fragen Sie es per "
+        ),
         link("Kontaktformular", formHref),
         text(", "),
         link("E-Mail", contactEmailHref()),
         text(` (${CONTACT_EMAIL}) oder `),
         link("WhatsApp", contactWhatsAppHref()),
-        text("."),
+        text(" an."),
       ],
     ];
   }
@@ -66,21 +52,14 @@ export function homeIntroParagraphs(locale: Locale, host?: string | null): Intro
   return [
     [
       text(
-        `The Hagen studio, ${hagen}, is about 40 square metres for portraits, business pictures, and smaller commercial sets. `
+        `I am Aaron Bowser, a photographer and videographer from Hagen. I photograph and film weddings, property, brands and companies across NRW, from Hagen and Wuppertal through Solingen to Düsseldorf, Cologne and the Ruhr. At the Hagen studio, ${HAGEN_ADDRESS.street}, I make portraits, `
       ),
-      text("Studio Hagen offers application and passport photos, more info "),
-      link("here", studioHref),
-      text("."),
-    ],
-    [
+      link("application and passport photos", studioHref),
       text(
-        `The Solingen studio, ${solingen}, is about 100 m² and can handle larger productions, projects and teams that would be too big for the Hagen studio. To book a shoot, please contact us to schedule an appointment before coming. The studio can also be rented, details `
+        ", Mon–Sat 10–20 and Sun 09–12. The studio in Solingen offers about 100 m² for larger productions and teams, by appointment and also for rent. Details "
       ),
       link("here", solingenHref),
-      text("."),
-    ],
-    [
-      text("For pricing, request a quote by "),
+      text(". Every project receives a quote that fits the scope, the place and the date. Ask for it by "),
       link("contact form", formHref),
       text(", "),
       link("email", contactEmailHref()),

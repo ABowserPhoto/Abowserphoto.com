@@ -57,7 +57,10 @@ const RENTAL_AMOUNTS = new Set(["54", "189", "329"]);
 const RENTAL_FILES = new Set([
   "lib/site.ts",
   "lib/structuredData.ts",
-  "lib/public-prices.test.ts",
+  "lib/i18n/dictionaries/de.json",
+  "lib/i18n/dictionaries/en.json",
+  "lib/homeHub.ts",
+  "lib/seo-copy.test.ts",
   "components/SolingenStudioPage.tsx",
 ]);
 
@@ -102,9 +105,9 @@ test("studio copy publishes the two allowed prices and nothing else", () => {
     assert.equal(faq?.answer, studioSittingPriceAnswer(locale));
 
     const seo = getDictionarySync(locale).seo.studio;
-    assert.equal(seo.description.includes("€"), false);
     assert.equal(seo.title.includes("€"), false);
-    assert.equal(seo.description.includes(locale === "de" ? "Bewerbungsfotos" : "Application photos"), true);
+    assert.equal(seo.description.includes(locale === "de" ? "29 €" : "€29"), true);
+    assert.equal(seo.description.includes(locale === "de" ? "Bewerbungsfoto" : "Application photo"), true);
   }
 
   const germanApplication = getLocalizedCategory("studio", "de").services[0];

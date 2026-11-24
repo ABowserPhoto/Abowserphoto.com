@@ -4,6 +4,7 @@ import type { OfferPageKind } from "../offerPages";
 import { offerPageCopy } from "../offerPages";
 import { categoryPath, eventsPath, printsPath, solingenStudioPath } from "../routes";
 import { nicheDocumentCopy } from "../niche-landing";
+import { serviceSurfaceCopy } from "../serviceSurface";
 import { nicheHostForHostname, nicheOrigin, PORTAL_CATEGORY_SUBDOMAIN } from "../subdomains";
 import {
   BRAND_NAME,
@@ -39,12 +40,11 @@ function urlOnOrigin(pathname: string, origin: string | null) {
 }
 
 function languageAlternatesOn(pathnameFor: (locale: Locale) => string, origin: string | null) {
-  // Niche hosts (origin set) are German by default. The main site stays English.
-  const xDefault: Locale = origin ? "de" : "en";
+  // German is the default market on every host.
   return {
     en: urlOnOrigin(pathnameFor("en"), origin),
     de: urlOnOrigin(pathnameFor("de"), origin),
-    "x-default": urlOnOrigin(pathnameFor(xDefault), origin),
+    "x-default": urlOnOrigin(pathnameFor("de"), origin),
   };
 }
 
@@ -81,7 +81,7 @@ function languageAlternates(pathnameFor: (locale: Locale) => string) {
   return {
     en: absoluteUrl(pathnameFor("en")),
     de: absoluteUrl(pathnameFor("de")),
-    "x-default": absoluteUrl(pathnameFor("en")),
+    "x-default": absoluteUrl(pathnameFor("de")),
   };
 }
 
@@ -190,12 +190,13 @@ export function buildCategoryMetadata(
   // The five public niches use their own title and description on their host.
   // www, and every other host, keep the dictionary copy.
   const landing = nicheDocumentCopy(slug, locale, requestHost);
-  const documentTitle = landing?.title ?? seo.title;
-  const description = landing?.description ?? seo.description;
+  const surface = serviceSurfaceCopy(slug, locale, requestHost);
+  const documentTitle = surface?.title ?? landing?.title ?? seo.title;
+  const description = surface?.description ?? landing?.description ?? seo.description;
   const { title, openGraphTitle } = resolveDocumentTitle(
     documentTitle,
     dict.brand,
-    Boolean(landing) || COMPLETE_DOCUMENT_TITLES.has(slug)
+    Boolean(surface) || Boolean(landing) || COMPLETE_DOCUMENT_TITLES.has(slug)
   );
   const metadata: Metadata = {
     title,

@@ -55,7 +55,7 @@ export default function CommercialPortfolioArchive({
             {dictionary.home.niches.commercial}
           </p>
           <h1 className="mt-3 text-3xl font-light tracking-tight text-[#F4F1ED] sm:text-4xl lg:text-5xl">
-            {dictionary.seo["commercial-portfolio"].title}
+            {dictionary.seo["commercial-portfolio"].h1}
           </h1>
           <div className="mt-5 max-w-3xl space-y-4 text-sm leading-relaxed text-white/75 sm:text-base">
             {dictionary.seo["commercial-portfolio"].intro.map((paragraph) => (

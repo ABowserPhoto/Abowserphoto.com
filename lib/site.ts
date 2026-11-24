@@ -169,9 +169,9 @@ export const STUDIOS: readonly Studio[] = [
       "https://www.google.com/maps/place/Aaron+Bowser+Photography/@51.3771835,7.454225,17z/data=!4m6!3m5!1s0x47b93cbdc8d7c7b3:0x6fde83c86b76ba38!8m2!3d51.3771835!4d7.454225!16s%2Fg%2F11btwpyctw",
     areaSqm: 40,
     summaryDe:
-      "Studio Hagen, etwa 40 m², für Porträts, Business-Bilder und kleinere Produktionen. Hier gibt es Bewerbungsfotos und Passbilder.",
+      "Fotostudio Hagen, ca. 40 m²: Porträts, Bewerbungsfotos und Passbilder. Mo–Sa 10–20 Uhr, So 09–12 Uhr.",
     summaryEn:
-      "Hagen studio, about 40 m², for portraits, business pictures, and smaller productions. Application and passport photos are available here.",
+      "Hagen photo studio, approx. 40 m²: portraits, application and passport photos. Mon–Sat 10–20, Sun 09–12.",
     pagePath: null,
   },
   {
@@ -265,9 +265,9 @@ export function passportPhotoPriceLine() {
 
 export function studioSittingPriceAnswer(locale: "de" | "en") {
   if (locale === "de") {
-    return `Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}. LinkedIn- und Xing-Porträts aus demselben Termin sind auf Anfrage.`;
+    return `Ein Bewerbungsfoto kostet ${applicationPhotoPriceLine("de")}. Ein biometrisches Passfoto kostet ${passportPhotoPriceLine()}. Alle Preise inkl. 19 % MwSt. LinkedIn- und Xing-Porträts können Sie im selben Termin dazubuchen.`;
   }
-  return `An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}. LinkedIn and Xing portraits from the same visit are on request.`;
+  return `An application photo is ${applicationPhotoPriceLine("en")}. A biometric passport photo is ${passportPhotoPriceLine()}. All prices include 19% VAT. LinkedIn and Xing portraits can be added in the same visit.`;
 }
 
 export const SOCIAL_LINKS = [

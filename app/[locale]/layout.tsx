@@ -42,9 +42,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const dictionary = await getDictionary(locale);
+  const host = (await headers()).get("host") ?? "";
 
   return (
-    <LocaleProvider locale={locale} dictionary={dictionary}>
+    <LocaleProvider locale={locale} dictionary={dictionary} publicHost={host}>
       {children}
     </LocaleProvider>
   );

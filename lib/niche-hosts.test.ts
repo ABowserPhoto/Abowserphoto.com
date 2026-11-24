@@ -397,7 +397,7 @@ test("niche category canonicals use the short subdomain; www category URLs stay 
   ).alternates?.languages as Record<string, string>;
   assert.equal(
     wwwPortfolioLanguages["x-default"],
-    "https://www.aaronbowser-photography.com/en/commercial/portfolio"
+    "https://www.aaronbowser-photography.com/de/commercial-fotografie/portfolio"
   );
 });
 

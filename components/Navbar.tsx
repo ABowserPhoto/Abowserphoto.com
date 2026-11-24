@@ -18,6 +18,7 @@ export type NavbarServiceLink = {
   href: string;
   label: string;
   themeColor: string;
+  quiet?: boolean;
 };
 
 type NavbarProps = {
@@ -180,28 +181,39 @@ function ServicesMenu({
             onKeyDown={onMenuKeyDown}
             className="border border-[#322B2B]/10 bg-[#F4F1ED]/95 py-2 shadow-[0_12px_40px_rgba(50,43,43,0.08)] backdrop-blur-md"
           >
-            {links.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                role="menuitem"
-                className="block px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.16em] text-[#322B2B]/85 transition-colors duration-300 hover:bg-[#322B2B]/5 focus-visible:bg-[#322B2B]/5"
-                onMouseEnter={(event) => {
-                  event.currentTarget.style.color = item.themeColor;
-                }}
-                onMouseLeave={(event) => {
-                  event.currentTarget.style.color = "";
-                }}
-                onFocus={(event) => {
-                  event.currentTarget.style.color = item.themeColor;
-                }}
-                onBlur={(event) => {
-                  event.currentTarget.style.color = "";
-                }}
-              >
-                {item.label}
-              </a>
-            ))}
+            {links.map((item, index) => {
+              const showDivider = item.quiet && !links[index - 1]?.quiet;
+              return (
+                <div key={item.href}>
+                  {showDivider ? (
+                    <p className="px-4 pb-1 pt-2 text-[10px] font-medium uppercase tracking-[0.18em] text-[#322B2B]/45">
+                      Weitere
+                    </p>
+                  ) : null}
+                  <a
+                    href={item.href}
+                    role="menuitem"
+                    className={`block px-4 py-2.5 font-medium uppercase tracking-[0.16em] text-[#322B2B]/85 transition-colors duration-300 hover:bg-[#322B2B]/5 focus-visible:bg-[#322B2B]/5 ${
+                      item.quiet ? "text-[10px]" : "text-[11px]"
+                    }`}
+                    onMouseEnter={(event) => {
+                      event.currentTarget.style.color = item.themeColor;
+                    }}
+                    onMouseLeave={(event) => {
+                      event.currentTarget.style.color = "";
+                    }}
+                    onFocus={(event) => {
+                      event.currentTarget.style.color = item.themeColor;
+                    }}
+                    onBlur={(event) => {
+                      event.currentTarget.style.color = "";
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                </div>
+              );
+            })}
           </div>
         </div>
       ) : null}

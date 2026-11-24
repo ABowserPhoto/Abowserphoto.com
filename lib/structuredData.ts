@@ -89,7 +89,8 @@ export function buildBusinessJsonLd() {
     email: CONTACT_EMAIL,
     telephone: CONTACT_PHONE_TEL,
     image: absoluteUrl(OG_IMAGE_PATH),
-    description: `Fotograf in Hagen und Solingen. Das Studio Hagen hat etwa 40 m² für Porträts und Business. Das Studio Solingen hat etwa 100 m² für größere Produktionen, Projekte und Teams und kann gemietet werden.`,
+    description:
+      "Fotograf und Videograf in Hagen und Solingen für Hochzeiten, Immobilien, Film und Commercial in NRW. Fotostudio Hagen mit Bewerbungsfotos und Passbildern; Studio Solingen mit ca. 100 m² für größere Produktionen, auch zur Miete.",
     address: postalAddress(HAGEN_STUDIO),
     // The practice address is the Hagen studio, so the same public hours apply here.
     // Solingen is a separate node and does not receive them.

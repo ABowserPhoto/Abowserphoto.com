@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
+import { useLocale } from "../lib/i18n/LocaleProvider";
 import type { Dictionary } from "../lib/i18n/getDictionary";
 import {
   appointmentOnlyLabel,
@@ -12,6 +15,8 @@ import {
 } from "../lib/contact";
 import { absoluteUrl } from "../lib/i18n/seo";
 import { eventsPath, printsPath } from "../lib/routes";
+import { servicePageLinks } from "../lib/serviceLinks";
+import { nicheHostForHostname } from "../lib/subdomains";
 import {
   BRAND_NAME,
   COMPANY_REGISTER,
@@ -26,7 +31,17 @@ type SiteFooterProps = {
 };
 
 export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
+  const { publicHost } = useLocale();
+  const niche = nicheHostForHostname(publicHost);
+  const officeOnly = niche?.slug === "real-estate" || niche?.slug === "wedding" || niche?.slug === "social-media-management";
+  const hagenOnly = niche?.slug === "studio";
+  const studios = STUDIOS.filter((studio) => {
+    if (hagenOnly || officeOnly) return studio.id === "hagen";
+    return true;
+  });
   const country = locale === "de" ? "Deutschland" : "Germany";
+  const showOffers = !niche;
+  const serviceLinks = showOffers ? servicePageLinks(locale, undefined, publicHost) : [];
 
   return (
     <footer className="relative z-30 border-t border-[#322B2B]/15 bg-[#F4F1ED]">
@@ -49,21 +64,33 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
             >
               {CONTACT_EMAIL}
             </a>
-            <Link href={withLocale(printsPath(locale), locale)} className="block underline underline-offset-2">
-              {dictionary.footer.prints}
-            </Link>
-            <Link href={withLocale(eventsPath(locale), locale)} className="block underline underline-offset-2">
-              {dictionary.footer.events}
-            </Link>
+            {showOffers ? (
+              <Link href={withLocale(printsPath(locale), locale)} className="block underline underline-offset-2">
+                {dictionary.footer.prints}
+              </Link>
+            ) : null}
+            {showOffers ? (
+              <Link href={withLocale(eventsPath(locale), locale)} className="block underline underline-offset-2">
+                {dictionary.footer.events}
+              </Link>
+            ) : null}
           </div>
 
           <div className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#322B2B]/70">
               {dictionary.footer.studios}
             </p>
-            {STUDIOS.map((studio) => (
+            {studios.map((studio) => (
               <p key={studio.id} className="text-[#322B2B]">
-                <span className="block">{locale === "de" ? studio.nameDe : studio.nameEn}</span>
+                <span className="block">
+                  {officeOnly
+                    ? locale === "de"
+                      ? "Sitz"
+                      : "Registered office"
+                    : locale === "de"
+                      ? studio.nameDe
+                      : studio.nameEn}
+                </span>
                 <span className="block">{studio.street}</span>
                 <span className="block">
                   {studio.postalCode} {studio.city}, {country}
@@ -76,25 +103,21 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
                 >
                   {dictionary.footer.directions}
                 </a>
-                <span className="mt-1 block text-[#322B2B]/80">
-                  {locale === "de" ? studio.summaryDe : studio.summaryEn}
-                </span>
+                {officeOnly ? null : (
+                  <span className="mt-1 block text-[#322B2B]/80">
+                    {locale === "de" ? studio.summaryDe : studio.summaryEn}
+                  </span>
+                )}
                 <span className="mt-1 block text-[#322B2B]">
                   {studio.id === "hagen" ? hagenHoursLine(locale) : appointmentOnlyLabel(locale)}
                 </span>
-                {studio.detailLabelDe && studio.detailLabelEn ? (
-                  studio.pagePath ? (
-                    <a
-                      href={absoluteUrl(withLocale(studio.pagePath, locale))}
-                      className="mt-1 inline-block underline underline-offset-2"
-                    >
-                      {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
-                    </a>
-                  ) : (
-                    <span className="mt-1 block text-[#322B2B]">
-                      {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
-                    </span>
-                  )
+                {!officeOnly && studio.detailLabelDe && studio.detailLabelEn && studio.pagePath ? (
+                  <a
+                    href={absoluteUrl(withLocale(studio.pagePath, locale))}
+                    className="mt-1 inline-block underline underline-offset-2"
+                  >
+                    {locale === "de" ? studio.detailLabelDe : studio.detailLabelEn}
+                  </a>
                 ) : null}
               </p>
             ))}
@@ -142,14 +165,7 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#322B2B]/70">
               {dictionary.footer.social}
             </p>
-            {SOCIAL_LINKS.map((link) => {
-              const label =
-                link.id === "instagram-main"
-                  ? dictionary.footer.instagramMain
-                  : link.id === "instagram-real-estate"
-                    ? dictionary.footer.instagramRealEstate
-                    : dictionary.footer.instagramFood;
-              return (
+            {SOCIAL_LINKS.filter((link) => link.id === "instagram-main").map((link) => (
                 <a
                   key={link.id}
                   href={link.href}
@@ -157,10 +173,18 @@ export default function SiteFooter({ locale, dictionary }: SiteFooterProps) {
                   rel="noopener noreferrer"
                   className="block text-[#322B2B] underline-offset-2 transition-opacity hover:opacity-80 hover:underline"
                 >
-                  {label}
+                  {dictionary.footer.instagramMain}
                 </a>
-              );
-            })}
+              ))}
+            {serviceLinks.length > 0 ? (
+              <div className="space-y-1 pt-2">
+                {serviceLinks.map((item) => (
+                  <a key={item.id} href={item.href} className={`block underline-offset-2 hover:underline ${item.quiet ? "text-xs text-[#322B2B]/70" : ""}`}>
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

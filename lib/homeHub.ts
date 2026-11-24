@@ -6,123 +6,115 @@ export type HubTile = {
   title: string;
   text: string;
   image: string;
-  /** Large tiles at the top of the landing text box. */
   featured?: boolean;
 };
 
-/**
- * Landing order. Business portraits and food stay at the end of the box,
- * after the other services.
- */
-const TILES: Record<Locale, HubTile[]> = {
-  de: [
-    {
-      slug: "wedding",
-      title: "Hochzeit",
-      text: "Reportage für Standesamt, freie Trauung und den ganzen Tag.",
-      image: "/wedding/portfolio/hochzeitsfoto-mariam-1.webp",
-      featured: true,
-    },
-    {
-      slug: "real-estate",
-      title: "Immobilien",
-      text: "Fotopaket, Walk Thru Video, Agent Branding Video, Premium Home und Luxury Makler.",
-      image: "/real-estate/hero/immobilienfotografie-nrw-hero.webp",
-      featured: true,
-    },
-    {
-      slug: "commercial",
-      title: "Commercial",
-      text: "Fashion, Beauty, Produkt und Editorial für Marken.",
-      image: "/commercial/hero/commercial-fotografie-hero.webp",
-    },
-    {
-      slug: "cinematography",
-      title: "Film",
-      text: "Imagefilme, Brand Films, Hochzeitsvideos und Social Reels.",
-      image: "/og/og-film.jpg",
-    },
-    {
-      slug: "social-media-management",
-      title: "Social Media",
-      text: "Plan, Veröffentlichung und Pflege für einen festen Auftritt.",
-      image: "/social-media-management/hero/1_social-media-hero-instagram-frame.webp",
-    },
-    {
-      slug: "studio",
-      title: "Studio Hagen",
-      text: "Bewerbungsfotos und Passbilder im Studio Hagen.",
-      image: "/og/og-studio.jpg",
-    },
-    {
-      slug: "business-portraits",
-      title: "Business-Porträts",
-      text: "Teams, Profile und Businessfotos im Studio oder bei Ihnen.",
-      image: "/business-portraits/hero/businessportrait-hero-frau-flieder-blazer.webp",
-    },
-    {
-      slug: "food",
-      title: "Food",
-      text: "Für Restaurants, Speisekarten und Produkte, im Studio oder vor Ort.",
-      image: "/food/hero/food-hero-1-desktop.jpg",
-    },
-  ],
-  en: [
-    {
-      slug: "wedding",
-      title: "Wedding",
-      text: "Reportage for the registry office, a symbolic ceremony, and the full day.",
-      image: "/wedding/portfolio/hochzeitsfoto-mariam-1.webp",
-      featured: true,
-    },
-    {
-      slug: "real-estate",
-      title: "Real estate",
-      text: "Photo package, Walk Thru Video, Agent Branding Video, Premium Home, and Luxury Makler.",
-      image: "/real-estate/hero/immobilienfotografie-nrw-hero.webp",
-      featured: true,
-    },
-    {
-      slug: "commercial",
-      title: "Commercial",
-      text: "Fashion, beauty, product, and editorial for brands.",
-      image: "/commercial/hero/commercial-fotografie-hero.webp",
-    },
-    {
-      slug: "cinematography",
-      title: "Film",
-      text: "Brand films, wedding films, and social reels.",
-      image: "/og/og-film.jpg",
-    },
-    {
-      slug: "social-media-management",
-      title: "Social media",
-      text: "Planning, publishing, and care for a steady presence.",
-      image: "/social-media-management/hero/1_social-media-hero-instagram-frame.webp",
-    },
-    {
-      slug: "studio",
-      title: "Studio Hagen",
-      text: "Application photos and passport photos at the Hagen studio.",
-      image: "/og/og-studio.jpg",
-    },
-    {
-      slug: "business-portraits",
-      title: "Business portraits",
-      text: "Teams, profiles, and business photographs at the studio or at your office.",
-      image: "/business-portraits/hero/businessportrait-hero-frau-flieder-blazer.webp",
-    },
-    {
-      slug: "food",
-      title: "Food",
-      text: "For restaurants, menus, and products, in the studio or on location.",
-      image: "/food/hero/food-hero-1-desktop.jpg",
-    },
-  ],
+const TILES: Record<Locale, { featured: HubTile[]; middle: HubTile[]; afterStudios: HubTile[]; text: { slug: CategorySlug; title: string }[] }> = {
+  de: {
+    featured: [
+      {
+        slug: "wedding",
+        title: "Hochzeit",
+        text: "Standesamt, freie Trauung oder der ganze Tag, als ruhige, ehrliche Reportage. Auf Wunsch mit Hochzeitsfilm vom selben Tag.",
+        image: "/wedding/portfolio/hochzeitsfoto-mariam-1.webp",
+        featured: true,
+      },
+      {
+        slug: "real-estate",
+        title: "Immobilien",
+        text: "Exposé-Fotos, Walk Thru Video und Drohnenaufnahmen für Makler in NRW.",
+        image: "/real-estate/hero/immobilienfotografie-nrw-hero.webp",
+        featured: true,
+      },
+    ],
+    middle: [
+      {
+        slug: "cinematography",
+        title: "Film & Video",
+        text: "Imagefilme, Hochzeitsfilme und Social-Media-Reels, von Konzept bis Schnitt.",
+        image: "/og/og-film.jpg",
+      },
+      {
+        slug: "commercial",
+        title: "Commercial",
+        text: "Fashion, Beauty, Produkt und Editorial für Marken.",
+        image: "/commercial/hero/commercial-fotografie-hero.webp",
+      },
+    ],
+    afterStudios: [
+      {
+        slug: "social-media-management",
+        title: "Social Media",
+        text: "Redaktionsplan, Content und Betreuung Ihrer Kanäle, mit eigenen Fotos und Videos.",
+        image: "/social-media-management/hero/1_social-media-hero-instagram-frame.webp",
+      },
+    ],
+    text: [
+      { slug: "business-portraits", title: "Business-Porträts" },
+      { slug: "food", title: "Food-Fotografie" },
+    ],
+  },
+  en: {
+    featured: [
+      {
+        slug: "wedding",
+        title: "Wedding",
+        text: "Registry office, a symbolic ceremony or the full day, as a calm, honest reportage. A wedding film from the same day if you want it.",
+        image: "/wedding/portfolio/hochzeitsfoto-mariam-1.webp",
+        featured: true,
+      },
+      {
+        slug: "real-estate",
+        title: "Real estate",
+        text: "Listing photos, Walk Thru Video and drone footage for agents in NRW.",
+        image: "/real-estate/hero/immobilienfotografie-nrw-hero.webp",
+        featured: true,
+      },
+    ],
+    middle: [
+      {
+        slug: "cinematography",
+        title: "Film & video",
+        text: "Brand films, wedding films and social reels, from concept to edit.",
+        image: "/og/og-film.jpg",
+      },
+      {
+        slug: "commercial",
+        title: "Commercial",
+        text: "Fashion, beauty, product and editorial for brands.",
+        image: "/commercial/hero/commercial-fotografie-hero.webp",
+      },
+    ],
+    afterStudios: [
+      {
+        slug: "social-media-management",
+        title: "Social media",
+        text: "A content plan, the pictures and care of your channels, with our own photographs and videos.",
+        image: "/social-media-management/hero/1_social-media-hero-instagram-frame.webp",
+      },
+    ],
+    text: [
+      { slug: "business-portraits", title: "Business portraits" },
+      { slug: "food", title: "Food photography" },
+    ],
+  },
 };
 
-export function homeHubTiles(locale: Locale) {
+export function homeHubGroups(locale: Locale) {
   return TILES[locale];
+}
+
+export function homeStudioLine(locale: Locale) {
+  if (locale === "de") {
+    return {
+      hagen: "Hagen: Bewerbungsfotos 29 €, Passbilder 15 €.",
+      solingen: "Solingen: Studiomiete 54 €/Std.",
+    };
+  }
+  return {
+    hagen: "Hagen: application photos €29, passport photos €15.",
+    solingen: "Solingen: studio rental €54/h.",
+  };
 }
 
 export function homeAboutCopy(locale: Locale) {

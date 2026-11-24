@@ -1,7 +1,7 @@
 import Link from "next/link";
 import LightPageFrame from "./LightPageFrame";
 import GuestEnquiry from "./GuestEnquiry";
-import { SolingenPlaceJsonLd, SolingenRentalJsonLd } from "./JsonLd";
+import { FaqPageJsonLd, SolingenPlaceJsonLd, SolingenRentalJsonLd } from "./JsonLd";
 import {
   appointmentOnlyLabel,
   CONTACT_EMAIL,
@@ -52,11 +52,40 @@ export default function SolingenStudioPage({
   const studioHref = portalCategoryUrl("studio", { host: publicHost, locale });
   const href = (slug: Parameters<typeof categoryPath>[0]) => withLocale(categoryPath(slug, locale), locale);
   const rental = solingenRentalCopy(locale);
+  const solingenFaqs = de
+    ? [
+        {
+          question: "Was kostet die Studiomiete?",
+          answer: `${rental.hourly}. ${rental.halfDay}. ${rental.fullDay}. ${rental.vat}`,
+        },
+        { question: "Wie groß ist das Studio?", answer: "Rund 100 m², genug für Teams, große Sets und Videodrehs." },
+        {
+          question: "Wie buche ich das Studio?",
+          answer: "Nach Terminvereinbarung per Telefon, WhatsApp oder E-Mail. Sie bekommen eine Terminbestätigung.",
+        },
+        {
+          question: "Kann ich auch Videos im Studio drehen?",
+          answer: "Ja, das Studio ist für Foto- und Videoproduktionen ausgelegt.",
+        },
+      ]
+    : [
+        {
+          question: "What does the studio rental cost?",
+          answer: `${rental.hourly}. ${rental.halfDay}. ${rental.fullDay}. ${rental.vat}`,
+        },
+        { question: "How large is the studio?", answer: "About 100 m², enough for teams, large sets and video." },
+        {
+          question: "How do I book the studio?",
+          answer: "By appointment, by phone, WhatsApp or email. You receive a confirmation.",
+        },
+        { question: "Can I film in the studio?", answer: "Yes. The studio is set up for photography and video." },
+      ];
 
   return (
     <LightPageFrame locale={locale} dictionary={dictionary} logoUrl={logoUrl}>
       <SolingenPlaceJsonLd locale={locale} />
       <SolingenRentalJsonLd locale={locale} />
+      <FaqPageJsonLd items={solingenFaqs} />
       <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#322B2B]/55">
         {de ? "Studio Solingen" : "Solingen studio"}
       </p>
@@ -66,8 +95,8 @@ export default function SolingenStudioPage({
       <div className="mt-8 space-y-5 text-sm leading-relaxed text-[#322B2B]/85 sm:text-base">
         <p>
           {de
-            ? `Das Studio Solingen, ${address}, hat etwa 100 m² und nimmt größere Produktionen, Projekte und Teams auf, die für das Studio Hagen zu groß wären. Für ein Shooting schreiben Sie uns bitte, damit wir vor Ihrem Besuch einen Termin legen.`
-            : `The Solingen studio, ${address}, is about 100 m² and can handle larger productions, projects and teams that would be too big for the Hagen studio. To book a shoot, please contact us to schedule an appointment before coming.`}
+            ? `Das Fotostudio in Solingen, ${address}, bietet rund 100 m² für Produktionen, die Platz brauchen: Teamshootings, Commercial- und Fashion-Sets, Food-Aufbauten und Videodrehs. Sie mieten das Studio nach Terminvereinbarung, für Ihre eigene Produktion oder zusammen mit einem Shooting. Die Studiomiete kostet 54 € pro Stunde (mindestens 2 Stunden), 189 € für einen halben Tag (4 Stunden) und 329 € für einen ganzen Tag (8 Stunden), alle Preise inkl. 19 % MwSt. Fragen Sie Ihren Wunschtermin per Telefon, WhatsApp oder E-Mail an.`
+            : `The photo studio in Solingen, ${address}, offers about 100 m² for productions that need the space: team shoots, commercial and fashion sets, food builds and video. You rent it by appointment, for your own production or together with a shoot. The rent is €54 per hour (at least 2 hours), €189 for a half day (4 hours) and €329 for a full day (8 hours), all prices include 19% VAT. Ask for a time by phone, WhatsApp or email.`}
         </p>
         <h2 className="pt-4 text-2xl font-light tracking-tight">
           {de ? "Termin vor dem Besuch" : "An appointment before you come"}
@@ -135,6 +164,13 @@ export default function SolingenStudioPage({
             </>
           )}
         </p>
+        <h2 className="pt-4 text-2xl font-light tracking-tight">{de ? "Fragen" : "Questions"}</h2>
+        {solingenFaqs.map((item) => (
+          <div key={item.question}>
+            <h3 className="text-base font-medium">{item.question}</h3>
+            <p>{item.answer}</p>
+          </div>
+        ))}
         <h2 className="pt-4 text-2xl font-light tracking-tight">{dictionary.footer.contact}</h2>
         <p>
           <span className="block">{de ? "Studio Solingen" : "Solingen studio"}</span>
