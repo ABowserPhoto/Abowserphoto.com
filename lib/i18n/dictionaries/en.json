@@ -54,7 +54,7 @@
     },
     "real-estate": {
       "title": "Real Estate Video & Drone for Agents NRW | Aaron Bowser",
-      "description": "Walk Thru Video, Agent Branding Video and drone footage for agents in NRW, as Premium Home or Luxury Makler. Book a shoot."
+      "description": "Walk-thru videos, agent branding videos and drone footage for agents in NRW, as Premium Home or Luxury Makler bundles. Book a shoot."
     },
     "commercial": {
       "title": "Commercial Photographer NRW | Fashion, Beauty & Editorial",
@@ -82,7 +82,7 @@
     },
     "solingen": {
       "title": "Rent a Photo Studio Solingen | 100 m² | Aaron Bowser",
-      "description": "Rent the Solingen studio, about 100 m²: €54/h (2 hour minimum), half day €189, full day €329, including 19% VAT."
+      "description": "Rent a photo studio in Solingen: approx. 100 m² for shoots, teams and video. €54/h (2 h min.), half day €189, full day €329 incl. VAT."
     },
     "social-media-management": {
       "title": "Social Media Content NRW | Photos, Reels & Strategy",
@@ -293,7 +293,7 @@
     "calendarEventFailed": "We could not create the calendar event.",
     "saveFailed": "We could not save your request. Please try again.",
     "invalidDate": "Please select a valid date.",
-    "notConfigured": "Online booking is unavailable just now. Please enquire by form, phone or WhatsApp.",
+    "notConfigured": "Online booking is not available right now. Please enquire by form, phone or WhatsApp.",
     "checkingAccount": "Checking your account...",
     "closeModal": "Close booking modal",
     "propertyStatuses": {

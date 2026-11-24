@@ -22,7 +22,7 @@ const TILES: Record<Locale, { featured: HubTile[]; middle: HubTile[]; afterStudi
       {
         slug: "real-estate",
         title: "Immobilien",
-        text: "Exposé-Fotos, Walk Thru Video und Drohnenaufnahmen für Makler in NRW.",
+        text: "Exposé-Fotos, Walk-Thru-Videos und Drohnenaufnahmen für Makler in NRW.",
         image: "/real-estate/hero/immobilienfotografie-nrw-hero.webp",
         featured: true,
       },
@@ -66,7 +66,7 @@ const TILES: Record<Locale, { featured: HubTile[]; middle: HubTile[]; afterStudi
       {
         slug: "real-estate",
         title: "Real estate",
-        text: "Listing photos, Walk Thru Video and drone footage for agents in NRW.",
+        text: "Listing photos, walk-thru videos and drone footage for agents in NRW.",
         image: "/real-estate/hero/immobilienfotografie-nrw-hero.webp",
         featured: true,
       },
@@ -107,12 +107,12 @@ export function homeHubGroups(locale: Locale) {
 export function homeStudioLine(locale: Locale) {
   if (locale === "de") {
     return {
-      hagen: "Im Studio Hagen: Bewerbungsfotos (29 €) und biometrische Passbilder (15 €), Mo–Sa 10–20 Uhr, So 09–12 Uhr.",
-      solingen: "Solingen: Studiomiete 54 €/Std. (mind. 2 Std.), Halbtag 189 €, Tag 329 €, inkl. 19 % MwSt.",
+      hagen: "Im Studio Hagen: Bewerbungsfotos (29 €) und biometrische Passbilder (15 €), Mo–Sa 10–20 Uhr, So 09–12 Uhr. Mehr Infos und Termin →",
+      solingen: "Solingen: Studiomiete 54 €/Std. (mind. 2 Std.), Halbtag 189 €, Tag 329 €.",
     };
   }
   return {
-    hagen: "Hagen studio: application photos (€29) and biometric passport photos (€15), Mon–Sat 10–20, Sun 09–12.",
-    solingen: "Solingen: studio rental €54/h (2 hour minimum), half day €189, full day €329, including 19% VAT.",
+    hagen: "Hagen studio: application photos (€29) and biometric passport photos (€15), Mon–Sat 10–20, Sun 09–12. More info and booking →",
+    solingen: "Solingen: studio rental €54/h (2 hour minimum), half day €189, full day €329.",
   };
 }

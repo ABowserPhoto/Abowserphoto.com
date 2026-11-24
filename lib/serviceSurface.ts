@@ -203,7 +203,7 @@ const immoNiche: Pair = {
     h1: "Immobilienfotograf für Makler in NRW",
     subline: "Immobilienfotos, die Besichtigungen bringen",
     intro:
-      "Mehr Anfragen, schnellere Besichtigungen: Exposé-Fotos und Videos für Makler in NRW. Sie wählen das Fotopaket, das zum Objekt passt, von der kompakten Wohnung bis zum großen Haus. Fehlt nur ein Raum oder die Außenansicht, ergänzen Sie einzelne Fotos. Als Extras gibt es Walk Thru Video und Agent Branding Video. Mit Premium Home bekommen Sie Fotopaket, Highlight-Video und Drohne aus einem Termin. Luxury Makler setzt Sie selbst im Video in Szene. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Im Einsatz in Hagen, Wuppertal, Solingen, Düsseldorf, Köln und im Ruhrgebiet.",
+      "Als Immobilienfotograf für Makler in NRW liefere ich Exposé-Fotos und Videos, die Interessenten zur Besichtigung bringen. Sie wählen das Fotopaket, das zum Objekt passt, von der kompakten Wohnung bis zum großen Haus. Fehlt nur ein Raum oder die Außenansicht, ergänzen Sie einzelne Fotos. Als Extras gibt es ein Walk-Thru-Video und ein Agent-Branding-Video. Mit Premium Home bekommen Sie Fotopaket, Highlight-Video und Drohne aus einem Termin. Luxury Makler setzt Sie selbst im Walk-Through-Video in Szene. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Im Einsatz in Hagen, Wuppertal, Solingen, Düsseldorf, Köln und im Ruhrgebiet.",
     faqs: [
       faq(
         "Wie viele Fotos braucht ein Exposé?",
@@ -219,19 +219,11 @@ const immoNiche: Pair = {
       ),
       faq(
         "Was ist der Unterschied zwischen Premium Home und Luxury Makler?",
-        "Beide enthalten ein Fotopaket Ihrer Wahl und Drohnenaufnahmen. Premium Home ergänzt ein Highlight-Video der Immobilie. Luxury Makler ergänzt ein Walk Thru Video, in dem Sie als Makler durch das Objekt führen."
+        "Beide enthalten ein Fotopaket Ihrer Wahl und Drohnenaufnahmen. Premium Home ergänzt ein Highlight-Video der Immobilie. Luxury Makler ergänzt ein Walk-Through-Video, in dem Sie als Makler durch das Objekt führen."
       ),
       faq(
         "Sind die Bilder für ImmoScout24 und Immowelt geeignet?",
         "Ja, Sie erhalten Exporte für ImmoScout24, Immowelt, Ihre Website und Social Media."
-      ),
-      faq(
-        "Ist virtuelles Homestaging erlaubt?",
-        "Ja, wenn es gekennzeichnet ist. Virtuell eingerichtete Bilder markieren wir sichtbar mit „Virtuell eingerichtet“ und verändern keine Bausubstanz."
-      ),
-      faq(
-        "Wie bereite ich die Immobilie vor?",
-        "Räume aufräumen, Licht an, persönliche Dinge und Autos vor dem Haus wegräumen."
       ),
     ],
   },
@@ -242,7 +234,7 @@ const immoNiche: Pair = {
     h1: "Real Estate Photographer for Agents in NRW",
     subline: "Property photos that bring viewings",
     intro:
-      "More enquiries, and viewings that happen sooner: listing photos and videos for agents in NRW. You choose the photo package that fits the property, from a compact flat to a large house. If only one room or the exterior is missing, you add individual photos. Walk Thru Video and Agent Branding Video are extras. Premium Home is the photo package, a highlight video and drone from one appointment. Luxury Makler puts you in the video. The drone is registered with the aviation authority and insured. In use in Hagen, Wuppertal, Solingen, Düsseldorf, Cologne and the Ruhr.",
+      "As a property photographer for agents in NRW I deliver listing photos and videos that bring people to a viewing. You choose the photo package that fits the property, from a compact flat to a large house. If only one room or the exterior is missing, you add individual photos. A walk-thru video and an agent branding video are extras. With Premium Home you get the photo package, a highlight video and drone from one appointment. Luxury Makler puts you in the walk-through video. The drone is registered with the aviation authority and insured. In use in Hagen, Wuppertal, Solingen, Düsseldorf, Cologne and the Ruhr.",
     faqs: [
       faq(
         "How many photos does a listing need?",
@@ -258,19 +250,11 @@ const immoNiche: Pair = {
       ),
       faq(
         "What is the difference between Premium Home and Luxury Makler?",
-        "Both include a photo package of your choice and drone footage. Premium Home adds a highlight video of the property. Luxury Makler adds a Walk Thru Video in which you, the agent, lead the viewer through the property."
-      ),
-      faq(
-        "How should I prepare the property?",
-        "Tidy the rooms, turn the lights on, and move personal items and cars away from the front of the house."
+        "Both include a photo package of your choice and drone footage. Premium Home adds a highlight video of the property. Luxury Makler adds a walk-through video in which you, the agent, lead the viewer through the property."
       ),
       faq(
         "Will the files work on ImmoScout24 and Immowelt?",
         "Yes. You receive exports for ImmoScout24, Immowelt, your website and social media."
-      ),
-      faq(
-        "Is virtual staging allowed?",
-        "Yes, when it is labelled. Virtually staged pictures are marked in the image as “Virtuell eingerichtet”, and the building itself is not changed."
       ),
     ],
   },
@@ -280,7 +264,7 @@ const immoWww: Pair = {
   de: {
     title: "Immobilienvideo & Drohne für Makler NRW | Aaron Bowser",
     description:
-      "Walk Thru Video, Agent Branding Video und Drohnenaufnahmen für Makler in NRW, als Premium Home oder Luxury Makler. Shooting buchen.",
+      "Walk-Thru-Videos, Agent-Branding-Videos und Drohnenaufnahmen für Makler in NRW, als Premium Home oder Luxury Makler Paket. Shooting buchen.",
     h1: "Immobilienvideos & Drohnenaufnahmen für Makler in NRW",
     intro:
       "Ein Exposé mit Video bleibt länger im Kopf. Für Makler in NRW produziere ich Walk Thru Videos, die Interessenten durch die Immobilie führen, und Agent Branding Videos, die Sie als Ansprechpartner zeigen. Drohnenaufnahmen zeigen Lage, Grundstück und Umfeld. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Am einfachsten buchen Sie alles in einem Termin: Premium Home kombiniert Fotopaket, Highlight-Video und Drohne, Luxury Makler setzt Sie im Video in Szene. Alle Fotopakete im Überblick finden Sie auf meiner Seite für Immobilienfotografie in Hagen. Ein Angebot erhalten Sie per Formular, E-Mail oder WhatsApp.",
@@ -297,12 +281,16 @@ const immoWww: Pair = {
         "Ist die Drohne erlaubt und versichert?",
         "Ja, beim Luftfahrt-Bundesamt registriert und haftpflichtversichert. Die Zustimmung des Eigentümers klären wir vorab."
       ),
+      faq(
+        "Kann ich Video ohne Fotos buchen?",
+        "Walk-Thru-Video und Agent-Branding-Video sind Extras zum Fotopaket."
+      ),
     ],
   },
   en: {
     title: "Real Estate Video & Drone for Agents NRW | Aaron Bowser",
     description:
-      "Walk Thru Video, Agent Branding Video and drone footage for agents in NRW, as Premium Home or Luxury Makler. Book a shoot.",
+      "Walk-thru videos, agent branding videos and drone footage for agents in NRW, as Premium Home or Luxury Makler bundles. Book a shoot.",
     h1: "Real Estate Video & Drone for Agents in NRW",
     intro:
       "A listing with video stays in mind longer. For agents in NRW I produce Walk Thru Videos that lead viewers through the property, and Agent Branding Videos that show you as the contact. Drone footage shows the setting, the plot and the surroundings. The drone is registered and insured. The simplest booking is one appointment: Premium Home combines the photo package, a highlight video and drone, and Luxury Makler puts you in the video. The photo packages are set out on the Hagen property page. A quote comes by form, email or WhatsApp.",
@@ -318,6 +306,10 @@ const immoWww: Pair = {
       faq(
         "Is the drone permitted and insured?",
         "Yes. It is registered and insured. We arrange the owner's consent beforehand."
+      ),
+      faq(
+        "Can I book video without photos?",
+        "Walk-thru video and agent branding video are extras to the photo package."
       ),
     ],
   },
@@ -747,7 +739,7 @@ const socialNiche: Pair = {
   de: {
     title: "Social-Media-Betreuung Hagen | Content & Management",
     description:
-      "Social-Media-Management für Unternehmen in Hagen und NRW: Redaktionsplan, eigene Fotos und Videos, Posting und Auswertung. Jetzt Beratung anfragen.",
+      "Social-Media-Management für Unternehmen in Hagen und NRW: Redaktionsplan, eigene Fotos & Videos, Posting und Auswertung. Jetzt Beratung anfragen.",
     h1: "Social-Media-Betreuung für Unternehmen in Hagen & NRW",
     intro:
       "Ihr Auftritt auf Instagram, TikTok, LinkedIn und Facebook soll regelmäßig, stimmig und messbar sein, ohne dass Sie sich jede Woche selbst darum kümmern? Ich betreue Social-Media-Kanäle für Unternehmen und Marken in Hagen und NRW. Der Unterschied: Fotos und Videos produziere ich selbst. Dazu kommen ein monatlicher Redaktionsplan, Texte und Hashtags, Veröffentlichung, Community-Pflege und eine Auswertung, die zeigt, was funktioniert und was als Nächstes angepasst wird.",
@@ -771,7 +763,7 @@ const socialNiche: Pair = {
   en: {
     title: "Social Media Management Hagen | Content & Posting",
     description:
-      "Social media management for businesses in Hagen and NRW: content plan, our own photos and videos, posting and reporting. Request a consultation.",
+      "Social media management for businesses in Hagen and NRW: content plan, our own photos & videos, posting and reporting. Request a consultation.",
     h1: "Social Media Management for Businesses in Hagen & NRW",
     intro:
       "Should your presence on Instagram, TikTok, LinkedIn and Facebook stay regular, coherent and measurable, without you handling it every week? I look after social channels for companies and brands in Hagen and NRW. The difference: I produce the photographs and videos myself. Added to that are a monthly content plan, captions and hashtags, publishing, community care, and a report that shows what worked and what to adjust next.",
@@ -798,7 +790,7 @@ const socialWww: Pair = {
   de: {
     title: "Social-Media-Content NRW | Fotos, Reels & Strategie",
     description:
-      "Content-Produktion und Strategie für Marken in Düsseldorf, Köln und NRW: Fotos, Reels, Redaktionsplan und Reporting aus einer Hand. Beratung anfragen.",
+      "Content-Produktion und Strategie für Marken in Düsseldorf, Köln und NRW: Fotos, Reels, Redaktionsplan, Reporting aus einer Hand. Jetzt Beratung anfragen.",
     h1: "Social-Media-Content & Strategie für Marken in NRW",
     intro:
       "Marken mit einem starken visuellen Auftritt brauchen Content, der zu ihnen passt, und einen Plan dahinter. Ich verbinde professionelle Foto- und Videoproduktion mit Strategie: vom Content-Shooting über Reels im Hochformat bis zum Redaktionsplan und Reporting, für Marken in Düsseldorf, Köln und ganz NRW. So entsteht ein Auftritt, der auf Instagram, TikTok und LinkedIn wiedererkennbar bleibt. Laufende Betreuung Ihrer Kanäle finden Sie auf meiner Seite für Social-Media-Betreuung.",

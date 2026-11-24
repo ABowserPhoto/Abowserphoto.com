@@ -49,7 +49,7 @@ export function offerPageCopy(kind: OfferPageKind, locale: Locale): OfferPageCop
               "Your photographs, or AI art made for the place, as aluminium dibond, acrylic, or HD metal. For a home, a hotel, a restaurant, or an office.",
               "AI image worlds are clearly labelled as AI art. Nothing generated is presented as a photograph.",
               "For hotels and restaurants: image worlds that fit the house, labelled as AI art, with a licence for use.",
-              "Every print is planned for your room. Request a quote by contact form, email or WhatsApp. We are glad to show a preview on a photograph of your actual wall.",
+              "Every wall piece is planned for your room. Request your quote by contact form, email or WhatsApp. We are happy to show you a preview on a photo of your actual wall first.",
             ],
             lines: ["Signature Alu", "Signature Acrylic", "HD Metal (suitable for wet rooms)", "Gallery wall"],
             steps: [
@@ -82,16 +82,16 @@ export function offerPageCopy(kind: OfferPageKind, locale: Locale): OfferPageCop
             eyebrow: "Dates",
             title: "Dates and events | Aaron Bowser Photography",
             h1: "Dates and events",
-            claim: "Seasonal mini sessions and events at the studio.",
+            claim: "Seasonal mini sessions and offers in the studio.",
             paragraphs: [
-              "Seasonal mini sessions and events at the studio: short, themed shoots for a particular occasion, a good gift or a new family or couple photograph.",
-              "Places are limited. Join the waiting list and we will write when the next date is set.",
+              "Seasonal mini sessions and offers in the studio: short themed shoots for special occasions, ideal as a gift or for new family and couple photos.",
+              "Places are limited. Join the waiting list and we will get in touch as soon as the next date is set.",
             ],
             lines: [],
             steps: [],
             footnote: null,
             datesPlaceholder:
-              "New dates are published here. Use the form to take a place on the waiting list.",
+              "New dates will be published here. Save your place on the waiting list with the form.",
           };
     default: {
       const neverKind: never = kind;

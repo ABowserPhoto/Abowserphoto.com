@@ -1,6 +1,7 @@
 import Link from "next/link";
 import LightPageFrame from "./LightPageFrame";
 import GuestEnquiry from "./GuestEnquiry";
+import QuoteClose from "./QuoteClose";
 import { FaqPageJsonLd, SolingenPlaceJsonLd, SolingenRentalJsonLd } from "./JsonLd";
 import {
   appointmentOnlyLabel,
@@ -111,8 +112,8 @@ export default function SolingenStudioPage({
       <div className="mt-8 space-y-5 text-sm leading-relaxed text-[#322B2B]/85 sm:text-base">
         <p>
           {de
-            ? `Das Fotostudio in Solingen, ${address}, bietet rund 100 m² für größere Produktionen, Projekte und Teams: Teamshootings, Commercial- und Fashion-Sets, Food-Aufbauten und Videodrehs. Sie möchten hier ein Shooting buchen? Dann vereinbaren Sie bitte vorab einen Termin per Telefon, WhatsApp oder E-Mail. Sie können das Studio auch für Ihre eigene Produktion mieten: 54 € pro Stunde (mindestens 2 Stunden), 189 € für einen halben Tag und 329 € für einen ganzen Tag, alle Preise inkl. 19 % MwSt. Gut erreichbar aus Wuppertal, Düsseldorf und Köln.`
-            : `The photo studio in Solingen, ${address}, offers about 100 m² for larger productions, projects and teams: team shoots, commercial and fashion sets, food builds and video. To book a shoot here, please arrange a time by phone, WhatsApp or email before you come. You can also rent the studio for your own production: €54 per hour (at least 2 hours), €189 for a half day and €329 for a full day, all prices include 19% VAT. Easy to reach from Wuppertal, Düsseldorf and Cologne.`}
+            ? `Das Fotostudio in Solingen, ${SOLINGEN_ADDRESS.street}, bietet rund 100 m² für größere Produktionen, Projekte und Teams: Teamshootings, Commercial- und Fashion-Sets, Food-Aufbauten und Videodrehs. Sie möchten hier ein Shooting buchen? Dann vereinbaren Sie bitte vorab einen Termin per Telefon, WhatsApp oder E-Mail. Sie können das Studio auch für Ihre eigene Produktion mieten: 54 € pro Stunde (mindestens 2 Stunden), 189 € für einen halben Tag und 329 € für einen ganzen Tag, alle Preise inkl. 19 % MwSt. Gut erreichbar aus Wuppertal, Düsseldorf und Köln.`
+            : `The photo studio in Solingen, ${SOLINGEN_ADDRESS.street}, offers about 100 m² for larger productions, projects and teams: team shoots, commercial and fashion sets, food set-ups and video shoots. Want to book a shoot here? Please arrange an appointment in advance by phone, WhatsApp or email. You can also rent the studio for your own production: €54 per hour (2 hour minimum), €189 for a half day and €329 for a full day, all prices including 19% VAT. Easy to reach from Wuppertal, Düsseldorf and Cologne.`}
         </p>
         <h2 className="pt-4 text-2xl font-light tracking-tight">
           {de ? "Termin vor dem Besuch" : "An appointment before you come"}
@@ -211,6 +212,7 @@ export default function SolingenStudioPage({
           <span className="mt-3 block">{appointmentOnlyLabel(locale)}</span>
         </p>
         <h2 className="pt-4 text-2xl font-light tracking-tight">{de ? "Termin anfragen" : "Request a time"}</h2>
+        <QuoteClose locale={locale} mode="shoot" />
         <GuestEnquiry topic={de ? "Fotostudio Solingen" : "Solingen studio"} />
       </div>
     </LightPageFrame>

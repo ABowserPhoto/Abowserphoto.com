@@ -242,7 +242,7 @@ const commercialSections: Record<Locale, PageSection[]> = {
       title: "AI image worlds, clearly labelled",
       paragraphs: [
         "For brands, hotels, and restaurants, photographed work can sit beside AI image worlds. Every AI-generated picture is labelled as an AI image world.",
-        "For a campaign picture, a hotel wall or a social series: AI image worlds extend your photographs where a camera reaches its limit. Every AI picture is clearly labelled.",
+        "Whether a campaign visual, a hotel wall or a social media series: AI image worlds add to your photographs where a photo reaches its limits. Every AI image is clearly labelled.",
       ],
       links: [{ href: withLocale(printsPath("en"), "en"), label: "Wall art and metal prints" }],
     },
