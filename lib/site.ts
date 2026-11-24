@@ -169,9 +169,9 @@ export const STUDIOS: readonly Studio[] = [
       "https://www.google.com/maps/place/Aaron+Bowser+Photography/@51.3771835,7.454225,17z/data=!4m6!3m5!1s0x47b93cbdc8d7c7b3:0x6fde83c86b76ba38!8m2!3d51.3771835!4d7.454225!16s%2Fg%2F11btwpyctw",
     areaSqm: 40,
     summaryDe:
-      "Hauptstudio, etwa 40 m². Aaron arbeitet hier täglich. Porträt- und Business-Sitzungen finden in der Regel hier statt.",
+      "Studio Hagen, etwa 40 m², für Porträts, Business-Bilder und kleinere Produktionen. Hier gibt es Bewerbungsfotos und Passbilder.",
     summaryEn:
-      "The main studio, about 40 m². Aaron works here every day. Portrait and business sessions are booked here by default.",
+      "Hagen studio, about 40 m², for portraits, business pictures, and smaller productions. Application and passport photos are available here.",
     pagePath: null,
   },
   {

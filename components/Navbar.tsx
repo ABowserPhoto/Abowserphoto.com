@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BOOKING_HREF, bookingHref, requestOpenBooking } from "../lib/booking";
 import AccountNav from "./AccountNav";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -12,6 +12,12 @@ import LanguageSwitcher from "./LanguageSwitcher";
 export type NavbarSection = {
   id: string;
   label: string;
+};
+
+export type NavbarServiceLink = {
+  href: string;
+  label: string;
+  themeColor: string;
 };
 
 type NavbarProps = {
@@ -27,7 +33,9 @@ type NavbarProps = {
     book?: string;
     home?: string;
     menu?: string;
+    services?: string;
   };
+  serviceLinks?: NavbarServiceLink[];
 };
 
 function NavbarLogo({
@@ -80,6 +88,126 @@ function NavbarLogo({
   );
 }
 
+function ServicesMenu({
+  label,
+  themeColor,
+  linkColor,
+  active,
+  links,
+  onSectionClick,
+}: {
+  label: string;
+  themeColor: string;
+  linkColor: MotionValue<string> | string;
+  active: boolean;
+  links: NavbarServiceLink[];
+  onSectionClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [triggerHover, setTriggerHover] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLAnchorElement>(null);
+
+  function focusItem(index: number) {
+    const items = menuRef.current?.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]');
+    if (!items?.length) return;
+    const next = items[(index + items.length) % items.length];
+    next?.focus();
+  }
+
+  function onTriggerKeyDown(event: React.KeyboardEvent<HTMLAnchorElement>) {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setOpen(true);
+      requestAnimationFrame(() => focusItem(0));
+    } else if (event.key === "Escape") {
+      setOpen(false);
+    }
+  }
+
+  function onMenuKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    const items = menuRef.current?.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]');
+    const current = items ? Array.from(items).findIndex((item) => item === document.activeElement) : -1;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      focusItem(current + 1);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      focusItem(current <= 0 ? (items?.length ?? 1) - 1 : current - 1);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      setOpen(false);
+      triggerRef.current?.focus();
+    }
+  }
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => {
+        setOpen(true);
+        setTriggerHover(true);
+      }}
+      onMouseLeave={() => {
+        setOpen(false);
+        setTriggerHover(false);
+      }}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+    >
+      <motion.a
+        ref={triggerRef}
+        href="#services"
+        onClick={onSectionClick}
+        onFocus={() => setOpen(true)}
+        onKeyDown={onTriggerKeyDown}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls="services-menu"
+        className="text-[11px] font-medium uppercase tracking-[0.22em] transition-colors duration-300"
+        style={{ color: active || triggerHover || open ? themeColor : linkColor }}
+      >
+        {label}
+      </motion.a>
+      {open ? (
+        <div className="absolute top-full left-1/2 z-50 w-64 -translate-x-1/2 pt-3">
+          <div
+            ref={menuRef}
+            id="services-menu"
+            role="menu"
+            aria-label={label}
+            onKeyDown={onMenuKeyDown}
+            className="border border-[#322B2B]/10 bg-[#F4F1ED]/95 py-2 shadow-[0_12px_40px_rgba(50,43,43,0.08)] backdrop-blur-md"
+          >
+            {links.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                role="menuitem"
+                className="block px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.16em] text-[#322B2B]/85 transition-colors duration-300 hover:bg-[#322B2B]/5 focus-visible:bg-[#322B2B]/5"
+                onMouseEnter={(event) => {
+                  event.currentTarget.style.color = item.themeColor;
+                }}
+                onMouseLeave={(event) => {
+                  event.currentTarget.style.color = "";
+                }}
+                onFocus={(event) => {
+                  event.currentTarget.style.color = item.themeColor;
+                }}
+                onBlur={(event) => {
+                  event.currentTarget.style.color = "";
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
 export default function Navbar({
   logoUrl,
   sections,
@@ -90,9 +218,12 @@ export default function Navbar({
   bookHref = BOOKING_HREF,
   homeHref = "/",
   labels,
+  serviceLinks = [],
 }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+  const [bookHover, setBookHover] = useState(false);
   const pathname = usePathname();
   const resolvedBookHref = bookHref === BOOKING_HREF ? bookingHref(pathname) : bookHref;
   const bookLabel = labels?.book ?? "Book";
@@ -173,16 +304,32 @@ export default function Navbar({
         />
 
         <nav className="hidden items-center gap-8 md:flex">
-          <Link href={homeHref}>
+          <Link
+            href={homeHref}
+            onMouseEnter={() => setHoveredNav("home")}
+            onMouseLeave={() => setHoveredNav(null)}
+            onFocus={() => setHoveredNav("home")}
+            onBlur={() => setHoveredNav(null)}
+          >
             <motion.span
-              className="text-[11px] font-medium uppercase tracking-[0.22em]"
-              style={{ color: linkColor }}
+              className="text-[11px] font-medium uppercase tracking-[0.22em] transition-colors duration-300"
+              style={{ color: hoveredNav === "home" ? themeColor : linkColor }}
             >
               {homeLabel}
             </motion.span>
           </Link>
           {pageSections.map((section) =>
-            activeSection === section.id ? (
+            section.id === "services" && serviceLinks.length > 0 ? (
+              <ServicesMenu
+                key={section.id}
+                label={labels?.services ?? section.label}
+                themeColor={themeColor}
+                linkColor={hoveredNav === section.id ? themeColor : linkColor}
+                active={activeSection === section.id}
+                links={serviceLinks}
+                onSectionClick={(event) => handleSectionClick(event, section.id)}
+              />
+            ) : activeSection === section.id ? (
               <a
                 key={section.id}
                 href={`#${section.id}`}
@@ -197,18 +344,30 @@ export default function Navbar({
                 key={section.id}
                 href={`#${section.id}`}
                 onClick={(event) => handleSectionClick(event, section.id)}
+                onMouseEnter={() => setHoveredNav(section.id)}
+                onMouseLeave={() => setHoveredNav(null)}
+                onFocus={() => setHoveredNav(section.id)}
+                onBlur={() => setHoveredNav(null)}
                 className="text-[11px] font-medium uppercase tracking-[0.22em] transition-colors duration-300"
-                style={{ color: linkColor }}
+                style={{ color: hoveredNav === section.id ? themeColor : linkColor }}
               >
                 {section.label}
               </motion.a>
             )
           )}
-          <motion.div className="rounded-full border px-4 py-2" style={{ borderColor: bookBorder }}>
+          <motion.div
+            className="rounded-full border px-4 py-2 transition-colors duration-300"
+            style={{
+              borderColor: bookHover ? themeColor : bookBorder,
+              backgroundColor: bookHover ? themeColor : "transparent",
+            }}
+            onMouseEnter={() => setBookHover(true)}
+            onMouseLeave={() => setBookHover(false)}
+          >
             <Link href={resolvedBookHref} scroll={false} onClick={() => requestOpenBooking()}>
               <motion.span
-                className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-                style={{ color: bookText }}
+                className="text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300"
+                style={{ color: bookHover ? "#322B2B" : bookText }}
               >
                 {bookLabel}
               </motion.span>
@@ -252,11 +411,15 @@ export default function Navbar({
                 key={section.id}
                 href={`#${section.id}`}
                 onClick={(event) => handleSectionClick(event, section.id)}
-                className="block rounded-md px-3 py-2.5 text-sm font-medium transition-colors duration-300"
+                className="block rounded-md px-3 py-2.5 text-sm font-medium transition-colors duration-300 hover:!text-[var(--brand)]"
                 style={
                   activeSection === section.id
-                    ? { color: themeColor, backgroundColor: `${themeColor}22` }
-                    : { color: "rgba(50, 43, 43, 0.9)" }
+                    ? {
+                        color: themeColor,
+                        backgroundColor: `${themeColor}22`,
+                        ["--brand" as string]: themeColor,
+                      }
+                    : { color: "rgba(50, 43, 43, 0.9)", ["--brand" as string]: themeColor }
                 }
               >
                 {section.label}
@@ -269,8 +432,8 @@ export default function Navbar({
                 requestOpenBooking();
                 setMenuOpen(false);
               }}
-              className="mt-2 block rounded-md px-3 py-2.5 text-center text-sm font-semibold text-[#F4F1ED]"
-              style={{ backgroundColor: themeColor }}
+              className="mt-2 block rounded-md px-3 py-2.5 text-center text-sm font-semibold text-[#F4F1ED] transition-colors duration-300 hover:!bg-[#F4F1ED] hover:!text-[var(--brand)]"
+              style={{ backgroundColor: themeColor, ["--brand" as string]: themeColor }}
             >
               {bookLabel}
             </Link>

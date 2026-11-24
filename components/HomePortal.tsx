@@ -13,6 +13,7 @@ import { Major_Mono_Display } from "next/font/google";
 import Image from "next/image";
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import type { MotionValue } from "framer-motion";
+import { categoryContentMap } from "../lib/content";
 import type { PortalHeroSet } from "../lib/gallery";
 import { explicitImageAlt } from "../lib/homeImageAlts";
 import type { Locale } from "../lib/i18n/config";
@@ -320,17 +321,9 @@ export default function HomePortal({
   const videoRef = useRef<HTMLVideoElement>(null);
   const trackRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  const menuDockRef = useRef<HTMLDivElement>(null);
+  const [menuClearance, setMenuClearance] = useState(168);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-  const linkRefCallbacks = useRef<Array<(node: HTMLAnchorElement | null) => void>>([]);
-  const refForLink = (index: number) => {
-    const existing = linkRefCallbacks.current[index];
-    if (existing) return existing;
-    const callback = (node: HTMLAnchorElement | null) => {
-      linkRefs.current[index] = node;
-    };
-    linkRefCallbacks.current[index] = callback;
-    return callback;
-  };
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ["start start", "end end"],
@@ -392,6 +385,27 @@ export default function HomePortal({
       })),
     [clientHost, dictionary, locale, publicHost]
   );
+
+  useLayoutEffect(() => {
+    const dock = menuDockRef.current;
+    if (!dock) return;
+
+    const measure = () => {
+      const height = dock.getBoundingClientRect().height;
+      const bottom = Number.parseFloat(window.getComputedStyle(dock).bottom || "0");
+      const gap = 16;
+      setMenuClearance(Math.ceil(height + (Number.isFinite(bottom) ? bottom : 0) + gap));
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(dock);
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
 
   useEffect(() => {
     if (reduceMotion === null) return;
@@ -545,8 +559,13 @@ export default function HomePortal({
       </div>
 
       <motion.div
-        className="absolute left-1/2 top-[5vh] z-[45] h-[90vh] w-[min(92vw,46rem)] -translate-x-1/2 overflow-y-auto rounded-2xl border border-white/20 bg-white/30 p-8 shadow-xl backdrop-blur-md max-md:top-20 max-md:h-[calc(100dvh-6.25rem)]"
-        style={{ opacity: glassOpacity, y: glassY, pointerEvents: glassOpen ? "auto" : "none" }}
+        className="absolute left-1/2 top-[5.25rem] z-[45] w-[min(92vw,46rem)] -translate-x-1/2 overflow-y-auto rounded-2xl border border-white/20 bg-white/30 p-6 shadow-xl backdrop-blur-md sm:p-8 md:top-[6vh]"
+        style={{
+          opacity: glassOpacity,
+          y: glassY,
+          pointerEvents: glassOpen ? "auto" : "none",
+          bottom: menuClearance,
+        }}
       >
         {children}
       </motion.div>
@@ -566,7 +585,10 @@ export default function HomePortal({
         ) : null}
       </AnimatePresence>
 
-      <div className="absolute bottom-6 left-4 z-[70] flex w-max max-w-[90vw] flex-col items-start gap-3 md:bottom-12 md:left-1/2 md:-translate-x-1/2 md:items-center">
+      <div
+        ref={menuDockRef}
+        className="absolute bottom-6 left-4 z-[70] flex w-max max-w-[90vw] flex-col items-start gap-3 md:bottom-12 md:left-1/2 md:-translate-x-1/2 md:items-center"
+      >
       <motion.nav
         ref={navRef}
         className="relative hidden flex-col gap-3 md:flex md:flex-row md:flex-wrap md:justify-center md:gap-0"
@@ -587,18 +609,30 @@ export default function HomePortal({
               }}
             >
               <a
-                ref={refForLink(panel.index)}
+                ref={(node) => {
+                  linkRefs.current[panel.index] = node;
+                }}
                 href={panel.href}
                 title={panel.seoTitle}
                 aria-label={panel.seoLabel}
                 aria-current={hopIndex === panel.index ? "true" : undefined}
-                onMouseEnter={() => setHoveredIndex(panel.index)}
+                onMouseEnter={(event) => {
+                  setHoveredIndex(panel.index);
+                  event.currentTarget.style.backgroundColor = `${categoryContentMap[panel.key].themeColor}99`;
+                }}
+                onFocus={(event) => {
+                  event.currentTarget.style.backgroundColor = `${categoryContentMap[panel.key].themeColor}99`;
+                }}
+                onBlur={(event) => {
+                  event.currentTarget.style.backgroundColor = "";
+                }}
                 onMouseLeave={(event) => {
+                  event.currentTarget.style.backgroundColor = "";
                   const next = event.relatedTarget;
                   if (next instanceof Node && event.currentTarget.closest("nav")?.contains(next)) return;
                   setHoveredIndex(null);
                 }}
-                className={`block w-fit text-left text-sm font-medium uppercase tracking-[0.18em] transition-opacity duration-300 sm:text-base ${
+                className={`block w-fit rounded-md px-2 py-1 text-left text-sm font-medium uppercase tracking-[0.18em] transition-colors duration-300 sm:text-base ${
                   hoveredIndex === null || hoveredIndex === panel.index
                     ? "opacity-100"
                     : "opacity-70 hover:opacity-100"

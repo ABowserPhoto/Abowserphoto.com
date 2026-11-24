@@ -43,7 +43,7 @@ const weddingSections: Record<Locale, PageSection[]> = {
       title: "Hochzeitsvideo aus derselben Reportage",
       paragraphs: [
         "Fotos und Film gehören für viele Paare zusammen. Das Hochzeitsvideo entsteht am selben Tag wie die Reportage: Standesamt in Hagen oder Solingen, freie Trauung, der ganze Tag. Schnitt und Ton folgen der ruhigen Bildsprache der Fotos.",
-        "Konzept, Dreh und Schnitt liegen bei der Filmproduktion. Wer beides buchen möchte, spricht das im selben Gespräch ab. Das Honorar wird dafür einzeln angeboten, ohne Paketpreis auf dieser Seite.",
+        "Konzept, Dreh und Schnitt liegen bei der Filmproduktion. Wer beides buchen möchte, spricht das im selben Gespräch ab. Für die Preise fordern Sie ein Angebot über das Kontaktformular, per E-Mail oder per WhatsApp an.",
       ],
       links: [
         {
@@ -70,7 +70,7 @@ const weddingSections: Record<Locale, PageSection[]> = {
       title: "A wedding film from the same reportage",
       paragraphs: [
         "Photographs and film belong together for many couples. The wedding film is made on the same day as the reportage: the registry office in Hagen or Solingen, a symbolic ceremony, the full day. The cut follows the calm pace of the photographs.",
-        "Concept, shoot, and edit sit with the film production. Couples who want both discuss it in the same conversation. The film is quoted on its own. This page does not publish a package price.",
+        "Concept, shoot, and edit sit with the film production. Couples who want both discuss it in the same conversation. For pricing, request a quote by contact form, email or WhatsApp.",
       ],
       links: [
         {
@@ -86,7 +86,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wo entstehen die Business-Porträts?",
-      answer: `In der Regel im Studio Hagen, ${hagen}, etwa 40 m², wo Aaron täglich arbeitet. Das Studio Solingen, ${solingen}, etwa 100 m², ist für größere Produktionen und ${appointmentOnlyLabel("de", { sentence: false })}; es kann auch gemietet werden. Die Seite zum Fotostudio Solingen beschreibt Fläche und Miete. Sitzungen im Büro in Nordrhein-Westfalen bleiben möglich.`,
+      answer: `In der Regel im Studio Hagen, ${hagen}, etwa 40 m². Das Studio Solingen, ${solingen}, hat etwa 100 m² und nimmt größere Produktionen, Projekte und Teams auf, die im Studio Hagen zu groß wären. Für ein Shooting schreiben Sie bitte vorher, damit ein Termin liegt. Das Studio kann auch gemietet werden. Sitzungen im Büro in Nordrhein-Westfalen bleiben möglich.`,
       linkHref: solingenHref("de"),
       linkLabel: "Fotostudio Solingen",
     },
@@ -98,7 +98,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "Was kostet ein Business-Porträt?",
       answer:
-        "Das Honorar richtet sich nach Personenzahl, Ort und Umfang. Sie erhalten ein individuelles Angebot.",
+        "Das Honorar richtet sich nach Personenzahl, Ort und Umfang. Für die Preise fordern Sie ein Angebot über das Kontaktformular, per E-Mail oder per WhatsApp an.",
     },
     {
       question: "Wie läuft das Shooting ab?",
@@ -114,7 +114,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
   en: [
     {
       question: "Where do you photograph business portraits?",
-      answer: `Usually at the Hagen studio, ${hagen}, about 40 m², where Aaron works every day. The Solingen studio, ${solingen}, about 100 m², is for larger productions and ${appointmentOnlyLabel("en", { sentence: false })}; it can also be rented. The Solingen studio page describes the space and how to rent it. Sessions at your office in North Rhine-Westphalia are still possible.`,
+      answer: `Usually at the Hagen studio, ${hagen}, about 40 m². The Solingen studio, ${solingen}, is about 100 m² and can handle larger productions, projects and teams that would be too big for the Hagen studio. To book a shoot, please contact us to schedule an appointment before coming. The studio can also be rented. Sessions at your office in North Rhine-Westphalia are still possible.`,
       linkHref: solingenHref("en"),
       linkLabel: "Solingen studio",
     },
@@ -126,7 +126,7 @@ const businessFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "What does a business portrait cost?",
       answer:
-        "The fee depends on the number of people, the location, and the scope. You receive an individual quote.",
+        "The fee depends on the number of people, the location, and the scope. For pricing, request a quote by contact form, email or WhatsApp.",
     },
     {
       question: "How does a session run?",
@@ -161,7 +161,7 @@ const weddingFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "Was kostet die Hochzeitsfotografie?",
       answer:
-        "Das Honorar richtet sich nach Dauer, Ort und Umfang: nur das Standesamt, die freie Trauung, der ganze Tag, und ob ein Hochzeitsvideo dazukommt. Sie erhalten ein Angebot. Auf dieser Seite stehen keine Paketpreise.",
+        "Das Honorar richtet sich nach Dauer, Ort und Umfang: nur das Standesamt, die freie Trauung, der ganze Tag, und ob ein Hochzeitsvideo dazukommt. Für die Preise fordern Sie ein Angebot über das Kontaktformular, per E-Mail oder per WhatsApp an.",
     },
     {
       question: "Wie läuft der Tag ab?",
@@ -199,7 +199,7 @@ const weddingFaqs: Record<Locale, FAQItem[]> = {
     {
       question: "What does wedding photography cost?",
       answer:
-        "The fee follows the length, the place, and the scope: the registry office only, a symbolic ceremony, the full day, and whether a wedding film is included. You receive a quote. This page does not publish package prices.",
+        "The fee follows the length, the place, and the scope: the registry office only, a symbolic ceremony, the full day, and whether a wedding film is included. For pricing, request a quote by contact form, email or WhatsApp.",
     },
     {
       question: "How does the day run?",
@@ -258,7 +258,7 @@ const studioFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wo entstehen Bewerbungsfotos und Passbilder?",
-      answer: `Im Studio Hagen, ${hagen}, etwa 40 m². Dort arbeitet Aaron täglich, und diese Termine werden hier gebucht.`,
+      answer: `Im Studio Hagen, ${hagen}, etwa 40 m². Studio Hagen bietet Bewerbungsfotos und Passbilder.`,
     },
     {
       question: "Was unterscheidet ein Bewerbungsfoto von einem Passbild?",
@@ -278,7 +278,7 @@ const studioFaqs: Record<Locale, FAQItem[]> = {
   en: [
     {
       question: "Where are application and passport photos taken?",
-      answer: `At the Hagen studio, ${hagen}, about 40 m². Aaron works there every day, and these sittings are booked there.`,
+      answer: `At the Hagen studio, ${hagen}, about 40 m². Studio Hagen offers application and passport photos.`,
     },
     {
       question: "How is an application photo different from a passport photo?",

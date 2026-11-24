@@ -1,5 +1,4 @@
 import {
-  appointmentOnlyLabel,
   CONTACT_EMAIL,
   CONTACT_PHONE_TEL,
   hagenOpeningHoursSpecification,
@@ -90,7 +89,7 @@ export function buildBusinessJsonLd() {
     email: CONTACT_EMAIL,
     telephone: CONTACT_PHONE_TEL,
     image: absoluteUrl(OG_IMAGE_PATH),
-    description: `Fotograf mit Hauptstudio in Hagen, etwa 40 m², für Porträt und Business im Alltag. Das Studio Solingen, etwa 100 m², ist für größere Produktionen, ${appointmentOnlyLabel("de", { sentence: false })}, und kann gemietet werden.`,
+    description: `Fotograf in Hagen und Solingen. Das Studio Hagen hat etwa 40 m² für Porträts und Business. Das Studio Solingen hat etwa 100 m² für größere Produktionen, Projekte und Teams und kann gemietet werden.`,
     address: postalAddress(HAGEN_STUDIO),
     // The practice address is the Hagen studio, so the same public hours apply here.
     // Solingen is a separate node and does not receive them.
@@ -185,8 +184,8 @@ export function buildSolingenPlaceJsonLd(locale: Locale) {
     },
     hasMap: SOLINGEN_STUDIO.mapsUrl,
     description: de
-      ? `Fotostudio in Solingen, etwa ${SOLINGEN_STUDIO.areaSqm} m², für größere Produktionen. ${appointmentOnlyLabel("de")}. Das Studio kann gemietet werden. Keine Bewerbungsfotos und keine Passbilder.`
-      : `Photo studio in Solingen, about ${SOLINGEN_STUDIO.areaSqm} m², for larger productions. ${appointmentOnlyLabel("en")}. The studio can be rented. No application photos and no passport photos.`,
+      ? `Fotostudio in Solingen, etwa ${SOLINGEN_STUDIO.areaSqm} m², für größere Produktionen, Projekte und Teams, die im Studio Hagen zu groß wären. Ein Shooting wird vor dem Besuch terminiert. Das Studio kann gemietet werden.`
+      : `Photo studio in Solingen, about ${SOLINGEN_STUDIO.areaSqm} m², for larger productions, projects and teams that would be too big for the Hagen studio. To book a shoot, contact the studio and schedule an appointment before coming. The studio can also be rented.`,
     floorSize: {
       "@type": "QuantitativeValue",
       value: SOLINGEN_STUDIO.areaSqm,

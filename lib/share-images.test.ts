@@ -26,6 +26,10 @@ function twitterUrl(metadata: Metadata) {
   return String(image.url);
 }
 
+function samePath(left: string, right: string) {
+  return left === right;
+}
+
 test("each niche page shares its own category image, and only real estate uses a property photo", () => {
   const paths = new Set<string>();
 
@@ -33,7 +37,7 @@ test("each niche page shares its own category image, and only real estate uses a
     const expected = NICHE_OG_IMAGES[slug];
     assert.equal(paths.has(expected.path), false, expected.path);
     paths.add(expected.path);
-    assert.equal(expected.path === OG_IMAGE_PATH, false);
+    assert.equal(samePath(expected.path, OG_IMAGE_PATH), false);
 
     for (const locale of ["de", "en"] as const) {
       const pages = [
@@ -46,7 +50,9 @@ test("each niche page shares its own category image, and only real estate uses a
         assert.equal(image.width, 1200);
         assert.equal(image.height, 630);
         assert.equal(image.alt, expected.alt[locale]);
-        assert.equal(metadata.twitter?.card, "summary_large_image");
+        const twitter = metadata.twitter;
+        const card = twitter && "card" in twitter ? twitter.card : undefined;
+        assert.equal(card, "summary_large_image");
         assert.equal(twitterUrl(metadata), image.url);
       }
     }

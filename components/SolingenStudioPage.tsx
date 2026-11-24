@@ -48,7 +48,6 @@ export default function SolingenStudioPage({
   publicHost,
 }: SolingenStudioPageProps) {
   const de = locale === "de";
-  const appointment = appointmentOnlyLabel(locale, { sentence: false });
   const address = formatAddressLine(SOLINGEN_ADDRESS);
   const studioHref = portalCategoryUrl("studio", { host: publicHost, locale });
   const href = (slug: Parameters<typeof categoryPath>[0]) => withLocale(categoryPath(slug, locale), locale);
@@ -67,16 +66,16 @@ export default function SolingenStudioPage({
       <div className="mt-8 space-y-5 text-sm leading-relaxed text-[#322B2B]/85 sm:text-base">
         <p>
           {de
-            ? `Das Fotostudio in Solingen liegt in der ${address}. Es hat etwa 100 Quadratmeter und ist für größere Projekte und Produktionen gedacht: Teams, Commercial-Sets und Aufbauten, die im Alltagstudio in Hagen keinen Platz haben. Gearbeitet wird hier nicht im Vorbeigehen, sondern dann, wenn der Raum für eine Produktion gebraucht wird.`
-            : `The photo studio in Solingen is at ${address}. It is about 100 square metres and is meant for larger projects and productions: teams, commercial sets, and builds that do not fit in the everyday studio in Hagen. Work happens here when a production needs the room, not as a walk-in counter.`}
+            ? `Das Studio Solingen, ${address}, hat etwa 100 m² und nimmt größere Produktionen, Projekte und Teams auf, die für das Studio Hagen zu groß wären. Für ein Shooting schreiben Sie uns bitte, damit wir vor Ihrem Besuch einen Termin legen.`
+            : `The Solingen studio, ${address}, is about 100 m² and can handle larger productions, projects and teams that would be too big for the Hagen studio. To book a shoot, please contact us to schedule an appointment before coming.`}
         </p>
         <h2 className="pt-4 text-2xl font-light tracking-tight">
-          {de ? "Nur nach Vereinbarung" : "By appointment only"}
+          {de ? "Termin vor dem Besuch" : "An appointment before you come"}
         </h2>
         <p>
           {de
-            ? `Es gibt keine öffentlichen Öffnungszeiten. Das Studio ist ${appointment} zugänglich und kann gemietet werden, wenn eine Produktion die Fläche für sich braucht. Ein Termin wird bestätigt, bevor jemand kommt.`
-            : `There are no public opening hours. The studio is ${appointment} and can be rented when a production needs the floor to itself. A time is confirmed before anyone arrives.`}
+            ? "Das Studio kann auch gemietet werden. Die Konditionen stehen unten. Ein Termin wird bestätigt, bevor jemand kommt."
+            : "The studio can also be rented. The rates are below. A time is confirmed before anyone arrives."}
         </p>
         <h2 className="pt-4 text-2xl font-light tracking-tight">
           {de ? "Studio mieten" : "Rent the studio"}
@@ -121,18 +120,18 @@ export default function SolingenStudioPage({
           )}
         </p>
         <h2 className="pt-4 text-2xl font-light tracking-tight">
-          {de ? "Was hier nicht angeboten wird" : "What is not offered here"}
+          {de ? "Bewerbungsfotos und Passbilder" : "Application and passport photos"}
         </h2>
         <p>
           {de ? (
             <>
-              Bewerbungsfotos und Passbilder gibt es in Solingen nicht. Dafür ist das Fotostudio Hagen
-              zuständig, auf einer <TextLink href={studioHref}>eigenen Seite</TextLink>.
+              Studio Hagen bietet Bewerbungsfotos und Passbilder, mehr dazu{" "}
+              <TextLink href={studioHref}>hier</TextLink>.
             </>
           ) : (
             <>
-              Application photos and passport photos are not offered in Solingen. Those sittings belong
-              to the Hagen studio, on its <TextLink href={studioHref}>own page</TextLink>.
+              Studio Hagen offers application and passport photos, more info{" "}
+              <TextLink href={studioHref}>here</TextLink>.
             </>
           )}
         </p>

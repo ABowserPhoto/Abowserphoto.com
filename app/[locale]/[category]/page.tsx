@@ -17,6 +17,7 @@ import { getPageFaqs, getPageSections } from "../../../lib/i18n/pageSections";
 import { buildCategoryMetadata } from "../../../lib/i18n/seo";
 import { nicheDocumentCopy } from "../../../lib/niche-landing";
 import { categorySegment, resolveCategorySegment } from "../../../lib/routes";
+import { serviceIntroBeats, serviceIntroFrames, serviceIntroKicker } from "../../../lib/serviceIntro";
 import { nicheHostForHostname } from "../../../lib/subdomains";
 
 type CategoryPageProps = {
@@ -131,6 +132,24 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     };
   });
 
+  const introFrames = serviceIntroFrames(
+    slug,
+    heroMedia.map((item) => ({ url: item.url, type: item.type })),
+    portfolio
+  );
+  const intro = serviceIntroBeats(slug, locale).map((beat, index) => {
+    const frame = introFrames[index] ?? introFrames[0];
+    return {
+      title: beat.title,
+      description: beat.description,
+      imageUrl: frame?.imageUrl ?? null,
+      imageAlt: frame?.imageUrl ? getImageAlt(frame.imageUrl, locale) : beat.title,
+      imageWidth: null,
+      imageHeight: null,
+      backgroundVideoUrl: frame?.backgroundVideoUrl,
+    };
+  });
+
   const logoUrl = getLogoUrl();
   const aboutImageUrl = getAboutImageUrl();
   const aboutDescription = selectedCategory.aboutText;
@@ -155,6 +174,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         pageSections={getPageSections(slug, locale)}
         dictionary={dictionary}
         locale={locale}
+        publicHost={host ?? ""}
+        intro={intro}
+        introKicker={serviceIntroKicker(locale)}
       />
     </>
   );

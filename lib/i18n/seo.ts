@@ -161,6 +161,7 @@ const COMPLETE_DOCUMENT_TITLES = new Set<CategorySlug>([
   "food",
   "cinematography",
   "commercial",
+  "social-media-management",
 ]);
 
 export function buildCategoryMetadata(

@@ -8,6 +8,20 @@ body {
   margin: 0;
 }
 
+.service-pin-static {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-pin-animated {
+    display: none;
+  }
+
+  .service-pin-static {
+    display: block;
+  }
+}
+
 .booking-form {
   color-scheme: dark;
 }

@@ -10,6 +10,7 @@ import type { Locale } from "../lib/i18n/config";
 import { withLocale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
 import type { PageSection } from "../lib/i18n/pageSections";
+import { servicePageLinks } from "../lib/serviceLinks";
 import { contactEmailHref } from "../lib/contact";
 import HeroSlider, { type HeroMediaItem } from "./HeroSlider";
 import Navbar from "./Navbar";
@@ -30,6 +31,7 @@ type ServiceWithMedia = {
   mediaType?: "embed" | "video";
   embedUrl?: string;
   videoUrl?: string;
+  backgroundVideoUrl?: string;
   tours?: { title: string; url: string }[];
   videos?: { title: string; url: string }[];
   beforeImage?: string;
@@ -54,6 +56,9 @@ type CategoryTemplateProps = {
   pageSections?: PageSection[];
   dictionary: Dictionary;
   locale: Locale;
+  publicHost?: string;
+  intro?: ServiceWithMedia[];
+  introKicker?: string;
 };
 
 type SectionId = "hero" | "portfolio" | "services" | "about" | "faq";
@@ -82,6 +87,9 @@ export default function CategoryTemplate({
   pageSections = [],
   dictionary,
   locale,
+  publicHost,
+  intro = [],
+  introKicker = "In focus",
 }: CategoryTemplateProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
@@ -172,7 +180,9 @@ export default function CategoryTemplate({
           book: isSocial ? dictionary.nav.consult : dictionary.nav.book,
           home: dictionary.nav.home,
           menu: dictionary.nav.menu,
+          services: dictionary.nav.services,
         }}
+        serviceLinks={servicePageLinks(locale, dictionary.home.niches, publicHost)}
       />
 
       <main>
@@ -184,6 +194,18 @@ export default function CategoryTemplate({
             align={category.slug === "food" ? "left" : "center"}
           />
         </section>
+
+        {intro.length > 0 ? (
+          <ServicesScroll
+            services={intro}
+            themeColor={category.themeColor}
+            inquireLabel={inquireLabel}
+            watchVideoLabel={dictionary.category.watchVideo}
+            viewTourLabel={dictionary.category.viewTour}
+            sectionId="story"
+            kicker={introKicker}
+          />
+        ) : null}
 
         <section id="portfolio" className="relative z-0 isolate bg-black">
           <PortfolioGrid
@@ -284,8 +306,8 @@ export default function CategoryTemplate({
               </div>
               <a
                 href={contactEmailHref()}
-                className="mt-8 inline-flex rounded-full px-6 py-3 text-sm font-semibold text-white transition-opacity duration-300 hover:opacity-90"
-                style={{ backgroundColor: category.themeColor }}
+                className="mt-8 inline-flex rounded-full border border-transparent px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:border-[var(--brand)] hover:!bg-[#F4F1ED] hover:!text-[var(--brand)]"
+                style={{ backgroundColor: category.themeColor, ["--brand" as string]: category.themeColor }}
               >
                 {dictionary.nav.contact}
               </a>

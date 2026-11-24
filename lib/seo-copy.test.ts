@@ -2,10 +2,15 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { HAGEN_ADDRESS, SOLINGEN_ADDRESS } from "./contact";
 import { countWords, homeIntroPlainText } from "./homeIntro";
+import { AWARD_LOGOS } from "./awards";
+import { MARKETING_VIDEO } from "./marketingVideo";
+import { homeHubTiles } from "./homeHub";
+import { serviceIntroBeats } from "./serviceIntro";
+import { categoryContentMap, type CategorySlug } from "./content";
 import { getDictionarySync } from "./i18n/getDictionary";
 import { buildHomeMetadata, buildSolingenStudioMetadata } from "./i18n/seo";
 import { getPageFaqs } from "./i18n/pageSections";
-import { indexablePaths } from "./routes";
+import { categoryPath, indexablePaths } from "./routes";
 import { buildFaqPageJsonLd, buildSolingenPlaceJsonLd } from "./structuredData";
 
 function absoluteTitle(title: unknown) {
@@ -15,10 +20,21 @@ function absoluteTitle(title: unknown) {
   return String(title);
 }
 
-test("homepage intro is 300 to 500 words in both languages", () => {
+test("homepage intro leads with the studios and a quote, without internal notes", () => {
   for (const locale of ["de", "en"] as const) {
-    const words = countWords(homeIntroPlainText(locale));
-    assert.ok(words >= 300 && words <= 500, `${locale} intro is ${words} words`);
+    const text = homeIntroPlainText(locale);
+    assert.equal(/second studio|zweite Studio|every day|täglich|Paketpreise|package prices|not part of the offer|nicht zum Angebot|separate address|eigene Adresse/i.test(text), false);
+    if (locale === "de") {
+      assert.match(text, /100 m²/);
+      assert.match(text, /Bewerbungsfotos und Passbilder/);
+      assert.match(text, /Kontaktformular/);
+    } else {
+      assert.match(text, /about 100 m²/);
+      assert.match(text, /too big for the Hagen studio/);
+      assert.match(text, /application and passport photos/);
+      assert.match(text, /contact form/);
+      assert.match(text, /WhatsApp/);
+    }
   }
   assert.equal(getDictionarySync("de").home.headline, "Fotograf & Fotostudio in Hagen und Solingen");
   assert.equal(
@@ -29,6 +45,19 @@ test("homepage intro is 300 to 500 words in both languages", () => {
     absoluteTitle(buildHomeMetadata("de").title),
     "Fotograf & Fotostudio Hagen | Aaron Bowser Photography"
   );
+  const tiles = homeHubTiles("de");
+  assert.equal(tiles[0]?.slug, "wedding");
+  assert.equal(tiles[1]?.slug, "real-estate");
+  assert.equal(tiles.at(-1)?.slug, "food");
+  assert.equal(tiles.at(-2)?.slug, "business-portraits");
+  assert.equal(AWARD_LOGOS.length, 0);
+  assert.equal(MARKETING_VIDEO.src, "");
+  assert.ok(MARKETING_VIDEO.poster.startsWith("/"));
+  for (const slug of Object.keys(categoryContentMap) as CategorySlug[]) {
+    for (const locale of ["de", "en"] as const) {
+      assert.equal(serviceIntroBeats(slug, locale).length, 2);
+    }
+  }
 });
 
 test("scan titles and meta descriptions stay within length and match the German wording", () => {
@@ -149,6 +178,15 @@ test("scan titles and meta descriptions stay within length and match the German 
   assert.ok(indexablePaths("en").includes("/photo-studio-solingen"));
   assert.equal(indexablePaths("de").includes("/bewerbungsfotos"), false);
   assert.equal(indexablePaths("en").includes("/application-photos"), false);
+  for (const slug of Object.keys(categoryContentMap) as CategorySlug[]) {
+    if (slug === "studio") continue;
+    assert.ok(indexablePaths("de").includes(categoryPath(slug, "de")), slug);
+    assert.ok(indexablePaths("en").includes(categoryPath(slug, "en")), slug);
+  }
+  const social = getDictionarySync("de").seo["social-media-management"];
+  assert.ok(social.title.length <= 60, social.title);
+  assert.ok(social.description.length <= 155, social.description);
+  assert.ok(getDictionarySync("en").seo["social-media-management"].description.length <= 155);
 });
 
 test("portfolio archive copy is no longer a single sentence", () => {

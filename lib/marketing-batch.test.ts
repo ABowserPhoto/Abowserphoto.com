@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { explicitImageAlt } from "./homeImageAlts";
 import { getLegalDocument } from "./legalContent";
+import { AWARD_LOGOS } from "./awards";
 import { homeHeroCopy } from "./homeHero";
 import { NICHE_LANDING_COPY } from "./niche-landing";
 import { getDictionarySync } from "./i18n/getDictionary";
@@ -32,7 +33,7 @@ test("the German homepage uses Buscando's alts and the logo alt is already the b
   assert.equal(getDictionarySync("de").home.logoLabel, "Aaron Bowser Photography");
 });
 
-test("the homepage keeps its title and H1 and adds the claim without an award strip", () => {
+test("the homepage keeps its title and H1 and adds the claim with an empty award slot", () => {
   const german = getDictionarySync("de");
   const hero = homeHeroCopy("de");
   assert.equal(german.seo.home.title, "Fotograf & Fotostudio Hagen | Aaron Bowser Photography");
@@ -44,6 +45,7 @@ test("the homepage keeps its title and H1 and adds the claim without an award st
   assert.equal(german.home.logoLabel, "Aaron Bowser Photography");
   assert.equal(getDictionarySync("en").nav.inquire, "Book a shoot");
   assert.equal(german.nav.consult, "Beratung anfragen");
+  assert.equal(AWARD_LOGOS.length, 0);
 });
 
 test("immo keeps its title and H1, and www real-estate copy stays on its own heading", () => {
