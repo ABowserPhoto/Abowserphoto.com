@@ -8,17 +8,29 @@ import {
   writeCookieConsent,
   type CookieConsentChoice,
 } from "../lib/cookieConsent";
-import { useLocale } from "../lib/i18n/LocaleProvider";
+import { useDictionary, useLocale } from "../lib/i18n/LocaleProvider";
 
 export default function CookieConsent() {
   const { localizePath } = useLocale();
+  const { footer } = useDictionary();
+  const banner = footer.cookieBanner;
   const [isReady, setIsReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
     setIsOpen(!saved);
     setIsReady(true);
+  }, []);
+
+  useEffect(() => {
+    function syncBooking() {
+      setBookingOpen(document.documentElement.dataset.bookingOpen === "1");
+    }
+    syncBooking();
+    window.addEventListener("abowser:booking-open", syncBooking);
+    return () => window.removeEventListener("abowser:booking-open", syncBooking);
   }, []);
 
   function handleConsent(choice: CookieConsentChoice) {
@@ -37,7 +49,7 @@ export default function CookieConsent() {
   return (
     <>
       <AnimatePresence>
-        {isOpen ? (
+        {isOpen && !bookingOpen ? (
           <motion.aside
             key="cookie-consent-banner"
             className="fixed inset-x-3 bottom-3 z-[100] mx-auto w-auto max-w-3xl rounded-2xl border border-white/50 bg-white/80 p-4 shadow-xl backdrop-blur-md sm:inset-x-6 sm:p-5"
@@ -47,16 +59,18 @@ export default function CookieConsent() {
             transition={{ duration: 0.35, ease: "easeOut" }}
             role="dialog"
             aria-live="polite"
-            aria-label="Cookie-Einwilligung"
+            aria-label={banner.dialogLabel}
           >
-            <h2 className="text-base font-semibold text-[#322B2B]">Ihre Privatsphäre ist uns wichtig</h2>
+            <h2 className="text-base font-semibold text-[#322B2B]">{banner.title}</h2>
             <p className="mt-2 text-sm leading-relaxed text-[#322B2B]">
-              Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und den Website-Traffic zu analysieren.
-              Details finden Sie in unserer{" "}
-              <Link href={localizePath("/datenschutz")} className="underline underline-offset-2">
-                Datenschutzerklärung
+              {banner.body}{" "}
+              <Link href={localizePath("/cookie-richtlinie")} className="underline underline-offset-2">
+                {banner.cookiePolicy}
               </Link>
-              .
+              {" · "}
+              <Link href={localizePath("/datenschutz")} className="underline underline-offset-2">
+                {banner.privacyPolicy}
+              </Link>
             </p>
             <div className="mt-4 flex flex-col gap-2 sm:flex-row">
               <button
@@ -64,14 +78,14 @@ export default function CookieConsent() {
                 onClick={() => handleConsent("all")}
                 className="rounded-md bg-[#322B2B] px-4 py-2 text-sm font-semibold text-white transition-opacity duration-300 hover:opacity-90"
               >
-                Alle akzeptieren
+                {banner.accept}
               </button>
               <button
                 type="button"
                 onClick={() => handleConsent("essential")}
                 className="rounded-md border border-[#322B2B]/25 bg-transparent px-4 py-2 text-sm font-semibold text-[#322B2B] transition-colors duration-300 hover:bg-[#322B2B]/5"
               >
-                Nur essenzielle
+                {banner.essential}
               </button>
             </div>
           </motion.aside>
@@ -82,8 +96,8 @@ export default function CookieConsent() {
         type="button"
         onClick={reopenBanner}
         className="fixed bottom-3 left-3 z-[90] rounded-full border border-[#322B2B]/25 bg-white/80 p-2 text-[#322B2B] opacity-50 shadow-sm backdrop-blur transition-opacity duration-300 hover:opacity-90"
-        aria-label="Cookie-Einstellungen öffnen"
-        title="Cookie-Einstellungen"
+        aria-label={banner.reopen}
+        title={banner.reopen}
       >
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
           <circle cx="12" cy="12" r="9" />

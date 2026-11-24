@@ -507,6 +507,39 @@ test("password reset pages stay on the niche host", async () => {
   assert.equal(recoveryLocation?.searchParams.get("error"), "invalid");
 });
 
+test("http requests 301 to the same host on https, and the main apex goes to www", async () => {
+  function httpRequest(host: string, pathname: string) {
+    const headers = new Headers({ host, "x-forwarded-proto": "http" });
+    return new NextRequest(`http://${host}${pathname}`, { headers });
+  }
+
+  const immo = await proxy(httpRequest("immo.abowserphoto.com", "/de?utm=qr"));
+  assert.equal(immo.status, 301);
+  const immoLocation = locationUrl(immo);
+  assert.equal(immoLocation?.protocol, "https:");
+  assert.equal(immoLocation?.hostname, "immo.abowserphoto.com");
+  assert.equal(immoLocation?.pathname, "/de");
+  assert.equal(immoLocation?.search, "?utm=qr");
+
+  const studio = await proxy(httpRequest("studio.abowserphoto.com", "/en"));
+  assert.equal(locationUrl(studio)?.hostname, "studio.abowserphoto.com");
+  assert.equal(locationUrl(studio)?.protocol, "https:");
+
+  const apex = await proxy(httpRequest("aaronbowser-photography.com", "/de/hochzeitsfotograf?ref=card"));
+  assert.equal(apex.status, 301);
+  const apexLocation = locationUrl(apex);
+  assert.equal(apexLocation?.hostname, "www.aaronbowser-photography.com");
+  assert.equal(apexLocation?.pathname, "/de/hochzeitsfotograf");
+  assert.equal(apexLocation?.search, "?ref=card");
+
+  const www = await proxy(httpRequest("www.aaronbowser-photography.com", "/de"));
+  assert.equal(locationUrl(www)?.hostname, "www.aaronbowser-photography.com");
+  assert.equal(locationUrl(www)?.protocol, "https:");
+
+  const dev = await proxy(request("immo.localhost:3001", "/de"));
+  assert.notEqual(dev.status, 301);
+});
+
 test("application photos on the main site canonicalize to the studio host", () => {
   const german = buildCategoryMetadata("de", "studio", "www.aaronbowser-photography.com");
   assert.equal(german.alternates?.canonical, "https://studio.abowserphoto.com/de");

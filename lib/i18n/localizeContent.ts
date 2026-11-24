@@ -22,7 +22,7 @@ const germanCategoryCopy: Partial<
       title: string;
       subtitle: string;
       aboutText: string;
-      services?: Array<{ title: string; description: string }>;
+      services?: Array<{ title: string; description: string; badge?: string }>;
     }
   >
 > = {
@@ -31,54 +31,44 @@ const germanCategoryCopy: Partial<
     title: "Immobilienfotografie NRW",
     subtitle:
       "Immobilienbilder für Exposés in Nordrhein-Westfalen, mit Studios in Hagen und Solingen.",
-    aboutText: `Ich bin Aaron Bowser, Immobilienfotograf aus Hagen, und fotografiere Wohnungen, Häuser und Gewerbeflächen in Hagen, Solingen und ganz NRW. Mir geht es um Raum, Licht und Perspektive: Bilder, die eine Immobilie einladend und zugleich ehrlich zeigen, so wie Interessenten sie bei der Besichtigung erleben.
+    aboutText: `Für Makler in Hagen, Solingen und ganz NRW. Ein Termin, klare Pakete, Fotos innerhalb von 24 Stunden.
 
-Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Neben Innen- und Außenaufnahmen gehören Twilight-Aufnahmen, Drohnenfotos, 360°-Rundgänge, kurze Highlight-Videos und digitales Homestaging dazu. Mit sorgfältiger Lichtführung und Nachbearbeitung entstehen Bilder fürs Exposé und für Immobilienportale, die schnell und zuverlässig bei Ihnen sind.`,
+Ich bin Aaron Bowser, Immobilienfotograf aus Hagen, und fotografiere Wohnungen, Häuser und Gewerbeflächen in Hagen, Solingen und ganz NRW. Mir geht es um Raum, Licht und Perspektive: Bilder, die eine Immobilie einladend und zugleich ehrlich zeigen, so wie Interessenten sie bei der Besichtigung erleben.
+
+Ich arbeite für Makler, Bauträger, Verwalter und Eigentümer. Die Angebote sind ein Fotopaket ohne Video, die optionalen Extras Walk Thru Video und Agent Branding Video sowie die Pakete Premium Home und Luxury Makler. Bei Premium Home und Luxury Makler werden Drohnenfotos auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in das Video ein. Preise stehen im Kundenkonto.`,
     services: [
       {
-        title: "Innenaufnahmen",
+        title: "Fotopaket",
         description:
-          "Wir zeigen Raumfluss, Tageslicht und architektonische Details – hell, einladend und so, dass sich Käufer das Leben vor Ort vorstellen können.",
+          "Ein Fotopaket, das Sie im Kundenkonto wählen. Nur Fotos, ohne Video. Die Preise stehen im Kundenkonto.",
       },
       {
-        title: "Außenaufnahmen",
+        title: "Walk Thru Video",
+        description: "Ein optionales Extra. Ein Walkthrough durch die Immobilie.",
+      },
+      {
+        title: "Agent Branding Video",
+        description: "Ein optionales Extra. Ein Video mit dem Makler im Mittelpunkt.",
+      },
+      {
+        title: "Premium Home",
         description:
-          "Maximale Außenwirkung durch Architektur, Landschaft und Umgebung – mit präzisen Winkeln und optimalem Licht.",
+          "Das Fotopaket Ihrer Wahl plus ein Highlight-Video. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Preise stehen im Kundenkonto.",
       },
       {
-        title: "Twilight Sessions",
-        description: "Golden Hour und Abendstimmungen für starke Hero-Bilder im Exposé.",
-      },
-      {
-        title: "Makler-Branding",
-        description: "Porträts und Branding für Agenturen und Vertriebsteams.",
-      },
-      {
-        title: "Drohnenfotografie",
-        description: "Luftaufnahmen für Lage, Grundstück und Umfeld.",
-      },
-      {
-        title: "360°-Virtuelle Touren",
-        description: "Immersive Rundgänge, die Interessenten digital durch die Immobilie führen.",
-      },
-      {
-        title: "Highlight-Videos",
-        description: "Kurze, filmische Videos für Portale und Social Media.",
+        title: "Luxury Makler",
+        description:
+          "Wie Premium Home, nur ist das Video ein Walkthrough mit dem Makler im Fokus. Drohnenfotos werden auf das Fotopaket angerechnet, und die Drohnenaufnahmen fließen in dieses Video ein. Preise stehen im Kundenkonto.",
       },
       {
         title: "Digitales Homestaging",
         description:
-          "Leere Räume werden mit realistischem digitalem Mobiliar zum einladenden Zuhause.",
+          "Virtuell eingerichtete Bilder kennzeichnen wir sichtbar im Bild („Virtuell eingerichtet“). Wir verändern keine Bausubstanz: Wände, Fenster, Ausblicke oder Mängel werden weder hinzugefügt noch entfernt.",
+        badge: "Virtuell eingerichtet",
       },
       {
-        title: "Premium Home Paket",
-        description:
-          "Enthält ein Fotopaket Ihrer Wahl und ein Highlight-Video. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Video ein.",
-      },
-      {
-        title: "Luxury Makler Paket",
-        description:
-          "Enthält ein Fotopaket Ihrer Wahl und ein Walk-Through-Video mit dem Makler im Fokus. Drohnenfotos und Drohnenaufnahmen sind ebenfalls enthalten: Die Drohnenfotos werden auf Ihr Fotopaket angerechnet, die Drohnenaufnahmen fließen in das Walk-Through-Video ein.",
+        title: "360°-Rundgang",
+        description: "Ein optionales Extra zum Fotopaket. Ein Rundgang, wenn das Objekt ihn braucht.",
       },
     ],
   },
@@ -282,7 +272,7 @@ So bleibt Ihr Auftritt auf Instagram, LinkedIn und Co. regelmäßig, visuell sti
 
 function localizeServices(
   services: ServiceItem[],
-  overrides?: Array<{ title: string; description: string }>
+  overrides?: Array<{ title: string; description: string; badge?: string }>
 ): ServiceItem[] {
   if (!overrides?.length) return services;
   return services.map((service, index) => {
@@ -292,6 +282,7 @@ function localizeServices(
       ...service,
       title: override.title,
       description: override.description,
+      badge: override.badge ?? service.badge,
     };
   });
 }

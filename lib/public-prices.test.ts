@@ -13,9 +13,10 @@ import {
   PASSPORT_PHOTO_PRICE_EUR,
   applicationPhotoPriceLine,
   passportPhotoPriceLine,
+  solingenRentalCopy,
   studioSittingPriceAnswer,
 } from "./site";
-import { buildBusinessJsonLd, buildStudioServiceJsonLd } from "./structuredData";
+import { buildBusinessJsonLd, buildSolingenRentalOfferJsonLd, buildStudioServiceJsonLd } from "./structuredData";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const TEXT_EXT = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".json", ".md", ".html"]);
@@ -52,7 +53,15 @@ function amountsIn(text: string) {
   return found;
 }
 
-test("the only public amounts are €29 and €15", () => {
+const RENTAL_AMOUNTS = new Set(["54", "189", "329"]);
+const RENTAL_FILES = new Set([
+  "lib/site.ts",
+  "lib/structuredData.ts",
+  "lib/public-prices.test.ts",
+  "components/SolingenStudioPage.tsx",
+]);
+
+test("the only public amounts are €29, €15, and the Solingen rental rates", () => {
   assert.equal(APPLICATION_PHOTO_PRICE_EUR, "29");
   assert.equal(PASSPORT_PHOTO_PRICE_EUR, "15");
   assert.equal(applicationPhotoPriceLine("de"), "€29 für 1 digitales Foto");
@@ -63,9 +72,9 @@ test("the only public amounts are €29 and €15", () => {
   for (const file of walk(ROOT)) {
     const text = fs.readFileSync(file, "utf8");
     for (const amount of amountsIn(text)) {
-      if (amount !== "29" && amount !== "15") {
-        hits.push(`${relative(file)} ${amount}`);
-      }
+      if (amount === "29" || amount === "15") continue;
+      if (RENTAL_AMOUNTS.has(amount) && RENTAL_FILES.has(relative(file))) continue;
+      hits.push(`${relative(file)} ${amount}`);
     }
     if (/"priceRange"\s*:/.test(text)) {
       hits.push(`${relative(file)} priceRange`);
@@ -144,5 +153,27 @@ test("removed public prices stay out of metadata, packages, and structured data"
     assert.equal(studioJson.includes("priceRange"), false);
     const prices = amountsIn(studioJson);
     assert.deepEqual(prices.sort(), ["15", "29"]);
+
+    const rental = solingenRentalCopy(locale);
+    const rentalText = Object.values(rental).join("\n");
+    assert.deepEqual(amountsIn(rentalText).sort(), ["189", "329", "54"]);
+    assert.match(rentalText, /19/);
+    assert.equal(rentalText.includes("["), false);
+    assert.equal(rentalText.includes("]"), false);
+
+    const offer = buildSolingenRentalOfferJsonLd(locale);
+    assert.equal(offer["@type"], "OfferCatalog");
+    assert.equal(offer.itemListElement.length, 3);
+    for (const item of offer.itemListElement) {
+      assert.equal(item["@type"], "Offer");
+      assert.equal(item.priceCurrency, "EUR");
+      assert.equal(item.valueAddedTaxIncluded, true);
+      assert.equal(item.priceSpecification.valueAddedTaxIncluded, true);
+      assert.equal(item.priceSpecification.priceCurrency, "EUR");
+    }
+    assert.deepEqual(
+      offer.itemListElement.map((item) => item.price).sort(),
+      ["189", "329", "54"]
+    );
   }
 });

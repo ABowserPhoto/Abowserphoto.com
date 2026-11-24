@@ -10,6 +10,7 @@ import { createClient } from "../lib/supabase/client";
 import ClientAuth from "./Auth/ClientAuth";
 import BookingForm from "./BookingForm";
 import GeneralInquiryForm from "./GeneralInquiryForm";
+import GuestEnquiry from "./GuestEnquiry";
 
 type BookingModalProps = {
   isOpen: boolean;
@@ -91,6 +92,20 @@ export default function BookingModal({ isOpen, onClose, isRealEstate, inquiryCat
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!hasMounted) return;
+    if (isOpen) {
+      document.documentElement.dataset.bookingOpen = "1";
+    } else {
+      delete document.documentElement.dataset.bookingOpen;
+    }
+    window.dispatchEvent(new Event("abowser:booking-open"));
+    return () => {
+      delete document.documentElement.dataset.bookingOpen;
+      window.dispatchEvent(new Event("abowser:booking-open"));
+    };
+  }, [hasMounted, isOpen]);
 
   useEffect(() => {
     if (!hasMounted || !isOpen) return;
@@ -219,7 +234,10 @@ export default function BookingModal({ isOpen, onClose, isRealEstate, inquiryCat
             </h2>
 
             {!isSupabaseConfigured() ? (
-              <p className="pr-10 text-sm leading-relaxed text-[#F4F1ED]/80">{booking.notConfigured}</p>
+              <div className="space-y-6 pr-8">
+                <GuestEnquiry topic={isRealEstate ? "Immobilien" : inquiryCategory.label} variant="dark" />
+                <p className="text-sm leading-relaxed text-[#F4F1ED]/80">{booking.notConfigured}</p>
+              </div>
             ) : isCheckingSession && !showSignupSuccess ? (
               <p className="pr-10 text-sm text-[#F4F1ED]/70">{booking.checkingAccount}</p>
             ) : showSignupSuccess ? (
@@ -230,7 +248,9 @@ export default function BookingModal({ isOpen, onClose, isRealEstate, inquiryCat
                 }}
               />
             ) : !user ? (
-              <ClientAuth
+              <div className="space-y-10 pr-8">
+                <GuestEnquiry topic={isRealEstate ? "Immobilien" : inquiryCategory.label} variant="dark" />
+                <ClientAuth
                 onSignupStart={() => {
                   ignoreAuthChangesRef.current = true;
                 }}
@@ -268,6 +288,7 @@ export default function BookingModal({ isOpen, onClose, isRealEstate, inquiryCat
                   setIsCheckingSession(false);
                 }}
               />
+              </div>
             ) : user && isApproved ? (
               isRealEstate ? (
                 <BookingForm

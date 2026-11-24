@@ -8,6 +8,7 @@ type BeforeAfterSliderProps = {
   afterImage: string;
   alt: string;
   priority?: boolean;
+  badge?: string;
 };
 
 export default function BeforeAfterSlider({
@@ -15,6 +16,7 @@ export default function BeforeAfterSlider({
   afterImage,
   alt,
   priority,
+  badge,
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -82,6 +84,12 @@ export default function BeforeAfterSlider({
           </svg>
         </div>
       </div>
+
+      {badge ? (
+        <span className="pointer-events-none absolute bottom-4 right-4 z-10 bg-black/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white">
+          {badge}
+        </span>
+      ) : null}
 
       <input
         type="range"

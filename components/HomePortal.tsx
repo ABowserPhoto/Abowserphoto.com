@@ -14,6 +14,7 @@ import Image from "next/image";
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import type { MotionValue } from "framer-motion";
 import type { PortalHeroSet } from "../lib/gallery";
+import { explicitImageAlt } from "../lib/homeImageAlts";
 import type { Locale } from "../lib/i18n/config";
 import type { Dictionary } from "../lib/i18n/getDictionary";
 import { type PortalCategorySlug, portalCategoryUrl } from "../lib/subdomains";
@@ -145,28 +146,30 @@ type Panel = {
   seoLabel: string;
 };
 
-function StageImage({ src, sizes }: { src: string; sizes: string }) {
+function StageImage({ src, sizes, alt }: { src: string; sizes: string; alt: string }) {
   const position = "object-cover object-top";
 
   if (src.startsWith("http")) {
     return (
       // Remote heroes are not in the image optimizer allowlist.
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={src} alt="" className={`absolute inset-0 h-full w-full ${position}`} />
+      <img src={src} alt={alt} className={`absolute inset-0 h-full w-full ${position}`} />
     );
   }
 
-  return <Image src={src} alt="" fill sizes={sizes} className={position} />;
+  return <Image src={src} alt={alt} fill sizes={sizes} className={position} />;
 }
 
 function BackgroundFrames({
   images,
   videoUrl,
   layout,
+  locale,
 }: {
   images: string[];
   videoUrl: string | null;
   layout: HoverLayout;
+  locale: Locale;
 }) {
   if (layout === "landscape-video" && videoUrl) {
     return (
@@ -189,7 +192,7 @@ function BackgroundFrames({
     <div className="flex h-full w-full">
       {frames.map((src) => (
         <div key={src} className={frameClass}>
-          <StageImage src={src} sizes={sizes} />
+          <StageImage src={src} sizes={sizes} alt={explicitImageAlt(src, locale)} />
         </div>
       ))}
     </div>
@@ -439,7 +442,7 @@ export default function HomePortal({
       <div className="sticky top-0 h-screen overflow-hidden">
       <div className="absolute inset-0 overflow-hidden" aria-hidden>
         <motion.div className="absolute inset-0 flex" style={{ opacity: baseOpacity }}>
-          <BackgroundFrames images={baseImages} videoUrl={null} layout="triptych" />
+          <BackgroundFrames images={baseImages} videoUrl={null} layout="triptych" locale={locale} />
         </motion.div>
 
         <motion.video
@@ -460,7 +463,7 @@ export default function HomePortal({
           style={{ opacity: lightOpacity }}
           aria-hidden
         >
-          <BackgroundFrames images={lightImages} videoUrl={null} layout="triptych" />
+          <BackgroundFrames images={lightImages} videoUrl={null} layout="triptych" locale={locale} />
         </motion.div>
 
         <AnimatePresence>
@@ -477,6 +480,7 @@ export default function HomePortal({
                 images={hoveredHero.images}
                 videoUrl={hoveredHero.videoUrl}
                 layout={HOVER_LAYOUT[hoveredKey]}
+                locale={locale}
               />
             </motion.div>
           ) : null}

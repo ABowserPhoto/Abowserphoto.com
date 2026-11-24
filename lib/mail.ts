@@ -194,6 +194,68 @@ function decisionMessage(details: RequestDetails, decision: "confirmed" | "decli
   }
 }
 
+export async function sendGuestEnquiryEmail(details: {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  topic: string;
+  locale: string;
+}) {
+  const smtp = openSmtp();
+  const to = headerValue(process.env.BOOKING_NOTIFY_EMAIL || smtp?.user || "");
+  if (!smtp || !to) {
+    console.error("Guest enquiry email skipped: SMTP is not configured.");
+    return false;
+  }
+
+  const name = sanitize(details.name);
+  const email = headerValue(details.email);
+  const phone = sanitize(details.phone);
+  const topic = sanitize(details.topic) || "Allgemein";
+  const message = details.message.replace(/\r\n/g, "\n").trim().slice(0, 4000);
+  const locale = sanitize(details.locale).toUpperCase();
+
+  const text = [
+    "Anfrage ohne Kundenkonto",
+    "",
+    `Thema: ${topic}`,
+    `Name: ${name}`,
+    `E-Mail: ${email}`,
+    `Telefon: ${phone}`,
+    `Sprache: ${locale}`,
+    "",
+    message,
+  ].join("\n");
+
+  const html = `
+    <p>Anfrage ohne Kundenkonto</p>
+    <p>
+      <strong>Thema:</strong> ${escapeHtml(topic)}<br />
+      <strong>Name:</strong> ${escapeHtml(name)}<br />
+      <strong>E-Mail:</strong> ${escapeHtml(email)}<br />
+      <strong>Telefon:</strong> ${escapeHtml(phone)}<br />
+      <strong>Sprache:</strong> ${escapeHtml(locale)}
+    </p>
+    <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
+  `.trim();
+
+  try {
+    await smtp.transporter.sendMail({
+      from: smtp.from,
+      to,
+      replyTo: email,
+      subject: `Anfrage ohne Konto: ${topic}`,
+      text,
+      html,
+    });
+    return true;
+  } catch (error) {
+    console.error("Guest enquiry email failed:", errorMessage(error));
+    return false;
+  }
+}
+
 export async function sendShootDecisionEmail(
   details: RequestDetails,
   decision: "confirmed" | "declined"

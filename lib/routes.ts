@@ -52,6 +52,29 @@ export function solingenStudioPath(locale: Locale) {
   return `/${SOLINGEN_STUDIO_SEGMENTS[locale]}`;
 }
 
+/** Wall art and prints. German and English use different slugs. */
+export const PRINTS_SEGMENTS: Record<Locale, string> = {
+  de: "wandbilder",
+  en: "wall-art",
+};
+
+/** Dated events and mini sessions. No public prices. */
+export const EVENTS_SEGMENTS: Record<Locale, string> = {
+  de: "termine-aktionen",
+  en: "dates-and-events",
+};
+
+const printsSegments = new Set<string>(Object.values(PRINTS_SEGMENTS));
+const eventsSegments = new Set<string>(Object.values(EVENTS_SEGMENTS));
+
+export function printsPath(locale: Locale) {
+  return `/${PRINTS_SEGMENTS[locale]}`;
+}
+
+export function eventsPath(locale: Locale) {
+  return `/${EVENTS_SEGMENTS[locale]}`;
+}
+
 /** Rewrite a locale-less path so the first segment matches the locale's public slug. */
 export function localizePublicPath(pathname: string, locale: Locale) {
   const clean = pathname.startsWith("/") ? pathname : `/${pathname}`;
@@ -60,6 +83,16 @@ export function localizePublicPath(pathname: string, locale: Locale) {
 
   if (isSolingenStudioSegment(parts[0] ?? "")) {
     parts[0] = SOLINGEN_STUDIO_SEGMENTS[locale];
+    return `/${parts.join("/")}`;
+  }
+
+  if (printsSegments.has(parts[0] ?? "")) {
+    parts[0] = PRINTS_SEGMENTS[locale];
+    return `/${parts.join("/")}`;
+  }
+
+  if (eventsSegments.has(parts[0] ?? "")) {
+    parts[0] = EVENTS_SEGMENTS[locale];
     return `/${parts.join("/")}`;
   }
 
@@ -85,6 +118,8 @@ export function indexablePaths(locale: Locale) {
     ...categories,
     `${categoryPath("commercial", locale)}/portfolio`,
     solingenStudioPath(locale),
+    printsPath(locale),
+    eventsPath(locale),
     ...LEGAL_PATHS,
   ];
 }

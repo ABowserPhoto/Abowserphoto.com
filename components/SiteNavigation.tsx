@@ -26,7 +26,7 @@ export default function SiteNavigation({
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur md:hidden">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <Link href="/" className="text-lg font-semibold tracking-tight text-slate-900">
-            A. Bowser Photo
+            Aaron Bowser Photography
           </Link>
           <button
             type="button"
@@ -57,7 +57,7 @@ export default function SiteNavigation({
 
       <aside className="fixed left-0 top-0 hidden h-screen w-72 border-r border-slate-200 bg-white px-7 py-10 md:block">
         <Link href="/" className="text-2xl font-bold tracking-tight text-slate-900">
-          A. Bowser Photo
+          Aaron Bowser Photography
         </Link>
         <p className="mt-2 text-sm text-slate-600">Visual storytelling across multiple niches</p>
         <nav className="mt-10 space-y-2">

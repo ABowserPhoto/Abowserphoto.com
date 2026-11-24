@@ -14,6 +14,28 @@ type LegalDocumentProps = {
   logoUrl: string | null;
 };
 
+function LegalParagraph({ text }: { text: string }) {
+  const parts = text.split(/(https:\/\/[^\s]+)/);
+  return (
+    <p>
+      {parts.map((part, index) =>
+        part.startsWith("https://") ? (
+          <a
+            key={`${part}-${index}`}
+            href={part}
+            className="underline underline-offset-2"
+            rel="noopener noreferrer"
+          >
+            {part}
+          </a>
+        ) : (
+          <span key={`${index}-${part.slice(0, 12)}`}>{part}</span>
+        )
+      )}
+    </p>
+  );
+}
+
 export default function LegalDocument({ document, locale, dictionary, logoUrl }: LegalDocumentProps) {
   return (
     <div className="min-h-screen bg-[#F4F1ED] text-[#322B2B]">
@@ -33,11 +55,8 @@ export default function LegalDocument({ document, locale, dictionary, logoUrl }:
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-        <p className="rounded-xl border border-[#E18400]/50 bg-[#E18400]/10 px-4 py-3 text-sm leading-relaxed text-[#322B2B]">
-          {document.draftNote}
-        </p>
-        <h1 className="mt-8 text-4xl font-light tracking-tight">{document.title}</h1>
+      <main className="mx-auto max-w-3xl px-4 py-14 pb-32 sm:px-6">
+        <h1 className="text-4xl font-light tracking-tight">{document.title}</h1>
         <div className="mt-10 space-y-8">
           {document.blocks.map((block) => (
             <section key={block.heading}>
@@ -48,7 +67,7 @@ export default function LegalDocument({ document, locale, dictionary, logoUrl }:
                 }`}
               >
                 {block.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+                  <LegalParagraph key={paragraph} text={paragraph} />
                 ))}
               </div>
             </section>

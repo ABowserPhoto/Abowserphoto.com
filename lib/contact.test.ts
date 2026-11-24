@@ -126,7 +126,7 @@ test("contact literals are defined only in lib/contact.ts", () => {
 
   for (const needle of needles) {
     const found = sourceFiles
-      .filter((file) => relative(file) !== "lib/contact.test.ts")
+      .filter((file) => !relative(file).endsWith(".test.ts"))
       .filter((file) => fs.readFileSync(file, "utf8").includes(needle))
       .map(relative);
     assert.deepEqual(found, ["lib/contact.ts"], `${needle} also appears in ${found.join(", ")}`);
