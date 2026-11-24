@@ -146,14 +146,20 @@ export default function HomeIntro({ locale, publicHost }: HomeIntroProps) {
               );
             }
             return (
-              <p key={index}>
-                <LongParts parts={block.parts} />
-              </p>
+              <div key={index}>
+                <p>
+                  <LongParts parts={block.parts} />
+                </p>
+                {index === 0 ? (
+                  <div className="mt-4">
+                    <AwardsStrip locale={locale} />
+                  </div>
+                ) : null}
+              </div>
             );
           })}
         </div>
       </details>
-      <AwardsStrip label={locale === "de" ? "Auszeichnungen" : "Awards"} />
       <MarketingVideoSlot alt={locale === "de" ? "Film von Aaron Bowser Photography" : "Film from Aaron Bowser Photography"} />
       <QuoteClose locale={locale} mode="shoot" />
     </article>

@@ -175,7 +175,7 @@ I work with agents, developers, property managers and owners. The offers are a p
     faq: [
       {
         question: "How quickly do I get the pictures?",
-        answer: "The delivery date is set in the quote.",
+        answer: "Delivered within 24–48 hours of your final image selection (times may vary with demand).",
       },
       {
         question: "Will the files work on the portals?",

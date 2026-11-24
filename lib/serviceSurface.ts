@@ -203,7 +203,7 @@ const immoNiche: Pair = {
     h1: "Immobilienfotograf für Makler in NRW",
     subline: "Immobilienfotos, die Besichtigungen bringen",
     intro:
-      "Als Immobilienfotograf für Makler in NRW liefere ich Exposé-Fotos und Videos, die Interessenten zur Besichtigung bringen. Sie wählen das Fotopaket, das zum Objekt passt, von der kompakten Wohnung bis zum großen Haus. Fehlt nur ein Raum oder die Außenansicht, ergänzen Sie einzelne Fotos. Als Extras gibt es ein Walk-Thru-Video und ein Agent-Branding-Video. Mit Premium Home bekommen Sie Fotopaket, Highlight-Video und Drohne aus einem Termin. Luxury Makler setzt Sie selbst im Walk-Through-Video in Szene. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Im Einsatz in Hagen, Wuppertal, Solingen, Düsseldorf, Köln und im Ruhrgebiet.",
+      "Als Immobilienfotograf für Makler in NRW liefere ich Exposé-Fotos und Videos, die Interessenten zur Besichtigung bringen. Sie wählen das Fotopaket, das zum Objekt passt, von der kompakten Wohnung bis zum großen Haus. Fehlt nur ein Raum oder die Außenansicht, ergänzen Sie einzelne Fotos. Als Extras gibt es ein Walk-Thru-Video und ein Agent-Branding-Video. Mit Premium Home bekommen Sie Fotopaket, Highlight-Video und Drohne aus einem Termin. Luxury Makler setzt Sie selbst im Walk-Through-Video in Szene. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Im Einsatz in Hagen, Wuppertal, Solingen, Düsseldorf, Köln und im Ruhrgebiet. Lieferung innerhalb von 24–48 Stunden nach Ihrer finalen Bildauswahl (je nach Auslastung).",
     faqs: [
       faq(
         "Wie viele Fotos braucht ein Exposé?",
@@ -225,6 +225,10 @@ const immoNiche: Pair = {
         "Sind die Bilder für ImmoScout24 und Immowelt geeignet?",
         "Ja, Sie erhalten Exporte für ImmoScout24, Immowelt, Ihre Website und Social Media."
       ),
+      faq(
+        "Wie schnell bekomme ich die Bilder?",
+        "Lieferung innerhalb von 24–48 Stunden nach Ihrer finalen Bildauswahl (je nach Auslastung)."
+      ),
     ],
   },
   en: {
@@ -234,7 +238,7 @@ const immoNiche: Pair = {
     h1: "Real Estate Photographer for Agents in NRW",
     subline: "Property photos that bring viewings",
     intro:
-      "As a property photographer for agents in NRW I deliver listing photos and videos that bring people to a viewing. You choose the photo package that fits the property, from a compact flat to a large house. If only one room or the exterior is missing, you add individual photos. A walk-thru video and an agent branding video are extras. With Premium Home you get the photo package, a highlight video and drone from one appointment. Luxury Makler puts you in the walk-through video. The drone is registered with the aviation authority and insured. In use in Hagen, Wuppertal, Solingen, Düsseldorf, Cologne and the Ruhr.",
+      "As a property photographer for agents in NRW I deliver listing photos and videos that bring people to a viewing. You choose the photo package that fits the property, from a compact flat to a large house. If only one room or the exterior is missing, you add individual photos. A walk-thru video and an agent branding video are extras. With Premium Home you get the photo package, a highlight video and drone from one appointment. Luxury Makler puts you in the walk-through video. The drone is registered with the aviation authority and insured. In use in Hagen, Wuppertal, Solingen, Düsseldorf, Cologne and the Ruhr. Delivered within 24–48 hours of your final image selection (times may vary with demand).",
     faqs: [
       faq(
         "How many photos does a listing need?",
@@ -256,6 +260,10 @@ const immoNiche: Pair = {
         "Will the files work on ImmoScout24 and Immowelt?",
         "Yes. You receive exports for ImmoScout24, Immowelt, your website and social media."
       ),
+      faq(
+        "How quickly do I get the pictures?",
+        "Delivered within 24–48 hours of your final image selection (times may vary with demand)."
+      ),
     ],
   },
 };
@@ -267,7 +275,7 @@ const immoWww: Pair = {
       "Walk-Thru-Videos, Agent-Branding-Videos und Drohnenaufnahmen für Makler in NRW, als Premium Home oder Luxury Makler Paket. Shooting buchen.",
     h1: "Immobilienvideos & Drohnenaufnahmen für Makler in NRW",
     intro:
-      "Ein Exposé mit Video bleibt länger im Kopf. Für Makler in NRW produziere ich Walk Thru Videos, die Interessenten durch die Immobilie führen, und Agent Branding Videos, die Sie als Ansprechpartner zeigen. Drohnenaufnahmen zeigen Lage, Grundstück und Umfeld. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Am einfachsten buchen Sie alles in einem Termin: Premium Home kombiniert Fotopaket, Highlight-Video und Drohne, Luxury Makler setzt Sie im Video in Szene. Alle Fotopakete im Überblick finden Sie auf meiner Seite für Immobilienfotografie in Hagen. Ein Angebot erhalten Sie per Formular, E-Mail oder WhatsApp.",
+      "Ein Exposé mit Video bleibt länger im Kopf. Für Makler in NRW produziere ich Walk Thru Videos, die Interessenten durch die Immobilie führen, und Agent Branding Videos, die Sie als Ansprechpartner zeigen. Drohnenaufnahmen zeigen Lage, Grundstück und Umfeld. Die Drohne ist beim Luftfahrt-Bundesamt registriert und versichert. Am einfachsten buchen Sie alles in einem Termin: Premium Home kombiniert Fotopaket, Highlight-Video und Drohne, Luxury Makler setzt Sie im Video in Szene. Alle Fotopakete im Überblick finden Sie auf meiner Seite für Immobilienfotografie in Hagen. Ein Angebot erhalten Sie per Formular, E-Mail oder WhatsApp. Lieferung innerhalb von 24–48 Stunden nach Ihrer finalen Bildauswahl (je nach Auslastung).",
     faqs: [
       faq(
         "Was ist ein Walk Thru Video?",
@@ -285,6 +293,10 @@ const immoWww: Pair = {
         "Kann ich Video ohne Fotos buchen?",
         "Walk-Thru-Video und Agent-Branding-Video sind Extras zum Fotopaket."
       ),
+      faq(
+        "Wie schnell bekomme ich die Bilder?",
+        "Lieferung innerhalb von 24–48 Stunden nach Ihrer finalen Bildauswahl (je nach Auslastung)."
+      ),
     ],
   },
   en: {
@@ -293,7 +305,7 @@ const immoWww: Pair = {
       "Walk-thru videos, agent branding videos and drone footage for agents in NRW, as Premium Home or Luxury Makler bundles. Book a shoot.",
     h1: "Real Estate Video & Drone for Agents in NRW",
     intro:
-      "A listing with video stays in mind longer. For agents in NRW I produce Walk Thru Videos that lead viewers through the property, and Agent Branding Videos that show you as the contact. Drone footage shows the setting, the plot and the surroundings. The drone is registered and insured. The simplest booking is one appointment: Premium Home combines the photo package, a highlight video and drone, and Luxury Makler puts you in the video. The photo packages are set out on the Hagen property page. A quote comes by form, email or WhatsApp.",
+      "A listing with video stays in mind longer. For agents in NRW I produce Walk Thru Videos that lead viewers through the property, and Agent Branding Videos that show you as the contact. Drone footage shows the setting, the plot and the surroundings. The drone is registered and insured. The simplest booking is one appointment: Premium Home combines the photo package, a highlight video and drone, and Luxury Makler puts you in the video. The photo packages are set out on the Hagen property page. A quote comes by form, email or WhatsApp. Delivered within 24–48 hours of your final image selection (times may vary with demand).",
     faqs: [
       faq(
         "What is a Walk Thru Video?",
@@ -310,6 +322,10 @@ const immoWww: Pair = {
       faq(
         "Can I book video without photos?",
         "Walk-thru video and agent branding video are extras to the photo package."
+      ),
+      faq(
+        "How quickly do I get the pictures?",
+        "Delivered within 24–48 hours of your final image selection (times may vary with demand)."
       ),
     ],
   },

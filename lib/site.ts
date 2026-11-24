@@ -236,8 +236,8 @@ export function solingenRentalCopy(locale: "de" | "en") {
   if (locale === "de") {
     return {
       hourly: `Stundenweise: ${rates.hourlyEur} € pro Stunde (mind. ${rates.minimumHours} Stunden)`,
-      halfDay: `Halber Tag: ${rates.halfDayEur} €`,
-      fullDay: `Ganzer Tag: ${rates.fullDayEur} €`,
+      halfDay: `Halbtag (4 Std.) ${rates.halfDayEur} €`,
+      fullDay: `Ganztag (8 Std.) ${rates.fullDayEur} €`,
       vat: "Alle Preise inkl. 19 % MwSt.",
       invoice: "Für Geschäftskunden: Rechnung mit ausgewiesener MwSt.",
       photographerExtra: "Extras: Studio + Fotograf auf Anfrage",
@@ -245,8 +245,8 @@ export function solingenRentalCopy(locale: "de" | "en") {
   }
   return {
     hourly: `Hourly: €${rates.hourlyEur} per hour (${rates.minimumHours} hour minimum)`,
-    halfDay: `Half day: €${rates.halfDayEur}`,
-    fullDay: `Full day: €${rates.fullDayEur}`,
+    halfDay: `Half day (4 h): €${rates.halfDayEur}`,
+    fullDay: `Full day (8 h): €${rates.fullDayEur}`,
     vat: "All prices include 19% VAT.",
     invoice: "Business customers receive an invoice with VAT shown.",
     photographerExtra: "Extras: studio + photographer on request",

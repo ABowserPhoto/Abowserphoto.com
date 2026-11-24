@@ -240,18 +240,18 @@ export function buildSolingenRentalOfferJsonLd(locale: Locale) {
           : `€${rates.hourlyEur} per hour, ${rates.minimumHours} hour minimum, including 19% VAT.`
       ),
       offer(
-        de ? "Halber Tag" : "Half day",
+        de ? "Halbtag (4 Std.)" : "Half day (4 h)",
         rates.halfDayEur,
         de
-          ? `${rates.halfDayEur} € für einen halben Tag, inkl. 19 % MwSt.`
-          : `€${rates.halfDayEur} for a half day, including 19% VAT.`
+          ? `Halbtag (4 Std.) ${rates.halfDayEur} €, inkl. 19 % MwSt.`
+          : `Half day (4 h): €${rates.halfDayEur}, including 19% VAT.`
       ),
       offer(
-        de ? "Ganzer Tag" : "Full day",
+        de ? "Ganztag (8 Std.)" : "Full day (8 h)",
         rates.fullDayEur,
         de
-          ? `${rates.fullDayEur} € für einen ganzen Tag, inkl. 19 % MwSt.`
-          : `€${rates.fullDayEur} for a full day, including 19% VAT.`
+          ? `Ganztag (8 Std.) ${rates.fullDayEur} €, inkl. 19 % MwSt.`
+          : `Full day (8 h): €${rates.fullDayEur}, including 19% VAT.`
       ),
     ],
   };

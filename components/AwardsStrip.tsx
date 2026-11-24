@@ -1,32 +1,24 @@
-import Image from "next/image";
-import { AWARD_LOGOS } from "../lib/awards";
+import { AWARD_NAMES } from "../lib/awards";
+import type { Locale } from "../lib/i18n/config";
 
 type AwardsStripProps = {
-  label: string;
+  locale: Locale;
 };
 
-/** Renders configured award logos. An empty config leaves the strip out. */
-export default function AwardsStrip({ label }: AwardsStripProps) {
-  if (AWARD_LOGOS.length === 0) return null;
+/** Text-only award names. Logos stay out until image files and rights exist. */
+export default function AwardsStrip({ locale }: AwardsStripProps) {
+  const names = AWARD_NAMES[locale];
 
   return (
-    <ul className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3" aria-label={label}>
-      {AWARD_LOGOS.map((logo) => {
-        const image = (
-          <Image src={logo.src} alt={logo.alt} width={120} height={48} className="h-10 w-auto object-contain" />
-        );
-        return (
-          <li key={logo.src}>
-            {logo.href ? (
-              <a href={logo.href} className="block opacity-80 transition-opacity duration-300 hover:opacity-100">
-                {image}
-              </a>
-            ) : (
-              image
-            )}
-          </li>
-        );
-      })}
-    </ul>
+    <div>
+      <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-[#322B2B]/55">
+        {locale === "de" ? "Auszeichnungen" : "Awards"}
+      </p>
+      <ul className="mt-2 space-y-1 text-sm leading-relaxed text-[#322B2B]/90">
+        {names.map((name) => (
+          <li key={name}>{name}</li>
+        ))}
+      </ul>
+    </div>
   );
 }

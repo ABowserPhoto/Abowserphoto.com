@@ -306,7 +306,7 @@ const realEstateFaqs: Record<Locale, FAQItem[]> = {
   de: [
     {
       question: "Wie schnell bekomme ich die Bilder?",
-      answer: "Den Lieferzeitpunkt legen wir im Angebot fest.",
+      answer: "Lieferung innerhalb von 24–48 Stunden nach Ihrer finalen Bildauswahl (je nach Auslastung).",
     },
     {
       question: "Passen die Dateien für die Portale?",
@@ -316,7 +316,7 @@ const realEstateFaqs: Record<Locale, FAQItem[]> = {
   en: [
     {
       question: "How quickly do I get the pictures?",
-      answer: "The delivery date is set in the quote.",
+      answer: "Delivered within 24–48 hours of your final image selection (times may vary with demand).",
     },
     {
       question: "Will the files work on the portals?",
